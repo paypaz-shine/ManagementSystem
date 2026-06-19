@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paypaz 管理后台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
+      background: #F5F7FA;
+      color: #303133;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────── */
+    .sidebar {
+      width: 165px;
+      min-width: 165px;
+      background: #1a2236;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .logo-area {
+      height: 60px;
+      background: #141d2d;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px;
+      flex-shrink: 0;
+    }
+    .logo-area .logo-icon { color: #409EFF; }
+    .logo-area .logo-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .nav-item {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s;
+      user-select: none;
+    }
+    .nav-item:hover:not(.active) { background: #1f2d42; }
+    .nav-item .nav-icon { color: #5a7296; flex-shrink: 0; }
+    .nav-item .nav-label { font-size: 13px; color: #8a9ab5; white-space: nowrap; }
+
+    .nav-item.active { background: #263a52; }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: #409EFF;
+    }
+    .nav-item.active .nav-icon { color: #409EFF; }
+    .nav-item.active .nav-label { color: #fff; }
+
+    /* ── Main Area ───────────────────────────────────── */
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      height: 52px;
+      background: #fff;
+      border-bottom: 1px solid #E4E7ED;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+    }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; }
+    .breadcrumb .bc-home { font-family: 'Inter', sans-serif; font-size: 13px; color: #909399; cursor: pointer; }
+    .breadcrumb .bc-sep { color: #C0C4CC; }
+    .breadcrumb .bc-current { font-family: 'Inter', sans-serif; font-size: 13px; color: #303133; font-weight: 500; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .lang-btn {
+      display: flex; align-items: center; height: 28px; padding: 0 8px;
+      border: 1px solid #DCDFE6; border-radius: 4px; background: #fff;
+      font-family: 'Inter', sans-serif; font-size: 12px; color: #606266;
+      cursor: pointer; gap: 4px;
+    }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: #409EFF;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+      color: #fff; cursor: pointer;
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      height: 40px;
+      background: #fff;
+      border-bottom: 1px solid #E4E7ED;
+      display: flex;
+      align-items: stretch;
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+    .tab-bar::-webkit-scrollbar { height: 0; }
+    .tab-item {
+      display: flex; align-items: center; gap: 6px; padding: 0 14px;
+      font-size: 13px; color: #606266; background: #F5F7FA;
+      border-left: 1px solid #E4E7ED; cursor: pointer; white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tab-item .tab-close { color: #C0C4CC; display: flex; align-items: center; }
+    .tab-item.active {
+      background: #fff; color: #409EFF;
+      border-top: 2px solid #409EFF;
+      border-left: 1px solid #409EFF;
+      border-right: 1px solid #409EFF;
+    }
+    .tab-item.active .tab-close { color: #909399; }
+
+    /* Content Pages */
+    .page { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+    .page.active { display: flex; }
+
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Filter Card */
+    .filter-card {
+      background: #fff;
+      border: 1px solid #EBEEF5;
+      border-radius: 4px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    /* ── Element UI 风格筛选栅格 ────────────────────────── */
+    /* 4列栅格，label 右对齐固定宽度，control 填充剩余 */
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px 20px;
+    }
+    .filter-item {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      min-width: 0;
+    }
+    .filter-item.col-span-2 { grid-column: span 2; }
+
+    /* label：固定宽度 + 右对齐，与 Element UI label-width 一致 */
+    .filter-label-el {
+      flex-shrink: 0;
+      width: 70px;
+      text-align: right;
+      padding-right: 8px;
+      font-size: 13px;
+      color: #606266;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    /* control：填充剩余空间 */
+    .filter-control {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    }
+    .filter-control .field-input,
+    .filter-control .field-select { width: 100%; min-width: 0; }
+    .filter-control .select-wrap  { flex: 1; min-width: 0; }
+    .filter-control .select-wrap .field-select { width: 100%; }
+
+    /* 日期范围：两个 date 输入等分 */
+    .date-range-el {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 0;
+    }
+    .date-range-el .date-input-el {
+      flex: 1;
+      min-width: 0;
+      height: 32px;
+      border: 1px solid #DCDFE6;
+      border-radius: 4px;
+      padding: 0 8px;
+      font-size: 13px;
+      color: #303133;
+      background: #fff;
+      outline: none;
+      font-family: 'Noto Sans SC', sans-serif;
+      transition: border-color .2s;
+    }
+    .date-range-el .date-input-el:focus { border-color: #409EFF; }
+    .date-range-el .range-sep-el {
+      flex-shrink: 0;
+      color: #C0C4CC;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* 操作按钮行：右对齐，与栅格底部有分隔 */
+    .filter-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      border-top: 1px solid #F2F6FC;
+      margin-top: 2px;
+    }
+
+    /* 兼容旧 field-input / field-select（表格外不受 filter-control 约束时保持原样） */
+    .field-input, .field-select {
+      height: 32px; width: 180px; border: 1px solid #DCDFE6;
+      border-radius: 4px; padding: 0 10px; font-size: 13px; color: #303133;
+      background: #fff; outline: none; font-family: 'Noto Sans SC', sans-serif;
+      transition: border-color 0.2s; appearance: none; -webkit-appearance: none;
+    }
+    .field-input::placeholder { color: #C0C4CC; }
+    .field-input:focus, .field-select:focus { border-color: #409EFF; }
+
+    .select-wrap { position: relative; display: inline-flex; align-items: center; }
+    .select-wrap .select-caret { position: absolute; right: 8px; pointer-events: none; color: #C0C4CC; }
+    .field-select { padding-right: 28px; cursor: pointer; }
+
+    .filter-spacer { flex: 1; min-width: 20px; }
+
+    .btn {
+      height: 32px; padding: 0 15px; border-radius: 4px;
+      font-size: 13px; font-family: 'Noto Sans SC', sans-serif;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      border: none; white-space: nowrap; transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #409EFF; color: #fff; }
+    .btn-default { background: #fff; color: #606266; border: 1px solid #DCDFE6; }
+
+    /* Table Card */
+    .table-card {
+      background: #fff; border: 1px solid #EBEEF5; border-radius: 4px;
+      display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;
+    }
+
+    /* Summary Bar */
+    .summary-bar {
+      height: 48px; display: flex; align-items: center; gap: 24px;
+      padding: 0 20px; border-bottom: 1px solid #EBEEF5; flex-shrink: 0;
+    }
+    .summary-bar .count-label { font-size: 13px; color: #606266; }
+    .summary-bar .count-value { font-size: 13px; font-weight: 600; color: #303133; }
+    .summary-spacer { flex: 1; }
+    .export-btn {
+      height: 30px; padding: 0 14px; border-radius: 4px; border: 1px solid #409EFF;
+      background: #fff; color: #409EFF; font-size: 13px; font-family: 'Noto Sans SC', sans-serif;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.15s;
+    }
+    .export-btn:hover { background: #ecf5ff; }
+
+    /* Table */
+    .table-wrap { flex: 1; overflow-x: auto; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+    thead tr { background: #FAFAFA; border-bottom: 1px solid #EBEEF5; }
+    th {
+      height: 44px; padding: 0 12px; text-align: left;
+      font-size: 13px; font-weight: 600; color: #606266;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    tbody tr { border-bottom: 1px solid #EBEEF5; transition: background 0.1s; }
+    tbody tr:hover { background: #F5F7FA !important; }
+    tbody tr:nth-child(odd)  { background: #fff; }
+    tbody tr:nth-child(even) { background: #FAFAFA; }
+    td {
+      height: 46px; padding: 0 12px; font-size: 13px; color: #303133;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;
+    }
+
+    .cell-green  { color: #67C23A; }
+    .cell-empty  { color: #C0C4CC; font-family: 'Inter', sans-serif; }
+
+    .copy-cell { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+    .copy-cell span { overflow: hidden; text-overflow: ellipsis; font-family: 'Inter', sans-serif; }
+    .copy-icon {
+      color: #409EFF; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; transition: opacity 0.15s;
+    }
+    .copy-icon:hover { opacity: 0.7; }
+
+    /* Status Badges */
+    .badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 3px 8px; border-radius: 3px; font-size: 12px; white-space: nowrap;
+    }
+    .badge-green   { background: #f0f9ea; color: #8acf68; }
+    .badge-red     { background: #FEF0F0; color: #F56C6C; }
+    .badge-gray    { background: #f4f4f5; color: #95989e; }
+    .badge-blue    { background: #ECF5FF; color: #409EFF; border: 1px solid #D9ECFF; border-radius: 4px; padding: 4px 10px; }
+
+    /* Action icons */
+    .action-cell { display: flex; align-items: center; gap: 4px; }
+    .action-icon { color: #409EFF; cursor: pointer; display: flex; align-items: center; transition: opacity 0.15s; }
+    .action-icon:hover { opacity: 0.7; }
+
+    /* Pagination Bar */
+    .pagination-bar {
+      height: 52px; border-top: 1px solid #EBEEF5;
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 8px; padding: 0 20px; flex-shrink: 0;
+    }
+    .pagination-total { font-size: 13px; color: #606266; margin-right: 4px; }
+    .page-size-select {
+      height: 28px; padding: 0 8px; border: 1px solid #DCDFE6; border-radius: 3px;
+      font-size: 13px; color: #606266; background: #fff; cursor: pointer;
+      outline: none; font-family: 'Noto Sans SC', sans-serif;
+    }
+    .page-btn {
+      width: 32px; height: 28px; border: 1px solid #DCDFE6; border-radius: 3px;
+      background: #fff; font-size: 13px; color: #606266; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s, color 0.15s; font-family: 'Inter', sans-serif;
+    }
+    .page-btn:hover:not(:disabled) { border-color: #409EFF; color: #409EFF; }
+    .page-btn.active { background: #409EFF; border-color: #409EFF; color: #fff; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .goto-label, .goto-suffix { font-size: 13px; color: #606266; }
+    .goto-input {
+      width: 44px; height: 28px; border: 1px solid #DCDFE6; border-radius: 3px;
+      text-align: center; font-size: 13px; color: #303133; background: #fff;
+      outline: none; font-family: 'Inter', sans-serif;
+    }
+    .goto-input:focus { border-color: #409EFF; }
+
+    /* Toast */
+    .toast {
+      position: fixed; top: 24px; left: 50%;
+      transform: translateX(-50%) translateY(-60px);
+      background: #fff; border: 1px solid #EBEEF5; border-radius: 4px;
+      padding: 10px 20px; font-size: 13px; color: #606266;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12); transition: transform 0.25s ease;
+      z-index: 9999; display: flex; align-items: center; gap: 8px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast-icon { color: #67C23A; }
+
+    /* Detail Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #fff; border-radius: 6px; width: 560px; max-width: 90vw;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18); overflow: hidden;
+    }
+    .modal-header {
+      height: 54px; padding: 0 20px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid #EBEEF5;
+    }
+    .modal-title { font-size: 15px; font-weight: 600; color: #303133; }
+    .modal-close { cursor: pointer; color: #909399; display: flex; align-items: center; }
+    .modal-close:hover { color: #606266; }
+    .modal-body { padding: 24px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+    .detail-item { display: flex; flex-direction: column; gap: 4px; }
+    .detail-label { font-size: 12px; color: #909399; }
+    .detail-value { font-size: 13px; color: #303133; word-break: break-all; }
+    .modal-footer {
+      padding: 12px 20px; border-top: 1px solid #EBEEF5;
+      display: flex; justify-content: flex-end;
+    }
+    .btn-sm { height: 28px; padding: 0 16px; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Sidebar ─────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="logo-area">
+      <i data-lucide="zap" class="logo-icon" style="width:22px;height:22px;"></i>
+      <span class="logo-text">paypaz</span>
+    </div>
+    <nav>
+      <div class="nav-item" data-page="home">
+        <i data-lucide="house" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">首页</span>
+      </div>
+      <div class="nav-item" data-page="platform">
+        <i data-lucide="layers" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">平台资产</span>
+      </div>
+      <div class="nav-item" data-page="merchant">
+        <i data-lucide="users" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">商户管理</span>
+      </div>
+      <div class="nav-item active" data-page="deposit">
+        <i data-lucide="circle-arrow-down" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">充币记录</span>
+      </div>
+      <div class="nav-item" data-page="withdraw">
+        <i data-lucide="circle-arrow-up" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">提币记录</span>
+      </div>
+      <div class="nav-item" data-page="payment">
+        <i data-lucide="file-text" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">支付订单</span>
+      </div>
+      <div class="nav-item" data-page="currency">
+        <i data-lucide="circle-dollar-sign" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">币种管理</span>
+      </div>
+      <div class="nav-item" data-page="feedback">
+        <i data-lucide="message-square" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">反馈收集</span>
+      </div>
+      <div class="nav-item" data-page="system">
+        <i data-lucide="settings" class="nav-icon" style="width:16px;height:16px;"></i>
+        <span class="nav-label">系统管理</span>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ── Main Area ───────────────────────────────────── -->
+  <div class="main-area">
+
+    <!-- Header Bar -->
+    <div class="header-bar">
+      <div class="breadcrumb">
+        <span class="bc-home">首页</span>
+        <i data-lucide="chevron-right" class="bc-sep" style="width:12px;height:12px;"></i>
+        <span class="bc-current" id="bc-current">充币记录</span>
+      </div>
+      <div class="header-right">
+        <button class="lang-btn">A₿</button>
+        <div class="avatar">U</div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar" id="tab-bar">
+      <!-- tabs injected by JS -->
+    </div>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 充币记录                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page active" id="page-deposit">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <!-- Row 1 -->
+            <div class="filter-item">
+              <span class="filter-label-el">UID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="d-uid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">钱包地址</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="d-wallet">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="d-token">
+                    <option value="">请选择</option>
+                    <option value="USDT1">USDT1</option>
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="d-network">
+                    <option value="">请选择</option>
+                    <option value="TRON">TRON</option>
+                    <option value="ETH">ETH</option>
+                    <option value="BSC">BSC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="d-status">
+                    <option value="">状态</option>
+                    <option value="arrived">已到账</option>
+                    <option value="pending">待匹配订单</option>
+                    <option value="invalid">无效充值</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">渠道</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="d-channel">
+                    <option value="">全部</option>
+                    <option value="direct">直连</option>
+                    <option value="Meta Trader">Meta Trader</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">哈希</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="d-hash">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">时间范围</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="d-date-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="d-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="depositReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="depositSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <span class="count-label">条数：</span>
+            <span class="count-value" id="d-total">276</span>
+            <div class="summary-spacer"></div>
+            <button class="export-btn" onclick="depositExport()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1310px;">
+              <colgroup>
+                <col style="width:95px"><col style="width:100px"><col style="width:70px">
+                <col style="width:80px"><col style="width:70px"><col style="width:72px">
+                <col style="width:70px"><col style="width:155px"><col style="width:152px">
+                <col><col style="width:240px"><col style="width:110px"><col style="width:100px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>UID</th><th>名称</th><th>代币</th><th>网络</th>
+                  <th>金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
+                  <th>到账时间</th><th>哈希</th><th>订单号</th><th>渠道</th><th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="d-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="d-page-total">共 276 条</span>
+            <select class="page-size-select" id="d-page-size" onchange="depositPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="d-btn-prev" onclick="depositPage(dState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="depositPage(1)">1</button>
+            <button class="page-btn" onclick="depositPage(2)">2</button>
+            <button class="page-btn" onclick="depositPage(3)">3</button>
+            <button class="page-btn" id="d-btn-next" onclick="depositPage(dState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')depositPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-deposit -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 支付订单                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-payment">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <!-- Row 1 -->
+            <div class="filter-item">
+              <span class="filter-label-el">订单号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="p-order">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">商户名称</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="p-merchant">
+                    <option value="">请选择</option>
+                    <option value="kara">kara</option>
+                    <option value="kara2">kara2</option>
+                    <option value="kara4" selected>kara4</option>
+                    <option value="sherry@bdy.tech">sherry@bdy.tech</option>
+                    <option value="benny@bdy.tech">benny@bdy.tech</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">User ID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="p-uid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">订单来源</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="p-source">
+                    <option value="">请选择</option>
+                    <option value="Paypaz">Paypaz</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="filter-item">
+              <span class="filter-label-el">渠道</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="p-channel">
+                    <option value="">全部</option>
+                    <option value="direct">直连</option>
+                    <option value="Meta Trader">Meta Trader</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="p-status">
+                    <option value="">请选择</option>
+                    <option value="processing">处理中</option>
+                    <option value="completed">已完成</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">充值地址</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="p-addr">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">Hash</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="p-hash">
+              </div>
+            </div>
+            <!-- Row 3 -->
+            <div class="filter-item col-span-2">
+              <span class="filter-label-el">时间范围</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="p-date-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="p-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="paymentReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="paymentSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <span class="count-label">条数：</span>
+            <span class="count-value" id="p-total">4</span>
+            <div class="summary-spacer"></div>
+            <button class="export-btn" onclick="paymentExport()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1430px;">
+              <colgroup>
+                <col style="width:220px"><col style="width:90px"><col style="width:100px">
+                <col style="width:80px"><col style="width:130px"><col style="width:70px">
+                <col style="width:70px"><col style="width:90px"><col style="width:110px">
+                <col style="width:152px"><col style="width:272px"><col style="width:90px">
+                <col style="width:60px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>订单号</th><th>应付金额</th><th>实付金额</th><th>手续费</th>
+                  <th>净入账</th><th>代币</th><th>网络</th><th>订单来源</th>
+                  <th>渠道</th><th>创建时间</th><th>充值地址</th><th>状态</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="p-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="p-page-total">共 4 条</span>
+            <select class="page-size-select" id="p-page-size" onchange="paymentPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="p-btn-prev" onclick="paymentPage(pState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="paymentPage(1)">1</button>
+            <button class="page-btn" id="p-page-2" onclick="paymentPage(2)">2</button>
+            <button class="page-btn" id="p-page-3" onclick="paymentPage(3)">3</button>
+            <button class="page-btn" id="p-btn-next" onclick="paymentPage(pState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')paymentPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-payment -->
+
+  </div><!-- /main-area -->
+
+  <!-- ── Detail Modal ───────────────────────────────── -->
+  <div class="modal-overlay" id="detail-modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">订单详情</span>
+        <span class="modal-close" onclick="closeModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i data-lucide="check-circle" class="toast-icon" style="width:16px;height:16px;"></i>
+    <span id="toast-msg">复制成功</span>
+  </div>
+
+  <script>
+  // ══════════════════════════════════════════════════════
+  //  Tab / Nav routing
+  // ══════════════════════════════════════════════════════
+  const PAGE_META = {
+    deposit:  { label: '充币记录',  icon: 'circle-arrow-down' },
+    payment:  { label: '支付订单',  icon: 'file-text' },
+    home:     { label: '首页',      icon: 'house' },
+    platform: { label: '平台资产',  icon: 'layers' },
+    merchant: { label: '商户管理',  icon: 'users' },
+    withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
+    currency: { label: '币种管理',  icon: 'circle-dollar-sign' },
+    feedback: { label: '反馈收集',  icon: 'message-square' },
+    system:   { label: '系统管理',  icon: 'settings' },
+  };
+
+  // implemented pages
+  const IMPL_PAGES = new Set(['deposit', 'payment']);
+
+  let activePage = 'deposit';
+  // openTabs: array of pageIds in open order
+  let openTabs = ['deposit'];
+
+  function renderTabs() {
+    const bar = document.getElementById('tab-bar');
+    bar.innerHTML = openTabs.map(pid => {
+      const m = PAGE_META[pid];
+      const isActive = pid === activePage;
+      return `<div class="tab-item${isActive ? ' active' : ''}" data-tab="${pid}">
+        <span>${m.label}</span>
+        <span class="tab-close" data-close="${pid}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </span>
+      </div>`;
+    }).join('');
+
+    bar.querySelectorAll('.tab-item').forEach(el => {
+      el.addEventListener('click', e => {
+        if (e.target.closest('[data-close]')) return;
+        navigateTo(el.dataset.tab);
+      });
+    });
+    bar.querySelectorAll('[data-close]').forEach(el => {
+      el.addEventListener('click', e => { e.stopPropagation(); closeTab(el.dataset.close); });
+    });
+  }
+
+  function navigateTo(pid) {
+    if (!openTabs.includes(pid)) openTabs.push(pid);
+    activePage = pid;
+
+    // update sidebar
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.toggle('active', n.dataset.page === pid);
+    });
+
+    // update breadcrumb
+    document.getElementById('bc-current').textContent = PAGE_META[pid]?.label || pid;
+
+    // show/hide pages
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.toggle('active', p.id === 'page-' + pid);
+    });
+
+    renderTabs();
+    lucide.createIcons();
+  }
+
+  function closeTab(pid) {
+    if (openTabs.length === 1) return; // keep at least one
+    const idx = openTabs.indexOf(pid);
+    openTabs.splice(idx, 1);
+    if (activePage === pid) {
+      navigateTo(openTabs[Math.min(idx, openTabs.length - 1)]);
+    } else {
+      renderTabs();
+    }
+  }
+
+  // Sidebar click
+  document.querySelectorAll('.nav-item[data-page]').forEach(el => {
+    el.addEventListener('click', () => {
+      const pid = el.dataset.page;
+      if (!IMPL_PAGES.has(pid)) { showToast('页面开发中'); return; }
+      navigateTo(pid);
+    });
+  });
+
+  // ══════════════════════════════════════════════════════
+  //  充币记录 data & logic
+  // ══════════════════════════════════════════════════════
+  const D_STATUS = {
+    arrived: { label:'已到账',    cls:'badge-green' },
+    pending:  { label:'待匹配订单', cls:'badge-red'  },
+    invalid:  { label:'无效充值',  cls:'badge-gray' },
+  };
+
+  const DEPOSIT_ALL = [
+    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d...', order:'291654802-52081422241536', channel:'Meta Trader', status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:45', hash:'613e517de794200d...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.3',  fee:'0.3',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a...', order:'',                         channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.2',  fee:'0.2',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:44', hash:'d641bab856175231...', order:'',                         channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.1',  fee:'0.1',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af...', order:'',                         channel:'',           status:'invalid' },
+    { uid:'884590488', name:'kara2',           token:'USDT1', network:'TRON', amount:'7.19', fee:'7.19', net:'+0', wallet:'0x488......5a219', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT1', network:'TRON', amount:'0.12', fee:'0.12', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT1', network:'TRON', amount:'0.09', fee:'0.09', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'253024631', name:'benny@bdy.tech',  token:'USDT1', network:'TRON', amount:'4.5',  fee:'4.5',  net:'+0', wallet:'0x488......5a219', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af57...', order:'',                         channel:'',           status:'arrived' },
+  ];
+
+  const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
+
+  function depositRender() {
+    const tbody = document.getElementById('d-tbody');
+    const start = (dState.page - 1) * dState.size;
+    const slice = dState.rows.slice(start, start + dState.size);
+    tbody.innerHTML = slice.map(r => {
+      const st = D_STATUS[r.status];
+      const orderCell = r.order
+        ? `<div class="copy-cell"><span>${r.order}</span>
+             <span class="copy-icon" onclick="copyText('${r.order}')">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+               </svg>
+             </span></div>`
+        : `<span class="cell-empty">—</span>`;
+      return `<tr>
+        <td style="font-family:Inter,sans-serif">${r.uid}</td>
+        <td>${r.name}</td><td>${r.token}</td><td>${r.network}</td>
+        <td>${r.amount}</td><td>${r.fee}</td>
+        <td class="cell-green">${r.net}</td>
+        <td>${r.wallet}</td>
+        <td style="font-family:Inter,sans-serif">${r.time}</td>
+        <td style="font-family:Inter,sans-serif">${r.hash}</td>
+        <td>${orderCell}</td>
+        <td>${r.channel || '直连'}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('d-total').textContent = dState.rows.length;
+    document.getElementById('d-page-total').textContent = `共 ${dState.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(dState.rows.length / dState.size));
+    document.getElementById('d-btn-prev').disabled = dState.page <= 1;
+    document.getElementById('d-btn-next').disabled = dState.page >= total;
+    document.querySelectorAll('#page-deposit .page-btn:not(#d-btn-prev):not(#d-btn-next)').forEach((btn, i) => {
+      const pg = i + 1;
+      btn.style.display = pg <= total ? '' : 'none';
+      btn.classList.toggle('active', pg === dState.page);
+    });
+  }
+
+  function depositPage(p) {
+    const total = Math.max(1, Math.ceil(dState.rows.length / dState.size));
+    if (p < 1 || p > total) return;
+    dState.page = p; depositRender();
+  }
+  function depositPageSize() {
+    dState.size = +document.getElementById('d-page-size').value;
+    dState.page = 1; depositRender();
+  }
+  function depositSearch() {
+    const uid     = document.getElementById('d-uid').value.trim().toLowerCase();
+    const wallet  = document.getElementById('d-wallet').value.trim().toLowerCase();
+    const token   = document.getElementById('d-token').value;
+    const net     = document.getElementById('d-network').value;
+    const st      = document.getElementById('d-status').value;
+    const channel = document.getElementById('d-channel').value;
+    const hash    = document.getElementById('d-hash').value.trim().toLowerCase();
+    const ds      = document.getElementById('d-date-start').value;
+    const de      = document.getElementById('d-date-end').value;
+    dState.rows = DEPOSIT_ALL.filter(r => {
+      if (uid     && !r.uid.toLowerCase().includes(uid))       return false;
+      if (wallet  && !r.wallet.toLowerCase().includes(wallet)) return false;
+      if (token   && r.token   !== token)                      return false;
+      if (net     && r.network !== net)                        return false;
+      if (st      && r.status  !== st)                         return false;
+      if (channel === 'direct' && r.channel !== '')            return false;
+      if (channel && channel !== 'direct' && r.channel !== channel) return false;
+      if (hash    && !r.hash.toLowerCase().includes(hash))    return false;
+      if (ds      && r.time.split(' ')[0] < ds)               return false;
+      if (de      && r.time.split(' ')[0] > de)               return false;
+      return true;
+    });
+    dState.page = 1; depositRender();
+  }
+  function depositReset() {
+    ['d-uid','d-wallet','d-token','d-network','d-status','d-channel','d-hash','d-date-start','d-date-end']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    dState.rows = [...DEPOSIT_ALL]; dState.page = 1; depositRender();
+  }
+  function depositExport() {
+    const headers = ['UID','名称','代币','网络','金额','手续费','净入账','钱包地址','到账时间','哈希','订单号','渠道','状态'];
+    csvDownload(headers, dState.rows.map(r => [
+      r.uid, r.name, r.token, r.network, r.amount, r.fee, r.net,
+      r.wallet, r.time, r.hash, r.order || '—', r.channel || '直连', D_STATUS[r.status].label
+    ]), '充币记录.csv');
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  支付订单 data & logic
+  // ══════════════════════════════════════════════════════
+  const P_STATUS = {
+    processing: { label:'处理中', cls:'badge-blue'  },
+    completed:  { label:'已完成', cls:'badge-green' },
+  };
+
+  const PAYMENT_ALL = [
+    { order:'291654802-52081422241536', due:'0.70',   paid:'0.70',   fee:'0.01', net:'0.69',   source:'Paypaz', token:'USDT1', network:'TRON', channel:'Meta Trader', time:'2026-06-12 15:57:35', addr:'TG1xj...bkJzh', status:'processing', editable:true  },
+    { order:'291654802-52081414206720', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT1', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+    { order:'291654802-52079444850688', due:'0.20',   paid:'0.20',   fee:'0.01', net:'0.19',   source:'Paypaz', token:'USDT1', network:'TRON', channel:'',            time:'2026-06-13 13:48:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+    { order:'291654802-51905185772032', due:'400.00', paid:'400.00', fee:'0.04', net:'399.96', source:'Paypaz', token:'USDT1', network:'TRON', channel:'',            time:'2026-06-04 16:43:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+  ];
+
+  const pState = { rows: [...PAYMENT_ALL], page: 1, size: 10 };
+
+  function paymentRender() {
+    const tbody = document.getElementById('p-tbody');
+    const start = (pState.page - 1) * pState.size;
+    const slice = pState.rows.slice(start, start + pState.size);
+    tbody.innerHTML = slice.map((r, idx) => {
+      const st = P_STATUS[r.status];
+      const editBtn = r.editable
+        ? `<span class="action-icon" onclick="openEdit(${PAYMENT_ALL.indexOf(r)})" title="编辑">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+             </svg>
+           </span>` : '';
+      return `<tr>
+        <td>
+          <div class="copy-cell">
+            <span>${r.order}</span>
+            <span class="copy-icon" onclick="copyText('${r.order}')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+            </span>
+          </div>
+        </td>
+        <td>${r.due}</td><td>${r.paid}</td><td>${r.fee}</td><td>${r.net}</td>
+        <td>${r.token}</td><td>${r.network}</td><td>${r.source}</td>
+        <td>${r.channel || '直连'}</td>
+        <td style="font-family:Inter,sans-serif">${r.time}</td>
+        <td>
+          <div class="copy-cell">
+            <span>${r.addr}</span>
+            <span class="copy-icon" onclick="copyText('${r.addr}')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+            </span>
+          </div>
+        </td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td>
+          <div class="action-cell">
+            <span class="action-icon" onclick="openDetail(${PAYMENT_ALL.indexOf(r)})" title="详情">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+              </svg>
+            </span>
+            ${editBtn}
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+    document.getElementById('p-total').textContent = pState.rows.length;
+    document.getElementById('p-page-total').textContent = `共 ${pState.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(pState.rows.length / pState.size));
+    document.getElementById('p-btn-prev').disabled = pState.page <= 1;
+    document.getElementById('p-btn-next').disabled = pState.page >= total;
+    ['p-page-2','p-page-3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el) { el.style.display = (i + 2) <= total ? '' : 'none'; el.classList.toggle('active', (i + 2) === pState.page); }
+    });
+    document.querySelector('#page-payment .pagination-bar .page-btn.active:not(#p-btn-prev):not(#p-btn-next)');
+    // reset page-1 active state
+    const allPageBtns = document.querySelectorAll('#page-payment .pagination-bar .page-btn:not(#p-btn-prev):not(#p-btn-next)');
+    allPageBtns.forEach((btn, i) => btn.classList.toggle('active', (i + 1) === pState.page));
+  }
+
+  function paymentPage(p) {
+    const total = Math.max(1, Math.ceil(pState.rows.length / pState.size));
+    if (p < 1 || p > total) return;
+    pState.page = p; paymentRender();
+  }
+  function paymentPageSize() {
+    pState.size = +document.getElementById('p-page-size').value;
+    pState.page = 1; paymentRender();
+  }
+  function paymentSearch() {
+    const order   = document.getElementById('p-order').value.trim().toLowerCase();
+    const merch   = document.getElementById('p-merchant').value;
+    const uid     = document.getElementById('p-uid').value.trim().toLowerCase();
+    const source  = document.getElementById('p-source').value;
+    const channel = document.getElementById('p-channel').value;
+    const st      = document.getElementById('p-status').value;
+    const addr    = document.getElementById('p-addr').value.trim().toLowerCase();
+    const hash    = document.getElementById('p-hash').value.trim().toLowerCase();
+    const ds      = document.getElementById('p-date-start').value;
+    const de      = document.getElementById('p-date-end').value;
+    pState.rows = PAYMENT_ALL.filter(r => {
+      if (order   && !r.order.toLowerCase().includes(order))  return false;
+      if (source  && r.source !== source)                      return false;
+      if (channel === 'direct'  && r.channel !== '')           return false;
+      if (channel && channel !== 'direct' && r.channel !== channel) return false;
+      if (st      && r.status !== st)                          return false;
+      if (addr    && !r.addr.toLowerCase().includes(addr))    return false;
+      if (ds      && r.time.split(' ')[0] < ds)               return false;
+      if (de      && r.time.split(' ')[0] > de)               return false;
+      return true;
+    });
+    pState.page = 1; paymentRender();
+  }
+  function paymentReset() {
+    ['p-order','p-merchant','p-uid','p-source','p-channel','p-status','p-addr','p-hash','p-date-start','p-date-end']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    pState.rows = [...PAYMENT_ALL]; pState.page = 1; paymentRender();
+  }
+  function paymentExport() {
+    const headers = ['订单号','应付金额','实付金额','手续费','净入账','代币','网络','订单来源','渠道','创建时间','充值地址','状态'];
+    csvDownload(headers, pState.rows.map(r => [
+      r.order, r.due, r.paid, r.fee, r.net, r.token, r.network, r.source, r.channel || '直连', r.time, r.addr, P_STATUS[r.status].label
+    ]), '支付订单.csv');
+  }
+
+  // ── Detail / Edit Modal ───────────────────────────────
+  function openDetail(idx) {
+    const r = PAYMENT_ALL[idx];
+    const st = P_STATUS[r.status];
+    document.getElementById('modal-body').innerHTML = `
+      <div class="detail-item"><span class="detail-label">订单号</span><span class="detail-value">${r.order}</span></div>
+      <div class="detail-item"><span class="detail-label">状态</span><span class="detail-value"><span class="badge ${st.cls}">${st.label}</span></span></div>
+      <div class="detail-item"><span class="detail-label">应付金额</span><span class="detail-value">${r.due} ${r.token}</span></div>
+      <div class="detail-item"><span class="detail-label">实付金额</span><span class="detail-value">${r.paid} ${r.token}</span></div>
+      <div class="detail-item"><span class="detail-label">手续费</span><span class="detail-value">${r.fee} ${r.token}</span></div>
+      <div class="detail-item"><span class="detail-label">净入账</span><span class="detail-value">${r.net} ${r.token}</span></div>
+      <div class="detail-item"><span class="detail-label">代币</span><span class="detail-value">${r.token}</span></div>
+      <div class="detail-item"><span class="detail-label">网络</span><span class="detail-value">${r.network}</span></div>
+      <div class="detail-item"><span class="detail-label">订单来源</span><span class="detail-value">${r.source}</span></div>
+      <div class="detail-item"><span class="detail-label">渠道</span><span class="detail-value">${r.channel || '直连'}</span></div>
+      <div class="detail-item"><span class="detail-label">创建时间</span><span class="detail-value">${r.time}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">充值地址</span><span class="detail-value">${r.addr}</span></div>
+    `;
+    document.getElementById('detail-modal').classList.add('show');
+  }
+  function openEdit(idx) { openDetail(idx); } // placeholder
+  function closeModal() { document.getElementById('detail-modal').classList.remove('show'); }
+
+  // ── Shared Utils ──────────────────────────────────────
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => showToast('复制成功'));
+  }
+
+  function csvDownload(headers, rows, filename) {
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+    showToast('导出成功');
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // ── Init ──────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    renderTabs();
+    depositRender();
+    paymentRender();
+    lucide.createIcons();
+  });
+  </script>
+</body>
+</html>

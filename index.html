@@ -499,10 +499,9 @@
                 <div class="select-wrap">
                   <select class="field-select" id="d-token">
                     <option value="">请选择</option>
-                    <option value="USDT1">USDT1</option>
                     <option value="USDT">USDT</option>
                     <option value="BTC">BTC</option>
-                    <option value="ETH">ETH</option>
+                    <option value="Ethereum">Ethereum</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
@@ -515,7 +514,7 @@
                   <select class="field-select" id="d-network">
                     <option value="">请选择</option>
                     <option value="TRON">TRON</option>
-                    <option value="ETH">ETH</option>
+                    <option value="Ethereum">Ethereum</option>
                     <option value="BSC">BSC</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
@@ -920,15 +919,15 @@
   };
 
   const DEPOSIT_ALL = [
-    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d...', order:'291654802-52081422241536', channel:'Meta Trader', status:'arrived' },
-    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:45', hash:'613e517de794200d...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.3',  fee:'0.3',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a...', order:'',                         channel:'',           status:'pending' },
-    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.2',  fee:'0.2',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:44', hash:'d641bab856175231...', order:'',                         channel:'',           status:'pending' },
-    { uid:'635102950', name:'kara',            token:'USDT1', network:'TRON', amount:'0.1',  fee:'0.1',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af...', order:'',                         channel:'',           status:'invalid' },
-    { uid:'884590488', name:'kara2',           token:'USDT1', network:'TRON', amount:'7.19', fee:'7.19', net:'+0', wallet:'0x488......5a219', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT1', network:'TRON', amount:'0.12', fee:'0.12', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT1', network:'TRON', amount:'0.09', fee:'0.09', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'253024631', name:'benny@bdy.tech',  token:'USDT1', network:'TRON', amount:'4.5',  fee:'4.5',  net:'+0', wallet:'0x488......5a219', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af57...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d...', order:'291654802-52081422241536', channel:'Meta Trader', status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:45', hash:'613e517de794200d...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.3',  fee:'0.3',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a...', order:'',                         channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.2',  fee:'0.2',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:44', hash:'d641bab856175231...', order:'',                         channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.1',  fee:'0.1',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af...', order:'',                         channel:'',           status:'invalid' },
+    { uid:'884590488', name:'kara2',           token:'USDT', network:'TRON', amount:'7.19', fee:'7.19', net:'+0', wallet:'0x488......5a219', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.12', fee:'0.12', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.09', fee:'0.09', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'253024631', name:'benny@bdy.tech',  token:'USDT', network:'TRON', amount:'4.5',  fee:'4.5',  net:'+0', wallet:'0x488......5a219', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af57...', order:'',                         channel:'',           status:'arrived' },
   ];
 
   const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
@@ -1030,10 +1029,10 @@
   };
 
   const PAYMENT_ALL = [
-    { order:'291654802-52081422241536', due:'0.70',   paid:'0.70',   fee:'0.01', net:'0.69',   source:'Paypaz', token:'USDT1', network:'TRON', channel:'Meta Trader', time:'2026-06-12 15:57:35', addr:'TG1xj...bkJzh', status:'processing', editable:true  },
-    { order:'291654802-52081414206720', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT1', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
-    { order:'291654802-52079444850688', due:'0.20',   paid:'0.20',   fee:'0.01', net:'0.19',   source:'Paypaz', token:'USDT1', network:'TRON', channel:'',            time:'2026-06-13 13:48:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
-    { order:'291654802-51905185772032', due:'400.00', paid:'400.00', fee:'0.04', net:'399.96', source:'Paypaz', token:'USDT1', network:'TRON', channel:'',            time:'2026-06-04 16:43:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+    { order:'291654802-52081422241536', due:'0.70',   paid:'0.70',   fee:'0.01', net:'0.69',   source:'Paypaz', token:'USDT', network:'TRON', channel:'Meta Trader', time:'2026-06-12 15:57:35', addr:'TG1xj...bkJzh', status:'processing', editable:true  },
+    { order:'291654802-52081414206720', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+    { order:'291654802-52079444850688', due:'0.20',   paid:'0.20',   fee:'0.01', net:'0.19',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-13 13:48:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+    { order:'291654802-51905185772032', due:'400.00', paid:'400.00', fee:'0.04', net:'399.96', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-04 16:43:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
   ];
 
   const pState = { rows: [...PAYMENT_ALL], page: 1, size: 10 };

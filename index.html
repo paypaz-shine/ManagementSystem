@@ -407,8 +407,7 @@
   <!-- ── Sidebar ─────────────────────────────────────── -->
   <aside class="sidebar">
     <div class="logo-area">
-      <i data-lucide="zap" class="logo-icon" style="width:22px;height:22px;"></i>
-      <span class="logo-text">paypaz</span>
+      <img src="image/Paypaz-logo.png" alt="Paypaz" style="height:32px;width:auto;object-fit:contain;">
     </div>
     <nav>
       <div class="nav-item" data-page="home">
@@ -592,13 +591,13 @@
                 <col style="width:95px"><col style="width:100px"><col style="width:70px">
                 <col style="width:80px"><col style="width:70px"><col style="width:72px">
                 <col style="width:70px"><col style="width:155px"><col style="width:152px">
-                <col><col style="width:240px"><col style="width:110px"><col style="width:100px">
+                <col style="width:150px"><col style="width:110px"><col style="width:100px">
               </colgroup>
               <thead>
                 <tr>
                   <th>UID</th><th>名称</th><th>代币</th><th>网络</th>
                   <th>金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
-                  <th>到账时间</th><th>哈希</th><th>订单号</th><th>渠道</th><th>状态</th>
+                  <th>到账时间</th><th>哈希</th><th>渠道</th><th>状态</th>
                 </tr>
               </thead>
               <tbody id="d-tbody"></tbody>
@@ -751,12 +750,12 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1430px;">
+            <table style="min-width:1100px;">
               <colgroup>
-                <col style="width:220px"><col style="width:90px"><col style="width:100px">
+                <col style="width:200px"><col style="width:90px"><col style="width:100px">
                 <col style="width:80px"><col style="width:130px"><col style="width:70px">
                 <col style="width:70px"><col style="width:90px"><col style="width:110px">
-                <col style="width:152px"><col style="width:272px"><col style="width:90px">
+                <col style="width:152px"><col style="width:140px"><col style="width:90px">
                 <col style="width:60px">
               </colgroup>
               <thead>
@@ -919,15 +918,15 @@
   };
 
   const DEPOSIT_ALL = [
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d...', order:'291654802-52081422241536', channel:'Meta Trader', status:'arrived' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:45', hash:'613e517de794200d...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.3',  fee:'0.3',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a...', order:'',                         channel:'',           status:'pending' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.2',  fee:'0.2',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:44', hash:'d641bab856175231...', order:'',                         channel:'',           status:'pending' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.1',  fee:'0.1',  net:'+0', wallet:'0x488......5a219', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af...', order:'',                         channel:'',           status:'invalid' },
-    { uid:'884590488', name:'kara2',           token:'USDT', network:'TRON', amount:'7.19', fee:'7.19', net:'+0', wallet:'0x488......5a219', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.12', fee:'0.12', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.09', fee:'0.09', net:'+0', wallet:'0x488......5a219', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff...', order:'',                         channel:'',           status:'arrived' },
-    { uid:'253024631', name:'benny@bdy.tech',  token:'USDT', network:'TRON', amount:'4.5',  fee:'4.5',  net:'+0', wallet:'0x488......5a219', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af57...', order:'',                         channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', channel:'Meta Trader', status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:45', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.3',  fee:'0.3',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a7d8e5f2c9b4a1d6e8f3c7b2a5d9e0f4c8b3a7d6e2f1c5b4', channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.2',  fee:'0.2',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:44', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.1',  fee:'0.1',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af8d2e6b4c7f9a3d5e8c1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a', channel:'',           status:'invalid' },
+    { uid:'884590488', name:'kara2',           token:'USDT', network:'TRON', amount:'7.19', fee:'7.19', net:'+0', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.12', fee:'0.12', net:'+0', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b5a', channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.09', fee:'0.09', net:'+0', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff5c2a8d6e1b4f7c9a3d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d', channel:'',           status:'arrived' },
+    { uid:'253024631', name:'benny@bdy.tech',  token:'USDT', network:'TRON', amount:'4.5',  fee:'4.5',  net:'+0', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', channel:'',           status:'arrived' },
   ];
 
   const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
@@ -938,25 +937,14 @@
     const slice = dState.rows.slice(start, start + dState.size);
     tbody.innerHTML = slice.map(r => {
       const st = D_STATUS[r.status];
-      const orderCell = r.order
-        ? `<div class="copy-cell"><span>${r.order}</span>
-             <span class="copy-icon" onclick="copyText('${r.order}')">
-               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-               </svg>
-             </span></div>`
-        : `<span class="cell-empty">—</span>`;
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
         <td>${r.name}</td><td>${r.token}</td><td>${r.network}</td>
         <td>${r.amount}</td><td>${r.fee}</td>
         <td class="cell-green">${r.net}</td>
-        <td>${r.wallet}</td>
+        <td>${truncCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
-        <td style="font-family:Inter,sans-serif">${r.hash}</td>
-        <td>${orderCell}</td>
+        <td>${truncCell(r.hash)}</td>
         <td>${r.channel || '直连'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
       </tr>`;
@@ -1013,10 +1001,10 @@
     dState.rows = [...DEPOSIT_ALL]; dState.page = 1; depositRender();
   }
   function depositExport() {
-    const headers = ['UID','名称','代币','网络','金额','手续费','净入账','钱包地址','到账时间','哈希','订单号','渠道','状态'];
+    const headers = ['UID','名称','代币','网络','金额','手续费','净入账','钱包地址','到账时间','哈希','渠道','状态'];
     csvDownload(headers, dState.rows.map(r => [
       r.uid, r.name, r.token, r.network, r.amount, r.fee, r.net,
-      r.wallet, r.time, r.hash, r.order || '—', r.channel || '直连', D_STATUS[r.status].label
+      r.wallet, r.time, r.hash, r.channel || '直连', D_STATUS[r.status].label
     ]), '充币记录.csv');
   }
 
@@ -1067,18 +1055,7 @@
         <td>${r.token}</td><td>${r.network}</td><td>${r.source}</td>
         <td>${r.channel || '直连'}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
-        <td>
-          <div class="copy-cell">
-            <span>${r.addr}</span>
-            <span class="copy-icon" onclick="copyText('${r.addr}')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-              </svg>
-            </span>
-          </div>
-        </td>
+        <td>${truncCell(r.addr)}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td>
           <div class="action-cell">
@@ -1180,6 +1157,31 @@
   // ── Shared Utils ──────────────────────────────────────
   function copyText(text) {
     navigator.clipboard.writeText(text).then(() => showToast('复制成功'));
+  }
+
+  // 截断 + 浮窗 Tooltip
+  (function () {
+    const el = document.createElement('div');
+    el.id = 'g-tip';
+    el.style.cssText = 'display:none;position:fixed;background:#303133;color:#fff;font-size:12px;font-family:Inter,sans-serif;padding:6px 10px;border-radius:4px;z-index:9999;max-width:480px;word-break:break-all;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.2);line-height:1.6;white-space:normal;';
+    document.body.appendChild(el);
+    window.showTip = (e, t) => { el.textContent = t; el.style.display = 'block'; moveTip(e); };
+    window.moveTip = (e) => { el.style.left = e.clientX + 'px'; el.style.top = (e.clientY - 48) + 'px'; };
+    window.hideTip = () => { el.style.display = 'none'; };
+  })();
+
+  function truncateStr(str) {
+    if (!str || str.length <= 13) return str;
+    return str.slice(0, 5) + '...' + str.slice(-5);
+  }
+
+  const _COPY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+
+  function truncCell(val) {
+    if (!val) return `<span class="cell-empty">—</span>`;
+    const short = truncateStr(val);
+    const esc = val.replace(/'/g, '&#39;');
+    return `<div class="copy-cell"><span style="font-family:Inter,sans-serif;cursor:default" onmouseenter="showTip(event,'${esc}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${short}</span><span class="copy-icon" onclick="copyText('${esc}')">${_COPY_SVG}</span></div>`;
   }
 
   function csvDownload(headers, rows, filename) {

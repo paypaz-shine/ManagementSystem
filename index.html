@@ -403,6 +403,18 @@
   </style>
 </head>
 <body>
+<script>
+(function(){
+  if (sessionStorage.getItem('ppz_auth') !== '1') {
+    var input = prompt('请输入访问密码');
+    if (input !== '@PayPaz.tech') {
+      document.documentElement.innerHTML = '<body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;color:#606266;font-size:15px;background:#F5F7FA;">无权限访问</body>';
+      throw new Error('unauthorized');
+    }
+    sessionStorage.setItem('ppz_auth', '1');
+  }
+})();
+</script>
 
   <!-- ── Sidebar ─────────────────────────────────────── -->
   <aside class="sidebar">

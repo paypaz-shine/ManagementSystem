@@ -400,6 +400,104 @@
       display: flex; justify-content: flex-end;
     }
     .btn-sm { height: 28px; padding: 0 16px; font-size: 13px; }
+
+    /* ── 商户管理 ────────────────────────────────── */
+    .badge-enabled  { background:#F0F9EB; color:#67C23A; border:1px solid #b3e19d; border-radius:30px; padding:2px 8px; font-size:12px; white-space:nowrap; }
+    .badge-disabled { background:#f4f4f5; color:#909399; border:1px solid #E4E7ED; border-radius:30px; padding:2px 8px; font-size:12px; white-space:nowrap; }
+    /* ── Merchant Detail Page ───────────────────── */
+    .md-top-bar {
+      height:52px; background:#fff; border-bottom:1px solid #EBEEF5;
+      display:flex; align-items:center; padding:0 20px; flex-shrink:0;
+    }
+    .md-back-btn {
+      height:32px; padding:0 12px; border-radius:4px;
+      border:1px solid #E6A23C; background:#fff; color:#E6A23C;
+      font-size:14px; font-family:'Noto Sans SC',sans-serif;
+      display:flex; align-items:center; gap:4px; cursor:pointer; transition:background 0.15s;
+    }
+    .md-back-btn:hover { background:#fdf6ec; }
+    .md-sub-tabs {
+      height:44px; background:#fff; border-bottom:1px solid #E4E7ED;
+      display:flex; align-items:stretch; padding:0 20px; flex-shrink:0;
+    }
+    .md-tab {
+      display:flex; align-items:center; padding:0 16px;
+      font-size:14px; color:#606266; cursor:pointer;
+      border-bottom:2px solid transparent; transition:color 0.15s, border-color 0.15s; white-space:nowrap;
+    }
+    .md-tab:hover { color:#409EFF; }
+    .md-tab.md-tab-active { color:#409EFF; border-bottom-color:#409EFF; }
+    .md-tab-content { display:flex; flex-direction:column; flex:1; overflow:hidden; min-height:0; }
+    .badge-ton  { background:#EBF5FF; color:#409EFF; border:1px solid #b3d8ff; border-radius:30px; padding:2px 8px; font-size:12px; white-space:nowrap; }
+    .badge-toff { background:#FEF0F0; color:#F56C6C; border:1px solid #fbc4c4; border-radius:30px; padding:2px 8px; font-size:12px; white-space:nowrap; }
+    /* ── 邀请弹窗 ────────────────────────────────── */
+    .form-row { display:grid; grid-template-columns:70px 1fr; align-items:center; gap:8px; margin-bottom:16px; }
+    .form-row:last-child { margin-bottom:0; }
+    .form-label { font-size:13px; color:#606266; text-align:right; white-space:nowrap; }
+    /* ── API Keys 标签页 ──────────────────────────── */
+    .apikey-toolbar { display:flex; justify-content:flex-end; align-items:center; padding:12px 16px; flex-shrink:0; background:#fff; border-bottom:1px solid #EBEEF5; }
+    .perm-tag { display:inline-flex; align-items:center; height:22px; padding:0 8px; border:1px solid #b3d8ff; background:#EBF5FF; color:#409EFF; border-radius:4px; font-size:12px; white-space:nowrap; }
+    .ip-tag   { display:inline-flex; align-items:center; height:22px; padding:0 8px; border:1px solid #E4E7ED; background:#F4F4F5; color:#606266; border-radius:4px; font-size:12px; white-space:nowrap; font-family:'Inter',sans-serif; }
+    .status-link { color:#409EFF; font-size:13px; cursor:default; }
+    /* ── 资产 Tab ──────────────────────────────────── */
+    .asset-summary { display:flex; gap:16px; padding:16px 20px; flex-shrink:0; border-bottom:1px solid #EBEEF5; background:#fff; }
+    .asset-sum-card { flex:1; border:1px solid #EBEEF5; border-radius:4px; padding:14px 20px; background:#fff; }
+    .asset-sum-lbl { font-size:12px; color:#909399; margin-bottom:8px; }
+    .asset-sum-val { font-size:22px; font-weight:600; color:#303133; font-family:'Inter',sans-serif; line-height:1.2; }
+    .asset-sum-unit { font-size:12px; font-weight:400; color:#909399; margin-left:3px; font-family:'Noto Sans SC',sans-serif; }
+    .asset-num { font-family:'Inter',sans-serif; text-align:right; }
+    .asset-frozen { color:#E6A23C; }
+    .type-tag { display:inline-flex; align-items:center; height:22px; padding:0 8px; border-radius:4px; font-size:12px; white-space:nowrap; }
+    .type-tag-in  { border:1px solid #b3d8ff; background:#ecf5ff; color:#409EFF; }
+    .type-tag-out { border:1px solid #faecd8; background:#fdf6ec; color:#E6A23C; }
+    .asset-update-row { display:flex; align-items:center; gap:6px; padding:6px 20px; background:#fff; border-bottom:1px solid #EBEEF5; flex-shrink:0; }
+    .asset-refresh-icon { display:flex; align-items:center; color:#C0C4CC; cursor:pointer; transition:color 0.15s, transform 0.3s; }
+    .asset-refresh-icon:hover { color:#409EFF; }
+    .asset-refresh-icon.spinning svg { animation:spin 0.6s linear; }
+    @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+    .asset-update-lbl { font-size:12px; color:#909399; }
+    .asset-update-time { font-size:12px; color:#606266; font-family:'Inter',sans-serif; }
+    .asset-filter-bar { display:flex; gap:20px; align-items:center; padding:12px 20px; background:#fff; border-bottom:1px solid #EBEEF5; flex-shrink:0; }
+    .asset-filter-group { display:flex; align-items:center; gap:8px; }
+    .asset-filter-lbl { font-size:13px; color:#606266; white-space:nowrap; }
+    /* ── 观察者账号标签页 ─────────────────────────── */
+    .obs-account-wrap { display:flex; border:1px solid #DCDFE6; border-radius:4px; overflow:hidden; height:32px; align-items:center; transition:border-color 0.2s; }
+    .obs-account-wrap:focus-within { border-color:#409EFF; }
+    .obs-prefix { flex-shrink:0; width:110px; background:#F5F7FA; border:none; border-right:1px solid #DCDFE6; padding:0 8px; font-size:13px; color:#909399; height:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; outline:none; cursor:default; }
+    .obs-suffix { flex:1; border:none; padding:0 8px; font-size:13px; color:#303133; height:100%; outline:none; min-width:0; }
+    .obs-suffix::placeholder { color:#C0C4CC; }
+    .obs-counter { flex-shrink:0; font-size:12px; color:#909399; padding:0 8px; white-space:nowrap; }
+    .obs-pwd-wrap { position:relative; }
+    .obs-pwd-wrap input { padding-right:32px !important; width:100%; }
+    .obs-eye { position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; color:#C0C4CC; display:flex; align-items:center; }
+    .obs-eye:hover { color:#909399; }
+    /* ── 创建 API Keys 弹窗 ──────────────────────── */
+    .ak-modal { background:#fff; border-radius:6px; width:560px; max-width:92vw; box-shadow:0 12px 40px rgba(0,0,0,0.18); }
+    .ak-form-row { display:grid; grid-template-columns:90px 1fr; align-items:center; gap:8px; margin-bottom:18px; }
+    .ak-form-row.top { align-items:flex-start; }
+    .ak-label { font-size:13px; color:#606266; text-align:right; white-space:nowrap; }
+    .ak-req { color:#F56C6C; margin-right:2px; }
+    .ak-readonly { background:#F5F7FA !important; color:#909399; cursor:default; }
+    .ak-readonly:focus { border-color:#DCDFE6 !important; }
+    .ak-copy-row { display:flex; align-items:center; gap:6px; }
+    .ak-copy-row input { flex:1; min-width:0; }
+    .ak-copy-btn { flex-shrink:0; cursor:pointer; color:#409EFF; display:flex; align-items:center; transition:opacity 0.15s; }
+    .ak-copy-btn:hover { opacity:0.7; }
+    .ak-checks { display:flex; align-items:center; gap:20px; }
+    .ak-check-item { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#606266; user-select:none; }
+    .ak-check-item input[type=checkbox] { position:absolute; opacity:0; width:0; height:0; }
+    .ak-box { display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border:1px solid #DCDFE6; border-radius:2px; background:#fff; flex-shrink:0; transition:border-color 0.15s, background 0.15s; }
+    .ak-check-item input[type=checkbox]:checked + .ak-box { border-color:#409EFF; background:#409EFF; }
+    .ak-check-item input[type=checkbox]:checked + .ak-box::after { content:''; display:block; width:8px; height:5px; border-left:1.5px solid #fff; border-bottom:1.5px solid #fff; transform:rotate(-45deg) translateY(-1px); }
+    .ak-radios { display:flex; align-items:center; gap:24px; }
+    .ak-radio-item { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#606266; user-select:none; }
+    .ak-radio-item input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
+    .ak-dot { display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border:1px solid #DCDFE6; border-radius:50%; background:#fff; flex-shrink:0; transition:border-color 0.15s, background 0.15s; }
+    .ak-radio-item input[type=radio]:checked + .ak-dot { border-color:#409EFF; background:#409EFF; }
+    .ak-radio-item input[type=radio]:checked + .ak-dot::after { content:''; display:block; width:6px; height:6px; background:#fff; border-radius:50%; }
+    .ak-textarea { width:100%; height:80px; border:1px solid #DCDFE6; border-radius:4px; padding:8px 10px; font-size:13px; color:#303133; font-family:'Noto Sans SC',sans-serif; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
+    .ak-textarea:focus { border-color:#409EFF; }
+    .ak-textarea::placeholder { color:#C0C4CC; }
   </style>
 </head>
 <body>
@@ -567,7 +665,7 @@
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">时间范围</span>
+              <span class="filter-label-el">时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="d-date-start">
@@ -731,7 +829,7 @@
             </div>
             <!-- Row 3 -->
             <div class="filter-item col-span-2">
-              <span class="filter-label-el">时间范围</span>
+              <span class="filter-label-el">时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="p-date-start">
@@ -805,6 +903,290 @@
       </div>
     </div><!-- /page-payment -->
 
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 商户管理                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-merchant">
+      <div class="content-area">
+        <div class="table-card">
+          <div class="summary-bar">
+            <span class="count-label">条数：</span>
+            <span class="count-value" id="m-total">30</span>
+            <div class="summary-spacer"></div>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:840px;">
+              <colgroup>
+                <col><col style="width:130px">
+                <col style="width:90px"><col style="width:80px">
+                <col style="width:170px"><col style="width:190px">
+                <col style="width:120px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>名称</th><th>ID</th>
+                  <th>状态</th><th>子钱包</th><th>资产余额</th><th>创建时间</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="m-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="m-page-total">共 30 条</span>
+            <select class="page-size-select" id="m-page-size" onchange="merchantPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="m-btn-prev" onclick="merchantPage(mState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" id="m-p-1" onclick="merchantPage(1)">1</button>
+            <button class="page-btn" id="m-p-2" onclick="merchantPage(2)">2</button>
+            <button class="page-btn" id="m-p-3" onclick="merchantPage(3)">3</button>
+            <button class="page-btn" id="m-btn-next" onclick="merchantPage(mState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')merchantPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-merchant -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 商户详情                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-merchant-detail">
+      <!-- 返回 bar -->
+      <div class="md-top-bar">
+        <button class="md-back-btn" onclick="merchantDetailBack()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回
+        </button>
+      </div>
+      <!-- 子 Tabs -->
+      <div class="md-sub-tabs">
+        <span class="md-tab md-tab-active" data-tab="asset" onclick="mdSwitchTab('asset')">资产</span>
+        <span class="md-tab" data-tab="apikeys" onclick="mdSwitchTab('apikeys')">API keys</span>
+        <span class="md-tab" data-tab="token" onclick="mdSwitchTab('token')">代币</span>
+        <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
+      </div>
+      <!-- 资产 tab content -->
+      <div class="md-tab-content" id="md-content-asset" style="flex-direction:column;">
+        <div class="asset-summary">
+          <div class="asset-sum-card">
+            <div class="asset-sum-lbl">余额</div>
+            <div><span class="asset-sum-val" id="asset-total">—</span><span class="asset-sum-unit">USD</span></div>
+          </div>
+          <div class="asset-sum-card">
+            <div class="asset-sum-lbl">可用</div>
+            <div><span class="asset-sum-val" id="asset-avail">—</span><span class="asset-sum-unit">USD</span></div>
+          </div>
+          <div class="asset-sum-card">
+            <div class="asset-sum-lbl">冻结</div>
+            <div><span class="asset-sum-val asset-frozen" id="asset-frozen">—</span><span class="asset-sum-unit">USD</span></div>
+          </div>
+        </div>
+        <div class="asset-update-row">
+          <span class="asset-refresh-icon" id="asset-refresh-icon" onclick="mdAssetRefresh()" title="点击刷新">
+            <i data-lucide="refresh-cw" style="width:13px;height:13px;"></i>
+          </span>
+          <span class="asset-update-lbl">更新时间：</span>
+          <span class="asset-update-time" id="asset-update-time">2026-06-22 17:00:49</span>
+        </div>
+        <div class="content-area">
+          <div class="filter-card">
+            <div class="filter-grid">
+              <div class="filter-item">
+                <span class="filter-label-el">币种</span>
+                <div class="filter-control">
+                  <div class="select-wrap">
+                    <select class="field-select" id="asset-f-token">
+                      <option value="">全部</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="filter-item">
+                <span class="filter-label-el">网络</span>
+                <div class="filter-control">
+                  <div class="select-wrap">
+                    <select class="field-select" id="asset-f-network">
+                      <option value="">全部</option>
+                      <option>TRON</option>
+                      <option>Ethereum</option>
+                      <option>BNB Chain</option>
+                      <option>Polygon</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="filter-item">
+                <span class="filter-label-el">类型</span>
+                <div class="filter-control">
+                  <div class="select-wrap">
+                    <select class="field-select" id="asset-f-type">
+                      <option value="">全部</option>
+                      <option value="in">充币</option>
+                      <option value="out">提币</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="filter-item">
+                <span class="filter-label-el">渠道</span>
+                <div class="filter-control">
+                  <div class="select-wrap">
+                    <select class="field-select" id="asset-f-channel">
+                      <option value="">全部</option>
+                      <option>MT</option>
+                      <option>直连</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="filter-item col-span-2">
+                <span class="filter-label-el">时间</span>
+                <div class="filter-control">
+                  <div class="date-range-el">
+                    <input class="date-input-el" type="date" id="asset-f-date-start">
+                    <span class="range-sep-el">—</span>
+                    <input class="date-input-el" type="date" id="asset-f-date-end">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button class="btn btn-default" onclick="mdAssetReset()">
+                <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+              </button>
+              <button class="btn btn-primary" onclick="mdAssetSearch()">
+                <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+              </button>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="table-wrap">
+              <table style="min-width:760px;">
+                <colgroup>
+                  <col style="width:80px"><col style="width:160px"><col style="width:90px">
+                  <col style="width:90px"><col style="width:100px"><col style="width:130px">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>代币</th><th>网络</th><th>类型</th><th>渠道</th>
+                    <th style="text-align:right;">笔数</th>
+                    <th style="text-align:right;">金额</th>
+                  </tr>
+                </thead>
+                <tbody id="md-asset-tbody"></tbody>
+              </table>
+            </div>
+            <div class="pagination-bar">
+              <span class="pagination-total" id="asset-page-total">共 0 条</span>
+              <select class="page-size-select" id="asset-page-size" onchange="mdAssetPageSize()">
+                <option value="10">10条/页</option>
+                <option value="20">20条/页</option>
+                <option value="50">50条/页</option>
+              </select>
+              <button class="page-btn" id="asset-btn-prev" onclick="mdAssetPage(aState.page-1)">
+                <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+              </button>
+              <button class="page-btn active" id="asset-p-1" onclick="mdAssetPage(1)">1</button>
+              <button class="page-btn" id="asset-p-2" onclick="mdAssetPage(2)">2</button>
+              <button class="page-btn" id="asset-p-3" onclick="mdAssetPage(3)">3</button>
+              <button class="page-btn" id="asset-btn-next" onclick="mdAssetPage(aState.page+1)">
+                <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+              </button>
+              <span class="goto-label">前往</span>
+              <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')mdAssetPage(+this.value)">
+              <span class="goto-suffix">页</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 代币 tab content -->
+      <div class="md-tab-content" id="md-content-token" style="display:none;flex-direction:column;">
+        <div class="content-area">
+          <div class="table-card">
+            <div class="table-wrap">
+              <table style="min-width:1060px;">
+                <colgroup>
+                  <col style="width:80px"><col style="width:160px"><col style="width:100px">
+                  <col style="width:80px"><col style="width:80px"><col style="width:110px">
+                  <col style="width:80px"><col style="width:140px"><col style="width:140px">
+                  <col>
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>代币</th><th>网络全称</th><th>最小充币</th>
+                    <th>状态</th><th>充币</th><th>充币渠道</th>
+                    <th>提币</th><th>单笔提币渠道</th><th>批量提币渠道</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="md-token-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- API keys tab content -->
+      <div class="md-tab-content" id="md-content-apikeys" style="display:none;flex-direction:column;">
+        <div class="content-area">
+          <div class="table-card">
+            <div class="summary-bar">
+              <div class="summary-spacer"></div>
+              <button class="btn btn-primary" style="height:30px;padding:0 14px;font-size:13px;" onclick="openCreateApiKeyModal()">+ 添加</button>
+            </div>
+            <div class="table-wrap">
+              <table style="min-width:960px;">
+                <colgroup>
+                  <col style="width:130px"><col style="width:280px"><col style="width:130px">
+                  <col style="width:160px"><col style="width:175px">
+                  <col style="width:80px"><col style="width:80px">
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>名称</th><th>API key</th><th>IP白名单</th>
+                    <th>权限</th><th>创建时间</th><th>状态</th><th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="md-apikeys-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 观察者账号 tab content -->
+      <div class="md-tab-content" id="md-content-observer" style="display:none;flex-direction:column;">
+        <div class="content-area">
+          <div class="table-card">
+            <div class="summary-bar">
+              <div class="summary-spacer"></div>
+              <button class="btn btn-primary" style="height:30px;padding:0 14px;font-size:13px;" onclick="openCreateObserverModal()">+ 添加</button>
+            </div>
+            <div class="table-wrap">
+              <table style="min-width:700px;">
+                <colgroup><col><col style="width:200px"><col style="width:80px"></colgroup>
+                <thead>
+                  <tr><th>账号</th><th>最后登录时间</th><th>操作</th></tr>
+                </thead>
+                <tbody id="md-observer-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-merchant-detail -->
+
   </div><!-- /main-area -->
 
   <!-- ── Detail Modal ───────────────────────────────── -->
@@ -819,6 +1201,136 @@
       <div class="modal-body" id="modal-body"></div>
       <div class="modal-footer">
         <button class="btn btn-default btn-sm" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Invite Modal ──────────────────────────────── -->
+  <div class="modal-overlay" id="invite-modal" onclick="if(event.target===this)closeInviteModal()">
+    <div class="modal" style="width:460px;">
+      <div class="modal-header">
+        <span class="modal-title">邀请企业</span>
+        <span class="modal-close" onclick="closeInviteModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" style="display:block;padding:24px 24px 8px;">
+        <div class="form-row">
+          <span class="form-label">企业名称</span>
+          <input class="field-input" type="text" id="inv-name" placeholder="请输入企业名称" style="width:100%;">
+        </div>
+        <div class="form-row">
+          <span class="form-label">邮箱</span>
+          <input class="field-input" type="email" id="inv-email" placeholder="请输入邮箱地址" style="width:100%;">
+        </div>
+        <div class="form-row">
+          <span class="form-label">备注</span>
+          <input class="field-input" type="text" id="inv-remark" placeholder="选填" style="width:100%;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeInviteModal()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="submitInvite()" style="margin-left:8px;">确认邀请</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Create Observer Modal ────────────────────────── -->
+  <div class="modal-overlay" id="obs-modal" onclick="if(event.target===this)closeCreateObserverModal()">
+    <div class="modal" style="width:500px;">
+      <div class="modal-header">
+        <span class="modal-title">创建观察者账号</span>
+        <span class="modal-close" onclick="closeCreateObserverModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" style="display:block;padding:24px 24px 8px;">
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>账号</span>
+          <div class="obs-account-wrap">
+            <input class="obs-prefix" type="text" id="obs-prefix-val" readonly>
+            <input class="obs-suffix" type="text" id="obs-suffix" placeholder="请输入内容" maxlength="20"
+              oninput="document.getElementById('obs-counter').textContent=this.value.length+' / 20'">
+            <span class="obs-counter" id="obs-counter">0 / 20</span>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:0;">
+          <span class="ak-label"><span class="ak-req">*</span>密码</span>
+          <div class="obs-pwd-wrap">
+            <input class="field-input" type="password" id="obs-password" placeholder="请输入内容" style="width:100%;">
+            <span class="obs-eye" id="obs-eye-btn" onclick="toggleObsPassword()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="submitCreateObserver()">确定</button>
+        <button class="btn btn-default btn-sm" onclick="closeCreateObserverModal()" style="margin-left:8px;">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Create API Key Modal ──────────────────────────── -->
+  <div class="modal-overlay" id="ak-modal" onclick="if(event.target===this)closeCreateApiKeyModal()">
+    <div class="ak-modal">
+      <div class="modal-header">
+        <span class="modal-title">创建API keys</span>
+        <span class="modal-close" onclick="closeCreateApiKeyModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" style="display:block;padding:24px 24px 8px;">
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>名称</span>
+          <input class="field-input" type="text" id="ak-name" placeholder="请输入内容" style="width:100%;">
+        </div>
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>API Key</span>
+          <div class="ak-copy-row">
+            <input class="field-input ak-readonly" type="text" id="ak-key-val" readonly style="width:100%;font-family:'Inter',sans-serif;font-size:12px;">
+            <span class="ak-copy-btn" onclick="copyText(document.getElementById('ak-key-val').value)" title="复制">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>API Secret</span>
+          <div class="ak-copy-row">
+            <input class="field-input ak-readonly" type="text" id="ak-secret-val" readonly style="width:100%;font-family:'Inter',sans-serif;font-size:12px;">
+            <span class="ak-copy-btn" onclick="copyText(document.getElementById('ak-secret-val').value)" title="复制">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>权限</span>
+          <div class="ak-checks">
+            <label class="ak-check-item"><input type="checkbox" id="ak-perm-deposit" checked><span class="ak-box"></span> deposit</label>
+            <label class="ak-check-item"><input type="checkbox" id="ak-perm-withdraw" checked><span class="ak-box"></span> withdraw</label>
+          </div>
+        </div>
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>状态</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="ak-status" id="ak-status-on" value="enabled" checked><span class="ak-dot"></span> 启用</label>
+            <label class="ak-radio-item"><input type="radio" name="ak-status" id="ak-status-off" value="disabled"><span class="ak-dot"></span> 禁用</label>
+          </div>
+        </div>
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>类型</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="ak-type" value="forever" checked><span class="ak-dot"></span> 永久</label>
+          </div>
+        </div>
+        <div class="ak-form-row top">
+          <span class="ak-label" style="padding-top:8px;"><span class="ak-req">*</span>IP白名单</span>
+          <textarea class="ak-textarea" id="ak-ip" placeholder="多个IP用英文逗号分隔，最多支持10个地址"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="submitCreateApiKey()">确定</button>
+        <button class="btn btn-default btn-sm" onclick="closeCreateApiKeyModal()" style="margin-left:8px;">取消</button>
       </div>
     </div>
   </div>
@@ -839,6 +1351,7 @@
     home:     { label: '首页',      icon: 'house' },
     platform: { label: '平台资产',  icon: 'layers' },
     merchant: { label: '商户管理',  icon: 'users' },
+    'merchant-detail': { label: '商户详情', icon: 'layout-grid' },
     withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
     currency: { label: '币种管理',  icon: 'circle-dollar-sign' },
     feedback: { label: '反馈收集',  icon: 'message-square' },
@@ -846,7 +1359,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'payment']);
+  const IMPL_PAGES = new Set(['deposit', 'payment', 'merchant', 'merchant-detail']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -877,6 +1390,16 @@
     bar.querySelectorAll('[data-close]').forEach(el => {
       el.addEventListener('click', e => { e.stopPropagation(); closeTab(el.dataset.close); });
     });
+
+    // Merchant page: show invite button on right side of tab bar
+    if (activePage === 'merchant') {
+      const invBtn = document.createElement('div');
+      invBtn.style.cssText = 'flex:1;display:flex;justify-content:flex-end;align-items:center;padding-right:16px;flex-shrink:0;';
+      invBtn.innerHTML = `<button class="btn btn-primary" style="height:28px;padding:0 12px;font-size:13px;gap:4px;" onclick="openInviteModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>邀请企业
+      </button>`;
+      bar.appendChild(invBtn);
+    }
   }
 
   function navigateTo(pid) {
@@ -1147,6 +1670,7 @@
   function openDetail(idx) {
     const r = PAYMENT_ALL[idx];
     const st = P_STATUS[r.status];
+    document.querySelector('#detail-modal .modal-title').textContent = '订单详情';
     document.getElementById('modal-body').innerHTML = `
       <div class="detail-item"><span class="detail-label">订单号</span><span class="detail-value">${r.order}</span></div>
       <div class="detail-item"><span class="detail-label">状态</span><span class="detail-value"><span class="badge ${st.cls}">${st.label}</span></span></div>
@@ -1165,6 +1689,440 @@
   }
   function openEdit(idx) { openDetail(idx); } // placeholder
   function closeModal() { document.getElementById('detail-modal').classList.remove('show'); }
+
+  // ══════════════════════════════════════════════════════
+  //  商户管理 data & logic
+  // ══════════════════════════════════════════════════════
+  const MERCHANT_ALL = [
+    { id:'462513816', name:'shine',       status:'enabled',  wallets:0,  balance:'0',           created:'2026-06-09 10:38:16' },
+    { id:'291654802', name:'kara4',       status:'enabled',  wallets:8,  balance:'920.92',       created:'2026-05-29 18:35:11' },
+    { id:'460466234', name:'kara3',       status:'enabled',  wallets:5,  balance:'1070.14',      created:'2026-05-29 15:40:03' },
+    { id:'673738868', name:'rogan',       status:'enabled',  wallets:0,  balance:'86.29',        created:'2026-05-29 14:51:45' },
+    { id:'466332584', name:'rogan',       status:'enabled',  wallets:0,  balance:'0',            created:'2026-05-29 14:09:25' },
+    { id:'888166267', name:'rogan',       status:'enabled',  wallets:0,  balance:'0',            created:'2026-05-29 13:59:50' },
+    { id:'236751146', name:'rogan-v1',    status:'enabled',  wallets:0,  balance:'0',            created:'2026-05-29 13:46:01' },
+    { id:'848473309', name:'rogantest',   status:'enabled',  wallets:0,  balance:'156.928888',   created:'2026-05-06 15:34:16' },
+    { id:'884590488', name:'kara2',       status:'enabled',  wallets:9,  balance:'1501.06',      created:'2026-04-13 17:40:36' },
+    { id:'635102950', name:'kara',        status:'enabled',  wallets:10, balance:'1365.55',      created:'2026-04-13 16:00:01' },
+    { id:'512847362', name:'alpha-pay',   status:'enabled',  wallets:3,  balance:'580.00',       created:'2026-04-10 09:15:22' },
+    { id:'731924856', name:'betacorp',    status:'disabled', wallets:1,  balance:'0',            created:'2026-04-08 14:30:00' },
+    { id:'304857192', name:'gamma-fx',    status:'enabled',  wallets:6,  balance:'2410.75',      created:'2026-04-05 11:22:47' },
+    { id:'987654321', name:'delta-ex',    status:'enabled',  wallets:2,  balance:'318.40',       created:'2026-04-01 16:05:38' },
+    { id:'192837465', name:'epsilon',     status:'disabled', wallets:0,  balance:'0',            created:'2026-03-28 10:44:19' },
+    { id:'567891234', name:'zeta-pay',    status:'enabled',  wallets:4,  balance:'755.20',       created:'2026-03-25 08:37:56' },
+    { id:'345678912', name:'eta-trade',   status:'enabled',  wallets:7,  balance:'3210.50',      created:'2026-03-20 15:59:03' },
+    { id:'678912345', name:'theta-fin',   status:'enabled',  wallets:1,  balance:'102.88',       created:'2026-03-15 09:28:41' },
+    { id:'234567891', name:'iota-corp',   status:'disabled', wallets:0,  balance:'0',            created:'2026-03-10 17:14:29' },
+    { id:'891234567', name:'kappa-ex',    status:'enabled',  wallets:2,  balance:'490.60',       created:'2026-03-05 12:03:17' },
+    { id:'456789123', name:'lambda',      status:'enabled',  wallets:5,  balance:'1830.92',      created:'2026-02-28 14:52:44' },
+    { id:'789123456', name:'mu-pay',      status:'enabled',  wallets:3,  balance:'650.10',       created:'2026-02-20 10:19:32' },
+    { id:'123456789', name:'nu-trade',    status:'enabled',  wallets:0,  balance:'45.00',        created:'2026-02-15 08:44:11' },
+    { id:'963258741', name:'xi-corp',     status:'disabled', wallets:0,  balance:'0',            created:'2026-02-10 16:35:52' },
+    { id:'852741963', name:'omicron',     status:'enabled',  wallets:6,  balance:'2780.33',      created:'2026-02-05 11:07:28' },
+    { id:'741963852', name:'pi-finance',  status:'enabled',  wallets:2,  balance:'190.00',       created:'2026-01-30 09:22:15' },
+    { id:'630852741', name:'rho-pay',     status:'enabled',  wallets:1,  balance:'75.50',        created:'2026-01-25 14:48:37' },
+    { id:'519741630', name:'sigma-ex',    status:'disabled', wallets:0,  balance:'0',            created:'2026-01-20 10:55:04' },
+    { id:'408630519', name:'tau-corp',    status:'enabled',  wallets:8,  balance:'4120.78',      created:'2026-01-15 08:30:21' },
+    { id:'297519408', name:'upsilon',     status:'enabled',  wallets:0,  balance:'0',            created:'2026-01-10 16:17:49' },
+  ];
+
+  const M_STATUS = {
+    enabled:  { label:'启用中', cls:'badge-enabled'  },
+    disabled: { label:'已禁用', cls:'badge-disabled' },
+  };
+
+  const mState = { rows: [...MERCHANT_ALL], page: 1, size: 10 };
+
+  const _LOCK_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+  const _UNLOCK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>`;
+  const _EDIT_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
+  const _GRID_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>`;
+  const _TRASH_SVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`;
+
+  function merchantRender() {
+    const tbody = document.getElementById('m-tbody');
+    const start = (mState.page - 1) * mState.size;
+    const slice = mState.rows.slice(start, start + mState.size);
+    const html = [];
+
+    slice.forEach(r => {
+      const absIdx = MERCHANT_ALL.indexOf(r);
+      const st     = M_STATUS[r.status];
+      const bal    = r.balance === '0' ? '0 USDT' : r.balance + ' USDT';
+      const lockEl = r.status === 'enabled'
+        ? `<span class="action-icon" style="color:#909399" onclick="merchantToggleLock(${absIdx})" title="禁用">${_LOCK_SVG}</span>`
+        : `<span class="action-icon" style="color:#67C23A" onclick="merchantToggleLock(${absIdx})" title="启用">${_UNLOCK_SVG}</span>`;
+
+      html.push(`<tr>
+        <td>${r.name}</td>
+        <td style="font-family:Inter,sans-serif;color:#606266">${r.id}</td>
+        <td><span class="${st.cls}">${st.label}</span></td>
+        <td>${r.wallets}</td>
+        <td>${bal}</td>
+        <td style="font-family:Inter,sans-serif">${r.created}</td>
+        <td>
+          <div class="action-cell">
+            <span class="action-icon" onclick="openMerchantEdit(${absIdx})" title="编辑">${_EDIT_SVG}</span>
+            <span class="action-icon" onclick="openMerchantDetail(${absIdx})" title="子钱包">${_GRID_SVG}</span>
+            ${lockEl}
+          </div>
+        </td>
+      </tr>`);
+    });
+
+    tbody.innerHTML = html.join('');
+    document.getElementById('m-total').textContent      = mState.rows.length;
+    document.getElementById('m-page-total').textContent = `共 ${mState.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(mState.rows.length / mState.size));
+    document.getElementById('m-btn-prev').disabled = mState.page <= 1;
+    document.getElementById('m-btn-next').disabled = mState.page >= total;
+    ['m-p-1','m-p-2','m-p-3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el) { el.style.display = (i + 1) <= total ? '' : 'none'; el.classList.toggle('active', (i + 1) === mState.page); }
+    });
+    lucide.createIcons();
+  }
+
+  function merchantPage(p) {
+    const total = Math.max(1, Math.ceil(mState.rows.length / mState.size));
+    if (p < 1 || p > total) return;
+    mState.page = p; merchantRender();
+  }
+  function merchantPageSize() {
+    mState.size = +document.getElementById('m-page-size').value;
+    mState.page = 1; merchantRender();
+  }
+  function merchantToggleLock(absIdx) {
+    const r = MERCHANT_ALL[absIdx];
+    r.status = r.status === 'enabled' ? 'disabled' : 'enabled';
+    merchantRender();
+    showToast(r.name + (r.status === 'disabled' ? ' 已禁用' : ' 已启用'));
+  }
+
+  function openMerchantEdit(absIdx) {
+    const r = MERCHANT_ALL[absIdx];
+    const st = M_STATUS[r.status];
+    document.querySelector('#detail-modal .modal-title').textContent = '编辑商户';
+    document.getElementById('modal-body').innerHTML = `
+      <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.name}</span></div>
+      <div class="detail-item"><span class="detail-label">商户 ID</span><span class="detail-value" style="font-family:Inter,sans-serif">${r.id}</span></div>
+      <div class="detail-item"><span class="detail-label">状态</span><span class="detail-value"><span class="${st.cls}">${st.label}</span></span></div>
+      <div class="detail-item"><span class="detail-label">子钱包数</span><span class="detail-value">${r.wallets}</span></div>
+      <div class="detail-item"><span class="detail-label">资产余额</span><span class="detail-value">${r.balance === '0' ? '0' : r.balance} USDT</span></div>
+      <div class="detail-item"><span class="detail-label">创建时间</span><span class="detail-value" style="font-family:Inter,sans-serif">${r.created}</span></div>
+    `;
+    document.getElementById('detail-modal').classList.add('show');
+  }
+
+  function openMerchantDetail(absIdx) {
+    currentMerchantIdx = absIdx;
+    aState.rows = [...ASSET_ALL]; aState.page = 1;
+    mdRenderAssetTable();
+    // default to asset tab
+    document.querySelectorAll('.md-tab').forEach(el => el.classList.toggle('md-tab-active', el.dataset.tab === 'asset'));
+    document.querySelectorAll('.md-tab-content').forEach(el => { el.style.display = el.id === 'md-content-asset' ? 'flex' : 'none'; });
+    navigateTo('merchant-detail');
+  }
+
+  // ── Merchant Detail ───────────────────────────────────
+  let currentMerchantIdx = 0;
+
+  const TOKEN_ROWS = [
+    { token:'USDT', network:'TRON',            minDeposit:'0.1', status:'on', deposit:'on', depositCh:'Cobo',  withdraw:'on',  withdrawCh:'PayMe', batchCh:'PayMe' },
+    { token:'USDT', network:'Ethereum',        minDeposit:'',    status:'off',deposit:'on', depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'PayMe' },
+    { token:'USDC', network:'Ethereum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDC', network:'Arbitrum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDC', network:'Base',            minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDC', network:'Polygon',         minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDC', network:'BNB Smart Chain', minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDC', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDT', network:'Arbitrum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDT', network:'Base',            minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDT', network:'Polygon',         minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDT', network:'BNB Smart Chain', minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDT', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+  ];
+
+  function tBadge(flag) {
+    return flag === 'on'
+      ? '<span class="badge-ton">启用</span>'
+      : '<span class="badge-toff">禁用</span>';
+  }
+
+  function mdRenderTokenTable() {
+    const tbody = document.getElementById('md-token-tbody');
+    tbody.innerHTML = TOKEN_ROWS.map((r, i) => `<tr>
+      <td>${r.token}</td>
+      <td>${r.network}</td>
+      <td>${r.minDeposit || '<span class="cell-empty">—</span>'}</td>
+      <td>${tBadge(r.status)}</td>
+      <td>${tBadge(r.deposit)}</td>
+      <td>${r.depositCh}</td>
+      <td>${tBadge(r.withdraw)}</td>
+      <td>${r.withdrawCh}</td>
+      <td>${r.batchCh}</td>
+      <td>
+        <span class="action-icon" onclick="showToast('功能开发中')" title="编辑">${_EDIT_SVG}</span>
+      </td>
+    </tr>`).join('');
+  }
+
+  function merchantDetailBack() {
+    openTabs = openTabs.filter(t => t !== 'merchant-detail');
+    navigateTo('merchant');
+  }
+
+  function mdSwitchTab(tab) {
+    document.querySelectorAll('.md-tab').forEach(el => el.classList.toggle('md-tab-active', el.dataset.tab === tab));
+    document.querySelectorAll('.md-tab-content').forEach(el => { el.style.display = el.id === 'md-content-' + tab ? 'flex' : 'none'; });
+    if (tab === 'asset')    mdRenderAssetTable();
+    if (tab === 'apikeys')  mdRenderApiKeysTable();
+    if (tab === 'observer') mdRenderObserversTable();
+  }
+
+  // ── Asset ─────────────────────────────────────────────
+  const ASSET_ALL = [
+    { token:'USDT', network:'TRON',      type:'in',  channel:'MT',   amount:'2,341.80', count:128 },
+    { token:'USDT', network:'Ethereum',  type:'out', channel:'MT',   amount:'890.50',   count:45  },
+    { token:'USDT', network:'BNB Chain', type:'in',  channel:'直连', amount:'467.27',   count:23  },
+    { token:'USDT', network:'Polygon',   type:'out', channel:'直连', amount:'132.00',   count:8   },
+    { token:'USDC', network:'Ethereum',  type:'in',  channel:'直连', amount:'1,150.00', count:67  },
+    { token:'USDC', network:'Polygon',   type:'in',  channel:'直连', amount:'140.00',   count:12  },
+  ];
+  const aState = { rows: [...ASSET_ALL], page: 1, size: 10 };
+
+  function mdRenderAssetTable() {
+    const tbody = document.getElementById('md-asset-tbody');
+    if (!tbody) return;
+
+    const setOnce = (id, v) => { const el = document.getElementById(id); if (el && el.textContent === '—') el.textContent = v; };
+    setOnce('asset-total',  '5,486.57');
+    setOnce('asset-avail',  '5,121.57');
+    setOnce('asset-frozen', '365.00');
+
+    const total = aState.rows.length;
+    const pageTotal = Math.max(1, Math.ceil(total / aState.size));
+    const start = (aState.page - 1) * aState.size;
+    const slice = aState.rows.slice(start, start + aState.size);
+
+    const ptEl = document.getElementById('asset-page-total');
+    if (ptEl) ptEl.textContent = `共 ${total} 条`;
+    const prevBtn = document.getElementById('asset-btn-prev');
+    const nextBtn = document.getElementById('asset-btn-next');
+    if (prevBtn) prevBtn.disabled = aState.page <= 1;
+    if (nextBtn) nextBtn.disabled = aState.page >= pageTotal;
+    for (let i = 1; i <= 3; i++) {
+      const btn = document.getElementById(`asset-p-${i}`);
+      if (!btn) continue;
+      btn.style.display = i <= pageTotal ? '' : 'none';
+      btn.classList.toggle('active', i === aState.page);
+    }
+
+    if (!slice.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无数据</td></tr>`;
+      return;
+    }
+    const typeTag = t => t === 'in'
+      ? `<span class="type-tag type-tag-in">充币</span>`
+      : `<span class="type-tag type-tag-out">提币</span>`;
+    tbody.innerHTML = slice.map(r => `<tr>
+      <td style="font-weight:500;">${r.token}</td>
+      <td>${r.network}</td>
+      <td>${typeTag(r.type)}</td>
+      <td>${r.channel}</td>
+      <td class="asset-num">${r.count}</td>
+      <td class="asset-num">${r.amount}</td>
+    </tr>`).join('');
+  }
+
+  function mdAssetPage(p) {
+    const total = Math.max(1, Math.ceil(aState.rows.length / aState.size));
+    if (p < 1 || p > total) return;
+    aState.page = p; mdRenderAssetTable();
+  }
+  function mdAssetPageSize() {
+    aState.size = +(document.getElementById('asset-page-size') || {value:10}).value;
+    aState.page = 1; mdRenderAssetTable();
+  }
+  function mdAssetSearch() {
+    const fToken   = (document.getElementById('asset-f-token')      || {}).value || '';
+    const fNetwork = (document.getElementById('asset-f-network')    || {}).value || '';
+    const fType    = (document.getElementById('asset-f-type')       || {}).value || '';
+    const fChannel = (document.getElementById('asset-f-channel')    || {}).value || '';
+    aState.rows = ASSET_ALL.filter(r =>
+      (!fToken   || r.token   === fToken)   &&
+      (!fNetwork || r.network === fNetwork) &&
+      (!fType    || r.type    === fType)    &&
+      (!fChannel || r.channel === fChannel)
+    );
+    aState.page = 1; mdRenderAssetTable();
+  }
+  function mdAssetReset() {
+    ['asset-f-token','asset-f-network','asset-f-type','asset-f-channel'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['asset-f-date-start','asset-f-date-end'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    aState.rows = [...ASSET_ALL]; aState.page = 1; mdRenderAssetTable();
+  }
+  function mdAssetRefresh() {
+    const icon = document.getElementById('asset-refresh-icon');
+    if (icon) { icon.classList.add('spinning'); setTimeout(() => icon.classList.remove('spinning'), 650); }
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const el = document.getElementById('asset-update-time');
+    if (el) el.textContent = ts;
+    aState.rows = [...ASSET_ALL]; mdRenderAssetTable();
+  }
+
+  // ── API Keys ──────────────────────────────────────────
+  const APIKEYS_DATA = [
+    {
+      name: 'test',
+      apiKey: 'MCowBQYDK2VwAyEAPyYEO7xVmGrJfHsLpNqKdTbZuYcW3i4MXeD',
+      apiSecret: 'MC4CAQAwBQYDK2VwBCIEINFwI0GrKmHsLpNqKdTbZuYcW3iX',
+      ip: '104.30.178.73',
+      perms: ['deposit', 'withdraw'],
+      created: '2026-06-01 09:44:34',
+      status: 'enabled',
+    },
+  ];
+
+  function mdRenderApiKeysTable() {
+    const tbody = document.getElementById('md-apikeys-tbody');
+    if (!tbody) return;
+    if (!APIKEYS_DATA.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无 API keys</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = APIKEYS_DATA.map((r) => {
+      const shortKey = r.apiKey.slice(0, 22) + '...';
+      const esc = r.apiKey.replace(/'/g, "\\'");
+      const keyCell = `<div class="copy-cell"><span style="font-family:Inter,sans-serif;cursor:default;font-size:12px;" onmouseenter="showTip(event,'${esc}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${shortKey}</span><span class="copy-icon" onclick="copyText('${esc}')">${_COPY_SVG}</span></div>`;
+      const permTags = r.perms.map(p => `<span class="perm-tag">${p}</span>`).join(' ');
+      const ipCell = r.ip ? `<span class="ip-tag">${r.ip}</span>` : `<span style="color:#C0C4CC;">—</span>`;
+      const statusText = r.status === 'enabled' ? '启用' : '禁用';
+      return `<tr>
+        <td>${r.name}</td>
+        <td>${keyCell}</td>
+        <td>${ipCell}</td>
+        <td><div style="display:flex;gap:4px;flex-wrap:wrap;">${permTags}</div></td>
+        <td style="font-family:Inter,sans-serif;">${r.created}</td>
+        <td><span class="status-link">${statusText}</span></td>
+        <td><span class="action-icon" onclick="showToast('功能开发中')" title="编辑">${_EDIT_SVG}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function openCreateApiKeyModal() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const rnd = (n) => Array.from({length:n}, (_, i) => chars[(i * 37 + n * 13) % chars.length]).join('');
+    document.getElementById('ak-key-val').value    = 'MCowBQYDK2VwAyEA5CV8qOi/' + rnd(14) + 'Lc=';
+    document.getElementById('ak-secret-val').value = 'MC4CAQAwBQYDK2VwBCIEINFwI0G' + rnd(12) + '=';
+    document.getElementById('ak-name').value = '';
+    document.getElementById('ak-ip').value   = '';
+    document.getElementById('ak-perm-deposit').checked  = true;
+    document.getElementById('ak-perm-withdraw').checked = true;
+    document.getElementById('ak-status-on').checked = true;
+    document.getElementById('ak-modal').classList.add('show');
+    lucide.createIcons();
+  }
+  function closeCreateApiKeyModal() {
+    document.getElementById('ak-modal').classList.remove('show');
+  }
+  function submitCreateApiKey() {
+    const name = document.getElementById('ak-name').value.trim();
+    if (!name) { showToast('请输入名称'); return; }
+    const perms = [];
+    if (document.getElementById('ak-perm-deposit').checked)  perms.push('deposit');
+    if (document.getElementById('ak-perm-withdraw').checked) perms.push('withdraw');
+    const status = document.getElementById('ak-status-on').checked ? 'enabled' : 'disabled';
+    const rawIp = document.getElementById('ak-ip').value.trim();
+    const ip = rawIp.split(',').map(s => s.trim()).filter(Boolean)[0] || '';
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const created = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    APIKEYS_DATA.push({
+      name,
+      apiKey:    document.getElementById('ak-key-val').value,
+      apiSecret: document.getElementById('ak-secret-val').value,
+      ip, perms, status, created,
+    });
+    closeCreateApiKeyModal();
+    mdRenderApiKeysTable();
+    showToast('API key 创建成功');
+  }
+
+  // ── Observers ─────────────────────────────────────────
+  const OBS_PREFIX = 'test.stylized564@simplelogin.com';
+  const OBSERVERS_DATA = [
+    { account: OBS_PREFIX + '-shine1', lastLogin: '-' },
+  ];
+
+  function mdRenderObserversTable() {
+    const tbody = document.getElementById('md-observer-tbody');
+    if (!tbody) return;
+    if (!OBSERVERS_DATA.length) {
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无观察者账号</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = OBSERVERS_DATA.map((r, i) => `<tr>
+      <td style="font-family:'Inter',sans-serif;font-size:13px;">${r.account}</td>
+      <td style="color:#909399;">${r.lastLogin}</td>
+      <td><span class="action-icon" style="color:#F56C6C;" onclick="deleteObserver(${i})" title="删除">${_TRASH_SVG}</span></td>
+    </tr>`).join('');
+  }
+
+  function deleteObserver(i) {
+    OBSERVERS_DATA.splice(i, 1);
+    mdRenderObserversTable();
+    showToast('已删除');
+  }
+
+  function openCreateObserverModal() {
+    document.getElementById('obs-prefix-val').value = OBS_PREFIX;
+    document.getElementById('obs-suffix').value = '';
+    document.getElementById('obs-password').value = '';
+    document.getElementById('obs-counter').textContent = '0 / 20';
+    document.getElementById('obs-password').type = 'password';
+    document.getElementById('obs-modal').classList.add('show');
+    lucide.createIcons();
+  }
+  function closeCreateObserverModal() {
+    document.getElementById('obs-modal').classList.remove('show');
+  }
+  function toggleObsPassword() {
+    const inp = document.getElementById('obs-password');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+  function submitCreateObserver() {
+    const suffix = document.getElementById('obs-suffix').value.trim();
+    if (!suffix) { showToast('请输入账号后缀'); return; }
+    const pwd = document.getElementById('obs-password').value;
+    if (!pwd) { showToast('请输入密码'); return; }
+    OBSERVERS_DATA.push({ account: OBS_PREFIX + '-' + suffix, lastLogin: '-' });
+    closeCreateObserverModal();
+    mdRenderObserversTable();
+    showToast('观察者账号创建成功');
+  }
+
+  // ── Invite Modal ──────────────────────────────────────
+  function openInviteModal() {
+    document.getElementById('invite-modal').classList.add('show');
+    lucide.createIcons();
+  }
+  function closeInviteModal() {
+    document.getElementById('invite-modal').classList.remove('show');
+  }
+  function submitInvite() {
+    const name = document.getElementById('inv-name').value.trim();
+    if (!name) { showToast('请输入企业名称'); return; }
+    closeInviteModal();
+    ['inv-name','inv-email','inv-remark'].forEach(id => { document.getElementById(id).value = ''; });
+    showToast('邀请已发送');
+  }
 
   // ── Shared Utils ──────────────────────────────────────
   function copyText(text) {
@@ -1218,6 +2176,7 @@
     renderTabs();
     depositRender();
     paymentRender();
+    merchantRender();
     lucide.createIcons();
   });
   </script>

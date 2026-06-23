@@ -278,8 +278,7 @@
       height: 48px; display: flex; align-items: center; gap: 24px;
       padding: 0 20px; border-bottom: 1px solid #EBEEF5; flex-shrink: 0;
     }
-    .summary-bar .count-label { font-size: 13px; color: #606266; }
-    .summary-bar .count-value { font-size: 13px; font-weight: 600; color: #303133; }
+
     .summary-spacer { flex: 1; }
     .export-btn {
       height: 30px; padding: 0 14px; border-radius: 4px; border: 1px solid #409EFF;
@@ -660,7 +659,7 @@
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">渠道</span>
+              <span class="filter-label-el">合作伙伴</span>
               <div class="filter-control">
                 <div class="select-wrap">
                   <select class="field-select" id="d-channel">
@@ -702,8 +701,6 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
-            <span class="count-label">条数：</span>
-            <span class="count-value" id="d-total">276</span>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="depositExport()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
@@ -721,7 +718,7 @@
                 <tr>
                   <th>UID</th><th>名称</th><th>代币</th><th>网络</th>
                   <th>金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
-                  <th>到账时间</th><th>哈希</th><th>渠道</th><th>状态</th>
+                  <th>到账时间</th><th>哈希</th><th>合作伙伴</th><th>状态</th>
                 </tr>
               </thead>
               <tbody id="d-tbody"></tbody>
@@ -804,7 +801,7 @@
             </div>
             <!-- Row 2 -->
             <div class="filter-item">
-              <span class="filter-label-el">渠道</span>
+              <span class="filter-label-el">合作伙伴</span>
               <div class="filter-control">
                 <div class="select-wrap">
                   <select class="field-select" id="p-channel">
@@ -866,8 +863,6 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
-            <span class="count-label">条数：</span>
-            <span class="count-value" id="p-total">4</span>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="paymentExport()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
@@ -886,7 +881,7 @@
                 <tr>
                   <th>订单号</th><th>应付金额</th><th>实付金额</th><th>手续费</th>
                   <th>净入账</th><th>代币</th><th>网络</th><th>订单来源</th>
-                  <th>渠道</th><th>创建时间</th><th>充值地址</th><th>状态</th><th>操作</th>
+                  <th>合作伙伴</th><th>创建时间</th><th>充值地址</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="p-tbody"></tbody>
@@ -924,8 +919,6 @@
       <div class="content-area">
         <div class="table-card">
           <div class="summary-bar">
-            <span class="count-label">条数：</span>
-            <span class="count-value" id="m-total">30</span>
             <div class="summary-spacer"></div>
           </div>
           <div class="table-wrap">
@@ -981,12 +974,12 @@
       </div>
       <!-- 子 Tabs -->
       <div class="md-sub-tabs">
-        <span class="md-tab md-tab-active" data-tab="tunnel" onclick="mdSwitchTab('tunnel')">渠道</span>
+        <span class="md-tab md-tab-active" data-tab="tunnel" onclick="mdSwitchTab('tunnel')">合作伙伴</span>
         <span class="md-tab" data-tab="apikeys" onclick="mdSwitchTab('apikeys')">API keys</span>
         <span class="md-tab" data-tab="token" onclick="mdSwitchTab('token')">代币</span>
         <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
       </div>
-      <!-- 渠道 tab content -->
+      <!-- 合作伙伴 tab content -->
       <div class="md-tab-content" id="md-content-tunnel" style="flex-direction:column;">
         <div class="content-area">
           <div class="filter-card">
@@ -1033,7 +1026,7 @@
                 </div>
               </div>
               <div class="filter-item">
-                <span class="filter-label-el">渠道</span>
+                <span class="filter-label-el">合作伙伴</span>
                 <div class="filter-control">
                   <div class="select-wrap">
                     <select class="field-select" id="asset-f-channel">
@@ -1074,7 +1067,7 @@
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>代币</th><th>网络</th><th>类型</th><th>渠道</th>
+                    <th>代币</th><th>网络</th><th>类型</th><th>合作伙伴</th>
                     <th style="text-align:right;">笔数</th>
                     <th style="text-align:right;">金额</th>
                   </tr>
@@ -1477,7 +1470,6 @@
         <td><span class="badge ${st.cls}">${st.label}</span></td>
       </tr>`;
     }).join('');
-    document.getElementById('d-total').textContent = dState.rows.length;
     document.getElementById('d-page-total').textContent = `共 ${dState.rows.length} 条`;
     const total = Math.max(1, Math.ceil(dState.rows.length / dState.size));
     document.getElementById('d-btn-prev').disabled = dState.page <= 1;
@@ -1529,7 +1521,7 @@
     dState.rows = [...DEPOSIT_ALL]; dState.page = 1; depositRender();
   }
   function depositExport() {
-    const headers = ['UID','名称','代币','网络','金额','手续费','净入账','钱包地址','到账时间','哈希','渠道','状态'];
+    const headers = ['UID','名称','代币','网络','金额','手续费','净入账','钱包地址','到账时间','哈希','合作伙伴','状态'];
     csvDownload(headers, dState.rows.map(r => [
       r.uid, r.name, r.token, r.network, r.amount, r.fee, r.net,
       r.wallet, r.time, r.hash, r.channel || '直连', D_STATUS[r.status].label
@@ -1599,7 +1591,6 @@
         </td>
       </tr>`;
     }).join('');
-    document.getElementById('p-total').textContent = pState.rows.length;
     document.getElementById('p-page-total').textContent = `共 ${pState.rows.length} 条`;
     const total = Math.max(1, Math.ceil(pState.rows.length / pState.size));
     document.getElementById('p-btn-prev').disabled = pState.page <= 1;
@@ -1653,7 +1644,7 @@
     pState.rows = [...PAYMENT_ALL]; pState.page = 1; paymentRender();
   }
   function paymentExport() {
-    const headers = ['订单号','应付金额','实付金额','手续费','净入账','代币','网络','订单来源','渠道','创建时间','充值地址','状态'];
+    const headers = ['订单号','应付金额','实付金额','手续费','净入账','代币','网络','订单来源','合作伙伴','创建时间','充值地址','状态'];
     csvDownload(headers, pState.rows.map(r => [
       r.order, r.due, r.paid, r.fee, r.net, r.token, r.network, r.source, r.channel || '直连', r.time, r.addr, P_STATUS[r.status].label
     ]), '支付订单.csv');
@@ -1674,7 +1665,7 @@
       <div class="detail-item"><span class="detail-label">代币</span><span class="detail-value">${r.token}</span></div>
       <div class="detail-item"><span class="detail-label">网络</span><span class="detail-value">${r.network}</span></div>
       <div class="detail-item"><span class="detail-label">订单来源</span><span class="detail-value">${r.source}</span></div>
-      <div class="detail-item"><span class="detail-label">渠道</span><span class="detail-value">${r.channel || '直连'}</span></div>
+      <div class="detail-item"><span class="detail-label">合作伙伴</span><span class="detail-value">${r.channel || '直连'}</span></div>
       <div class="detail-item"><span class="detail-label">创建时间</span><span class="detail-value">${r.time}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">充值地址</span><span class="detail-value">${r.addr}</span></div>
     `;
@@ -1810,7 +1801,6 @@
     });
 
     tbody.innerHTML = html.join('');
-    document.getElementById('m-total').textContent      = mState.rows.length;
     document.getElementById('m-page-total').textContent = `共 ${mState.rows.length} 条`;
     const total = Math.max(1, Math.ceil(mState.rows.length / mState.size));
     document.getElementById('m-btn-prev').disabled = mState.page <= 1;
@@ -1931,7 +1921,7 @@
     const tbody = document.getElementById('md-channel-tbody');
     if (!tbody) return;
     if (!CHANNEL_DATA.length) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无渠道</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无合作伙伴数据</td></tr>`;
       return;
     }
     tbody.innerHTML = CHANNEL_DATA.map(r => `<tr>

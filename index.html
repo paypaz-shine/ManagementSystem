@@ -892,10 +892,11 @@
                 <div class="select-wrap">
                   <select class="field-select" id="w-status">
                     <option value="">请选择</option>
-                    <option value="risk">风控处理</option>
-                    <option value="mkt_fail">撤市失败</option>
+                    <option value="risk_pending">风控待处理</option>
+                    <option value="withdrawing">提币中</option>
                     <option value="completed">已到账</option>
-                    <option value="processing">处理中</option>
+                    <option value="failed">提币失败</option>
+                    <option value="manual_review">待人工审核</option>
                     <option value="rejected">已拒绝</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
@@ -963,13 +964,13 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1500px;">
+            <table style="min-width:1580px;">
               <colgroup>
                 <col style="width:90px"><col style="width:74px"><col style="width:56px">
                 <col style="width:56px"><col style="width:66px"><col style="width:60px">
                 <col style="width:138px"><col style="width:138px"><col style="width:126px">
                 <col style="width:150px"><col style="width:158px"><col style="width:66px">
-                <col style="width:80px">
+                <col style="width:80px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
@@ -977,7 +978,7 @@
                   <th>净入账</th><th>手续费</th><th>钱包地址</th>
                   <th>到账时间</th><th>哈希</th>
                   <th>PayPaz 订单号</th><th>供应商订单号</th>
-                  <th>渠道</th><th>状态</th>
+                  <th>渠道</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="w-tbody"></tbody>
@@ -2337,34 +2338,35 @@
   //  提币记录 data & logic
   // ══════════════════════════════════════════════════════
   const W_STATUS = {
-    risk:       { label:'风控处理', cls:'badge-amber' },
-    mkt_fail:   { label:'撤市失败', cls:'badge-red'   },
-    completed:  { label:'已到账',   cls:'badge-green' },
-    processing: { label:'处理中',   cls:'badge-blue'  },
-    rejected:   { label:'已拒绝',   cls:'badge-gray'  },
+    risk_pending:  { label:'风控待处理', cls:'badge-amber' },
+    withdrawing:   { label:'提币中',     cls:'badge-blue'  },
+    completed:     { label:'已到账',     cls:'badge-green' },
+    failed:        { label:'提币失败',   cls:'badge-red'   },
+    manual_review: { label:'待人工审核', cls:'badge-amber' },
+    rejected:      { label:'已拒绝',     cls:'badge-gray'  },
   };
 
   const WITHDRAW_ALL = [
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'Cobo', status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'Cobo', status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'risk'      },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'risk'      },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk'      },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'mkt_fail'  },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'mkt_fail'  },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'mkt_fail'  },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'70659db1-a9dc-4198-9ab9-7a1f3ceB5d27',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'mkt_fail'  },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
+    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
+    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'manual_review' },
+    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'WD00000000000031',                supplierId:'-',                                    channel:'Cobo', status:'withdrawing'},
+    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'70659db1-a9dc-4198-9ab9-7a1f3ceB5d27',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-74.01',fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 16:26:32', hash:'80b6301a92da4a741ce8069f07f3a52bdec14e8f',             paypazId:'Shine0000000000004',              supplierId:'41b27011-3b3b-4103-8463-c04a5ef62d1c', channel:'Cobo', status:'completed' },
     { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.31', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 16:24:48', hash:'0570b042ea4b99d72fe5e910fa63c28b5d1a7f9e',             paypazId:'Shine0000000000003',              supplierId:'c55570d7-e464-4e94-bf74-9cfb3a82d50e', channel:'Cobo', status:'completed' },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.21', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'-', hash:'-',                                                                       paypazId:'-',                               supplierId:'Udf20260624161152492022274D',            channel:'Payme',status:'mkt_fail'  },
+    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.21', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'-', hash:'-',                                                                       paypazId:'-',                               supplierId:'Udf20260624161152492022274D',            channel:'Payme',status:'failed'    },
     { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.11', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 16:12:18', hash:'Textbvdxxxxxxxxxxxxxxxxxxxxxxxx9e4f3a',               paypazId:'shine0000000000001',              supplierId:'Udf20260624161152385285r80r95',         channel:'Payme',status:'completed' },
     { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-6.81', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 15:35:28', hash:'f3761637e63afe678d9335fdb542a18c9e07b4d2',             paypazId:'00b0bb0b-1d8a-4d50-8032-514f3c9e7a21', supplierId:'47623fa6-7875-430d-9c44-43cf8d1b5e92', channel:'Cobo', status:'completed' },
     { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-6.67', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 15:23:59', hash:'e170de42bb24a554d9216d8285f6c3a71b9e04d8',             paypazId:'5bf9659b-51f1-4f6f-b39a-3426f9d2c10e', supplierId:'93140917-fa86-4614-826d-3d0f5c72b48a', channel:'Cobo', status:'completed' },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'-',                                                                       paypazId:'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', supplierId:'-',                                    channel:'Cobo', status:'mkt_fail'  },
+    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'-',                                                                       paypazId:'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', supplierId:'-',                                    channel:'Cobo', status:'failed'    },
   ];
 
   const wState = { rows: [...WITHDRAW_ALL], page: 1, size: 20 };
@@ -2375,11 +2377,16 @@
     if (!tbody) return;
     const start = (wState.page - 1) * wState.size;
     const slice = wState.rows.slice(start, start + wState.size);
+    const _EYE_SVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const _PEN_SVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
     tbody.innerHTML = slice.map(r => {
-      const st = W_STATUS[r.status];
-      const hashCell = r.hash === '-' ? '-' : truncCell(r.hash);
-      const paypazCell = r.paypazId === '-' ? '-' : truncCell(r.paypazId);
+      const st  = W_STATUS[r.status];
+      const idx = WITHDRAW_ALL.indexOf(r);
+      const hashCell     = r.hash === '-'       ? '-' : truncCell(r.hash);
+      const paypazCell   = r.paypazId === '-'   ? '-' : truncCell(r.paypazId);
       const supplierCell = r.supplierId === '-' ? '-' : truncCell(r.supplierId);
+      const editIcon = r.status === 'manual_review'
+        ? `<span class="action-icon" onclick="openWdEdit(${idx})" title="处理订单">${_PEN_SVG}</span>` : '';
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
         <td>${r.name}</td><td>${r.token}</td><td>${r.network}</td>
@@ -2392,6 +2399,10 @@
         <td>${supplierCell}</td>
         <td>${r.channel === '-' ? '-' : r.channel}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td><div class="action-cell">
+          <span class="action-icon" onclick="openWdView(${idx})" title="查看详情">${_EYE_SVG}</span>
+          ${editIcon}
+        </div></td>
       </tr>`;
     }).join('');
     document.getElementById('w-page-total').textContent = `共 ${wState.rows.length} 条`;
@@ -2453,61 +2464,64 @@
     ]), '提币记录.csv');
   }
 
-  // ── Withdraw Manage Modal ──────────────────────────────
-  function openWdManage(idx) {
-    wdManageIdx = idx;
-    const r  = WITHDRAW_ALL[idx];
-    const st = W_STATUS[r.status];
-
-    // Build info grid
-    const gridItems = [
+  // ── Withdraw Modals ────────────────────────────────────
+  function _wdDetailGrid(r) {
+    const items = [
       ['UID',        r.uid],
       ['名称',       r.name],
       ['代币 / 网络', `${r.token} / ${r.network}`],
       ['净入账',     `${r.net} USDT`],
       ['手续费',     `${r.fee} USDT`],
       ['渠道',       r.channel === '-' ? '—' : r.channel],
-      ['PayPaz 订单号', r.paypazId === '-' ? '—' : r.paypazId],
-      ['供应商订单号', r.supplierId === '-' ? '—' : r.supplierId],
       ['到账时间',   r.time === '-' ? '—' : r.time],
+      ['哈希',       r.hash === '-' ? '—' : r.hash],
+      ['PayPaz 订单号', r.paypazId === '-' ? '—' : r.paypazId],
+      ['供应商订单号',  r.supplierId === '-' ? '—' : r.supplierId],
       ['钱包地址',   r.wallet],
     ];
-    const gridHTML = gridItems.map(([k, v], i) => {
-      const full = k === '钱包地址' || k === 'PayPaz 订单号' || k === '供应商订单号';
+    return items.map(([k, v]) => {
+      const full = ['哈希','PayPaz 订单号','供应商订单号','钱包地址'].includes(k);
       return `<div class="wm-info-kv${full ? ' wm-info-full' : ''}"><div class="wm-info-k">${k}</div><div class="wm-info-v">${v}</div></div>`;
     }).join('');
+  }
 
-    const viewOnly = r.status === 'completed' || r.status === 'rejected';
-    const remarkHTML = viewOnly ? '' : `
-      <div class="wm-remark-wrap">
-        <div class="wm-remark-label">审核备注</div>
-        <textarea class="wm-remark" id="wd-remark" placeholder="选填，填写处理说明..."></textarea>
-      </div>`;
-
+  function openWdView(idx) {
+    wdManageIdx = idx;
+    const r  = WITHDRAW_ALL[idx];
+    const st = W_STATUS[r.status];
     document.getElementById('wd-manage-body').innerHTML = `
       <div class="wm-status-row">
         <span class="wm-status-label">当前状态：</span>
         <span class="badge ${st.cls}">${st.label}</span>
       </div>
-      <div class="wm-info-grid">${gridHTML}</div>
-      ${remarkHTML}
+      <div class="wm-info-grid">${_wdDetailGrid(r)}</div>
     `;
+    document.getElementById('wd-manage-footer').innerHTML =
+      `<button class="btn btn-default btn-sm" onclick="closeWdManage()">关闭</button>`;
+    document.getElementById('wd-manage-modal').classList.add('show');
+    lucide.createIcons();
+  }
 
-    // Build footer buttons by status
-    let footerHTML = `<button class="btn btn-default btn-sm" onclick="closeWdManage()">取消</button>`;
-    if (r.status === 'risk') {
-      footerHTML += `
-        <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="wdAction('rejected')">拒绝</button>
-        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="wdAction('processing')">通过审核</button>`;
-    } else if (r.status === 'mkt_fail') {
-      footerHTML += `
-        <button class="btn btn-warning btn-sm" style="margin-left:8px;" onclick="wdAction('completed')">手动完成</button>
-        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="wdAction('processing')">重新发起</button>`;
-    } else {
-      footerHTML = `<button class="btn btn-default btn-sm" onclick="closeWdManage()">关闭</button>`;
-    }
-    document.getElementById('wd-manage-footer').innerHTML = footerHTML;
-
+  function openWdEdit(idx) {
+    wdManageIdx = idx;
+    const r  = WITHDRAW_ALL[idx];
+    const st = W_STATUS[r.status];
+    document.getElementById('wd-manage-body').innerHTML = `
+      <div class="wm-status-row">
+        <span class="wm-status-label">当前状态：</span>
+        <span class="badge ${st.cls}">${st.label}</span>
+      </div>
+      <div class="wm-info-grid">${_wdDetailGrid(r)}</div>
+      <div class="wm-remark-wrap">
+        <div class="wm-remark-label">处理备注</div>
+        <textarea class="wm-remark" id="wd-remark" placeholder="选填，填写处理说明..."></textarea>
+      </div>
+    `;
+    document.getElementById('wd-manage-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeWdManage()">取消</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="wdAction('rejected')">拒绝</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="wdAction('withdrawing')">重试</button>
+    `;
     document.getElementById('wd-manage-modal').classList.add('show');
     lucide.createIcons();
   }
@@ -2515,10 +2529,10 @@
   function wdAction(newStatus) {
     if (wdManageIdx < 0) return;
     WITHDRAW_ALL[wdManageIdx].status = newStatus;
-    wState.rows = wState.rows.map(r => (r === WITHDRAW_ALL[wdManageIdx] ? WITHDRAW_ALL[wdManageIdx] : r));
     closeWdManage();
     withdrawRender();
-    showToast(newStatus === 'rejected' ? '已拒绝订单' : newStatus === 'completed' ? '已手动完成' : '审核通过，处理中');
+    const msgs = { rejected:'已拒绝订单', withdrawing:'已重新发起提币，状态更新为提币中' };
+    showToast(msgs[newStatus] || '操作成功');
   }
 
   function closeWdManage() {

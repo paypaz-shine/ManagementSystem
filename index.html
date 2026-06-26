@@ -72,6 +72,21 @@
     .nav-item.active .nav-icon { color: #409EFF; }
     .nav-item.active .nav-label { color: #fff; }
 
+    .nav-group-hd {
+      display:flex; align-items:center; gap:10px;
+      height:44px; padding:0 16px; cursor:pointer;
+    }
+    .nav-group-hd:hover { background:#1f2d42; }
+    .nav-group-hd .nav-icon { color:#5a7296; flex-shrink:0; }
+    .nav-group-hd .nav-label { font-size:13px; color:#8a9ab5; white-space:nowrap; flex:1; }
+    .nav-group-hd .nav-caret { color:#5a7296; flex-shrink:0; transition:transform 0.2s; }
+    .nav-group-hd.collapsed .nav-caret { transform:rotate(180deg); }
+    .nav-sub-items { overflow:hidden; }
+    .nav-sub-item { padding-left:40px !important; height:38px !important; }
+    .nav-group-hd.group-active .nav-icon,
+    .nav-group-hd.group-active .nav-caret { color:#409EFF; }
+    .nav-group-hd.group-active .nav-label { color:#d0e8ff; }
+
     /* ── Main Area ───────────────────────────────────── */
     .main-area {
       flex: 1;
@@ -180,7 +195,7 @@
     /* label：固定宽度 + 右对齐，与 Element UI label-width 一致 */
     .filter-label-el {
       flex-shrink: 0;
-      width: 70px;
+      width: 88px;
       text-align: right;
       padding-right: 8px;
       font-size: 13px;
@@ -511,6 +526,47 @@
     .ak-textarea { width:100%; height:80px; border:1px solid #DCDFE6; border-radius:4px; padding:8px 10px; font-size:13px; color:#303133; font-family:'Noto Sans SC',sans-serif; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
     .ak-textarea:focus { border-color:#409EFF; }
     .ak-textarea::placeholder { color:#C0C4CC; }
+    /* ── 出入金订单 ──────────────────────────────────── */
+    .badge-amber { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
+    .dir-tag { display:inline-flex; align-items:center; padding:2px 8px; border-radius:3px; font-size:12px; font-weight:500; white-space:nowrap; }
+    .dir-in  { background:#ecf5ff; color:#409EFF; border:1px solid #d9ecff; }
+    .dir-out { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
+    .ramp-detail-body { display:flex; flex-direction:column; gap:16px; padding:16px 20px 24px; overflow-y:auto; flex:1; }
+    /* ── 出入金订单详情弹窗 ─────────────────────────────── */
+    .ramp-modal { background:#fff; border-radius:6px; width:720px; max-width:94vw; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 12px 40px rgba(0,0,0,0.18); overflow:hidden; }
+    .ramp-modal-body { overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:14px; padding:16px 20px 20px; }
+    .ramp-modal-hd-meta { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
+    .ramp-modal-hd-id { font-size:14px; font-weight:600; color:#303133; font-family:'Inter',sans-serif; }
+    .detail-section { background:#fff; border:1px solid #EBEEF5; border-radius:4px; overflow:hidden; }
+    .detail-section-hd { padding:10px 20px; font-size:13px; font-weight:600; color:#303133; border-bottom:1px solid #EBEEF5; background:#FAFAFA; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; }
+    .detail-kv { padding:10px 20px; border-bottom:1px solid #F2F6FC; }
+    .detail-kv:nth-child(even) { border-left:1px solid #F2F6FC; }
+    .detail-k { font-size:12px; color:#909399; margin-bottom:3px; }
+    .detail-v { font-size:13px; color:#303133; font-family:'Inter',sans-serif; word-break:break-all; }
+    .id-chain { display:flex; align-items:center; padding:16px 20px; gap:0; overflow-x:auto; }
+    .id-node { flex:1; min-width:150px; background:#F5F7FA; border-radius:4px; padding:10px 14px; }
+    .id-node-lbl { font-size:11px; color:#909399; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+    .id-node-val { font-size:12px; color:#303133; font-family:'Inter',sans-serif; word-break:break-all; line-height:1.4; }
+    .id-arrow { padding:0 10px; color:#C0C4CC; flex-shrink:0; font-size:18px; line-height:1; }
+    .ramp-two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .timeline { padding:14px 20px; display:flex; flex-direction:column; }
+    .tl-item { display:flex; gap:10px; position:relative; }
+    .tl-item:not(:last-child)::before { content:''; position:absolute; left:6px; top:18px; bottom:0; width:1px; background:#EBEEF5; }
+    .tl-dot { width:13px; height:13px; border-radius:50%; flex-shrink:0; margin-top:3px; border:2px solid #DCDFE6; background:#fff; }
+    .tl-dot.done   { background:#67C23A; border-color:#67C23A; }
+    .tl-dot.active { background:#fff; border-color:#409EFF; }
+    .tl-dot.fdot   { background:#F56C6C; border-color:#F56C6C; }
+    .tl-content { flex:1; padding-bottom:14px; }
+    .tl-label { font-size:13px; font-weight:500; color:#303133; }
+    .tl-time  { font-size:11px; color:#909399; font-family:'Inter',sans-serif; margin-top:1px; }
+    .tl-desc  { font-size:12px; color:#909399; margin-top:2px; }
+    .json-wrap { background:#1a1a2e; padding:14px 18px; overflow:auto; max-height:320px; }
+    .json-pre { font-size:12px; font-family:'Inter',Consolas,monospace; line-height:1.7; white-space:pre; color:#ABB2BF; }
+    .jk { color:#61AFEF; }
+    .js { color:#98C379; }
+    .jn { color:#D19A66; }
+    .jb { color:#E06C75; }
   </style>
 </head>
 <body>
@@ -556,6 +612,23 @@
       <div class="nav-item" data-page="payment">
         <i data-lucide="file-text" class="nav-icon" style="width:16px;height:16px;"></i>
         <span class="nav-label">支付订单</span>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-hd" id="nav-ghd-ramp" onclick="toggleNavGroup('ramp')">
+          <i data-lucide="arrow-left-right" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">出入金</span>
+          <i data-lucide="chevron-up" id="nav-caret-ramp" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-ramp">
+          <div class="nav-item nav-sub-item" data-page="ramp-in">
+            <i data-lucide="circle-arrow-down" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">入金订单</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="ramp-out">
+            <i data-lucide="circle-arrow-up" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">出金订单</span>
+          </div>
+        </div>
       </div>
       <div class="nav-item" data-page="currency">
         <i data-lucide="circle-dollar-sign" class="nav-icon" style="width:16px;height:16px;"></i>
@@ -771,11 +844,9 @@
                 <div class="select-wrap">
                   <select class="field-select" id="p-merchant">
                     <option value="">请选择</option>
-                    <option value="kara">kara</option>
-                    <option value="kara2">kara2</option>
-                    <option value="kara4" selected>kara4</option>
-                    <option value="sherry@bdy.tech">sherry@bdy.tech</option>
-                    <option value="benny@bdy.tech">benny@bdy.tech</option>
+                    <option value="GMTM" selected>GMTM</option>
+                    <option value="XM Japan">XM Japan</option>
+                    <option value="IG Japan">IG Japan</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
@@ -913,6 +984,381 @@
     </div><!-- /page-payment -->
 
     <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 入金订单                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-ramp-in">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">Paypaz 订单</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入" id="ramp-in-f-pid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">商户订单</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入" id="ramp-in-f-cfd">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">商户名称</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入" id="ramp-in-f-merchant">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">渠道</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-in-f-provider">
+                    <option value="">全部</option>
+                    <option value="Banxa">Banxa</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-in-f-status">
+                    <option value="">全部</option>
+                    <option value="pending">待处理</option>
+                    <option value="awaiting_payment">等待付款</option>
+                    <option value="payment_received">已收到付款</option>
+                    <option value="processing">处理中</option>
+                    <option value="completed">已完成</option>
+                    <option value="pending_verification">追加验证中</option>
+                    <option value="failed">失败</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">法币币种</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-in-f-fiat">
+                    <option value="">全部</option>
+                    <option value="JPY">JPY</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="AUD">AUD</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-in-f-token">
+                    <option value="">全部</option>
+                    <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-in-f-network">
+                    <option value="">全部</option>
+                    <option value="Tron">Tron</option>
+                    <option value="Ethereum">Ethereum</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">创建时间</span>
+              <div class="filter-control" style="display:flex;gap:6px;align-items:center;">
+                <input class="field-input" type="date" id="ramp-in-f-date-from" style="flex:1;min-width:0;">
+                <span style="color:#C0C4CC;font-size:12px;">—</span>
+                <input class="field-input" type="date" id="ramp-in-f-date-to" style="flex:1;min-width:0;">
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="rampInReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="rampInSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-spacer"></div>
+            <button class="btn btn-default btn-sm" onclick="rampInExport()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1890px;">
+              <colgroup>
+                <col style="width:90px"><col style="width:110px"><col style="width:68px">
+                <col style="width:175px"><col style="width:170px"><col style="width:138px">
+                <col style="width:110px"><col style="width:155px">
+                <col style="width:80px"><col style="width:110px"><col style="width:105px"><col style="width:100px">
+                <col style="width:115px"><col style="width:148px"><col style="width:148px">
+                <col style="width:65px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>商户名称</th>
+                  <th>用户 ID</th>
+                  <th>渠道</th>
+                  <th>Paypaz 订单</th>
+                  <th>商户订单</th>
+                  <th>渠道订单</th>
+                  <th>法币</th>
+                  <th>代币</th>
+                  <th>汇率</th>
+                  <th>手续费</th>
+                  <th>渠道手续费</th>
+                  <th>利润</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>完成时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="ramp-in-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="ramp-in-page-total">共 0 条</span>
+            <select class="page-size-select" id="ramp-in-page-size" onchange="rampInPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="ramp-in-btn-prev" onclick="rampInPage(rampInState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" id="ramp-in-p-1" onclick="rampInPage(1)">1</button>
+            <button class="page-btn" id="ramp-in-p-2" onclick="rampInPage(2)">2</button>
+            <button class="page-btn" id="ramp-in-p-3" onclick="rampInPage(3)">3</button>
+            <button class="page-btn" id="ramp-in-btn-next" onclick="rampInPage(rampInState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')rampInPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-ramp-in -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 出金订单                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-ramp-out">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">Paypaz 订单</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入" id="ramp-out-f-pid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">商户订单</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入" id="ramp-out-f-cfd">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">商户名称</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入" id="ramp-out-f-merchant">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">渠道</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-out-f-provider">
+                    <option value="">全部</option>
+                    <option value="Banxa">Banxa</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-out-f-status">
+                    <option value="">全部</option>
+                    <option value="pending">待处理</option>
+                    <option value="awaiting_payment">等待付款</option>
+                    <option value="payment_received">已收到付款</option>
+                    <option value="processing">处理中</option>
+                    <option value="completed">已完成</option>
+                    <option value="pending_verification">追加验证中</option>
+                    <option value="failed">失败</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">法币币种</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-out-f-fiat">
+                    <option value="">全部</option>
+                    <option value="JPY">JPY</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="AUD">AUD</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-out-f-token">
+                    <option value="">全部</option>
+                    <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-out-f-network">
+                    <option value="">全部</option>
+                    <option value="Tron">Tron</option>
+                    <option value="Ethereum">Ethereum</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">创建时间</span>
+              <div class="filter-control" style="display:flex;gap:6px;align-items:center;">
+                <input class="field-input" type="date" id="ramp-out-f-date-from" style="flex:1;min-width:0;">
+                <span style="color:#C0C4CC;font-size:12px;">—</span>
+                <input class="field-input" type="date" id="ramp-out-f-date-to" style="flex:1;min-width:0;">
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="rampOutReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="rampOutSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-spacer"></div>
+            <button class="btn btn-default btn-sm" onclick="rampOutExport()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1890px;">
+              <colgroup>
+                <col style="width:90px"><col style="width:110px"><col style="width:68px">
+                <col style="width:175px"><col style="width:170px"><col style="width:138px">
+                <col style="width:110px"><col style="width:155px">
+                <col style="width:80px"><col style="width:110px"><col style="width:105px"><col style="width:100px">
+                <col style="width:115px"><col style="width:148px"><col style="width:148px">
+                <col style="width:65px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>商户名称</th>
+                  <th>用户 ID</th>
+                  <th>渠道</th>
+                  <th>Paypaz 订单</th>
+                  <th>商户订单</th>
+                  <th>渠道订单</th>
+                  <th>法币</th>
+                  <th>代币</th>
+                  <th>汇率</th>
+                  <th>手续费</th>
+                  <th>渠道手续费</th>
+                  <th>利润</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>完成时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="ramp-out-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="ramp-out-page-total">共 0 条</span>
+            <select class="page-size-select" id="ramp-out-page-size" onchange="rampOutPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="ramp-out-btn-prev" onclick="rampOutPage(rampOutState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" id="ramp-out-p-1" onclick="rampOutPage(1)">1</button>
+            <button class="page-btn" id="ramp-out-p-2" onclick="rampOutPage(2)">2</button>
+            <button class="page-btn" id="ramp-out-p-3" onclick="rampOutPage(3)">3</button>
+            <button class="page-btn" id="ramp-out-btn-next" onclick="rampOutPage(rampOutState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')rampOutPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-ramp-out -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 出入金订单详情                            -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-ramp-detail">
+      <div style="display:flex;align-items:center;gap:10px;padding:16px 20px 0;flex-shrink:0;">
+        <button class="btn btn-default btn-sm" onclick="closeRampDetail()" style="display:flex;align-items:center;gap:4px;">
+          <i data-lucide="arrow-left" style="width:13px;height:13px;"></i>返回列表
+        </button>
+        <span style="font-size:14px;font-weight:600;color:#303133;" id="ramp-detail-title">出入金订单详情</span>
+      </div>
+      <div class="ramp-detail-body" id="ramp-detail-body">
+        <!-- populated by JS -->
+      </div>
+    </div><!-- /page-ramp-detail -->
+
+    <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 商户管理                                  -->
     <!-- ════════════════════════════════════════════════ -->
     <div class="page" id="page-merchant">
@@ -977,6 +1423,7 @@
         <span class="md-tab md-tab-active" data-tab="tunnel" onclick="mdSwitchTab('tunnel')">合作伙伴</span>
         <span class="md-tab" data-tab="apikeys" onclick="mdSwitchTab('apikeys')">API keys</span>
         <span class="md-tab" data-tab="token" onclick="mdSwitchTab('token')">代币</span>
+        <span class="md-tab" data-tab="ramp-token" onclick="mdSwitchTab('ramp-token')">出入金</span>
         <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
       </div>
       <!-- 合作伙伴 tab content -->
@@ -1119,6 +1566,33 @@
                   </tr>
                 </thead>
                 <tbody id="md-token-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Ramp 代币 tab content -->
+      <div class="md-tab-content" id="md-content-ramp-token" style="display:none;flex-direction:column;">
+        <div class="content-area">
+          <div class="table-card">
+            <div class="table-wrap">
+              <table style="width:100%;table-layout:auto;">
+                <thead>
+                  <tr>
+                    <th style="white-space:nowrap;">币对</th>
+                    <th style="white-space:nowrap;">入金</th>
+                    <th style="white-space:nowrap;">入金渠道汇率</th>
+                    <th style="white-space:nowrap;">入金费率</th>
+                    <th style="white-space:nowrap;">入金用户汇率</th>
+                    <th style="white-space:nowrap;">出金</th>
+                    <th style="white-space:nowrap;">出金渠道汇率</th>
+                    <th style="white-space:nowrap;">出金费率</th>
+                    <th style="white-space:nowrap;">出金用户汇率</th>
+                    <th style="white-space:nowrap;">支持网络</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="md-ramp-token-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -1321,6 +1795,117 @@
     </div>
   </div>
 
+  <!-- Ramp 币对配置弹窗 -->
+  <div class="modal-overlay" id="ramp-token-edit-modal" onclick="if(event.target===this)closeRampPairEdit()">
+    <div class="modal" style="width:480px;">
+      <div class="modal-header">
+        <span class="modal-title" id="rte-title">出入金配置</span>
+        <span class="modal-close" onclick="closeRampPairEdit()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </span>
+      </div>
+      <div style="padding:20px 24px 8px;max-height:78vh;overflow-y:auto;">
+
+        <!-- 入金 -->
+        <div style="font-size:12px;font-weight:600;color:#606266;letter-spacing:0.5px;padding-bottom:8px;border-bottom:1px solid #EBEEF5;margin-bottom:14px;">入金</div>
+        <div class="ak-form-row" style="margin-bottom:12px;">
+          <span class="ak-label">状态</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="rp-on-status" value="on"><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="rp-on-status" value="off"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:12px;">
+          <span class="ak-label">渠道</span>
+          <div class="select-wrap" style="width:160px;">
+            <select class="field-select" id="rp-on-provider">
+              <option value="Banxa">Banxa</option>
+              <option value="Transak">Transak</option>
+              <option value="MoonPay">MoonPay</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:12px;">
+          <span class="ak-label">渠道汇率</span>
+          <span id="rp-on-providerRate-display" style="font-family:'Inter',sans-serif;font-size:13px;color:#606266;"></span>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:16px;">
+          <span class="ak-label">费率</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="ak-radios">
+              <label class="ak-radio-item"><input type="radio" name="rp-on-feeMode" value="pts" onchange="rpUpdateUserRate('on')"><span class="ak-dot"></span>加点</label>
+              <label class="ak-radio-item"><input type="radio" name="rp-on-feeMode" value="pct" onchange="rpUpdateUserRate('on')"><span class="ak-dot"></span>百分比</label>
+            </div>
+            <input type="number" class="field-input" id="rp-on-feeValue" style="width:96px;" min="0" step="0.0001" placeholder="0" oninput="rpUpdateUserRate('on')">
+            <span id="rp-on-feeUnit" style="font-size:12px;color:#909399;"></span>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:20px;">
+          <span class="ak-label">用户汇率</span>
+          <span id="rp-on-userRate-display" style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#303133;"></span>
+        </div>
+
+        <!-- 出金 -->
+        <div style="font-size:12px;font-weight:600;color:#606266;letter-spacing:0.5px;padding-bottom:8px;border-bottom:1px solid #EBEEF5;margin-bottom:14px;">出金</div>
+        <div class="ak-form-row" style="margin-bottom:12px;">
+          <span class="ak-label">状态</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="rp-off-status" value="on"><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="rp-off-status" value="off"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:12px;">
+          <span class="ak-label">渠道</span>
+          <div class="select-wrap" style="width:160px;">
+            <select class="field-select" id="rp-off-provider">
+              <option value="Banxa">Banxa</option>
+              <option value="Transak">Transak</option>
+              <option value="MoonPay">MoonPay</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:12px;">
+          <span class="ak-label">渠道汇率</span>
+          <span id="rp-off-providerRate-display" style="font-family:'Inter',sans-serif;font-size:13px;color:#606266;"></span>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:16px;">
+          <span class="ak-label">费率</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="ak-radios">
+              <label class="ak-radio-item"><input type="radio" name="rp-off-feeMode" value="pts" onchange="rpUpdateUserRate('off')"><span class="ak-dot"></span>加点</label>
+              <label class="ak-radio-item"><input type="radio" name="rp-off-feeMode" value="pct" onchange="rpUpdateUserRate('off')"><span class="ak-dot"></span>百分比</label>
+            </div>
+            <input type="number" class="field-input" id="rp-off-feeValue" style="width:96px;" min="0" step="0.0001" placeholder="0" oninput="rpUpdateUserRate('off')">
+            <span id="rp-off-feeUnit" style="font-size:12px;color:#909399;"></span>
+          </div>
+        </div>
+        <div class="ak-form-row" style="margin-bottom:20px;">
+          <span class="ak-label">用户汇率</span>
+          <span id="rp-off-userRate-display" style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#303133;"></span>
+        </div>
+
+        <!-- 支持网络 -->
+        <div style="font-size:12px;font-weight:600;color:#606266;letter-spacing:0.5px;padding-bottom:8px;border-bottom:1px solid #EBEEF5;margin-bottom:14px;">支持网络</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-TRON"><span class="ak-box"></span>TRON</label>
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-Ethereum"><span class="ak-box"></span>Ethereum</label>
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-Arbitrum"><span class="ak-box"></span>Arbitrum</label>
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-Base"><span class="ak-box"></span>Base</label>
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-Polygon"><span class="ak-box"></span>Polygon</label>
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-BNB"><span class="ak-box"></span>BNB Smart Chain</label>
+          <label class="ak-check-item"><input type="checkbox" id="rp-net-Solana"><span class="ak-box"></span>Solana</label>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeRampPairEdit()" style="margin-right:8px;">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="saveRampPairEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div class="toast" id="toast">
     <i data-lucide="check-circle" class="toast-icon" style="width:16px;height:16px;"></i>
@@ -1334,6 +1919,9 @@
   const PAGE_META = {
     deposit:  { label: '充币记录',  icon: 'circle-arrow-down' },
     payment:  { label: '支付订单',  icon: 'file-text' },
+    'ramp-in':  { label: '入金订单', icon: 'circle-arrow-down' },
+    'ramp-out': { label: '出金订单', icon: 'circle-arrow-up' },
+    'ramp-detail': { label: '出入金详情', icon: 'file-search' },
     home:     { label: '首页',      icon: 'house' },
     platform: { label: '平台资产',  icon: 'layers' },
     merchant: { label: '商户管理',  icon: 'users' },
@@ -1345,7 +1933,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'payment', 'merchant', 'merchant-detail']);
+  const IMPL_PAGES = new Set(['deposit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -1388,6 +1976,13 @@
     }
   }
 
+  function toggleNavGroup(id) {
+    const hd  = document.getElementById('nav-ghd-' + id);
+    const sub = document.getElementById('nav-sub-' + id);
+    const collapsed = hd.classList.toggle('collapsed');
+    sub.style.display = collapsed ? 'none' : '';
+  }
+
   function navigateTo(pid) {
     if (!openTabs.includes(pid)) openTabs.push(pid);
     activePage = pid;
@@ -1396,6 +1991,12 @@
     document.querySelectorAll('.nav-item').forEach(n => {
       n.classList.toggle('active', n.dataset.page === pid);
     });
+
+    // update ramp group header active state
+    const rampGhd = document.getElementById('nav-ghd-ramp');
+    if (rampGhd) {
+      rampGhd.classList.toggle('group-active', pid === 'ramp-in' || pid === 'ramp-out');
+    }
 
     // update breadcrumb
     document.getElementById('bc-current').textContent = PAGE_META[pid]?.label || pid;
@@ -1896,6 +2497,90 @@
     </tr>`).join('');
   }
 
+  const RAMP_PAIRS = [
+    {
+      crypto:'USDT', fiat:'JPY', networks:['TRON','Ethereum'],
+      onRamp:  { enabled:true,  provider:'Banxa', providerRate:'150.07', feeMode:'pts', feeValue:'1.43' },
+      offRamp: { enabled:true,  provider:'Banxa', providerRate:'150.07', feeMode:'pts', feeValue:'1.57' },
+    },
+    {
+      crypto:'USDT', fiat:'USD', networks:['Ethereum'],
+      onRamp:  { enabled:true,  provider:'Banxa', providerRate:'1.0015', feeMode:'pts', feeValue:'0.0035' },
+      offRamp: { enabled:true,  provider:'Banxa', providerRate:'1.0015', feeMode:'pts', feeValue:'0.0035' },
+    },
+    {
+      crypto:'USDC', fiat:'JPY', networks:['Ethereum'],
+      onRamp:  { enabled:true,  provider:'Banxa', providerRate:'150.07', feeMode:'pts', feeValue:'1.43' },
+      offRamp: { enabled:false, provider:'Banxa', providerRate:'150.07', feeMode:'pts', feeValue:'1.57' },
+    },
+    {
+      crypto:'USDT', fiat:'AUD', networks:['TRON'],
+      onRamp:  { enabled:true,  provider:'Banxa', providerRate:'1.5129', feeMode:'pts', feeValue:'0.0071' },
+      offRamp: { enabled:false, provider:'Banxa', providerRate:'1.5129', feeMode:'pts', feeValue:'0.0071' },
+    },
+    {
+      crypto:'USDC', fiat:'EUR', networks:['Ethereum'],
+      onRamp:  { enabled:true,  provider:'Banxa', providerRate:'0.9205', feeMode:'pts', feeValue:'0.0045' },
+      offRamp: { enabled:false, provider:'Banxa', providerRate:'0.9205', feeMode:'pts', feeValue:'0.0045' },
+    },
+    {
+      crypto:'USDC', fiat:'USD', networks:['Ethereum'],
+      onRamp:  { enabled:false, provider:'Banxa', providerRate:'1.0015', feeMode:'pts', feeValue:'0.0035' },
+      offRamp: { enabled:false, provider:'Banxa', providerRate:'1.0015', feeMode:'pts', feeValue:'0.0035' },
+    },
+  ];
+
+  function rpNetChips(nets) {
+    if (!nets || !nets.length) return '<span style="color:#C0C4CC;">—</span>';
+    return nets.map(n => `<span style="display:inline-block;background:#F5F7FA;border:1px solid #E4E7ED;border-radius:3px;padding:1px 6px;font-size:11px;color:#606266;font-family:'Inter',sans-serif;margin:1px 2px 1px 0;">${n}</span>`).join('');
+  }
+
+  function rpCalcUserRate(providerRate, feeMode, feeValue, dir) {
+    const pr = parseFloat(providerRate);
+    const fv = parseFloat(feeValue);
+    if (isNaN(pr) || isNaN(fv) || fv < 0) return '';
+    const ur = feeMode === 'pct'
+      ? (dir === 'in' ? pr * (1 + fv / 100) : pr * (1 - fv / 100))
+      : (dir === 'in' ? pr + fv : pr - fv);
+    const dec = Math.max((String(providerRate).split('.')[1] || '').length, 2);
+    return ur.toFixed(dec);
+  }
+
+  function rpRateCell(enabled, rate) {
+    if (!enabled || !rate) return '<span style="color:#C0C4CC;">—</span>';
+    return `<span style="font-family:'Inter',sans-serif;">${rate}</span>`;
+  }
+
+  function rpFeeCell(enabled, feeMode, feeValue, dir) {
+    if (!enabled) return '<span style="color:#C0C4CC;">—</span>';
+    const sign = dir === 'out' ? '−' : '+';
+    if (feeMode === 'pct') return `<span style="font-family:'Inter',sans-serif;">${sign}${feeValue}<span style="color:#909399;font-size:11px;">%</span></span>`;
+    return `<span style="font-family:'Inter',sans-serif;">${sign}${feeValue}</span>`;
+  }
+
+  function mdRenderRampTokenTable() {
+    const tbody = document.getElementById('md-ramp-token-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = RAMP_PAIRS.map((r, i) => {
+      const on = r.onRamp, off = r.offRamp;
+      const onUR  = on.enabled  ? rpCalcUserRate(on.providerRate,  on.feeMode,  on.feeValue,  'in')  : '';
+      const offUR = off.enabled ? rpCalcUserRate(off.providerRate, off.feeMode, off.feeValue, 'out') : '';
+      return `<tr>
+        <td style="font-family:'Inter',sans-serif;font-weight:500;">${r.crypto}<span style="color:#C0C4CC;margin:0 2px;">/</span>${r.fiat}</td>
+        <td>${tBadge(on.enabled ? 'on' : 'off')}</td>
+        <td>${rpRateCell(on.enabled, on.providerRate)}</td>
+        <td>${rpFeeCell(on.enabled, on.feeMode, on.feeValue, 'in')}</td>
+        <td>${rpRateCell(on.enabled, onUR)}</td>
+        <td>${tBadge(off.enabled ? 'on' : 'off')}</td>
+        <td>${rpRateCell(off.enabled, off.providerRate)}</td>
+        <td>${rpFeeCell(off.enabled, off.feeMode, off.feeValue, 'out')}</td>
+        <td>${rpRateCell(off.enabled, offUR)}</td>
+        <td>${rpNetChips(r.networks)}</td>
+        <td><span class="action-icon" onclick="openRampPairEdit(${i})" title="编辑">${_EDIT_SVG}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
   function merchantDetailBack() {
     openTabs = openTabs.filter(t => t !== 'merchant-detail');
     navigateTo('merchant');
@@ -1904,10 +2589,11 @@
   function mdSwitchTab(tab) {
     document.querySelectorAll('.md-tab').forEach(el => el.classList.toggle('md-tab-active', el.dataset.tab === tab));
     document.querySelectorAll('.md-tab-content').forEach(el => { el.style.display = el.id === 'md-content-' + tab ? 'flex' : 'none'; });
-    if (tab === 'tunnel')   mdRenderAssetTable();
-    if (tab === 'apikeys')  mdRenderApiKeysTable();
-    if (tab === 'token')    mdRenderTokenTable();
-    if (tab === 'observer') mdRenderObserversTable();
+    if (tab === 'tunnel')     mdRenderAssetTable();
+    if (tab === 'apikeys')    mdRenderApiKeysTable();
+    if (tab === 'token')      mdRenderTokenTable();
+    if (tab === 'ramp-token') mdRenderRampTokenTable();
+    if (tab === 'observer')   mdRenderObserversTable();
   }
 
   // ── Channel ───────────────────────────────────────────
@@ -2222,11 +2908,626 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
   }
 
+  // ══════════════════════════════════════════════════════
+  //  出入金订单 data & logic
+  // ══════════════════════════════════════════════════════
+  const RAMP_STATUS_MAP = {
+    pending:              { label: '待处理',     cls: 'badge-blue'  },
+    awaiting_payment:     { label: '等待付款',   cls: 'badge-blue'  },
+    payment_received:     { label: '已收到付款', cls: 'badge-blue'  },
+    processing:           { label: '处理中',     cls: 'badge-blue'  },
+    completed:            { label: '已完成',     cls: 'badge-green' },
+    pending_verification: { label: '追加验证中', cls: 'badge-amber' },
+    failed:               { label: '失败',       cls: 'badge-red'   },
+  };
+
+  const RAMP_ALL = [
+    {
+      paypaz_order_id: 'RAMP-20260625-8847', cfd_order_ref: 'CFD-TKS-20260625-5521',
+      provider_order_id: 'BNX-8847263901', provider: 'Banxa',
+      merchant: 'GMTM', user_id: 'USR-78324901',
+      direction: 'in', fiat_amount: '150,000', fiat_currency: 'JPY',
+      crypto_amount: '999.50', crypto_currency: 'USDT', crypto_network: 'Tron',
+      exchange_rate: '150.07', fee: '1,500', provider_fee: '1,050', profit: '450',
+      status: 'completed', created_at: '2026-06-25 09:12:34', completed_at: '2026-06-25 09:28:45',
+      timeline: [
+        { label:'待处理',    time:'2026-06-25 09:12:34', desc:'订单创建成功',             state:'done'   },
+        { label:'等待付款',  time:'2026-06-25 09:12:40', desc:'引导用户完成法币支付',      state:'done'   },
+        { label:'已收到付款',time:'2026-06-25 09:18:22', desc:'Banxa 确认收到法币付款',   state:'done'   },
+        { label:'处理中',    time:'2026-06-25 09:21:15', desc:'Banxa 发起加密资产划转',   state:'done'   },
+        { label:'已完成',    time:'2026-06-25 09:28:45', desc:'USDT 已到达用户钱包地址',  state:'done'   },
+      ],
+      webhook_raw: {
+        event:'ORDER_COMPLETE', orderId:'BNX-8847263901', status:'completed',
+        fiatAmount:150000, fiatCurrency:'JPY', coinAmount:999.50, coinCode:'USDT',
+        blockchain:'TRON', walletAddress:'TQnCVmTKovTqXbr1MDsAH2o8PZwkj4Fn',
+        txHash:'5a9f3bcd7e2f1a4b8c6d9e0f3a5b2c7d4e8f1a6b3c9d2e7f0a4b8c5d1e6f3a9b',
+        createdAt:'2026-06-25T09:12:34Z', completedAt:'2026-06-25T09:28:45Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260625-8902', cfd_order_ref: 'CFD-TKS-20260625-5587',
+      provider_order_id: 'BNX-8902417633', provider: 'Banxa',
+      merchant: 'XM Japan', user_id: 'USR-44129807',
+      direction: 'in', fiat_amount: '80,000', fiat_currency: 'JPY',
+      crypto_amount: '533.12', crypto_currency: 'USDC', crypto_network: 'Ethereum',
+      exchange_rate: '150.07', fee: '800', provider_fee: '560', profit: '240',
+      status: 'processing', created_at: '2026-06-25 10:35:20', completed_at: '—',
+      timeline: [
+        { label:'待处理',    time:'2026-06-25 10:35:20', desc:'订单创建成功',             state:'done'   },
+        { label:'等待付款',  time:'2026-06-25 10:35:28', desc:'引导用户完成法币支付',      state:'done'   },
+        { label:'已收到付款',time:'2026-06-25 10:44:11', desc:'Banxa 确认收到法币付款',   state:'done'   },
+        { label:'处理中',    time:'2026-06-25 10:50:03', desc:'Banxa 发起加密资产划转',   state:'active' },
+        { label:'已完成',    time:null,                  desc:'等待加密资产到账确认',      state:''       },
+      ],
+      webhook_raw: {
+        event:'ORDER_PROCESSING', orderId:'BNX-8902417633', status:'processing',
+        fiatAmount:80000, fiatCurrency:'JPY', coinAmount:533.12, coinCode:'USDC',
+        blockchain:'ETHEREUM', walletAddress:'0x8a3f7bC1d9E4f2A6B5c3D0e8F1a4B7c2d5E9f3',
+        txHash:null, createdAt:'2026-06-25T10:35:20Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260625-8988', cfd_order_ref: 'CFD-TKS-20260625-5601',
+      provider_order_id: 'BNX-8988241703', provider: 'Banxa',
+      merchant: 'GMTM', user_id: 'USR-22038514',
+      direction: 'in', fiat_amount: '50,000', fiat_currency: 'JPY',
+      crypto_amount: '333.00', crypto_currency: 'USDT', crypto_network: 'Tron',
+      exchange_rate: '150.15', fee: '500', provider_fee: '350', profit: '150',
+      status: 'payment_received', created_at: '2026-06-25 11:02:45', completed_at: '—',
+      timeline: [
+        { label:'待处理',    time:'2026-06-25 11:02:45', desc:'订单创建成功',             state:'done'   },
+        { label:'等待付款',  time:'2026-06-25 11:02:51', desc:'引导用户完成法币支付',      state:'done'   },
+        { label:'已收到付款',time:'2026-06-25 11:09:30', desc:'Banxa 确认收到法币付款',   state:'active' },
+        { label:'处理中',    time:null, desc:'等待 Banxa 发起加密资产划转',               state:''       },
+        { label:'已完成',    time:null, desc:'等待加密资产到账确认',                      state:''       },
+      ],
+      webhook_raw: {
+        event:'PAYMENT_RECEIVED', orderId:'BNX-8988241703', status:'payment_received',
+        fiatAmount:50000, fiatCurrency:'JPY', coinAmount:333.00, coinCode:'USDT',
+        blockchain:'TRON', walletAddress:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',
+        txHash:null, createdAt:'2026-06-25T11:02:45Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260625-9011', cfd_order_ref: 'CFD-TKS-20260625-5631',
+      provider_order_id: 'BNX-9011834720', provider: 'Banxa',
+      merchant: 'GMTM', user_id: 'USR-55671023',
+      direction: 'out', fiat_amount: '200,000', fiat_currency: 'JPY',
+      crypto_amount: '1,333.00', crypto_currency: 'USDT', crypto_network: 'Tron',
+      exchange_rate: '150.04', fee: '13.33', provider_fee: '9.33', profit: '4.00',
+      status: 'awaiting_payment', created_at: '2026-06-25 11:30:00', completed_at: '—',
+      timeline: [
+        { label:'待处理',   time:'2026-06-25 11:30:00', desc:'出金订单创建成功',          state:'done'   },
+        { label:'等待付款', time:'2026-06-25 11:30:08', desc:'等待用户转入加密资产',       state:'active' },
+        { label:'处理中',   time:null, desc:'Banxa 处理出金请求',                        state:''       },
+        { label:'已完成',   time:null, desc:'法币已到达用户账户',                         state:''       },
+      ],
+      webhook_raw: {
+        event:'ORDER_AWAITING_PAYMENT', orderId:'BNX-9011834720', status:'awaiting_payment',
+        fiatAmount:200000, fiatCurrency:'JPY', coinAmount:1333.00, coinCode:'USDT',
+        blockchain:'TRON', depositAddress:'TJHu8kCJRchR3iMTQ9PNTzuMGDpBpL6eNm',
+        createdAt:'2026-06-25T11:30:00Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260624-7721', cfd_order_ref: 'CFD-TKS-20260624-5423',
+      provider_order_id: 'BNX-7721938450', provider: 'Banxa',
+      merchant: 'XM Japan', user_id: 'USR-90124836',
+      direction: 'in', fiat_amount: '1,000.00', fiat_currency: 'USD',
+      crypto_amount: '998.50', crypto_currency: 'USDT', crypto_network: 'Ethereum',
+      exchange_rate: '1.0015', fee: '10.00', provider_fee: '7.00', profit: '3.00',
+      status: 'pending_verification', created_at: '2026-06-24 16:44:02', completed_at: '—',
+      timeline: [
+        { label:'待处理',    time:'2026-06-24 16:44:02', desc:'订单创建成功',                         state:'done'   },
+        { label:'等待付款',  time:'2026-06-24 16:44:09', desc:'引导用户完成法币支付',                  state:'done'   },
+        { label:'已收到付款',time:'2026-06-24 16:52:18', desc:'Banxa 确认收到法币付款',               state:'done'   },
+        { label:'追加验证中',time:'2026-06-24 16:55:40', desc:'Banxa 要求用户完成补充 KYC 验证',      state:'active' },
+        { label:'处理中',    time:null, desc:'等待验证通过后继续处理',                               state:''       },
+        { label:'已完成',    time:null, desc:'',                                                     state:''       },
+      ],
+      webhook_raw: {
+        event:'ORDER_PENDING_VERIFICATION', orderId:'BNX-7721938450', status:'pending_verification',
+        fiatAmount:1000.00, fiatCurrency:'USD', coinAmount:998.50, coinCode:'USDT',
+        blockchain:'ETHEREUM', walletAddress:'0xC4f9E1A3B6D2e8F5c7a9D0b2E4f6A8c3D5e7F1a',
+        verificationUrl:'https://verify.banxa.com/kycv2/BNX-7721938450',
+        createdAt:'2026-06-24T16:44:02Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260624-7633', cfd_order_ref: 'CFD-TKS-20260624-5394',
+      provider_order_id: 'BNX-7633129047', provider: 'Banxa',
+      merchant: 'GMTM', user_id: 'USR-33817640',
+      direction: 'in', fiat_amount: '200.00', fiat_currency: 'AUD',
+      crypto_amount: '132.18', crypto_currency: 'USDT', crypto_network: 'Tron',
+      exchange_rate: '1.5129', fee: '2.00', provider_fee: '1.40', profit: '0.60',
+      status: 'failed', created_at: '2026-06-24 14:18:55', completed_at: '—',
+      timeline: [
+        { label:'待处理',   time:'2026-06-24 14:18:55', desc:'订单创建成功',                           state:'done'   },
+        { label:'等待付款', time:'2026-06-24 14:19:03', desc:'引导用户完成法币支付',                    state:'done'   },
+        { label:'失败',     time:'2026-06-24 14:31:20', desc:'付款超时，用户未在规定时间内完成付款',     state:'failed' },
+      ],
+      webhook_raw: {
+        event:'ORDER_FAILED', orderId:'BNX-7633129047', status:'failed',
+        fiatAmount:200.00, fiatCurrency:'AUD', coinAmount:132.18, coinCode:'USDT',
+        blockchain:'TRON', reason:'payment_timeout',
+        createdAt:'2026-06-24T14:18:55Z', failedAt:'2026-06-24T14:31:20Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260624-7501', cfd_order_ref: 'CFD-TKS-20260624-5312',
+      provider_order_id: 'BNX-7501628193', provider: 'Banxa',
+      merchant: 'IG Japan', user_id: 'USR-67290143',
+      direction: 'out', fiat_amount: '300,000', fiat_currency: 'JPY',
+      crypto_amount: '2,000.00', crypto_currency: 'USDT', crypto_network: 'Tron',
+      exchange_rate: '150.00', fee: '20.00', provider_fee: '14.00', profit: '6.00',
+      status: 'completed', created_at: '2026-06-24 10:05:33', completed_at: '2026-06-24 10:42:19',
+      timeline: [
+        { label:'待处理',   time:'2026-06-24 10:05:33', desc:'出金订单创建成功',          state:'done' },
+        { label:'等待付款', time:'2026-06-24 10:05:40', desc:'等待用户转入加密资产',       state:'done' },
+        { label:'处理中',   time:'2026-06-24 10:18:07', desc:'USDT 已收到，Banxa 处理出金',state:'done' },
+        { label:'已完成',   time:'2026-06-24 10:42:19', desc:'法币已成功划转至用户绑定账户',state:'done' },
+      ],
+      webhook_raw: {
+        event:'ORDER_COMPLETE', orderId:'BNX-7501628193', status:'completed',
+        fiatAmount:300000, fiatCurrency:'JPY', coinAmount:2000.00, coinCode:'USDT',
+        blockchain:'TRON', txHash:'a8c3f2e7d4b9a1e6c5f3b8d2a7e4c1f9b6d3a8e5c2f7b4d1a9e6c3f0b7d4a2e5',
+        createdAt:'2026-06-24T10:05:33Z', completedAt:'2026-06-24T10:42:19Z'
+      }
+    },
+    {
+      paypaz_order_id: 'RAMP-20260625-9145', cfd_order_ref: 'CFD-TKS-20260625-5680',
+      provider_order_id: '—', provider: 'Banxa',
+      merchant: 'IG Japan', user_id: 'USR-10938271',
+      direction: 'in', fiat_amount: '500.00', fiat_currency: 'EUR',
+      crypto_amount: '543.20', crypto_currency: 'USDC', crypto_network: 'Ethereum',
+      exchange_rate: '0.9205', fee: '5.00', provider_fee: '3.50', profit: '1.50',
+      status: 'pending', created_at: '2026-06-25 11:58:12', completed_at: '—',
+      timeline: [
+        { label:'待处理',   time:'2026-06-25 11:58:12', desc:'订单已提交，等待向 Banxa 发起请求', state:'active' },
+        { label:'等待付款', time:null, desc:'',                                                   state:''       },
+        { label:'已完成',   time:null, desc:'',                                                   state:''       },
+      ],
+      webhook_raw: {}
+    },
+  ];
+
+  const rampState = { rows: [...RAMP_ALL], page: 1, size: 10 };
+
+  function rampStatusBadge(s) {
+    const m = RAMP_STATUS_MAP[s] || { label: s, cls: 'badge-gray' };
+    return `<span class="badge ${m.cls}">${m.label}</span>`;
+  }
+
+  function rampDirTag(d) {
+    return d === 'in'
+      ? '<span class="dir-tag dir-in">入金</span>'
+      : '<span class="dir-tag dir-out">出金</span>';
+  }
+
+  function rampRender() {
+    const tbody = document.getElementById('ramp-tbody');
+    if (!tbody) return;
+    const start = (rampState.page - 1) * rampState.size;
+    const slice = rampState.rows.slice(start, start + rampState.size);
+    tbody.innerHTML = slice.map(r => {
+      const idx = RAMP_ALL.indexOf(r);
+      return `<tr>
+        <td><span style="font-family:'Inter',sans-serif;font-size:12px;color:#409EFF;cursor:pointer;" onclick="openRampDetail(${idx})">${r.paypaz_order_id}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.cfd_order_ref}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#909399;">${r.provider_order_id}</td>
+        <td>${r.provider}</td>
+        <td>${r.merchant}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.user_id}</td>
+        <td>${rampDirTag(r.direction)}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.fiat_amount}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiat_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;">${r.crypto_amount}&nbsp;<span style="color:#909399;font-size:11px;">${r.crypto_currency}/${r.crypto_network}</span></td>
+        <td>${rampStatusBadge(r.status)}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.created_at}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.completed_at}</td>
+        <td><div class="action-cell"><span class="action-icon" onclick="openRampDetail(${idx})" title="详情"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></div></td>
+      </tr>`;
+    }).join('');
+
+    const total = rampState.rows.length;
+    document.getElementById('ramp-page-total').textContent = `共 ${total} 条`;
+    const pages = Math.ceil(total / rampState.size) || 1;
+    for (let k = 1; k <= 3; k++) {
+      const btn = document.getElementById('ramp-p-' + k);
+      if (btn) { btn.textContent = k; btn.classList.toggle('active', k === rampState.page); btn.style.display = k <= pages ? '' : 'none'; }
+    }
+    const prevBtn = document.getElementById('ramp-btn-prev');
+    const nextBtn = document.getElementById('ramp-btn-next');
+    if (prevBtn) prevBtn.disabled = rampState.page <= 1;
+    if (nextBtn) nextBtn.disabled = rampState.page >= pages;
+  }
+
+  function rampPage(n) {
+    const pages = Math.ceil(rampState.rows.length / rampState.size) || 1;
+    rampState.page = Math.max(1, Math.min(n, pages));
+    rampRender();
+  }
+
+  function rampPageSize() {
+    rampState.size = +document.getElementById('ramp-page-size').value;
+    rampState.page = 1;
+    rampRender();
+  }
+
+  function rampSearch() {
+    const pid      = document.getElementById('ramp-f-pid').value.trim().toLowerCase();
+    const cfd      = document.getElementById('ramp-f-cfd').value.trim().toLowerCase();
+    const merch    = document.getElementById('ramp-f-merchant').value.trim().toLowerCase();
+    const prov     = document.getElementById('ramp-f-provider').value;
+    const dir      = document.getElementById('ramp-f-direction').value;
+    const status   = document.getElementById('ramp-f-status').value;
+    const fiat     = document.getElementById('ramp-f-fiat').value;
+    const dateFrom = document.getElementById('ramp-f-date-from').value;
+    const dateTo   = document.getElementById('ramp-f-date-to').value;
+    rampState.rows = RAMP_ALL.filter(r => {
+      if (pid      && !r.paypaz_order_id.toLowerCase().includes(pid))  return false;
+      if (cfd      && !r.cfd_order_ref.toLowerCase().includes(cfd))    return false;
+      if (merch    && !r.merchant.toLowerCase().includes(merch))       return false;
+      if (prov     && r.provider !== prov)     return false;
+      if (dir      && r.direction !== dir)     return false;
+      if (status   && r.status !== status)     return false;
+      if (fiat     && r.fiat_currency !== fiat) return false;
+      if (dateFrom && r.created_at.slice(0,10) < dateFrom) return false;
+      if (dateTo   && r.created_at.slice(0,10) > dateTo)   return false;
+      return true;
+    });
+    rampState.page = 1;
+    rampRender();
+  }
+
+  function rampReset() {
+    ['ramp-f-pid','ramp-f-cfd','ramp-f-merchant','ramp-f-date-from','ramp-f-date-to'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['ramp-f-provider','ramp-f-direction','ramp-f-status','ramp-f-fiat'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    rampState.rows = [...RAMP_ALL];
+    rampState.page = 1;
+    rampRender();
+  }
+
+  function rampExport() { showToast('导出功能开发中'); }
+
+  // ── 入金订单 ──────────────────────────────────────────
+  const rampInState = { rows: RAMP_ALL.filter(r => r.direction === 'in'), page: 1, size: 10 };
+
+  function rampInRender() {
+    const tbody = document.getElementById('ramp-in-tbody');
+    if (!tbody) return;
+    const start = (rampInState.page - 1) * rampInState.size;
+    const slice = rampInState.rows.slice(start, start + rampInState.size);
+    tbody.innerHTML = slice.map(r => {
+      const idx = RAMP_ALL.indexOf(r);
+      return `<tr>
+        <td>${r.merchant}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.user_id}</td>
+        <td>${r.provider}</td>
+        <td><span style="font-family:'Inter',sans-serif;font-size:12px;color:#409EFF;cursor:pointer;" onclick="openRampDetail(${idx})">${r.paypaz_order_id}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.cfd_order_ref}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#909399;">${r.provider_order_id}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.fiat_amount}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiat_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;">${r.crypto_amount}&nbsp;<span style="color:#909399;font-size:11px;">${r.crypto_currency}/${r.crypto_network}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.exchange_rate}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.fee}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiat_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;">${r.provider_fee}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiat_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;color:#67C23A;">${r.profit}&nbsp;<span style="font-size:11px;">${r.fiat_currency}</span></td>
+        <td>${rampStatusBadge(r.status)}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.created_at}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.completed_at}</td>
+        <td><div class="action-cell"><span class="action-icon" onclick="openRampDetail(${idx})" title="详情"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></div></td>
+      </tr>`;
+    }).join('');
+    const total = rampInState.rows.length;
+    document.getElementById('ramp-in-page-total').textContent = `共 ${total} 条`;
+    const pages = Math.ceil(total / rampInState.size) || 1;
+    for (let k = 1; k <= 3; k++) {
+      const btn = document.getElementById('ramp-in-p-' + k);
+      if (btn) { btn.textContent = k; btn.classList.toggle('active', k === rampInState.page); btn.style.display = k <= pages ? '' : 'none'; }
+    }
+    const prev = document.getElementById('ramp-in-btn-prev');
+    const next = document.getElementById('ramp-in-btn-next');
+    if (prev) prev.disabled = rampInState.page <= 1;
+    if (next) next.disabled = rampInState.page >= pages;
+  }
+
+  function rampInPage(n) {
+    const pages = Math.ceil(rampInState.rows.length / rampInState.size) || 1;
+    rampInState.page = Math.max(1, Math.min(n, pages));
+    rampInRender();
+  }
+
+  function rampInPageSize() {
+    rampInState.size = +document.getElementById('ramp-in-page-size').value;
+    rampInState.page = 1;
+    rampInRender();
+  }
+
+  function rampInSearch() {
+    const pid      = document.getElementById('ramp-in-f-pid').value.trim().toLowerCase();
+    const cfd      = document.getElementById('ramp-in-f-cfd').value.trim().toLowerCase();
+    const merch    = document.getElementById('ramp-in-f-merchant').value.trim().toLowerCase();
+    const prov     = document.getElementById('ramp-in-f-provider').value;
+    const status   = document.getElementById('ramp-in-f-status').value;
+    const fiat     = document.getElementById('ramp-in-f-fiat').value;
+    const token    = document.getElementById('ramp-in-f-token').value;
+    const network  = document.getElementById('ramp-in-f-network').value;
+    const dateFrom = document.getElementById('ramp-in-f-date-from').value;
+    const dateTo   = document.getElementById('ramp-in-f-date-to').value;
+    rampInState.rows = RAMP_ALL.filter(r => {
+      if (r.direction !== 'in') return false;
+      if (pid     && !r.paypaz_order_id.toLowerCase().includes(pid)) return false;
+      if (cfd     && !r.cfd_order_ref.toLowerCase().includes(cfd))   return false;
+      if (merch   && !r.merchant.toLowerCase().includes(merch))      return false;
+      if (prov    && r.provider !== prov)          return false;
+      if (status  && r.status !== status)          return false;
+      if (fiat    && r.fiat_currency !== fiat)     return false;
+      if (token   && r.crypto_currency !== token)  return false;
+      if (network && r.crypto_network !== network) return false;
+      if (dateFrom && r.created_at.slice(0,10) < dateFrom) return false;
+      if (dateTo   && r.created_at.slice(0,10) > dateTo)   return false;
+      return true;
+    });
+    rampInState.page = 1;
+    rampInRender();
+  }
+
+  function rampInReset() {
+    ['ramp-in-f-pid','ramp-in-f-cfd','ramp-in-f-merchant','ramp-in-f-date-from','ramp-in-f-date-to'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['ramp-in-f-provider','ramp-in-f-status','ramp-in-f-fiat','ramp-in-f-token','ramp-in-f-network'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    rampInState.rows = RAMP_ALL.filter(r => r.direction === 'in');
+    rampInState.page = 1;
+    rampInRender();
+  }
+
+  // ── Ramp 币对配置 ─────────────────────────────────────
+  const _RP_NETWORKS = ['TRON','Ethereum','Arbitrum','Base','Polygon','BNB Smart Chain','Solana'];
+  const _RP_NET_IDS  = ['TRON','Ethereum','Arbitrum','Base','Polygon','BNB','Solana'];
+  let _rpIdx = -1;
+
+  function rpUpdateUserRate(dir) {
+    if (_rpIdx < 0) return;
+    const r = RAMP_PAIRS[_rpIdx];
+    const side = dir === 'on' ? r.onRamp : r.offRamp;
+    const rateUnit = `${r.fiat}/${r.crypto}`;
+    const feeMode  = document.querySelector(`input[name="rp-${dir}-feeMode"]:checked`)?.value || 'pts';
+    const feeValue = document.getElementById(`rp-${dir}-feeValue`).value;
+    document.getElementById(`rp-${dir}-feeUnit`).textContent = feeMode === 'pts' ? rateUnit : '%';
+    const calc = rpCalcUserRate(side.providerRate, feeMode, feeValue, dir === 'on' ? 'in' : 'out');
+    const display = document.getElementById(`rp-${dir}-userRate-display`);
+    if (display) display.textContent = calc || '—';
+  }
+
+  function openRampPairEdit(i) {
+    _rpIdx = i;
+    const r = RAMP_PAIRS[i];
+    document.getElementById('rte-title').textContent = `出入金 - ${r.crypto}/${r.fiat} 配置`;
+    const rateUnit = `${r.fiat}/${r.crypto}`;
+
+    // 入金
+    document.querySelectorAll('input[name="rp-on-status"]').forEach(el => { el.checked = el.value === (r.onRamp.enabled ? 'on' : 'off'); });
+    const onProv = document.getElementById('rp-on-provider');
+    if (onProv) onProv.value = r.onRamp.provider;
+    document.getElementById('rp-on-providerRate-display').textContent = `${r.onRamp.providerRate} ${rateUnit}`;
+    document.querySelectorAll('input[name="rp-on-feeMode"]').forEach(el => { el.checked = el.value === r.onRamp.feeMode; });
+    document.getElementById('rp-on-feeValue').value = r.onRamp.feeValue;
+    rpUpdateUserRate('on');
+
+    // 出金
+    document.querySelectorAll('input[name="rp-off-status"]').forEach(el => { el.checked = el.value === (r.offRamp.enabled ? 'on' : 'off'); });
+    const offProv = document.getElementById('rp-off-provider');
+    if (offProv) offProv.value = r.offRamp.provider;
+    document.getElementById('rp-off-providerRate-display').textContent = `${r.offRamp.providerRate} ${rateUnit}`;
+    document.querySelectorAll('input[name="rp-off-feeMode"]').forEach(el => { el.checked = el.value === r.offRamp.feeMode; });
+    document.getElementById('rp-off-feeValue').value = r.offRamp.feeValue;
+    rpUpdateUserRate('off');
+
+    // 支持网络
+    _RP_NETWORKS.forEach((name, j) => {
+      const el = document.getElementById('rp-net-' + _RP_NET_IDS[j]);
+      if (el) el.checked = r.networks.includes(name);
+    });
+
+    document.getElementById('ramp-token-edit-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeRampPairEdit() {
+    document.getElementById('ramp-token-edit-modal').classList.remove('show');
+  }
+
+  function saveRampPairEdit() {
+    if (_rpIdx < 0) return;
+    const r = RAMP_PAIRS[_rpIdx];
+
+    // 入金
+    const onStatus  = document.querySelector('input[name="rp-on-status"]:checked');
+    const onFeeMode = document.querySelector('input[name="rp-on-feeMode"]:checked')?.value || 'pts';
+    const onFeeVal  = Math.max(0, parseFloat(document.getElementById('rp-on-feeValue').value) || 0);
+    r.onRamp.enabled  = onStatus ? onStatus.value === 'on' : false;
+    r.onRamp.provider = document.getElementById('rp-on-provider').value;
+    r.onRamp.feeMode  = onFeeMode;
+    r.onRamp.feeValue = String(onFeeVal);
+
+    // 出金
+    const offStatus  = document.querySelector('input[name="rp-off-status"]:checked');
+    const offFeeMode = document.querySelector('input[name="rp-off-feeMode"]:checked')?.value || 'pts';
+    const offFeeVal  = Math.max(0, parseFloat(document.getElementById('rp-off-feeValue').value) || 0);
+    r.offRamp.enabled  = offStatus ? offStatus.value === 'on' : false;
+    r.offRamp.provider = document.getElementById('rp-off-provider').value;
+    r.offRamp.feeMode  = offFeeMode;
+    r.offRamp.feeValue = String(offFeeVal);
+
+    // 支持网络
+    r.networks = _RP_NETWORKS.filter((name, j) => {
+      const el = document.getElementById('rp-net-' + _RP_NET_IDS[j]);
+      return el && el.checked;
+    });
+
+    closeRampPairEdit();
+    mdRenderRampTokenTable();
+    showToast('保存成功');
+  }
+
+  function rampInExport() { showToast('导出功能开发中'); }
+
+  // ── 出金订单 ──────────────────────────────────────────
+  const rampOutState = { rows: RAMP_ALL.filter(r => r.direction === 'out'), page: 1, size: 10 };
+
+  function rampOutRender() {
+    const tbody = document.getElementById('ramp-out-tbody');
+    if (!tbody) return;
+    const start = (rampOutState.page - 1) * rampOutState.size;
+    const slice = rampOutState.rows.slice(start, start + rampOutState.size);
+    tbody.innerHTML = slice.map(r => {
+      const idx = RAMP_ALL.indexOf(r);
+      return `<tr>
+        <td>${r.merchant}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.user_id}</td>
+        <td>${r.provider}</td>
+        <td><span style="font-family:'Inter',sans-serif;font-size:12px;color:#409EFF;cursor:pointer;" onclick="openRampDetail(${idx})">${r.paypaz_order_id}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.cfd_order_ref}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#909399;">${r.provider_order_id}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.fiat_amount}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiat_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;">${r.crypto_amount}&nbsp;<span style="color:#909399;font-size:11px;">${r.crypto_currency}/${r.crypto_network}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.exchange_rate}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.fee}&nbsp;<span style="color:#909399;font-size:11px;">${r.crypto_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;">${r.provider_fee}&nbsp;<span style="color:#909399;font-size:11px;">${r.crypto_currency}</span></td>
+        <td style="font-family:'Inter',sans-serif;color:#67C23A;">${r.profit}&nbsp;<span style="font-size:11px;">${r.crypto_currency}</span></td>
+        <td>${rampStatusBadge(r.status)}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.created_at}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.completed_at}</td>
+        <td><div class="action-cell"><span class="action-icon" onclick="openRampDetail(${idx})" title="详情"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span></div></td>
+      </tr>`;
+    }).join('');
+    const total = rampOutState.rows.length;
+    document.getElementById('ramp-out-page-total').textContent = `共 ${total} 条`;
+    const pages = Math.ceil(total / rampOutState.size) || 1;
+    for (let k = 1; k <= 3; k++) {
+      const btn = document.getElementById('ramp-out-p-' + k);
+      if (btn) { btn.textContent = k; btn.classList.toggle('active', k === rampOutState.page); btn.style.display = k <= pages ? '' : 'none'; }
+    }
+    const prev = document.getElementById('ramp-out-btn-prev');
+    const next = document.getElementById('ramp-out-btn-next');
+    if (prev) prev.disabled = rampOutState.page <= 1;
+    if (next) next.disabled = rampOutState.page >= pages;
+  }
+
+  function rampOutPage(n) {
+    const pages = Math.ceil(rampOutState.rows.length / rampOutState.size) || 1;
+    rampOutState.page = Math.max(1, Math.min(n, pages));
+    rampOutRender();
+  }
+
+  function rampOutPageSize() {
+    rampOutState.size = +document.getElementById('ramp-out-page-size').value;
+    rampOutState.page = 1;
+    rampOutRender();
+  }
+
+  function rampOutSearch() {
+    const pid      = document.getElementById('ramp-out-f-pid').value.trim().toLowerCase();
+    const cfd      = document.getElementById('ramp-out-f-cfd').value.trim().toLowerCase();
+    const merch    = document.getElementById('ramp-out-f-merchant').value.trim().toLowerCase();
+    const prov     = document.getElementById('ramp-out-f-provider').value;
+    const status   = document.getElementById('ramp-out-f-status').value;
+    const fiat     = document.getElementById('ramp-out-f-fiat').value;
+    const token    = document.getElementById('ramp-out-f-token').value;
+    const network  = document.getElementById('ramp-out-f-network').value;
+    const dateFrom = document.getElementById('ramp-out-f-date-from').value;
+    const dateTo   = document.getElementById('ramp-out-f-date-to').value;
+    rampOutState.rows = RAMP_ALL.filter(r => {
+      if (r.direction !== 'out') return false;
+      if (pid     && !r.paypaz_order_id.toLowerCase().includes(pid)) return false;
+      if (cfd     && !r.cfd_order_ref.toLowerCase().includes(cfd))   return false;
+      if (merch   && !r.merchant.toLowerCase().includes(merch))      return false;
+      if (prov    && r.provider !== prov)          return false;
+      if (status  && r.status !== status)          return false;
+      if (fiat    && r.fiat_currency !== fiat)     return false;
+      if (token   && r.crypto_currency !== token)  return false;
+      if (network && r.crypto_network !== network) return false;
+      if (dateFrom && r.created_at.slice(0,10) < dateFrom) return false;
+      if (dateTo   && r.created_at.slice(0,10) > dateTo)   return false;
+      return true;
+    });
+    rampOutState.page = 1;
+    rampOutRender();
+  }
+
+  function rampOutReset() {
+    ['ramp-out-f-pid','ramp-out-f-cfd','ramp-out-f-merchant','ramp-out-f-date-from','ramp-out-f-date-to'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['ramp-out-f-provider','ramp-out-f-status','ramp-out-f-fiat','ramp-out-f-token','ramp-out-f-network'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    rampOutState.rows = RAMP_ALL.filter(r => r.direction === 'out');
+    rampOutState.page = 1;
+    rampOutRender();
+  }
+
+  function rampOutExport() { showToast('导出功能开发中'); }
+
+  function jsonHighlight(obj) {
+    if (!obj || !Object.keys(obj).length) {
+      return '<span style="color:#5C6370;font-style:italic;">// 暂无 Webhook 数据</span>';
+    }
+    const str = JSON.stringify(obj, null, 2);
+    return str.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+      let cls = 'jn';
+      if (/^"/.test(match)) {
+        cls = /:$/.test(match) ? 'jk' : 'js';
+      } else if (/true|false|null/.test(match)) {
+        cls = 'jb';
+      }
+      return `<span class="${cls}">${match}</span>`;
+    });
+  }
+
+  function openRampDetail(idx) {
+    const r = RAMP_ALL[idx];
+    if (!r) return;
+    const feeCurrency = r.direction === 'out' ? r.crypto_currency : r.fiat_currency;
+    document.querySelector('#detail-modal .modal-title').textContent = '出入金订单详情';
+    document.getElementById('modal-body').innerHTML = `
+      <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.merchant}</span></div>
+      <div class="detail-item"><span class="detail-label">用户 ID</span><span class="detail-value">${r.user_id}</span></div>
+      <div class="detail-item"><span class="detail-label">渠道</span><span class="detail-value">${r.provider}</span></div>
+      <div class="detail-item"><span class="detail-label">方向</span><span class="detail-value">${rampDirTag(r.direction)}</span></div>
+      <div class="detail-item"><span class="detail-label">状态</span><span class="detail-value">${rampStatusBadge(r.status)}</span></div>
+      <div class="detail-item"><span class="detail-label">汇率</span><span class="detail-value">${r.exchange_rate}</span></div>
+      <div class="detail-item"><span class="detail-label">法币金额</span><span class="detail-value">${r.fiat_amount} <span style="color:#909399;font-size:12px;">${r.fiat_currency}</span></span></div>
+      <div class="detail-item"><span class="detail-label">代币金额</span><span class="detail-value">${r.crypto_amount} <span style="color:#909399;font-size:12px;">${r.crypto_currency} / ${r.crypto_network}</span></span></div>
+      <div class="detail-item"><span class="detail-label">手续费</span><span class="detail-value">${r.fee} <span style="color:#909399;font-size:12px;">${feeCurrency}</span></span></div>
+      <div class="detail-item"><span class="detail-label">渠道手续费</span><span class="detail-value">${r.provider_fee} <span style="color:#909399;font-size:12px;">${feeCurrency}</span></span></div>
+      <div class="detail-item"><span class="detail-label">利润</span><span class="detail-value" style="color:#67C23A;">${r.profit} <span style="color:#52a85a;font-size:12px;">${feeCurrency}</span></span></div>
+      <div class="detail-item"><span class="detail-label">创建时间</span><span class="detail-value">${r.created_at}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">完成时间</span><span class="detail-value">${r.completed_at}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">Paypaz 订单</span><span class="detail-value">${r.paypaz_order_id}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">商户订单</span><span class="detail-value">${r.cfd_order_ref}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">渠道订单</span><span class="detail-value">${r.provider_order_id}</span></div>
+    `;
+    document.getElementById('detail-modal').classList.add('show');
+  }
+
+  function closeRampDetail() { closeModal(); }
+
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     renderTabs();
     depositRender();
     paymentRender();
+    rampInRender();
+    rampOutRender();
     merchantRender();
     lucide.createIcons();
   });

@@ -528,7 +528,8 @@
     .ak-textarea:focus { border-color:#409EFF; }
     .ak-textarea::placeholder { color:#C0C4CC; }
     /* ── 出入金订单 ──────────────────────────────────── */
-    .badge-amber { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
+    .badge-amber  { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
+    .badge-purple { background:#f5f0ff; color:#8B5CF6; border:1px solid #ddd6fe; }
     .dir-tag { display:inline-flex; align-items:center; padding:2px 8px; border-radius:3px; font-size:12px; font-weight:500; white-space:nowrap; }
     .dir-in  { background:#ecf5ff; color:#409EFF; border:1px solid #d9ecff; }
     .dir-out { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
@@ -576,18 +577,16 @@
     .btn-danger:hover  { background:#f78989; border-color:#f78989; }
     .btn-warning { background:#E6A23C; border:1px solid #E6A23C; color:#fff; }
     .btn-warning:hover { background:#ebb563; border-color:#ebb563; }
-    /* withdraw manage modal */
-    .wm-status-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; padding:10px 16px; background:#F5F7FA; border-radius:4px; }
-    .wm-status-label { font-size:13px; color:#606266; }
-    .wm-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid #EBEEF5; border-radius:4px; overflow:hidden; margin-bottom:14px; }
-    .wm-info-kv { padding:9px 16px; border-bottom:1px solid #F2F6FC; }
-    .wm-info-kv:nth-child(even) { border-left:1px solid #F2F6FC; }
-    .wm-info-full { grid-column:1/-1; }
-    .wm-info-k { font-size:12px; color:#909399; margin-bottom:2px; }
-    .wm-info-v { font-size:13px; color:#303133; font-family:'Inter',sans-serif; word-break:break-all; line-height:1.4; }
-    .wm-remark-wrap { margin-bottom:4px; }
-    .wm-remark-label { font-size:13px; color:#606266; margin-bottom:6px; }
-    .wm-remark { width:100%; box-sizing:border-box; padding:8px 12px; border:1px solid #DCDFE6; border-radius:4px; font-size:13px; font-family:'Noto Sans SC',sans-serif; resize:vertical; min-height:76px; color:#303133; outline:none; }
+    /* withdraw confirm dialog */
+    .wd-confirm-box { position:relative; padding:28px 24px 22px; }
+    .wd-confirm-close { position:absolute; top:14px; right:16px; background:none; border:none; cursor:pointer; color:#C0C4CC; padding:2px; display:flex; align-items:center; line-height:1; }
+    .wd-confirm-close:hover { color:#909399; }
+    .wd-confirm-hd { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .wd-confirm-title { font-size:16px; font-weight:600; color:#303133; line-height:1.4; }
+    .wd-confirm-msg { font-size:14px; color:#606266; line-height:1.75; margin:0 0 24px 32px; }
+    .wd-confirm-actions { display:flex; justify-content:flex-end; gap:8px; }
+    /* withdraw manage modal - remark textarea */
+    .wm-remark { width:100%; box-sizing:border-box; margin-top:4px; padding:8px 12px; border:1px solid #DCDFE6; border-radius:4px; font-size:13px; font-family:'Noto Sans SC',sans-serif; resize:vertical; min-height:72px; color:#303133; outline:none; }
     .wm-remark:focus { border-color:#409EFF; }
   </style>
 </head>
@@ -897,7 +896,6 @@
                     <option value="completed">已到账</option>
                     <option value="failed">提币失败</option>
                     <option value="manual_review">待人工审核</option>
-                    <option value="rejected">已拒绝</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
@@ -1861,11 +1859,31 @@
           <i data-lucide="x" style="width:18px;height:18px;"></i>
         </span>
       </div>
-      <div class="modal-body" style="display:block;padding:20px 24px 8px;" id="wd-manage-body">
+      <div class="modal-body" id="wd-manage-body">
         <!-- populated by JS -->
       </div>
       <div class="modal-footer" id="wd-manage-footer">
         <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Withdraw Confirm Modal ───────────────────────── -->
+  <div class="modal-overlay" id="wd-confirm-modal" style="z-index:1100;" onclick="if(event.target===this)closeWdConfirm()">
+    <div class="modal" style="width:380px;">
+      <div class="wd-confirm-box">
+        <button class="wd-confirm-close" onclick="closeWdConfirm()">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <div class="wd-confirm-hd">
+          <span id="wd-confirm-icon"></span>
+          <span class="wd-confirm-title" id="wd-confirm-title"></span>
+        </div>
+        <p class="wd-confirm-msg" id="wd-confirm-msg"></p>
+        <div class="wd-confirm-actions">
+          <button class="btn btn-default btn-sm" onclick="closeWdConfirm()">取消</button>
+          <button class="btn btn-sm" id="wd-confirm-ok"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -2338,12 +2356,11 @@
   //  提币记录 data & logic
   // ══════════════════════════════════════════════════════
   const W_STATUS = {
+    manual_review: { label:'待人工审核', cls:'badge-purple' },
     risk_pending:  { label:'风控待处理', cls:'badge-amber' },
     withdrawing:   { label:'提币中',     cls:'badge-blue'  },
     completed:     { label:'已到账',     cls:'badge-green' },
     failed:        { label:'提币失败',   cls:'badge-red'   },
-    manual_review: { label:'待人工审核', cls:'badge-amber' },
-    rejected:      { label:'已拒绝',     cls:'badge-gray'  },
   };
 
   const WITHDRAW_ALL = [
@@ -2465,37 +2482,33 @@
   }
 
   // ── Withdraw Modals ────────────────────────────────────
-  function _wdDetailGrid(r) {
-    const items = [
-      ['UID',        r.uid],
-      ['名称',       r.name],
-      ['代币 / 网络', `${r.token} / ${r.network}`],
-      ['净入账',     `${r.net} USDT`],
-      ['手续费',     `${r.fee} USDT`],
-      ['渠道',       r.channel === '-' ? '—' : r.channel],
-      ['到账时间',   r.time === '-' ? '—' : r.time],
-      ['哈希',       r.hash === '-' ? '—' : r.hash],
-      ['PayPaz 订单号', r.paypazId === '-' ? '—' : r.paypazId],
-      ['供应商订单号',  r.supplierId === '-' ? '—' : r.supplierId],
-      ['钱包地址',   r.wallet],
-    ];
-    return items.map(([k, v]) => {
-      const full = ['哈希','PayPaz 订单号','供应商订单号','钱包地址'].includes(k);
-      return `<div class="wm-info-kv${full ? ' wm-info-full' : ''}"><div class="wm-info-k">${k}</div><div class="wm-info-v">${v}</div></div>`;
-    }).join('');
+  function _wdItems(r) {
+    const st = W_STATUS[r.status];
+    const di = (label, value, full) =>
+      `<div class="detail-item"${full ? ' style="grid-column:1/-1"' : ''}>
+        <span class="detail-label">${label}</span>
+        <span class="detail-value">${value}</span>
+      </div>`;
+    return [
+      di('UID',          r.uid),
+      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
+      di('净入账',      `<span style="color:#F56C6C;font-family:Inter,sans-serif">${r.net} USDT</span>`),
+      di('手续费',      `${r.fee} USDT`),
+      di('代币',         r.token),
+      di('网络',         r.network),
+      di('渠道',         r.channel === '-' ? '—' : r.channel),
+      di('到账时间',     r.time === '-' ? '—' : r.time),
+      di('哈希',         r.hash === '-' ? '—' : r.hash,          true),
+      di('PayPaz 订单号', r.paypazId === '-' ? '—' : r.paypazId,  true),
+      di('供应商订单号',  r.supplierId === '-' ? '—' : r.supplierId, true),
+      di('钱包地址',     r.wallet,                                 true),
+    ].join('');
   }
 
   function openWdView(idx) {
     wdManageIdx = idx;
-    const r  = WITHDRAW_ALL[idx];
-    const st = W_STATUS[r.status];
-    document.getElementById('wd-manage-body').innerHTML = `
-      <div class="wm-status-row">
-        <span class="wm-status-label">当前状态：</span>
-        <span class="badge ${st.cls}">${st.label}</span>
-      </div>
-      <div class="wm-info-grid">${_wdDetailGrid(r)}</div>
-    `;
+    document.querySelector('#wd-manage-modal .modal-title').textContent = '提币详情';
+    document.getElementById('wd-manage-body').innerHTML = _wdItems(WITHDRAW_ALL[idx]);
     document.getElementById('wd-manage-footer').innerHTML =
       `<button class="btn btn-default btn-sm" onclick="closeWdManage()">关闭</button>`;
     document.getElementById('wd-manage-modal').classList.add('show');
@@ -2504,34 +2517,51 @@
 
   function openWdEdit(idx) {
     wdManageIdx = idx;
-    const r  = WITHDRAW_ALL[idx];
-    const st = W_STATUS[r.status];
-    document.getElementById('wd-manage-body').innerHTML = `
-      <div class="wm-status-row">
-        <span class="wm-status-label">当前状态：</span>
-        <span class="badge ${st.cls}">${st.label}</span>
-      </div>
-      <div class="wm-info-grid">${_wdDetailGrid(r)}</div>
-      <div class="wm-remark-wrap">
-        <div class="wm-remark-label">处理备注</div>
+    document.querySelector('#wd-manage-modal .modal-title').textContent = '处理提币订单';
+    document.getElementById('wd-manage-body').innerHTML = _wdItems(WITHDRAW_ALL[idx]) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">备注</span>
         <textarea class="wm-remark" id="wd-remark" placeholder="选填，填写处理说明..."></textarea>
-      </div>
-    `;
+      </div>`;
     document.getElementById('wd-manage-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeWdManage()">取消</button>
-      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="wdAction('rejected')">拒绝</button>
-      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="wdAction('withdrawing')">重试</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdAction('failed')">拒绝</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdAction('withdrawing')">重试</button>
     `;
     document.getElementById('wd-manage-modal').classList.add('show');
     lucide.createIcons();
   }
 
+  const WD_CONFIRM_CFG = {
+    failed:     { icon:'alert-circle', iconColor:'#F56C6C', title:'拒绝提币',         msg:'拒绝后，订单状态将更新为「提币失败」，且无法撤销。确认继续吗？',                     btnCls:'btn-danger',  btnTxt:'确认拒绝' },
+    withdrawing:{ icon:'rotate-ccw',   iconColor:'#409EFF', title:'确认重新发起提币', msg:'系统将重新提交该提币订单，订单状态将更新为「提币中」。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认重试' },
+  };
+
+  function confirmWdAction(action) {
+    const cfg = WD_CONFIRM_CFG[action];
+    document.getElementById('wd-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
+    document.getElementById('wd-confirm-title').textContent = cfg.title;
+    document.getElementById('wd-confirm-msg').textContent  = cfg.msg;
+    const okBtn = document.getElementById('wd-confirm-ok');
+    okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
+    okBtn.textContent = cfg.btnTxt;
+    okBtn.onclick = () => { wdAction(action); };
+    document.getElementById('wd-confirm-modal').classList.add('show');
+    lucide.createIcons();
+  }
+
+  function closeWdConfirm() {
+    document.getElementById('wd-confirm-modal').classList.remove('show');
+  }
+
   function wdAction(newStatus) {
     if (wdManageIdx < 0) return;
     WITHDRAW_ALL[wdManageIdx].status = newStatus;
+    closeWdConfirm();
     closeWdManage();
     withdrawRender();
-    const msgs = { rejected:'已拒绝订单', withdrawing:'已重新发起提币，状态更新为提币中' };
+    const msgs = { failed:'已拒绝，订单状态更新为提币失败', withdrawing:'已重新发起提币，状态更新为提币中' };
     showToast(msgs[newStatus] || '操作成功');
   }
 

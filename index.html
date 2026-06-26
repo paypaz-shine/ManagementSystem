@@ -963,13 +963,13 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1580px;">
+            <table style="min-width:1500px;">
               <colgroup>
                 <col style="width:90px"><col style="width:74px"><col style="width:56px">
                 <col style="width:56px"><col style="width:66px"><col style="width:60px">
                 <col style="width:138px"><col style="width:138px"><col style="width:126px">
                 <col style="width:150px"><col style="width:158px"><col style="width:66px">
-                <col style="width:80px"><col style="width:74px">
+                <col style="width:80px">
               </colgroup>
               <thead>
                 <tr>
@@ -977,7 +977,7 @@
                   <th>净入账</th><th>手续费</th><th>钱包地址</th>
                   <th>到账时间</th><th>哈希</th>
                   <th>PayPaz 订单号</th><th>供应商订单号</th>
-                  <th>渠道</th><th>状态</th><th>操作</th>
+                  <th>渠道</th><th>状态</th>
                 </tr>
               </thead>
               <tbody id="w-tbody"></tbody>
@@ -2377,8 +2377,6 @@
     const slice = wState.rows.slice(start, start + wState.size);
     tbody.innerHTML = slice.map(r => {
       const st = W_STATUS[r.status];
-      const viewOnly = r.status === 'completed' || r.status === 'rejected';
-      const actionBtn = `<button class="wd-manage-link" onclick="openWdManage(${WITHDRAW_ALL.indexOf(r)})">${viewOnly ? '查看' : '管理'}</button>`;
       const hashCell = r.hash === '-' ? '-' : truncCell(r.hash);
       const paypazCell = r.paypazId === '-' ? '-' : truncCell(r.paypazId);
       const supplierCell = r.supplierId === '-' ? '-' : truncCell(r.supplierId);
@@ -2394,7 +2392,6 @@
         <td>${supplierCell}</td>
         <td>${r.channel === '-' ? '-' : r.channel}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
-        <td>${actionBtn}</td>
       </tr>`;
     }).join('');
     document.getElementById('w-page-total').textContent = `共 ${wState.rows.length} 条`;

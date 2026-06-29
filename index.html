@@ -527,6 +527,9 @@
     .ak-box { display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border:1px solid #DCDFE6; border-radius:2px; background:#fff; flex-shrink:0; transition:border-color 0.15s, background 0.15s; }
     .ak-check-item input[type=checkbox]:checked + .ak-box { border-color:#409EFF; background:#409EFF; }
     .ak-check-item input[type=checkbox]:checked + .ak-box::after { content:''; display:block; width:8px; height:5px; border-left:1.5px solid #fff; border-bottom:1.5px solid #fff; transform:rotate(-45deg) translateY(-1px); }
+    .ak-check-item input[type=checkbox]:indeterminate + .ak-box { border-color:#409EFF; background:#409EFF; }
+    .ak-check-item input[type=checkbox]:indeterminate + .ak-box::after { content:''; display:block; width:8px; height:2px; background:#fff; border:none; transform:none; }
+    .ak-check-item.checked-text { color:#409EFF; }
     .ak-radios { display:flex; align-items:center; gap:24px; }
     .ak-radio-item { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#606266; user-select:none; }
     .ak-radio-item input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
@@ -614,12 +617,6 @@
       background:#fef0f0;
       color:#F56C6C;
       border:1px solid #fbc4c4;
-    }
-    .role-check {
-      width:14px;
-      height:14px;
-      cursor:pointer;
-      accent-color:#409EFF;
     }
     .role-switch {
       position:relative;
@@ -737,23 +734,6 @@
       gap:28px;
       min-height:32px;
     }
-    .role-native-check,
-    .role-native-radio {
-      width:14px;
-      height:14px;
-      accent-color:#409EFF;
-      cursor:pointer;
-    }
-    .role-radio-item,
-    .role-check-line {
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      font-size:13px;
-      color:#606266;
-      user-select:none;
-      cursor:pointer;
-    }
     .role-menu-tools {
       display:flex;
       align-items:center;
@@ -762,7 +742,7 @@
       margin-bottom:8px;
       color:#606266;
     }
-    .role-menu-tools .role-check-line.checked-text { color:#409EFF; }
+    .role-menu-tools .ak-check-item.checked-text { color:#409EFF; }
     .role-tree-box {
       width:356px;
       max-width:100%;
@@ -2233,7 +2213,7 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th><input class="role-check" type="checkbox" id="role-check-all" onchange="roleToggleAll(this.checked)"></th>
+                  <th><label class="ak-check-item" style="justify-content:center"><input type="checkbox" id="role-check-all" onchange="roleToggleAll(this.checked)"><span class="ak-box"></span></label></th>
                   <th>名称</th>
                   <th>权限字符</th>
                   <th>排序</th>
@@ -2308,7 +2288,7 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th><input class="role-check" type="checkbox" id="ru-check-all" onchange="roleUsersToggleAll(this.checked)"></th>
+                  <th><label class="ak-check-item" style="justify-content:center"><input type="checkbox" id="ru-check-all" onchange="roleUsersToggleAll(this.checked)"><span class="ak-box"></span></label></th>
                   <th>用户名称</th>
                   <th>用户昵称</th>
                   <th>邮箱</th>
@@ -2649,17 +2629,17 @@
         <div class="role-form-row">
           <span class="role-field-label">状态</span>
           <div class="role-radio-row">
-            <label class="role-radio-item"><input class="role-native-radio" type="radio" name="role-form-status" value="enabled" checked>启用</label>
-            <label class="role-radio-item"><input class="role-native-radio" type="radio" name="role-form-status" value="disabled">禁用</label>
+            <label class="ak-radio-item"><input type="radio" name="role-form-status" value="enabled" checked><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="role-form-status" value="disabled"><span class="ak-dot"></span>禁用</label>
           </div>
         </div>
         <div class="role-form-row top">
           <span class="role-field-label" style="padding-top:8px;">菜单权限</span>
           <div>
             <div class="role-menu-tools">
-              <label class="role-check-line" id="role-expand-label"><input class="role-native-check" type="checkbox" id="role-tree-expand" onchange="roleTreeToggleExpand(this.checked)">展开/折叠</label>
-              <label class="role-check-line checked-text"><input class="role-native-check" type="checkbox" id="role-tree-link" onchange="roleTreeRender()" checked>父子联动</label>
-              <label class="role-check-line"><input class="role-native-check" type="checkbox" id="role-tree-all" onchange="roleTreeToggleAll(this.checked)">全选/全不选</label>
+              <label class="ak-check-item" id="role-expand-label"><input type="checkbox" id="role-tree-expand" onchange="roleTreeToggleExpand(this.checked)"><span class="ak-box"></span>展开/折叠</label>
+              <label class="ak-check-item checked-text"><input type="checkbox" id="role-tree-link" onchange="roleTreeRender()" checked><span class="ak-box"></span>父子联动</label>
+              <label class="ak-check-item"><input type="checkbox" id="role-tree-all" onchange="roleTreeToggleAll(this.checked)"><span class="ak-box"></span>全选/全不选</label>
             </div>
             <div class="role-tree-box" id="role-tree-box">
               <div id="role-tree"></div>
@@ -4213,7 +4193,7 @@
       const checked = roleSelected.has(r.id) ? 'checked' : '';
       const statusChecked = r.status === 'enabled' ? 'checked' : '';
       return `<tr>
-        <td><input class="role-check" type="checkbox" ${checked} onchange="roleToggleSelected('${r.id}', this.checked)"></td>
+        <td><label class="ak-check-item" style="justify-content:center"><input type="checkbox" ${checked} onchange="roleToggleSelected('${r.id}', this.checked)"><span class="ak-box"></span></label></td>
         <td>${htmlSafe(r.name)}</td>
         <td style="font-family:'Inter',sans-serif;color:#606266;">${htmlSafe(r.key)}</td>
         <td style="font-family:'Inter',sans-serif;">${r.sort}</td>
@@ -4359,7 +4339,7 @@
         : `<span class="role-tree-caret empty">▶</span>`;
       return `<div class="role-tree-row${active}" style="padding-left:${10 + n.depth * 18}px;">
         ${caret}
-        <input class="role-native-check role-tree-check" type="checkbox" data-tree-id="${n.id}" ${checked} onchange="roleTreeSetChecked('${n.id}', this.checked)">
+        <label class="ak-check-item" style="margin:0"><input type="checkbox" class="role-tree-check" data-tree-id="${n.id}" ${checked} onchange="roleTreeSetChecked('${n.id}', this.checked)"><span class="ak-box"></span></label>
         <span class="role-tree-label" onclick="roleTreeToggleCheckFromLabel('${n.id}')">${htmlSafe(n.label)}</span>
       </div>`;
     }).join('');
@@ -4377,8 +4357,8 @@
     }
     const expand = document.getElementById('role-tree-expand');
     const link = document.getElementById('role-tree-link');
-    const expandLabel = expand?.closest('.role-check-line');
-    const linkLabel = link?.closest('.role-check-line');
+    const expandLabel = expand?.closest('.ak-check-item');
+    const linkLabel = link?.closest('.ak-check-item');
     if (expandLabel) expandLabel.classList.toggle('checked-text', !!expand.checked);
     if (linkLabel) linkLabel.classList.toggle('checked-text', !!link.checked);
     box.classList.toggle('expanded', !!expand?.checked);
@@ -4613,7 +4593,7 @@
       const checked = roleUserState.selected.has(u.id) ? 'checked' : '';
       const empty = '<span class="cell-empty">—</span>';
       return `<tr>
-        <td><input class="role-check" type="checkbox" ${checked} onchange="roleUsersToggleSelected('${u.id}', this.checked)"></td>
+        <td><label class="ak-check-item" style="justify-content:center"><input type="checkbox" ${checked} onchange="roleUsersToggleSelected('${u.id}', this.checked)"><span class="ak-box"></span></label></td>
         <td>${htmlSafe(u.name)}</td>
         <td>${htmlSafe(u.nick)}</td>
         <td>${u.email ? htmlSafe(u.email) : empty}</td>

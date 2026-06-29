@@ -2509,8 +2509,13 @@
 
   function openWdView(idx) {
     wdManageIdx = idx;
+    const r = WITHDRAW_ALL[idx];
     document.querySelector('#wd-manage-modal .modal-title').textContent = '提币详情';
-    document.getElementById('wd-manage-body').innerHTML = _wdItems(WITHDRAW_ALL[idx]);
+    document.getElementById('wd-manage-body').innerHTML = _wdItems(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">备注</span>
+        <span class="detail-value">${r.remark || '—'}</span>
+      </div>`;
     document.getElementById('wd-manage-footer').innerHTML =
       `<button class="btn btn-default btn-sm" onclick="closeWdManage()">关闭</button>`;
     document.getElementById('wd-manage-modal').classList.add('show');
@@ -2562,6 +2567,7 @@
 
   function wdAction(newStatus) {
     if (wdManageIdx < 0) return;
+    WITHDRAW_ALL[wdManageIdx].remark = (document.getElementById('wd-remark')?.value || '').trim();
     WITHDRAW_ALL[wdManageIdx].status = newStatus;
     closeWdConfirm();
     closeWdManage();

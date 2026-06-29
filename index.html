@@ -46,6 +46,13 @@
       color: #fff;
     }
 
+    .sidebar nav {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .sidebar nav::-webkit-scrollbar { width: 0; }
+
     .nav-item {
       height: 50px;
       display: flex;
@@ -109,6 +116,7 @@
     }
     .breadcrumb { display: flex; align-items: center; gap: 6px; }
     .breadcrumb .bc-home { font-family: 'Inter', sans-serif; font-size: 13px; color: #909399; cursor: pointer; }
+    .breadcrumb .bc-parent { font-family: 'Inter', sans-serif; font-size: 13px; color: #909399; }
     .breadcrumb .bc-sep { color: #C0C4CC; }
     .breadcrumb .bc-current { font-family: 'Inter', sans-serif; font-size: 13px; color: #303133; font-weight: 500; }
     .header-right { display: flex; align-items: center; gap: 12px; }
@@ -279,6 +287,7 @@
       border: none; white-space: nowrap; transition: opacity 0.15s;
     }
     .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn-primary { background: #409EFF; color: #fff; }
     .btn-default { background: #fff; color: #606266; border: 1px solid #DCDFE6; }
 
@@ -590,6 +599,291 @@
     .wm-remark { width:100%; box-sizing:border-box; padding:8px 12px; border:1px solid #DCDFE6; border-radius:4px; font-size:13px; font-family:'Noto Sans SC',sans-serif; resize:vertical; min-height:72px; color:#303133; outline:none; }
     .wm-remark:focus { border-color:#409EFF; }
     .wm-remark-count { display:block; text-align:right; font-size:12px; color:#C0C4CC; margin-top:4px; line-height:1; }
+
+    /* ── 系统管理 / 角色管理 ───────────────────────────── */
+    .role-toolbar {
+      justify-content:flex-end;
+      gap:8px;
+    }
+    .btn-success-soft {
+      background:#f0f9eb;
+      color:#67C23A;
+      border:1px solid #b3e19d;
+    }
+    .btn-danger-soft {
+      background:#fef0f0;
+      color:#F56C6C;
+      border:1px solid #fbc4c4;
+    }
+    .role-check {
+      width:14px;
+      height:14px;
+      cursor:pointer;
+      accent-color:#409EFF;
+    }
+    .role-switch {
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      width:34px;
+      height:18px;
+      cursor:pointer;
+      vertical-align:middle;
+    }
+    .role-switch input {
+      position:absolute;
+      opacity:0;
+      width:0;
+      height:0;
+    }
+    .role-switch span {
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:#DCDFE6;
+      transition:background 0.18s;
+    }
+    .role-switch span::after {
+      content:'';
+      position:absolute;
+      width:14px;
+      height:14px;
+      top:2px;
+      left:2px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 1px 3px rgba(0,0,0,0.18);
+      transition:transform 0.18s;
+    }
+    .role-switch input:checked + span { background:#409EFF; }
+    .role-switch input:checked + span::after { transform:translateX(16px); }
+    .role-permission-box {
+      border:1px solid #EBEEF5;
+      border-radius:4px;
+      padding:10px 12px;
+      background:#FAFAFA;
+    }
+    .role-permission-grid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:10px 16px;
+    }
+    .role-form-tip {
+      margin-top:6px;
+      font-size:12px;
+      color:#909399;
+      line-height:1.5;
+    }
+    .role-dialog {
+      width:600px;
+      max-width:92vw;
+      max-height:calc(100vh - 38px);
+      display:flex;
+      flex-direction:column;
+    }
+    .role-dialog .modal-header { flex-shrink:0; }
+    .role-dialog .modal-footer { flex-shrink:0; }
+    .role-modal-body {
+      display:block;
+      padding:20px 24px 12px;
+      overflow-y:auto;
+      flex:1;
+      min-height:0;
+    }
+    .role-form-row {
+      display:grid;
+      grid-template-columns:145px 1fr;
+      align-items:center;
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .role-form-row.top { align-items:flex-start; }
+    .role-field-label {
+      font-size:13px;
+      color:#606266;
+      text-align:right;
+      white-space:nowrap;
+    }
+    .role-required {
+      color:#F56C6C;
+      margin-right:4px;
+    }
+    .role-help {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:13px;
+      height:13px;
+      border-radius:50%;
+      background:#909399;
+      color:#fff;
+      font-size:10px;
+      margin-right:4px;
+      transform:translateY(-1px);
+    }
+    .role-input-md { width:240px; }
+    .role-sort-wrap {
+      display:flex;
+      align-items:center;
+    }
+    .role-sort-wrap .field-input {
+      width:150px;
+      text-align:center;
+      font-family:'Inter',sans-serif;
+    }
+    .role-radio-row {
+      display:flex;
+      align-items:center;
+      gap:28px;
+      min-height:32px;
+    }
+    .role-native-check,
+    .role-native-radio {
+      width:14px;
+      height:14px;
+      accent-color:#409EFF;
+      cursor:pointer;
+    }
+    .role-radio-item,
+    .role-check-line {
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      font-size:13px;
+      color:#606266;
+      user-select:none;
+      cursor:pointer;
+    }
+    .role-menu-tools {
+      display:flex;
+      align-items:center;
+      gap:28px;
+      min-height:32px;
+      margin-bottom:8px;
+      color:#606266;
+    }
+    .role-menu-tools .role-check-line.checked-text { color:#409EFF; }
+    .role-tree-box {
+      width:356px;
+      max-width:100%;
+      height:262px;
+      border:1px solid #DCDFE6;
+      border-radius:4px;
+      background:#fff;
+      overflow:auto;
+      padding:6px 0;
+    }
+    .role-tree-box.expanded { height:620px; }
+    .role-tree-row {
+      height:26px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding-right:10px;
+      font-size:13px;
+      color:#606266;
+      white-space:nowrap;
+    }
+    .role-tree-row.active { background:#F5F7FA; }
+    .role-tree-caret {
+      width:14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#A8ABB2;
+      cursor:pointer;
+      flex-shrink:0;
+    }
+    .role-tree-caret.empty { cursor:default; opacity:0; }
+    .role-tree-caret.open { transform:rotate(90deg); }
+    .role-tree-label { cursor:pointer; }
+    .role-data-dialog {
+      width:550px;
+      max-width:92vw;
+    }
+    .role-data-body {
+      display:block;
+      padding:24px 34px 30px;
+    }
+    .role-data-row {
+      display:grid;
+      grid-template-columns:105px 1fr;
+      align-items:center;
+      gap:10px;
+      margin-bottom:18px;
+    }
+    .role-readonly {
+      background:#F5F7FA !important;
+      color:#909399 !important;
+      cursor:not-allowed !important;
+    }
+    .role-confirm-dialog {
+      width:420px;
+      max-width:90vw;
+    }
+    .role-confirm-body {
+      padding:18px 24px 24px;
+    }
+    .role-confirm-content {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-height:32px;
+      color:#606266;
+      font-size:14px;
+    }
+    .role-confirm-icon {
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:#E6A23C;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:700;
+      flex-shrink:0;
+    }
+    .role-user-topbar {
+      height:48px;
+      display:flex;
+      align-items:center;
+      padding:0 20px;
+      flex-shrink:0;
+    }
+    .role-user-filter-row {
+      display:flex;
+      align-items:center;
+      gap:28px;
+      flex-wrap:wrap;
+    }
+    .role-user-toolbar {
+      justify-content:flex-end;
+      gap:8px;
+    }
+    .btn-warning-soft {
+      background:#fff;
+      color:#E6A23C;
+      border:1px solid #F3D19E;
+    }
+    .role-user-status {
+      display:inline-flex;
+      align-items:center;
+      height:22px;
+      padding:0 8px;
+      border-radius:4px;
+      background:#ECF5FF;
+      color:#409EFF;
+      font-size:12px;
+    }
+    .role-remove-icon {
+      color:#F56C6C;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+    }
+    .role-remove-icon:hover { opacity:0.75; }
   </style>
 </head>
 <body>
@@ -661,9 +955,34 @@
         <i data-lucide="message-square" class="nav-icon" style="width:16px;height:16px;"></i>
         <span class="nav-label">反馈收集</span>
       </div>
-      <div class="nav-item" data-page="system">
-        <i data-lucide="settings" class="nav-icon" style="width:16px;height:16px;"></i>
-        <span class="nav-label">系统管理</span>
+      <div class="nav-group">
+        <div class="nav-group-hd" id="nav-ghd-system" onclick="toggleNavGroup('system')">
+          <i data-lucide="settings" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">系统管理</span>
+          <i data-lucide="chevron-up" id="nav-caret-system" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-system">
+          <div class="nav-item nav-sub-item" data-page="sys-user">
+            <i data-lucide="user" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">用户管理</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="sys-role">
+            <i data-lucide="shield-check" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">角色管理</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="sys-menu">
+            <i data-lucide="list-tree" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">菜单管理</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="sys-dept">
+            <i data-lucide="building-2" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">部门管理</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="sys-post">
+            <i data-lucide="briefcase" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">岗位管理</span>
+          </div>
+        </div>
       </div>
     </nav>
   </aside>
@@ -675,7 +994,9 @@
     <div class="header-bar">
       <div class="breadcrumb">
         <span class="bc-home">首页</span>
-        <i data-lucide="chevron-right" class="bc-sep" style="width:12px;height:12px;"></i>
+        <i data-lucide="chevron-right" class="bc-sep" id="bc-sep-parent" style="width:12px;height:12px;"></i>
+        <span class="bc-parent" id="bc-parent" style="display:none;">系统管理</span>
+        <i data-lucide="chevron-right" class="bc-sep" id="bc-sep-current" style="width:12px;height:12px;display:none;"></i>
         <span class="bc-current" id="bc-current">充币记录</span>
       </div>
       <div class="header-right">
@@ -1834,6 +2155,176 @@
       </div>
     </div><!-- /page-merchant-detail -->
 
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 角色管理                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-sys-role">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">名称</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="role-name">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">权限字符</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="role-key">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="role-status">
+                    <option value="">请选择</option>
+                    <option value="enabled">正常</option>
+                    <option value="disabled">停用</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">创建时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="role-date-start">
+                  <span class="range-sep-el">-</span>
+                  <input class="date-input-el" type="date" id="role-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-primary" onclick="roleSearch()">
+              <i data-lucide="search" style="width:14px;height:14px;"></i>搜索
+            </button>
+            <button class="btn btn-default" onclick="roleReset()">
+              <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>重置
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="summary-bar role-toolbar">
+            <button class="btn btn-primary" onclick="openRoleCreate()">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>添加
+            </button>
+            <button class="btn btn-success-soft" id="role-edit-btn" onclick="roleEditSelected()" disabled>
+              <i data-lucide="square-pen" style="width:14px;height:14px;"></i>编辑
+            </button>
+            <button class="btn btn-danger-soft" id="role-delete-btn" onclick="roleBatchDelete()" disabled>
+              <i data-lucide="trash-2" style="width:14px;height:14px;"></i>删除
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <colgroup>
+                <col style="width:46px;">
+                <col style="width:190px;">
+                <col style="width:210px;">
+                <col style="width:90px;">
+                <col style="width:120px;">
+                <col style="width:210px;">
+                <col style="width:170px;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><input class="role-check" type="checkbox" id="role-check-all" onchange="roleToggleAll(this.checked)"></th>
+                  <th>名称</th>
+                  <th>权限字符</th>
+                  <th>排序</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="role-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-sys-role -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 分配用户                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-sys-role-users">
+      <div class="role-user-topbar">
+        <button class="md-back-btn" onclick="roleUsersBack()">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>返回
+        </button>
+      </div>
+      <div class="content-area" style="padding-top:0;">
+        <div class="filter-card">
+          <div class="role-user-filter-row">
+            <div class="filter-item" style="width:320px;">
+              <span class="filter-label-el" style="width:72px;">用户名称</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="ru-name">
+              </div>
+            </div>
+            <div class="filter-item" style="width:320px;">
+              <span class="filter-label-el" style="width:72px;">手机号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="ru-phone">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="roleUsersSearch()">
+              <i data-lucide="search" style="width:14px;height:14px;"></i>搜索
+            </button>
+            <button class="btn btn-default" onclick="roleUsersReset()">
+              <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>重置
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="summary-bar role-user-toolbar">
+            <button class="btn btn-primary" onclick="roleUsersAdd()">
+              <i data-lucide="plus" style="width:14px;height:14px;"></i>添加
+            </button>
+            <button class="btn btn-danger-soft" id="ru-batch-btn" onclick="roleUsersBatchRemove()" disabled>
+              <i data-lucide="circle-minus" style="width:14px;height:14px;"></i>批量移除
+            </button>
+            <button class="btn btn-warning-soft" onclick="roleUsersBack()">
+              <i data-lucide="x" style="width:14px;height:14px;"></i>取消
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <colgroup>
+                <col style="width:46px;">
+                <col style="width:180px;">
+                <col style="width:180px;">
+                <col style="width:260px;">
+                <col style="width:240px;">
+                <col style="width:140px;">
+                <col style="width:220px;">
+                <col style="width:120px;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><input class="role-check" type="checkbox" id="ru-check-all" onchange="roleUsersToggleAll(this.checked)"></th>
+                  <th>用户名称</th>
+                  <th>用户昵称</th>
+                  <th>邮箱</th>
+                  <th>手机号</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="ru-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-sys-role-users -->
+
   </div><!-- /main-area -->
 
   <!-- ── Detail Modal ───────────────────────────────── -->
@@ -2131,6 +2622,123 @@
     </div>
   </div>
 
+  <!-- ── Role Modal ──────────────────────────────────── -->
+  <div class="modal-overlay" id="role-modal" onclick="if(event.target===this)closeRoleModal()">
+    <div class="modal role-dialog">
+      <div class="modal-header">
+        <span class="modal-title" id="role-modal-title">编辑角色</span>
+        <span class="modal-close" onclick="closeRoleModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="role-modal-body">
+        <div class="role-form-row">
+          <span class="role-field-label"><span class="role-required">*</span>名称</span>
+          <input class="field-input role-input-md" type="text" id="role-form-name" placeholder="请输入内容">
+        </div>
+        <div class="role-form-row">
+          <span class="role-field-label"><span class="role-required">*</span><span class="role-help">?</span>权限字符</span>
+          <input class="field-input role-input-md" type="text" id="role-form-key" placeholder="请输入内容" style="font-family:'Inter',sans-serif;">
+        </div>
+        <div class="role-form-row">
+          <span class="role-field-label"><span class="role-required">*</span>排序</span>
+          <div class="role-sort-wrap">
+            <input class="field-input" type="number" id="role-form-sort" min="1" step="1" placeholder="1">
+          </div>
+        </div>
+        <div class="role-form-row">
+          <span class="role-field-label">状态</span>
+          <div class="role-radio-row">
+            <label class="role-radio-item"><input class="role-native-radio" type="radio" name="role-form-status" value="enabled" checked>启用</label>
+            <label class="role-radio-item"><input class="role-native-radio" type="radio" name="role-form-status" value="disabled">禁用</label>
+          </div>
+        </div>
+        <div class="role-form-row top">
+          <span class="role-field-label" style="padding-top:8px;">菜单权限</span>
+          <div>
+            <div class="role-menu-tools">
+              <label class="role-check-line" id="role-expand-label"><input class="role-native-check" type="checkbox" id="role-tree-expand" onchange="roleTreeToggleExpand(this.checked)">展开/折叠</label>
+              <label class="role-check-line checked-text"><input class="role-native-check" type="checkbox" id="role-tree-link" onchange="roleTreeRender()" checked>父子联动</label>
+              <label class="role-check-line"><input class="role-native-check" type="checkbox" id="role-tree-all" onchange="roleTreeToggleAll(this.checked)">全选/全不选</label>
+            </div>
+            <div class="role-tree-box" id="role-tree-box">
+              <div id="role-tree"></div>
+            </div>
+          </div>
+        </div>
+        <div class="role-form-row top">
+          <span class="role-field-label" style="padding-top:8px;">备注</span>
+          <textarea class="ak-textarea" id="role-form-remark" placeholder="请输入内容" style="width:356px;height:72px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="submitRoleForm()">确定</button>
+        <button class="btn btn-default btn-sm" onclick="closeRoleModal()" style="margin-left:8px;">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Role Data Scope Modal ───────────────────────── -->
+  <div class="modal-overlay" id="role-data-modal" onclick="if(event.target===this)closeRoleDataScope()">
+    <div class="modal role-data-dialog">
+      <div class="modal-header">
+        <span class="modal-title">数据权限</span>
+        <span class="modal-close" onclick="closeRoleDataScope()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="role-data-body">
+        <div class="role-data-row">
+          <span class="role-field-label">名称</span>
+          <input class="field-input role-readonly" type="text" id="role-data-name" readonly style="width:320px;">
+        </div>
+        <div class="role-data-row">
+          <span class="role-field-label">权限字符</span>
+          <input class="field-input role-readonly" type="text" id="role-data-key" readonly style="width:320px;font-family:'Inter',sans-serif;">
+        </div>
+        <div class="role-data-row" style="margin-bottom:0;">
+          <span class="role-field-label">权限范围</span>
+          <div class="select-wrap" style="width:320px;">
+            <select class="field-select" id="role-data-scope" style="width:320px;">
+              <option value="all">全部数据</option>
+              <option value="custom">自定数据权限</option>
+              <option value="dept">本部门数据权限</option>
+              <option value="dept_tree">本部门及以下数据权限</option>
+              <option value="self">仅本人数据权限</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="saveRoleDataScope()">确定</button>
+        <button class="btn btn-default btn-sm" onclick="closeRoleDataScope()" style="margin-left:8px;">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Role Delete Confirm Modal ───────────────────── -->
+  <div class="modal-overlay" id="role-delete-modal" style="z-index:1120;" onclick="if(event.target===this)closeRoleDeleteConfirm()">
+    <div class="modal role-confirm-dialog">
+      <div class="modal-header">
+        <span class="modal-title">提示</span>
+        <span class="modal-close" onclick="closeRoleDeleteConfirm()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="role-confirm-body">
+        <div class="role-confirm-content">
+          <span class="role-confirm-icon">!</span>
+          <span id="role-delete-msg">确定删除该条数据吗?</span>
+        </div>
+      </div>
+      <div class="modal-footer" style="border-top:none;padding-top:0;">
+        <button class="btn btn-default btn-sm" onclick="closeRoleDeleteConfirm()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="confirmRoleDelete()" style="margin-left:8px;">确定</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div class="toast" id="toast">
     <i data-lucide="check-circle" class="toast-icon" style="width:16px;height:16px;"></i>
@@ -2155,10 +2763,16 @@
     currency: { label: '币种管理',  icon: 'circle-dollar-sign' },
     feedback: { label: '反馈收集',  icon: 'message-square' },
     system:   { label: '系统管理',  icon: 'settings' },
+    'sys-user': { label: '用户管理', icon: 'user', parent: '系统管理' },
+    'sys-role': { label: '角色管理', icon: 'shield-check', parent: '系统管理' },
+    'sys-role-users': { label: '分配用户', icon: 'users' },
+    'sys-menu': { label: '菜单管理', icon: 'list-tree', parent: '系统管理' },
+    'sys-dept': { label: '部门管理', icon: 'building-2', parent: '系统管理' },
+    'sys-post': { label: '岗位管理', icon: 'briefcase', parent: '系统管理' },
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail']);
+  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -2213,8 +2827,9 @@
     activePage = pid;
 
     // update sidebar
+    const navPid = pid === 'sys-role-users' ? 'sys-role' : pid;
     document.querySelectorAll('.nav-item').forEach(n => {
-      n.classList.toggle('active', n.dataset.page === pid);
+      n.classList.toggle('active', n.dataset.page === navPid);
     });
 
     // update ramp group header active state
@@ -2223,8 +2838,31 @@
       rampGhd.classList.toggle('group-active', pid === 'ramp-in' || pid === 'ramp-out');
     }
 
+    const systemPages = ['sys-user', 'sys-role', 'sys-role-users', 'sys-menu', 'sys-dept', 'sys-post'];
+    const systemGhd = document.getElementById('nav-ghd-system');
+    if (systemGhd) {
+      const isSystemPage = systemPages.includes(pid);
+      systemGhd.classList.toggle('group-active', isSystemPage);
+      if (isSystemPage) {
+        systemGhd.classList.remove('collapsed');
+        const systemSub = document.getElementById('nav-sub-system');
+        if (systemSub) systemSub.style.display = '';
+      }
+    }
+
     // update breadcrumb
-    document.getElementById('bc-current').textContent = PAGE_META[pid]?.label || pid;
+    const meta = PAGE_META[pid] || {};
+    const parentEl = document.getElementById('bc-parent');
+    const sepCurrent = document.getElementById('bc-sep-current');
+    if (meta.parent) {
+      parentEl.textContent = meta.parent;
+      parentEl.style.display = '';
+      sepCurrent.style.display = '';
+    } else {
+      parentEl.style.display = 'none';
+      sepCurrent.style.display = 'none';
+    }
+    document.getElementById('bc-current').textContent = meta.label || pid;
 
     // show/hide pages
     document.querySelectorAll('.page').forEach(p => {
@@ -2232,7 +2870,7 @@
     });
 
     renderTabs();
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
 
   function closeTab(pid) {
@@ -2519,7 +3157,7 @@
     document.getElementById('wd-manage-footer').innerHTML =
       `<button class="btn btn-default btn-sm" onclick="closeWdManage()">关闭</button>`;
     document.getElementById('wd-manage-modal').classList.add('show');
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
 
   function openWdEdit(idx) {
@@ -2539,7 +3177,7 @@
       <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdAction('withdrawing')">重试</button>
     `;
     document.getElementById('wd-manage-modal').classList.add('show');
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
 
   const WD_CONFIRM_CFG = {
@@ -2558,7 +3196,7 @@
     okBtn.textContent = cfg.btnTxt;
     okBtn.onclick = () => { wdAction(action); };
     document.getElementById('wd-confirm-modal').classList.add('show');
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
 
   function closeWdConfirm() {
@@ -2862,7 +3500,7 @@
       const el = document.getElementById(id);
       if (el) { el.style.display = (i + 1) <= total ? '' : 'none'; el.classList.toggle('active', (i + 1) === mState.page); }
     });
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
 
   function merchantPage(p) {
@@ -3216,7 +3854,7 @@
     document.getElementById('ak-perm-withdraw').checked = true;
     document.getElementById('ak-status-on').checked = true;
     document.getElementById('ak-modal').classList.add('show');
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
   function closeCreateApiKeyModal() {
     document.getElementById('ak-modal').classList.remove('show');
@@ -3277,7 +3915,7 @@
     document.getElementById('obs-counter').textContent = '0 / 20';
     document.getElementById('obs-password').type = 'password';
     document.getElementById('obs-modal').classList.add('show');
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
   function closeCreateObserverModal() {
     document.getElementById('obs-modal').classList.remove('show');
@@ -3300,7 +3938,7 @@
   // ── Invite Modal ──────────────────────────────────────
   function openInviteModal() {
     document.getElementById('invite-modal').classList.add('show');
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   }
   function closeInviteModal() {
     document.getElementById('invite-modal').classList.remove('show');
@@ -3349,6 +3987,701 @@
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = filename; a.click();
     showToast('导出成功');
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  系统管理 / 角色管理 data & logic
+  // ══════════════════════════════════════════════════════
+  const ROLE_TREE = [
+    { id:'dashboard_view', label:'Dashboard查看' },
+    { id:'platform_asset', label:'平台资产' },
+    { id:'merchant_mgmt', label:'商户管理', children:[
+      { id:'merchant_company_delete', label:'企业账户删除' },
+      { id:'merchant_token_detail', label:'获取Token详情配置' },
+      { id:'merchant_company_create', label:'企业账户创建' },
+      { id:'merchant_currency_config', label:'币种配置' },
+      { id:'merchant_edit', label:'商户编辑' },
+      { id:'merchant_token_list', label:'Token管理列表' },
+      { id:'merchant_api_edit', label:'API编辑' },
+      { id:'merchant_2fa_reset', label:'重置2FA' },
+      { id:'merchant_api_list', label:'API管理列表' },
+      { id:'merchant_msg_add', label:'消息通知配置新增' },
+      { id:'merchant_observer_delete', label:'观察者账号删除' },
+      { id:'merchant_notice', label:'消息通知' },
+      { id:'merchant_active_email', label:'发送激活邮件' },
+      { id:'merchant_observer_list', label:'观察者账号列表' },
+      { id:'merchant_account_detail', label:'企业账户明细' },
+      { id:'merchant_observer_add', label:'观察者账号添加' },
+    ] },
+    { id:'deposit_record', label:'充值记录', children:[
+      { id:'deposit_summary', label:'充值记录汇总' },
+      { id:'deposit_export', label:'充值记录导出' },
+    ] },
+    { id:'withdraw_record', label:'提币记录', children:[
+      { id:'withdraw_export', label:'提币记录导出' },
+      { id:'withdraw_summary', label:'提现记录汇总' },
+    ] },
+    { id:'risk_mgmt', label:'风控管理', children:[
+      { id:'risk_rule', label:'风控规则' },
+      { id:'risk_process', label:'风控处理' },
+    ] },
+    { id:'payment_order', label:'支付订单', children:[
+      { id:'payment_detail', label:'查看订单详情' },
+    ] },
+    { id:'currency_mgmt', label:'币种管理', children:[
+      { id:'currency_list', label:'币种列表' },
+      { id:'currency_edit', label:'币种编辑' },
+    ] },
+    { id:'feedback_collect', label:'反馈收集' },
+    { id:'system_mgmt', label:'系统管理', children:[
+      { id:'system_user', label:'用户管理' },
+      { id:'system_role', label:'角色管理' },
+      { id:'system_menu', label:'菜单管理' },
+      { id:'system_dept', label:'部门管理' },
+      { id:'system_post', label:'岗位管理' },
+    ] },
+  ];
+
+  function roleFlattenTree(nodes = ROLE_TREE, depth = 0, parent = null, out = []) {
+    nodes.forEach(n => {
+      out.push({ ...n, depth, parent, hasChildren: !!(n.children && n.children.length) });
+      if (n.children) roleFlattenTree(n.children, depth + 1, n.id, out);
+    });
+    return out;
+  }
+
+  const ROLE_FLAT_NODES = roleFlattenTree();
+  const ROLE_ALL_NODE_IDS = ROLE_FLAT_NODES.map(n => n.id);
+  const ROLE_NODE_MAP = ROLE_FLAT_NODES.reduce((acc, n) => { acc[n.id] = n; return acc; }, {});
+  const ROLE_PARENT_MAP = ROLE_FLAT_NODES.reduce((acc, n) => { if (n.parent) acc[n.id] = n.parent; return acc; }, {});
+
+  function roleDescIdsFromTree(id, nodes = ROLE_TREE) {
+    for (const n of nodes) {
+      if (n.id === id) {
+        const ids = [];
+        roleFlattenTree(n.children || []).forEach(child => ids.push(child.id));
+        return ids;
+      }
+      const found = roleDescIdsFromTree(id, n.children || []);
+      if (found.length) return found;
+    }
+    return [];
+  }
+
+  function roleExpandPerms(ids) {
+    const set = new Set();
+    ids.forEach(id => {
+      set.add(id);
+      roleDescIdsFromTree(id).forEach(childId => set.add(childId));
+    });
+    return Array.from(set);
+  }
+
+  const ROLE_SCOPE_LABELS = {
+    all: '全部数据',
+    custom: '自定数据权限',
+    dept: '本部门数据权限',
+    dept_tree: '本部门及以下数据权限',
+    self: '仅本人数据权限',
+  };
+
+  const ROLE_ALL = [
+    {
+      id: 'role-001',
+      name: '超级管理员',
+      key: 'superadmin',
+      sort: 1,
+      status: 'enabled',
+      created: '2025-01-20 09:20:15',
+      remark: '系统内置最高权限角色',
+      dataScope: 'all',
+      perms: [...ROLE_ALL_NODE_IDS],
+      userIds: ['oya','sherry','riv1','andy','benny','nio','kara','rogan','shine','magic'],
+    },
+    {
+      id: 'role-002',
+      name: 'admintest',
+      key: 'admintest',
+      sort: 1,
+      status: 'enabled',
+      created: '2025-01-20 09:20:15',
+      remark: '',
+      dataScope: 'all',
+      perms: roleExpandPerms(['dashboard_view','platform_asset','merchant_mgmt','deposit_record','withdraw_record','risk_mgmt','payment_order','currency_mgmt','feedback_collect','system_mgmt']),
+      userIds: ['oya','sherry','riv1','andy','benny','nio','kara','rogan','shine','magic'],
+    },
+    {
+      id: 'role-003',
+      name: '管理员',
+      key: 'admin1',
+      sort: 1,
+      status: 'enabled',
+      created: '2026-05-08 09:16:37',
+      remark: '日常运营管理角色',
+      dataScope: 'dept_tree',
+      perms: roleExpandPerms(['dashboard_view','merchant_mgmt','deposit_record','withdraw_record','risk_mgmt','payment_order']),
+      userIds: ['kara','rogan','shine','magic'],
+    },
+  ];
+
+  const ROLE_USER_ALL = [
+    { id:'oya', name:'oya', nick:'oya', email:'', phone:'', status:'enabled', created:'2025-12-10 10:23:44' },
+    { id:'sherry', name:'sherry', nick:'sherry', email:'', phone:'', status:'enabled', created:'2025-12-10 10:24:45' },
+    { id:'riv1', name:'riv1', nick:'riv', email:'', phone:'', status:'enabled', created:'2025-12-12 03:46:53' },
+    { id:'andy', name:'andy', nick:'andy', email:'', phone:'', status:'enabled', created:'2025-12-30 08:58:59' },
+    { id:'benny', name:'benny', nick:'benny', email:'', phone:'', status:'enabled', created:'2026-02-04 05:55:33' },
+    { id:'nio', name:'Nio', nick:'Nio', email:'zhutianhao789@gmail.com', phone:'19940686781', status:'enabled', created:'2026-02-27 06:14:33' },
+    { id:'kara', name:'kara', nick:'kara', email:'', phone:'', status:'enabled', created:'2026-04-29 06:51:33' },
+    { id:'rogan', name:'rogan', nick:'rogan', email:'', phone:'', status:'enabled', created:'2026-05-08 08:58:17' },
+    { id:'shine', name:'Shine', nick:'Shine', email:'', phone:'', status:'enabled', created:'2026-06-09 02:55:43' },
+    { id:'magic', name:'magic', nick:'magic', email:'', phone:'', status:'enabled', created:'2026-06-23 02:13:35' },
+  ];
+
+  const ROLE_SCOPE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>`;
+  const ROLE_USER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a6 6 0 0 0-12 0"/><circle cx="12" cy="8" r="4"/></svg>`;
+  const ROLE_REMOVE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6"/><path d="M9 9l6 6"/></svg>`;
+
+  const roleState = { rows: [...ROLE_ALL], editId: null, dataId: null };
+  const roleSelected = new Set();
+  const roleTreeState = { selected: new Set(), expanded: new Set() };
+  const roleDeleteState = { kind: '', ids: [] };
+  const roleUserState = { roleId: null, rows: [], selected: new Set() };
+
+  function htmlSafe(v) {
+    return String(v ?? '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    }[ch]));
+  }
+
+  function roleNow() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  }
+
+  function roleMatchesFilters(r) {
+    const name = document.getElementById('role-name')?.value.trim().toLowerCase() || '';
+    const key = document.getElementById('role-key')?.value.trim().toLowerCase() || '';
+    const status = document.getElementById('role-status')?.value || '';
+    const ds = document.getElementById('role-date-start')?.value || '';
+    const de = document.getElementById('role-date-end')?.value || '';
+    if (name && !r.name.toLowerCase().includes(name)) return false;
+    if (key && !r.key.toLowerCase().includes(key)) return false;
+    if (status && r.status !== status) return false;
+    if (ds && r.created.slice(0, 10) < ds) return false;
+    if (de && r.created.slice(0, 10) > de) return false;
+    return true;
+  }
+
+  function roleApplyFilters(clearSelection = true) {
+    roleState.rows = ROLE_ALL.filter(roleMatchesFilters);
+    if (clearSelection) roleSelected.clear();
+    roleRender();
+  }
+
+  function roleSearch() {
+    roleApplyFilters(true);
+  }
+
+  function roleReset() {
+    ['role-name','role-key','role-status','role-date-start','role-date-end'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    roleState.rows = [...ROLE_ALL];
+    roleSelected.clear();
+    roleRender();
+  }
+
+  function roleRender() {
+    const tbody = document.getElementById('role-tbody');
+    if (!tbody) return;
+    const liveIds = new Set(ROLE_ALL.map(r => r.id));
+    Array.from(roleSelected).forEach(id => { if (!liveIds.has(id)) roleSelected.delete(id); });
+
+    if (!roleState.rows.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无角色数据</td></tr>`;
+      roleUpdateToolbar();
+      return;
+    }
+
+    tbody.innerHTML = roleState.rows.map(r => {
+      const checked = roleSelected.has(r.id) ? 'checked' : '';
+      const statusChecked = r.status === 'enabled' ? 'checked' : '';
+      return `<tr>
+        <td><input class="role-check" type="checkbox" ${checked} onchange="roleToggleSelected('${r.id}', this.checked)"></td>
+        <td>${htmlSafe(r.name)}</td>
+        <td style="font-family:'Inter',sans-serif;color:#606266;">${htmlSafe(r.key)}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.sort}</td>
+        <td>
+          <label class="role-switch" title="${r.status === 'enabled' ? '正常' : '停用'}">
+            <input type="checkbox" ${statusChecked} onchange="roleToggleStatus('${r.id}', this.checked)">
+            <span></span>
+          </label>
+        </td>
+        <td style="font-family:'Inter',sans-serif;color:#606266;">${r.created}</td>
+        <td>
+          <div class="action-cell">
+            <span class="action-icon" onclick="openRoleEditById('${r.id}')" title="编辑">${_EDIT_SVG}</span>
+            <span class="action-icon" onclick="roleDelete('${r.id}')" title="删除">${_TRASH_SVG}</span>
+            <span class="action-icon" onclick="openRoleDataScope('${r.id}')" title="数据权限">${ROLE_SCOPE_SVG}</span>
+            <span class="action-icon" onclick="openRoleUsers('${r.id}')" title="分配用户">${ROLE_USER_SVG}</span>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+    roleUpdateToolbar();
+  }
+
+  function roleToggleAll(checked) {
+    roleState.rows.forEach(r => {
+      if (checked) roleSelected.add(r.id);
+      else roleSelected.delete(r.id);
+    });
+    roleRender();
+  }
+
+  function roleToggleSelected(id, checked) {
+    if (checked) roleSelected.add(id);
+    else roleSelected.delete(id);
+    roleUpdateToolbar();
+  }
+
+  function roleUpdateToolbar() {
+    const visibleIds = roleState.rows.map(r => r.id);
+    const selectedVisible = visibleIds.filter(id => roleSelected.has(id));
+    const allCheck = document.getElementById('role-check-all');
+    if (allCheck) {
+      allCheck.checked = visibleIds.length > 0 && selectedVisible.length === visibleIds.length;
+      allCheck.indeterminate = selectedVisible.length > 0 && selectedVisible.length < visibleIds.length;
+    }
+    const editBtn = document.getElementById('role-edit-btn');
+    const deleteBtn = document.getElementById('role-delete-btn');
+    if (editBtn) editBtn.disabled = selectedVisible.length !== 1;
+    if (deleteBtn) deleteBtn.disabled = selectedVisible.length === 0;
+  }
+
+  function roleSelectedIds() {
+    const visibleIds = new Set(roleState.rows.map(r => r.id));
+    return Array.from(roleSelected).filter(id => visibleIds.has(id));
+  }
+
+  function roleTreeVisibleNodes(nodes = ROLE_TREE, depth = 0, parent = null, out = []) {
+    nodes.forEach(n => {
+      out.push({ ...n, depth, parent, hasChildren: !!(n.children && n.children.length) });
+      if (n.children && roleTreeState.expanded.has(n.id)) roleTreeVisibleNodes(n.children, depth + 1, n.id, out);
+    });
+    return out;
+  }
+
+  function roleTreeDescSelected(id) {
+    return roleDescIdsFromTree(id).some(childId => roleTreeState.selected.has(childId));
+  }
+
+  function roleTreeAncestors(id) {
+    const ids = [];
+    let cur = ROLE_PARENT_MAP[id];
+    while (cur) {
+      ids.push(cur);
+      cur = ROLE_PARENT_MAP[cur];
+    }
+    return ids;
+  }
+
+  function roleTreeUpdateParents(id) {
+    if (!document.getElementById('role-tree-link')?.checked) return;
+    roleTreeAncestors(id).forEach(parentId => {
+      const childIds = roleDescIdsFromTree(parentId).filter(cid => ROLE_PARENT_MAP[cid] === parentId);
+      if (childIds.length && childIds.every(cid => roleTreeState.selected.has(cid))) roleTreeState.selected.add(parentId);
+      else roleTreeState.selected.delete(parentId);
+    });
+  }
+
+  function roleTreeSetChecked(id, checked) {
+    if (checked) roleTreeState.selected.add(id);
+    else roleTreeState.selected.delete(id);
+    if (document.getElementById('role-tree-link')?.checked) {
+      roleDescIdsFromTree(id).forEach(childId => {
+        if (checked) roleTreeState.selected.add(childId);
+        else roleTreeState.selected.delete(childId);
+      });
+      roleTreeUpdateParents(id);
+    }
+    roleTreeRender();
+  }
+
+  function roleTreeToggleCheckFromLabel(id) {
+    roleTreeSetChecked(id, !roleTreeState.selected.has(id));
+  }
+
+  function roleTreeToggleNode(id) {
+    if (roleTreeState.expanded.has(id)) roleTreeState.expanded.delete(id);
+    else roleTreeState.expanded.add(id);
+    roleTreeSyncExpandControl();
+    roleTreeRender();
+  }
+
+  function roleTreeToggleExpand(checked) {
+    roleTreeState.expanded = new Set(checked ? ROLE_FLAT_NODES.filter(n => n.hasChildren).map(n => n.id) : []);
+    roleTreeRender();
+  }
+
+  function roleTreeToggleAll(checked) {
+    roleTreeState.selected = new Set(checked ? ROLE_ALL_NODE_IDS : []);
+    roleTreeRender();
+  }
+
+  function roleTreeSyncExpandControl() {
+    const expand = document.getElementById('role-tree-expand');
+    if (!expand) return;
+    const parentIds = ROLE_FLAT_NODES.filter(n => n.hasChildren).map(n => n.id);
+    const count = parentIds.filter(id => roleTreeState.expanded.has(id)).length;
+    expand.checked = count === parentIds.length;
+    expand.indeterminate = count > 0 && count < parentIds.length;
+  }
+
+  function roleTreeRender() {
+    const box = document.getElementById('role-tree-box');
+    const tree = document.getElementById('role-tree');
+    if (!tree || !box) return;
+
+    const visible = roleTreeVisibleNodes();
+    tree.innerHTML = visible.map(n => {
+      const open = roleTreeState.expanded.has(n.id);
+      const checked = roleTreeState.selected.has(n.id) ? 'checked' : '';
+      const active = n.id === 'merchant_company_create' ? ' active' : '';
+      const caret = n.hasChildren
+        ? `<span class="role-tree-caret${open ? ' open' : ''}" onclick="roleTreeToggleNode('${n.id}')">▶</span>`
+        : `<span class="role-tree-caret empty">▶</span>`;
+      return `<div class="role-tree-row${active}" style="padding-left:${10 + n.depth * 18}px;">
+        ${caret}
+        <input class="role-native-check role-tree-check" type="checkbox" data-tree-id="${n.id}" ${checked} onchange="roleTreeSetChecked('${n.id}', this.checked)">
+        <span class="role-tree-label" onclick="roleTreeToggleCheckFromLabel('${n.id}')">${htmlSafe(n.label)}</span>
+      </div>`;
+    }).join('');
+
+    visible.forEach(n => {
+      const input = tree.querySelector(`[data-tree-id="${n.id}"]`);
+      if (input) input.indeterminate = !roleTreeState.selected.has(n.id) && roleTreeDescSelected(n.id);
+    });
+
+    const all = document.getElementById('role-tree-all');
+    const selectedCount = ROLE_ALL_NODE_IDS.filter(id => roleTreeState.selected.has(id)).length;
+    if (all) {
+      all.checked = selectedCount === ROLE_ALL_NODE_IDS.length;
+      all.indeterminate = selectedCount > 0 && selectedCount < ROLE_ALL_NODE_IDS.length;
+    }
+    const expand = document.getElementById('role-tree-expand');
+    const link = document.getElementById('role-tree-link');
+    const expandLabel = expand?.closest('.role-check-line');
+    const linkLabel = link?.closest('.role-check-line');
+    if (expandLabel) expandLabel.classList.toggle('checked-text', !!expand.checked);
+    if (linkLabel) linkLabel.classList.toggle('checked-text', !!link.checked);
+    box.classList.toggle('expanded', !!expand?.checked);
+    roleTreeSyncExpandControl();
+  }
+
+  function roleSetFormPerms(perms) {
+    roleTreeState.selected = new Set((perms || []).filter(id => ROLE_NODE_MAP[id]));
+    roleTreeRender();
+  }
+
+  function getRoleFormPerms() {
+    return Array.from(roleTreeState.selected);
+  }
+
+  function openRoleCreate() {
+    roleState.editId = null;
+    document.getElementById('role-modal-title').textContent = '添加角色';
+    document.getElementById('role-form-name').value = '';
+    document.getElementById('role-form-key').value = '';
+    document.getElementById('role-form-sort').value = '1';
+    document.getElementById('role-form-remark').value = '';
+    document.querySelectorAll('input[name="role-form-status"]').forEach(el => { el.checked = el.value === 'enabled'; });
+    const expand = document.getElementById('role-tree-expand');
+    if (expand) expand.checked = false;
+    roleTreeState.expanded = new Set();
+    roleSetFormPerms(roleExpandPerms(['dashboard_view','merchant_mgmt','deposit_record']));
+    document.getElementById('role-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function openRoleEditById(id) {
+    const r = ROLE_ALL.find(item => item.id === id);
+    if (!r) return;
+    roleState.editId = id;
+    document.getElementById('role-modal-title').textContent = '编辑角色';
+    document.getElementById('role-form-name').value = r.name;
+    document.getElementById('role-form-key').value = r.key;
+    document.getElementById('role-form-sort').value = r.sort;
+    document.getElementById('role-form-remark').value = r.remark || '';
+    document.querySelectorAll('input[name="role-form-status"]').forEach(el => { el.checked = el.value === r.status; });
+    const expand = document.getElementById('role-tree-expand');
+    if (expand) expand.checked = false;
+    roleTreeState.expanded = new Set();
+    roleSetFormPerms(r.perms);
+    document.getElementById('role-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function roleEditSelected() {
+    const ids = roleSelectedIds();
+    if (ids.length !== 1) {
+      showToast('请选择一个角色');
+      return;
+    }
+    openRoleEditById(ids[0]);
+  }
+
+  function closeRoleModal() {
+    document.getElementById('role-modal').classList.remove('show');
+    roleState.editId = null;
+  }
+
+  function submitRoleForm() {
+    const name = document.getElementById('role-form-name').value.trim();
+    const key = document.getElementById('role-form-key').value.trim();
+    const sort = Math.max(1, parseInt(document.getElementById('role-form-sort').value, 10) || 1);
+    const status = document.querySelector('input[name="role-form-status"]:checked')?.value || 'enabled';
+    const remark = document.getElementById('role-form-remark').value.trim();
+    const perms = getRoleFormPerms();
+
+    if (!name) { showToast('请输入角色名称'); return; }
+    if (!key) { showToast('请输入权限字符'); return; }
+    if (!/^[a-zA-Z][a-zA-Z0-9:_-]*$/.test(key)) { showToast('权限字符需以字母开头'); return; }
+
+    if (roleState.editId) {
+      const r = ROLE_ALL.find(item => item.id === roleState.editId);
+      if (!r) return;
+      Object.assign(r, { name, key, sort, status, remark, perms });
+      showToast('角色已更新');
+    } else {
+      ROLE_ALL.unshift({
+        id: 'role-' + Date.now(),
+        name, key, sort, status, remark, perms,
+        created: roleNow(),
+        dataScope: 'all',
+        userIds: [],
+      });
+      showToast('角色已添加');
+    }
+
+    closeRoleModal();
+    roleSelected.clear();
+    roleApplyFilters(false);
+  }
+
+  function roleDelete(id) {
+    const r = ROLE_ALL.find(item => item.id === id);
+    if (!r) return;
+    roleDeleteState.kind = 'role';
+    roleDeleteState.ids = [id];
+    document.getElementById('role-delete-msg').textContent = '确定删除该条数据吗?';
+    document.getElementById('role-delete-modal').classList.add('show');
+  }
+
+  function roleBatchDelete() {
+    const ids = roleSelectedIds();
+    if (!ids.length) {
+      showToast('请选择要删除的角色');
+      return;
+    }
+    roleDeleteState.kind = 'role';
+    roleDeleteState.ids = ids;
+    document.getElementById('role-delete-msg').textContent = ids.length === 1 ? '确定删除该条数据吗?' : `确定删除选中的 ${ids.length} 条数据吗?`;
+    document.getElementById('role-delete-modal').classList.add('show');
+  }
+
+  function roleRemoveByIds(ids) {
+    for (let i = ROLE_ALL.length - 1; i >= 0; i--) {
+      if (ids.includes(ROLE_ALL[i].id)) ROLE_ALL.splice(i, 1);
+    }
+    ids.forEach(id => roleSelected.delete(id));
+    roleApplyFilters(false);
+  }
+
+  function roleToggleStatus(id, checked) {
+    const r = ROLE_ALL.find(item => item.id === id);
+    if (!r) return;
+    r.status = checked ? 'enabled' : 'disabled';
+    roleApplyFilters(false);
+    showToast(`${r.name} 已${checked ? '启用' : '停用'}`);
+  }
+
+  function openRoleDataScope(id) {
+    const r = ROLE_ALL.find(item => item.id === id);
+    if (!r) return;
+    roleState.dataId = id;
+    document.getElementById('role-data-name').value = r.name;
+    document.getElementById('role-data-key').value = r.key;
+    document.getElementById('role-data-scope').value = r.dataScope || 'all';
+    document.getElementById('role-data-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeRoleDataScope() {
+    document.getElementById('role-data-modal').classList.remove('show');
+    roleState.dataId = null;
+  }
+
+  function saveRoleDataScope() {
+    const r = ROLE_ALL.find(item => item.id === roleState.dataId);
+    if (!r) return;
+    r.dataScope = document.getElementById('role-data-scope').value;
+    closeRoleDataScope();
+    showToast('数据权限保存成功');
+  }
+
+  function closeRoleDeleteConfirm() {
+    document.getElementById('role-delete-modal').classList.remove('show');
+    roleDeleteState.kind = '';
+    roleDeleteState.ids = [];
+  }
+
+  function confirmRoleDelete() {
+    const ids = [...roleDeleteState.ids];
+    const kind = roleDeleteState.kind;
+    closeRoleDeleteConfirm();
+    if (kind === 'role') {
+      roleRemoveByIds(ids);
+      showToast(ids.length > 1 ? '批量删除成功' : '删除成功');
+    }
+    if (kind === 'roleUser') {
+      roleUsersRemoveByIds(ids);
+      showToast(ids.length > 1 ? '批量移除成功' : '移除成功');
+    }
+  }
+
+  function roleUsersForCurrentRole() {
+    const role = ROLE_ALL.find(r => r.id === roleUserState.roleId);
+    const ids = role?.userIds || [];
+    return ROLE_USER_ALL.filter(u => ids.includes(u.id));
+  }
+
+  function roleUsersApplyFilters(clearSelection = true) {
+    const name = document.getElementById('ru-name')?.value.trim().toLowerCase() || '';
+    const phone = document.getElementById('ru-phone')?.value.trim().toLowerCase() || '';
+    roleUserState.rows = roleUsersForCurrentRole().filter(u => {
+      if (name && !u.name.toLowerCase().includes(name) && !u.nick.toLowerCase().includes(name)) return false;
+      if (phone && !u.phone.toLowerCase().includes(phone)) return false;
+      return true;
+    });
+    if (clearSelection) roleUserState.selected.clear();
+    roleUsersRender();
+  }
+
+  function openRoleUsers(id) {
+    roleUserState.roleId = id;
+    roleUserState.selected.clear();
+    const name = document.getElementById('ru-name');
+    const phone = document.getElementById('ru-phone');
+    if (name) name.value = '';
+    if (phone) phone.value = '';
+    roleUsersApplyFilters(false);
+    navigateTo('sys-role-users');
+  }
+
+  function roleUsersBack() {
+    navigateTo('sys-role');
+  }
+
+  function roleUsersSearch() {
+    roleUsersApplyFilters(true);
+  }
+
+  function roleUsersReset() {
+    ['ru-name','ru-phone'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    roleUsersApplyFilters(true);
+  }
+
+  function roleUsersRender() {
+    const tbody = document.getElementById('ru-tbody');
+    if (!tbody) return;
+    if (!roleUserState.rows.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无分配用户</td></tr>`;
+      roleUsersUpdateToolbar();
+      return;
+    }
+    tbody.innerHTML = roleUserState.rows.map(u => {
+      const checked = roleUserState.selected.has(u.id) ? 'checked' : '';
+      const empty = '<span class="cell-empty">—</span>';
+      return `<tr>
+        <td><input class="role-check" type="checkbox" ${checked} onchange="roleUsersToggleSelected('${u.id}', this.checked)"></td>
+        <td>${htmlSafe(u.name)}</td>
+        <td>${htmlSafe(u.nick)}</td>
+        <td>${u.email ? htmlSafe(u.email) : empty}</td>
+        <td style="font-family:'Inter',sans-serif;">${u.phone ? htmlSafe(u.phone) : empty}</td>
+        <td><span class="role-user-status">启用</span></td>
+        <td style="font-family:'Inter',sans-serif;color:#606266;">${u.created}</td>
+        <td><span class="role-remove-icon" onclick="roleUsersRemove('${u.id}')" title="移除">${ROLE_REMOVE_SVG}</span></td>
+      </tr>`;
+    }).join('');
+    roleUsersUpdateToolbar();
+  }
+
+  function roleUsersToggleAll(checked) {
+    roleUserState.rows.forEach(u => {
+      if (checked) roleUserState.selected.add(u.id);
+      else roleUserState.selected.delete(u.id);
+    });
+    roleUsersRender();
+  }
+
+  function roleUsersToggleSelected(id, checked) {
+    if (checked) roleUserState.selected.add(id);
+    else roleUserState.selected.delete(id);
+    roleUsersUpdateToolbar();
+  }
+
+  function roleUsersUpdateToolbar() {
+    const visibleIds = roleUserState.rows.map(u => u.id);
+    const selectedVisible = visibleIds.filter(id => roleUserState.selected.has(id));
+    const all = document.getElementById('ru-check-all');
+    if (all) {
+      all.checked = visibleIds.length > 0 && selectedVisible.length === visibleIds.length;
+      all.indeterminate = selectedVisible.length > 0 && selectedVisible.length < visibleIds.length;
+    }
+    const batch = document.getElementById('ru-batch-btn');
+    if (batch) batch.disabled = selectedVisible.length === 0;
+  }
+
+  function roleUsersRemove(id) {
+    roleDeleteState.kind = 'roleUser';
+    roleDeleteState.ids = [id];
+    document.getElementById('role-delete-msg').textContent = '确定移除该用户吗?';
+    document.getElementById('role-delete-modal').classList.add('show');
+  }
+
+  function roleUsersBatchRemove() {
+    const visibleIds = new Set(roleUserState.rows.map(u => u.id));
+    const ids = Array.from(roleUserState.selected).filter(id => visibleIds.has(id));
+    if (!ids.length) {
+      showToast('请选择要移除的用户');
+      return;
+    }
+    roleDeleteState.kind = 'roleUser';
+    roleDeleteState.ids = ids;
+    document.getElementById('role-delete-msg').textContent = `确定移除选中的 ${ids.length} 个用户吗?`;
+    document.getElementById('role-delete-modal').classList.add('show');
+  }
+
+  function roleUsersRemoveByIds(ids) {
+    const role = ROLE_ALL.find(r => r.id === roleUserState.roleId);
+    if (!role) return;
+    role.userIds = (role.userIds || []).filter(id => !ids.includes(id));
+    ids.forEach(id => roleUserState.selected.delete(id));
+    roleUsersApplyFilters(false);
+  }
+
+  function roleUsersAdd() {
+    showToast('添加用户功能开发中');
   }
 
   let toastTimer;
@@ -3982,7 +5315,8 @@
     rampInRender();
     rampOutRender();
     merchantRender();
-    lucide.createIcons();
+    roleRender();
+    if (window.lucide) lucide.createIcons();
   });
   </script>
 </body>

@@ -197,6 +197,35 @@
       align-items: center;
       height: 32px;
       min-width: 0;
+      position: relative;
+    }
+    .p-merch-dropdown {
+      position: absolute;
+      top: 34px;
+      left: 88px;
+      right: 0;
+      background: #fff;
+      border: 1px solid #DCDFE6;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      z-index: 200;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .p-merch-opt {
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #303133;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .p-merch-opt:hover { background: #F5F7FA; }
+    .p-merch-opt .p-merch-id {
+      font-size: 11px;
+      font-family: Inter, sans-serif;
+      color: #909399;
     }
     .filter-item.col-span-2 { grid-column: span 2; }
 
@@ -335,10 +364,11 @@
     .cell-empty  { color: #C0C4CC; font-family: 'Inter', sans-serif; }
 
     .copy-cell { display: flex; align-items: center; gap: 6px; overflow: hidden; }
-    .copy-cell span { overflow: hidden; text-overflow: ellipsis; font-family: 'Inter', sans-serif; }
+    .copy-cell span { white-space: nowrap; flex-shrink: 0; font-family: 'Inter', sans-serif; }
     .copy-icon {
       color: #409EFF; cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; transition: opacity 0.15s;
+      display: inline-flex; align-items: center; transition: opacity 0.15s;
+      vertical-align: middle;
     }
     .copy-icon:hover { opacity: 0.7; }
 
@@ -425,9 +455,111 @@
     }
     .btn-sm { height: 28px; padding: 0 16px; font-size: 13px; }
 
+    /* ── 支付订单详情弹窗 ──────────────────────────── */
+    .pd-body { padding: 0 !important; display: block !important; }
+    .pd-section { padding: 16px 20px 18px; }
+    .pd-section + .pd-section { border-top: 1px solid #EBEEF5; }
+    .pd-section-title { font-size: 13px; font-weight: 600; color: #303133; margin-bottom: 14px; }
+    .pd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; }
+    .pd-field { display: flex; flex-direction: column; gap: 4px; }
+    .pd-label { font-size: 12px; color: #909399; }
+    .pd-val { font-size: 13px; color: #303133; display: flex; align-items: center; gap: 6px; font-family: Inter, sans-serif; }
+    .pd-val.mono { font-family: Inter, sans-serif; word-break: break-all; }
+    .pd-summary { display: grid; grid-template-columns: repeat(5,1fr); background: #F5F7FA; border-radius: 4px; padding: 10px 0; margin-bottom: 14px; }
+    .pd-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; border-right: 1px solid #EBEEF5; }
+    .pd-stat:last-child { border-right: none; }
+    .pd-stat-label { font-size: 11px; color: #909399; }
+    .pd-stat-val { font-size: 13px; font-weight: 600; color: #303133; font-family: Inter, sans-serif; }
+    .pd-stat-val.blue { color: #409EFF; }
+    .pd-dep-item { padding: 10px 0; border-bottom: 1px solid #F2F3F5; display: flex; justify-content: space-between; align-items: flex-start; }
+    .pd-dep-item:last-child { border-bottom: none; }
+    .pd-dep-left { display: flex; flex-direction: column; gap: 3px; }
+    .pd-dep-txid { font-size: 13px; font-weight: 500; color: #303133; font-family: Inter, sans-serif; }
+    .pd-dep-sub { font-size: 12px; color: #909399; font-family: Inter, sans-serif; }
+    .pd-dep-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .pd-dep-amount { font-size: 13px; font-weight: 500; color: #67C23A; font-family: Inter, sans-serif; }
+    .pd-dep-net { font-size: 12px; color: #909399; font-family: Inter, sans-serif; }
+    .pd-empty { display: flex; flex-direction: column; align-items: center; padding: 28px 0; gap: 8px; }
+    .pd-empty-text { font-size: 13px; color: #C0C4CC; }
+    .pd-dep-item.selectable { cursor: pointer; align-items: center; }
+    .pd-dep-ck svg { visibility: hidden; }
+    .pd-dep-item.selectable.checked .pd-dep-ck svg { visibility: visible; }
+    .pd-dep-ck {
+      width: 16px; height: 16px; flex-shrink: 0; border-radius: 3px;
+      border: 2px solid #DCDFE6; margin-right: 10px;
+      display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .pd-dep-item.selectable.checked .pd-dep-ck {
+      background: #409EFF; border-color: #409EFF; color: #fff;
+    }
+    .pd-edit-note {
+      font-size: 12px; color: #909399; line-height: 1.6;
+      background: #F5F7FA; border-radius: 4px; padding: 8px 12px; margin-bottom: 14px;
+    }
+
     /* ── 商户管理 ────────────────────────────────── */
     .badge-enabled  { background:#F0F9EB; color:#67C23A; border:1px solid #b3e19d; border-radius:30px; padding:2px 8px; font-size:12px; white-space:nowrap; }
     .badge-disabled { background:#f4f4f5; color:#909399; border:1px solid #E4E7ED; border-radius:30px; padding:2px 8px; font-size:12px; white-space:nowrap; }
+
+    /* ── 编辑商户表单 ────────────────────────────── */
+    .me-body { padding: 0 !important; display: block !important; }
+    .me-section { padding: 16px 20px 18px; }
+    .me-section + .me-section { border-top: 1px solid #EBEEF5; }
+    .me-section-title { font-size: 13px; font-weight: 600; color: #303133; margin-bottom: 14px; }
+    .me-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .me-row:last-child { margin-bottom: 0; }
+    .me-label { font-size: 12px; color: #606266; }
+    .me-label span { color:#F56C6C; margin-left:2px; }
+    .me-input { height:32px; border:1px solid #DCDFE6; border-radius:4px; padding:0 10px; font-size:13px; color:#303133; font-family:'Noto Sans SC',sans-serif; width:100%; box-sizing:border-box; }
+    .me-input:focus { outline:none; border-color:#409EFF; }
+    .me-input[readonly] { background:#F5F7FA; color:#909399; cursor:default; }
+    .me-radio-group { display:flex; gap:20px; align-items:center; }
+    .me-radio { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#606266; user-select:none; }
+    .me-radio input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
+    .me-radio input[type=radio]:checked + .me-dot { border-color:#409EFF; background:#409EFF; }
+    .me-radio input[type=radio]:checked + .me-dot::after { content:''; display:block; width:6px; height:6px; background:#fff; border-radius:50%; }
+    .me-dot { display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border:1px solid #DCDFE6; border-radius:50%; background:#fff; flex-shrink:0; transition:border-color 0.15s, background 0.15s; }
+    .me-toggle-row { display:flex; align-items:center; justify-content:space-between; }
+    .me-toggle-label { font-size:13px; color:#303133; }
+    .me-toggle { position:relative; display:inline-block; width:36px; height:20px; }
+    .me-toggle input { opacity:0; width:0; height:0; }
+    .me-toggle-track { position:absolute; inset:0; background:#C0C4CC; border-radius:10px; transition:.25s; cursor:pointer; }
+    .me-toggle input:checked + .me-toggle-track { background:#409EFF; }
+    .me-toggle-track::before { content:''; position:absolute; height:14px; width:14px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.25s; }
+    .me-toggle input:checked + .me-toggle-track::before { transform:translateX(16px); }
+    .me-match-config { margin-top:14px; background:#F5F7FA; border-radius:6px; padding:14px 16px; }
+    .me-match-row { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+    .me-match-row:last-of-type { margin-bottom:0; }
+    .me-match-label { font-size:12px; color:#606266; }
+    .me-match-input-wrap { display:flex; align-items:center; gap:8px; }
+    .me-check-row { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; margin-bottom:12px; }
+    .me-check-row input[type=checkbox] { position:absolute; opacity:0; width:0; height:0; }
+    .me-checkbox { width:14px; height:14px; flex-shrink:0; border:1px solid #DCDFE6; border-radius:3px; background:#fff; display:inline-flex; align-items:center; justify-content:center; transition:all .15s; }
+    .me-check-row input[type=checkbox]:checked + .me-checkbox { background:#409EFF; border-color:#409EFF; }
+    .me-check-row input[type=checkbox]:checked + .me-checkbox::after { content:''; display:block; width:8px; height:5px; border-left:1.5px solid #fff; border-bottom:1.5px solid #fff; transform:rotate(-45deg) translateY(-1px); }
+    .me-check-text { font-size:13px; color:#303133; }
+    .me-check-hint { font-size:11px; color:#909399; margin-left:2px; }
+    .me-match-input { height:32px; border:1px solid #DCDFE6; border-radius:4px; padding:0 10px; font-size:13px; color:#303133; font-family:Inter,sans-serif; width:90px; box-sizing:border-box; }
+    .me-match-input:focus { outline:none; border-color:#409EFF; }
+    .me-match-unit { font-size:13px; color:#606266; }
+    .me-match-range { display:flex; align-items:center; gap:8px; }
+    .me-match-sep { font-size:13px; color:#909399; }
+    .me-ratio-wrap { padding-left:22px; margin-bottom:12px; }
+    .me-match-input:disabled { background:#F5F7FA; color:#C0C4CC; border-color:#E4E7ED; cursor:not-allowed; }
+    .me-preview { margin-top:12px; background:#F5F7FA; border-radius:4px; padding:10px 12px; }
+    .me-prev-header { font-size:11px; color:#909399; margin-bottom:8px; font-family:'Noto Sans SC',sans-serif; }
+    .me-prev-header strong { font-family:Inter,sans-serif; color:#606266; }
+    .me-prev-cond { font-size:12px; color:#303133; line-height:1.9; font-family:'Noto Sans SC',sans-serif; }
+    .me-prev-cond strong { font-family:Inter,sans-serif; color:#303133; }
+    .me-prev-and { display:block; font-size:11px; color:#C0C4CC; line-height:1.4; padding-left:2px; }
+    .me-prev-result { margin-top:8px; font-size:12px; color:#67C23A; font-weight:600; }
+    .me-prev-none { font-size:12px; color:#F56C6C; }
+    .me-info-wrap { position:relative; display:inline-flex; align-items:center; }
+    .me-info-icon { width:15px; height:15px; display:inline-flex; align-items:center; justify-content:center; color:#C0C4CC; cursor:pointer; flex-shrink:0; }
+    .me-info-icon:hover { color:#909399; }
+    .me-info-tip { display:none; position:absolute; left:20px; top:50%; transform:translateY(-50%); width:280px; background:#303133; color:#fff; font-size:12px; line-height:1.6; border-radius:4px; padding:8px 10px; z-index:300; font-family:'Noto Sans SC',sans-serif; pointer-events:none; }
+    .me-info-tip::before { content:''; position:absolute; left:-5px; top:50%; transform:translateY(-50%); border-width:5px 5px 5px 0; border-style:solid; border-color:transparent #303133 transparent transparent; }
+    .me-info-wrap:hover .me-info-tip { display:block; }
     /* ── Merchant Detail Page ───────────────────── */
     .md-top-bar {
       height:52px; background:#fff; border-bottom:1px solid #EBEEF5;
@@ -1001,9 +1133,19 @@
           <div class="filter-grid">
             <!-- Row 1 -->
             <div class="filter-item">
-              <span class="filter-label-el">UID</span>
+              <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="请输入内容" id="d-uid">
+                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
+                       id="d-uid" autocomplete="off"
+                       oninput="dMerchantInput()" onfocus="dMerchantInput()"
+                       onblur="setTimeout(dHideMerchantDrop, 150)">
+              </div>
+              <div class="p-merch-dropdown" id="d-merch-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">用户 ID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="d-userid">
               </div>
             </div>
             <div class="filter-item">
@@ -1098,24 +1240,26 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
+            <span id="d-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="depositExport()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1310px;">
+            <table style="min-width:1400px;">
               <colgroup>
-                <col style="width:95px"><col style="width:100px"><col style="width:70px">
-                <col style="width:80px"><col style="width:70px"><col style="width:72px">
-                <col style="width:70px"><col style="width:155px"><col style="width:152px">
-                <col style="width:150px"><col style="width:110px"><col style="width:100px">
+                <col style="width:95px"><col style="width:100px"><col style="width:95px">
+                <col style="width:70px"><col style="width:80px"><col style="width:80px">
+                <col style="width:72px"><col style="width:70px"><col style="width:155px">
+                <col style="width:152px"><col style="width:150px"><col style="width:110px">
+                <col style="width:100px"><col style="width:55px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>UID</th><th>名称</th><th>代币</th><th>网络</th>
-                  <th>金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
-                  <th>到账时间</th><th>哈希</th><th>合作伙伴</th><th>状态</th>
+                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
+                  <th>到账金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
+                  <th>到账时间</th><th>哈希</th><th>合作伙伴</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="d-tbody"></tbody>
@@ -1327,18 +1471,14 @@
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">商户名称</span>
+              <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="p-merchant">
-                    <option value="">请选择</option>
-                    <option value="GMTM" selected>GMTM</option>
-                    <option value="XM Japan">XM Japan</option>
-                    <option value="IG Japan">IG Japan</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
-                </div>
+                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
+                       id="p-merchant" autocomplete="off"
+                       oninput="pMerchantInput()" onfocus="pMerchantInput()"
+                       onblur="setTimeout(pHideMerchantDrop, 150)">
               </div>
+              <div class="p-merch-dropdown" id="p-merch-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">User ID</span>
@@ -1397,14 +1537,23 @@
                 <input class="field-input" type="text" placeholder="请输入内容" id="p-hash">
               </div>
             </div>
-            <!-- Row 3 -->
-            <div class="filter-item col-span-2">
-              <span class="filter-label-el">时间</span>
+            <div class="filter-item">
+              <span class="filter-label-el">创建时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="p-date-start">
                   <span class="range-sep-el">—</span>
                   <input class="date-input-el" type="date" id="p-date-end">
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">完成时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="p-done-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="p-done-end">
                 </div>
               </div>
             </div>
@@ -1428,19 +1577,21 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1100px;">
+            <table style="min-width:1720px;">
               <colgroup>
-                <col style="width:200px"><col style="width:90px"><col style="width:100px">
-                <col style="width:80px"><col style="width:130px"><col style="width:70px">
-                <col style="width:70px"><col style="width:90px"><col style="width:110px">
-                <col style="width:152px"><col style="width:140px"><col style="width:90px">
-                <col style="width:60px">
+                <col style="width:220px"><col style="width:85px"><col style="width:90px"><!-- 订单号/商户ID/商户名称 -->
+                <col style="width:90px"><col style="width:60px"><col style="width:70px"><!-- 用户ID/代币/网络 -->
+                <col style="width:80px"><col style="width:80px"><col style="width:70px"><!-- 应付/实付/手续费 -->
+                <col style="width:70px"><col style="width:160px"><col style="width:80px"><!-- 净入账/充值地址/订单来源 -->
+                <col style="width:100px"><col style="width:145px"><col style="width:145px"><!-- 合作伙伴/创建时间/完成时间 -->
+                <col style="width:80px"><col style="width:60px"><!-- 状态/操作 -->
               </colgroup>
               <thead>
                 <tr>
-                  <th>订单号</th><th>应付金额</th><th>实付金额</th><th>手续费</th>
-                  <th>净入账</th><th>代币</th><th>网络</th><th>订单来源</th>
-                  <th>合作伙伴</th><th>创建时间</th><th>充值地址</th><th>状态</th><th>操作</th>
+                  <th>订单号</th><th>商户 ID</th><th>商户名称</th><th>用户 ID</th>
+                  <th>代币</th><th>网络</th><th>应付金额</th><th>实付金额</th><th>手续费</th><th>净入账</th>
+                  <th>充值地址</th><th>订单来源</th><th>合作伙伴</th>
+                  <th>创建时间</th><th>完成时间</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="p-tbody"></tbody>
@@ -2876,6 +3027,34 @@
   // ══════════════════════════════════════════════════════
   //  充币记录 data & logic
   // ══════════════════════════════════════════════════════
+  const D_MERCHANTS = [
+    { id:'635102950', name:'kara'            },
+    { id:'884590488', name:'kara2'           },
+    { id:'460004375', name:'sherry@bdy.tech' },
+    { id:'253024631', name:'benny@bdy.tech'  },
+  ];
+
+  function dMerchantInput() {
+    const val = document.getElementById('d-uid').value.trim().toLowerCase();
+    const dd  = document.getElementById('d-merch-dropdown');
+    const list = val ? D_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : D_MERCHANTS;
+    if (!list.length) { dd.style.display = 'none'; return; }
+    dd.innerHTML = list.map(m =>
+      `<div class="p-merch-opt" onmousedown="dSelectMerchant('${m.name}')">
+        ${m.name}<span class="p-merch-id">${m.id}</span>
+      </div>`
+    ).join('');
+    dd.style.display = '';
+  }
+  function dSelectMerchant(name) {
+    document.getElementById('d-uid').value = name;
+    document.getElementById('d-merch-dropdown').style.display = 'none';
+  }
+  function dHideMerchantDrop() {
+    const dd = document.getElementById('d-merch-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+
   const D_STATUS = {
     arrived: { label:'已到账',    cls:'badge-green' },
     pending:  { label:'待匹配订单', cls:'badge-red'  },
@@ -2883,18 +3062,20 @@
   };
 
   const DEPOSIT_ALL = [
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', channel:'Meta Trader', status:'arrived' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.4',  fee:'0.4',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:45', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', channel:'',           status:'arrived' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.3',  fee:'0.3',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a7d8e5f2c9b4a1d6e8f3c7b2a5d9e0f4c8b3a7d6e2f1c5b4', channel:'',           status:'pending' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.2',  fee:'0.2',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:44', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', channel:'',           status:'pending' },
-    { uid:'635102950', name:'kara',            token:'USDT', network:'TRON', amount:'0.1',  fee:'0.1',  net:'+0', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af8d2e6b4c7f9a3d5e8c1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a', channel:'',           status:'invalid' },
-    { uid:'884590488', name:'kara2',           token:'USDT', network:'TRON', amount:'7.19', fee:'7.19', net:'+0', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', channel:'',           status:'arrived' },
-    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.12', fee:'0.12', net:'+0', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b5a', channel:'',           status:'arrived' },
-    { uid:'460004375', name:'sherry@bdy.tech', token:'USDT', network:'TRON', amount:'0.09', fee:'0.09', net:'+0', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff5c2a8d6e1b4f7c9a3d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d', channel:'',           status:'arrived' },
-    { uid:'253024631', name:'benny@bdy.tech',  token:'USDT', network:'TRON', amount:'4.5',  fee:'4.5',  net:'+0', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', channel:'Meta Trader', status:'arrived' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:45', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.3',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a7d8e5f2c9b4a1d6e8f3c7b2a5d9e0f4c8b3a7d6e2f1c5b4', channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.2',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:44', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.1',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af8d2e6b4c7f9a3d5e8c1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a', channel:'',           status:'invalid' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', network:'TRON', amount:'7.19', fee:'0.07', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON', amount:'0.12', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b5a', channel:'',           status:'arrived' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON', amount:'0.09', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff5c2a8d6e1b4f7c9a3d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d', channel:'',           status:'arrived' },
+    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'TRON', amount:'4.5',  fee:'0.05', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', channel:'',           status:'arrived' },
   ];
 
   const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
+
+  const _MATCH_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
 
   function depositRender() {
     const tbody = document.getElementById('d-tbody');
@@ -2902,19 +3083,29 @@
     const slice = dState.rows.slice(start, start + dState.size);
     tbody.innerHTML = slice.map(r => {
       const st = D_STATUS[r.status];
+      const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
+      const matchBtn = r.status === 'pending'
+        ? `<span class="action-icon" title="关联订单" onclick="openDepositMatch(${DEPOSIT_ALL.indexOf(r)})" style="color:#409EFF;">${_MATCH_SVG}</span>`
+        : '';
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
-        <td>${r.name}</td><td>${r.token}</td><td>${r.network}</td>
-        <td>${r.amount}</td><td>${r.fee}</td>
-        <td class="cell-green">${r.net}</td>
+        <td>${r.name}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td><td>${r.network}</td>
+        <td style="font-family:Inter,sans-serif">${r.amount}</td>
+        <td style="font-family:Inter,sans-serif">${r.fee}</td>
+        <td style="font-family:Inter,sans-serif;color:#67C23A;">${net}</td>
         <td>${truncCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
         <td>${truncCell(r.hash)}</td>
         <td>${r.channel || '直连'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td style="text-align:center;">${matchBtn}</td>
       </tr>`;
     }).join('');
     document.getElementById('d-page-total').textContent = `共 ${dState.rows.length} 条`;
+    const sc = document.getElementById('d-summary-count');
+    if (sc) sc.textContent = `条数: ${dState.rows.length}`;
     const total = Math.max(1, Math.ceil(dState.rows.length / dState.size));
     document.getElementById('d-btn-prev').disabled = dState.page <= 1;
     document.getElementById('d-btn-next').disabled = dState.page >= total;
@@ -2936,6 +3127,7 @@
   }
   function depositSearch() {
     const uid     = document.getElementById('d-uid').value.trim().toLowerCase();
+    const userId  = document.getElementById('d-userid').value.trim().toLowerCase();
     const wallet  = document.getElementById('d-wallet').value.trim().toLowerCase();
     const token   = document.getElementById('d-token').value;
     const net     = document.getElementById('d-network').value;
@@ -2945,8 +3137,9 @@
     const ds      = document.getElementById('d-date-start').value;
     const de      = document.getElementById('d-date-end').value;
     dState.rows = DEPOSIT_ALL.filter(r => {
-      if (uid     && !r.uid.toLowerCase().includes(uid))       return false;
-      if (wallet  && !r.wallet.toLowerCase().includes(wallet)) return false;
+      if (uid    && !r.uid.toLowerCase().includes(uid) && !r.name.toLowerCase().includes(uid)) return false;
+      if (userId && !r.userId.toLowerCase().includes(userId)) return false;
+      if (wallet && !r.wallet.toLowerCase().includes(wallet)) return false;
       if (token   && r.token   !== token)                      return false;
       if (net     && r.network !== net)                        return false;
       if (st      && r.status  !== st)                         return false;
@@ -2960,16 +3153,28 @@
     dState.page = 1; depositRender();
   }
   function depositReset() {
-    ['d-uid','d-wallet','d-token','d-network','d-status','d-channel','d-hash','d-date-start','d-date-end']
+    ['d-uid','d-userid','d-wallet','d-token','d-network','d-channel','d-hash','d-date-start','d-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    dState.rows = [...DEPOSIT_ALL]; dState.page = 1; depositRender();
+    document.getElementById('d-status').value = 'pending';
+    dState.rows = DEPOSIT_ALL.filter(r => r.status === 'pending');
+    dState.page = 1; depositRender();
+  }
+  function openDepositMatch(idx) {
+    const r = DEPOSIT_ALL[idx];
+    document.getElementById('p-uid').value = r.userId;
+    document.getElementById('p-status').value = 'processing';
+    ['p-order','p-merchant','p-source','p-channel','p-addr','p-hash','p-date-start','p-date-end']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    navigateTo('payment');
+    paymentSearch();
   }
   function depositExport() {
-    const headers = ['UID','名称','代币','网络','金额','手续费','净入账','钱包地址','到账时间','哈希','合作伙伴','状态'];
-    csvDownload(headers, dState.rows.map(r => [
-      r.uid, r.name, r.token, r.network, r.amount, r.fee, r.net,
-      r.wallet, r.time, r.hash, r.channel || '直连', D_STATUS[r.status].label
-    ]), '充币记录.csv');
+    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','手续费','净入账','钱包地址','到账时间','哈希','合作伙伴','状态'];
+    csvDownload(headers, dState.rows.map(r => {
+      const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
+      return [r.uid, r.name, r.userId, r.token, r.network, r.amount, r.fee, net,
+              r.wallet, r.time, r.hash, r.channel || '直连', D_STATUS[r.status].label];
+    }), '充币记录.csv');
   }
 
   // ══════════════════════════════════════════════════════
@@ -3207,11 +3412,31 @@
     completed:  { label:'已完成', cls:'badge-green' },
   };
 
+  const P_MERCHANTS = [
+    { id:'M001', name:'GMTM'     },
+    { id:'M002', name:'XM Japan' },
+    { id:'M003', name:'IG Japan' },
+  ];
+
   const PAYMENT_ALL = [
-    { order:'291654802-52081422241536', due:'0.70',   paid:'0.70',   fee:'0.01', net:'0.69',   source:'Paypaz', token:'USDT', network:'TRON', channel:'Meta Trader', time:'2026-06-12 15:57:35', addr:'TG1xj...bkJzh', status:'processing', editable:true  },
-    { order:'291654802-52081414206720', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
-    { order:'291654802-52079444850688', due:'0.20',   paid:'0.20',   fee:'0.01', net:'0.19',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-13 13:48:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
-    { order:'291654802-51905185772032', due:'400.00', paid:'400.00', fee:'0.04', net:'399.96', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-04 16:43:51', addr:'TG1xj...bkJzh', status:'completed',  editable:false },
+    { order:'291654802-52081422241536', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'0.70',   paid:'0.70',   fee:'0.01', net:'0.69',   source:'Paypaz', token:'USDT', network:'TRON', channel:'Meta Trader', time:'2026-06-12 15:57:35', doneTime:'-',                    addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'processing', editable:true,
+      deposits:[] },
+    { order:'291654802-52081414206720', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', doneTime:'2026-06-12 16:03:21', addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'completed',  editable:false,
+      deposits:[
+        { txid:'52081414206001', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', amount:'0.40', fee:'0.01', net:'0.39', time:'2026-06-12 15:46:45' },
+        { txid:'52081414206002', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', amount:'0.40', fee:'0.01', net:'0.39', time:'2026-06-12 15:57:35' },
+      ]},
+    { order:'291654802-52079444850688', merchantId:'M002', merchantName:'XM Japan', userId:'U20048762', due:'0.20',   paid:'0.20',   fee:'0.01', net:'0.19',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-13 13:48:51', doneTime:'2026-06-13 14:02:07', addr:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', status:'completed',  editable:false,
+      deposits:[
+        { txid:'52079444850001', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', amount:'0.20', fee:'0.01', net:'0.19', time:'2026-06-13 13:48:51' },
+      ]},
+    { order:'291654802-51905185772032', merchantId:'M002', merchantName:'XM Japan', userId:'U20048762', due:'400.00', paid:'400.00', fee:'0.04', net:'399.96', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-04 16:43:51', doneTime:'2026-06-04 16:58:34', addr:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', status:'completed',  editable:false,
+      deposits:[
+        { txid:'51905185772001', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', amount:'200.00', fee:'0.02', net:'199.98', time:'2026-06-04 16:43:51' },
+        { txid:'51905185772002', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', amount:'200.00', fee:'0.02', net:'199.98', time:'2026-06-04 16:51:22' },
+      ]},
+    { order:'460004375-52085120983040', merchantId:'M003', merchantName:'IG Japan', userId:'U30015923', due:'5.00', paid:'0.00', fee:'0.00', net:'0.00', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-14 09:22:10', doneTime:'-',                    addr:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', status:'processing', editable:true,
+      deposits:[] },
   ];
 
   const pState = { rows: [...PAYMENT_ALL], page: 1, size: 10 };
@@ -3232,21 +3457,20 @@
       return `<tr>
         <td>
           <div class="copy-cell">
-            <span>${r.order}</span>
-            <span class="copy-icon" onclick="copyText('${r.order}')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-              </svg>
-            </span>
+            <span style="font-family:Inter,sans-serif">${r.order}</span>
+            <span class="copy-icon" onclick="copyText('${r.order}')">${_COPY_SVG}</span>
           </div>
         </td>
+        <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
+        <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td><td>${r.network}</td>
         <td>${r.due}</td><td>${r.paid}</td><td>${r.fee}</td><td>${r.net}</td>
-        <td>${r.token}</td><td>${r.network}</td><td>${r.source}</td>
+        <td>${truncCell(r.addr)}</td>
+        <td>${r.source}</td>
         <td>${r.channel || '直连'}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
-        <td>${truncCell(r.addr)}</td>
+        <td style="font-family:Inter,sans-serif;color:${r.doneTime==='-'?'#C0C4CC':'#303133'}">${r.doneTime}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td>
           <div class="action-cell">
@@ -3287,7 +3511,7 @@
   }
   function paymentSearch() {
     const order   = document.getElementById('p-order').value.trim().toLowerCase();
-    const merch   = document.getElementById('p-merchant').value;
+    const merch   = document.getElementById('p-merchant').value.trim().toLowerCase();
     const uid     = document.getElementById('p-uid').value.trim().toLowerCase();
     const source  = document.getElementById('p-source').value;
     const channel = document.getElementById('p-channel').value;
@@ -3296,89 +3520,335 @@
     const hash    = document.getElementById('p-hash').value.trim().toLowerCase();
     const ds      = document.getElementById('p-date-start').value;
     const de      = document.getElementById('p-date-end').value;
+    const dds     = document.getElementById('p-done-start').value;
+    const dde     = document.getElementById('p-done-end').value;
     pState.rows = PAYMENT_ALL.filter(r => {
-      if (order   && !r.order.toLowerCase().includes(order))  return false;
-      if (source  && r.source !== source)                      return false;
-      if (channel === 'direct'  && r.channel !== '')           return false;
-      if (channel && channel !== 'direct' && r.channel !== channel) return false;
-      if (st      && r.status !== st)                          return false;
-      if (addr    && !r.addr.toLowerCase().includes(addr))    return false;
-      if (ds      && r.time.split(' ')[0] < ds)               return false;
-      if (de      && r.time.split(' ')[0] > de)               return false;
+      if (order  && !r.order.toLowerCase().includes(order))                                                return false;
+      if (merch  && !r.merchantId.toLowerCase().includes(merch) && !r.merchantName.toLowerCase().includes(merch)) return false;
+      if (uid    && !r.userId.toLowerCase().includes(uid))                                                return false;
+      if (source && r.source !== source)                                                                  return false;
+      if (channel === 'direct' && r.channel !== '')                                                       return false;
+      if (channel && channel !== 'direct' && r.channel !== channel)                                       return false;
+      if (st     && r.status !== st)                                                                      return false;
+      if (addr   && !r.addr.toLowerCase().includes(addr))                                                 return false;
+      if (ds     && r.time.split(' ')[0] < ds)                                                            return false;
+      if (de     && r.time.split(' ')[0] > de)                                                            return false;
+      if (dds    && (r.doneTime === '-' || r.doneTime.split(' ')[0] < dds))                               return false;
+      if (dde    && (r.doneTime === '-' || r.doneTime.split(' ')[0] > dde))                               return false;
       return true;
     });
     pState.page = 1; paymentRender();
   }
   function paymentReset() {
-    ['p-order','p-merchant','p-uid','p-source','p-channel','p-status','p-addr','p-hash','p-date-start','p-date-end']
+    ['p-order','p-merchant','p-uid','p-source','p-channel','p-status','p-addr','p-hash','p-date-start','p-date-end','p-done-start','p-done-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     pState.rows = [...PAYMENT_ALL]; pState.page = 1; paymentRender();
   }
+  function pMerchantInput() {
+    const val = document.getElementById('p-merchant').value.trim().toLowerCase();
+    const dd  = document.getElementById('p-merch-dropdown');
+    const list = val ? P_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.toLowerCase().includes(val)) : P_MERCHANTS;
+    if (!list.length) { dd.style.display = 'none'; return; }
+    dd.innerHTML = list.map(m =>
+      `<div class="p-merch-opt" onmousedown="pSelectMerchant('${m.name}')">
+        ${m.name}<span class="p-merch-id">${m.id}</span>
+      </div>`
+    ).join('');
+    dd.style.display = '';
+  }
+  function pSelectMerchant(name) {
+    document.getElementById('p-merchant').value = name;
+    document.getElementById('p-merch-dropdown').style.display = 'none';
+  }
+  function pHideMerchantDrop() {
+    const dd = document.getElementById('p-merch-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+
   function paymentExport() {
-    const headers = ['订单号','应付金额','实付金额','手续费','净入账','代币','网络','订单来源','合作伙伴','创建时间','充值地址','状态'];
+    const headers = ['订单号','商户 ID','商户名称','用户 ID','应付金额','实付金额','手续费','净入账','代币','网络','订单来源','合作伙伴','创建时间','完成时间','充值地址','状态'];
     csvDownload(headers, pState.rows.map(r => [
-      r.order, r.due, r.paid, r.fee, r.net, r.token, r.network, r.source, r.channel || '直连', r.time, r.addr, P_STATUS[r.status].label
+      r.order, r.merchantId, r.merchantName, r.userId, r.due, r.paid, r.fee, r.net,
+      r.token, r.network, r.source, r.channel || '直连', r.time, r.doneTime, r.addr, P_STATUS[r.status].label
     ]), '支付订单.csv');
   }
 
   // ── Detail / Edit Modal ───────────────────────────────
   function openDetail(idx) {
-    const r = PAYMENT_ALL[idx];
+    const r  = PAYMENT_ALL[idx];
     const st = P_STATUS[r.status];
+    const deps = r.deposits || [];
+    const totalPaid = deps.reduce((s, d) => s + parseFloat(d.amount), 0).toFixed(2);
+    const totalFee  = deps.reduce((s, d) => s + parseFloat(d.fee),    0).toFixed(2);
+    const totalNet  = deps.reduce((s, d) => s + parseFloat(d.net),    0).toFixed(2);
+
+    const depItems = deps.length === 0
+      ? `<div class="pd-empty">
+           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C0C4CC" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v4M16 4v4M2 10h20"/></svg>
+           <span class="pd-empty-text">暂无记录</span>
+         </div>`
+      : deps.map(d => `
+          <div class="pd-dep-item">
+            <div class="pd-dep-left">
+              <span class="pd-dep-txid">${d.txid}</span>
+              <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}</span>
+              <span class="pd-dep-sub">${d.time}</span>
+            </div>
+            <div class="pd-dep-right">
+              <span class="pd-dep-amount">+${d.amount} USDT</span>
+              <span class="pd-dep-net">净额: ${d.net} USDT</span>
+            </div>
+          </div>`).join('');
+
     document.querySelector('#detail-modal .modal-title').textContent = '订单详情';
+    document.querySelector('#detail-modal .modal').style.width = '640px';
+    document.getElementById('modal-body').className = 'modal-body pd-body';
     document.getElementById('modal-body').innerHTML = `
-      <div class="detail-item"><span class="detail-label">订单号</span><span class="detail-value">${r.order}</span></div>
-      <div class="detail-item"><span class="detail-label">状态</span><span class="detail-value"><span class="badge ${st.cls}">${st.label}</span></span></div>
-      <div class="detail-item"><span class="detail-label">应付金额</span><span class="detail-value">${r.due} ${r.token}</span></div>
-      <div class="detail-item"><span class="detail-label">实付金额</span><span class="detail-value">${r.paid} ${r.token}</span></div>
-      <div class="detail-item"><span class="detail-label">手续费</span><span class="detail-value">${r.fee} ${r.token}</span></div>
-      <div class="detail-item"><span class="detail-label">净入账</span><span class="detail-value">${r.net} ${r.token}</span></div>
-      <div class="detail-item"><span class="detail-label">代币</span><span class="detail-value">${r.token}</span></div>
-      <div class="detail-item"><span class="detail-label">网络</span><span class="detail-value">${r.network}</span></div>
-      <div class="detail-item"><span class="detail-label">订单来源</span><span class="detail-value">${r.source}</span></div>
-      <div class="detail-item"><span class="detail-label">合作伙伴</span><span class="detail-value">${r.channel || '直连'}</span></div>
-      <div class="detail-item"><span class="detail-label">创建时间</span><span class="detail-value">${r.time}</span></div>
-      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">充值地址</span><span class="detail-value">${r.addr}</span></div>
+      <!-- 订单信息 -->
+      <div class="pd-section">
+        <div class="pd-section-title">订单信息</div>
+        <div class="pd-grid">
+          <div class="pd-field">
+            <span class="pd-label">订单号</span>
+            <span class="pd-val"><span class="mono">${r.order}</span><span class="copy-icon" onclick="copyText('${r.order}')">${_COPY_SVG}</span></span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">订单来源</span>
+            <span class="pd-val">${r.source}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">商户名称</span>
+            <span class="pd-val">${r.merchantName}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">商户 ID</span>
+            <span class="pd-val">${r.merchantId}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">用户 ID</span>
+            <span class="pd-val">${r.userId}<span class="copy-icon" onclick="copyText('${r.userId}')">${_COPY_SVG}</span></span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">充值地址</span>
+            <span class="pd-val mono">${truncateStr(r.addr)}<span class="copy-icon" onclick="copyText('${r.addr}')">${_COPY_SVG}</span></span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">代币</span>
+            <span class="pd-val">${r.token}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">网络</span>
+            <span class="pd-val">${r.network}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">应付金额</span>
+            <span class="pd-val">${r.due} ${r.token}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">创建时间</span>
+            <span class="pd-val">${r.time}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">完成时间</span>
+            <span class="pd-val" style="color:${r.doneTime==='-'?'#C0C4CC':'#303133'}">${r.doneTime}</span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">状态</span>
+            <span class="pd-val"><span class="badge ${st.cls}">${st.label}</span></span>
+          </div>
+        </div>
+      </div>
+      <!-- 充值记录 -->
+      <div class="pd-section">
+        <div class="pd-section-title">充值记录</div>
+        <div class="pd-summary">
+          <div class="pd-stat">
+            <span class="pd-stat-label">笔数</span>
+            <span class="pd-stat-val blue">${deps.length} 笔</span>
+          </div>
+          <div class="pd-stat">
+            <span class="pd-stat-label">订单金额</span>
+            <span class="pd-stat-val">${r.due} USDT</span>
+          </div>
+          <div class="pd-stat">
+            <span class="pd-stat-label">合计实付</span>
+            <span class="pd-stat-val">${totalPaid} USDT</span>
+          </div>
+          <div class="pd-stat">
+            <span class="pd-stat-label">合计手续费</span>
+            <span class="pd-stat-val">${totalFee} USDT</span>
+          </div>
+          <div class="pd-stat">
+            <span class="pd-stat-label">合计净额</span>
+            <span class="pd-stat-val">${totalNet} USDT</span>
+          </div>
+        </div>
+        ${depItems}
+      </div>
+    `;
+    document.getElementById('detail-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons({ nodes: [document.getElementById('modal-body')] });
+  }
+  function openEdit(idx) {
+    const r  = PAYMENT_ALL[idx];
+    const st = P_STATUS[r.status];
+
+    // Pending deposits available for this user
+    const available = DEPOSIT_ALL.filter(d => d.userId === r.userId && d.status === 'pending')
+      .map(d => ({ ...d, net: (parseFloat(d.amount) - parseFloat(d.fee)).toFixed(2) }));
+
+    function calcSummary() {
+      const items = document.querySelectorAll('#modal-body .pd-dep-item.selectable.checked');
+      let paid = 0, fee = 0, net = 0;
+      items.forEach(el => {
+        paid += parseFloat(el.dataset.amount || 0);
+        fee  += parseFloat(el.dataset.fee    || 0);
+        net  += parseFloat(el.dataset.net    || 0);
+      });
+      document.getElementById('pd-edit-paid').textContent = paid.toFixed(2) + ' USDT';
+      document.getElementById('pd-edit-fee').textContent  = fee.toFixed(2)  + ' USDT';
+      document.getElementById('pd-edit-net').textContent  = net.toFixed(2)  + ' USDT';
+    }
+
+    const depItems = available.length === 0
+      ? `<div class="pd-empty">
+           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C0C4CC" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v4M16 4v4M2 10h20"/></svg>
+           <span class="pd-empty-text">暂无记录</span>
+         </div>`
+      : available.map((d, i) => `
+          <div class="pd-dep-item selectable" data-amount="${d.amount}" data-fee="${d.fee}" data-net="${d.net}" onclick="this.classList.toggle('checked');pdEditCalc()">
+            <div class="pd-dep-ck"><svg width="10" height="10" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>
+            <div class="pd-dep-left" style="flex:1;">
+              <span class="pd-dep-txid">流水号：${d.userId}-${d.hash.slice(0,8)}</span>
+              <span class="pd-dep-sub">${d.time}&nbsp;&nbsp;Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="event.stopPropagation();copyText('${d.hash}')">${_COPY_SVG}</span></span>
+            </div>
+            <div class="pd-dep-right">
+              <span class="pd-dep-amount">+${d.amount} USDT</span>
+              <span class="pd-dep-net">手续费: ${d.fee} USDT</span>
+              <span class="pd-dep-net">净入账: ${d.net} USDT</span>
+            </div>
+          </div>`).join('');
+
+    const initPaid = '0.00';
+    const initFee  = '0.00';
+    const initNet  = '0.00';
+
+    document.querySelector('#detail-modal .modal-title').textContent = '编辑订单';
+    document.querySelector('#detail-modal .modal').style.width = '640px';
+    document.getElementById('modal-body').className = 'modal-body pd-body';
+    document.getElementById('modal-body').innerHTML = `
+      <div class="pd-section">
+        <div class="pd-section-title">订单信息</div>
+        <div class="pd-grid">
+          <div class="pd-field">
+            <span class="pd-label">订单号</span>
+            <span class="pd-val"><span class="mono">${r.order}</span><span class="copy-icon" onclick="copyText('${r.order}')">${_COPY_SVG}</span></span>
+          </div>
+          <div class="pd-field"><span class="pd-label">订单来源</span><span class="pd-val">${r.source}</span></div>
+          <div class="pd-field"><span class="pd-label">商户名称</span><span class="pd-val">${r.merchantName}</span></div>
+          <div class="pd-field"><span class="pd-label">商户 ID</span><span class="pd-val">${r.merchantId}</span></div>
+          <div class="pd-field">
+            <span class="pd-label">用户 ID</span>
+            <span class="pd-val">${r.userId}<span class="copy-icon" onclick="copyText('${r.userId}')">${_COPY_SVG}</span></span>
+          </div>
+          <div class="pd-field">
+            <span class="pd-label">充值地址</span>
+            <span class="pd-val mono">${truncateStr(r.addr)}<span class="copy-icon" onclick="copyText('${r.addr}')">${_COPY_SVG}</span></span>
+          </div>
+          <div class="pd-field"><span class="pd-label">代币</span><span class="pd-val">${r.token}</span></div>
+          <div class="pd-field"><span class="pd-label">网络</span><span class="pd-val">${r.network}</span></div>
+          <div class="pd-field"><span class="pd-label">应付金额</span><span class="pd-val">${r.due} ${r.token}</span></div>
+          <div class="pd-field"><span class="pd-label">创建时间</span><span class="pd-val">${r.time}</span></div>
+          <div class="pd-field"><span class="pd-label">完成时间</span><span class="pd-val" style="color:#C0C4CC">${r.doneTime}</span></div>
+          <div class="pd-field"><span class="pd-label">状态</span><span class="pd-val"><span class="badge ${st.cls}">${st.label}</span></span></div>
+        </div>
+      </div>
+      <div class="pd-section">
+        <div class="pd-section-title">充值记录</div>
+        <div class="pd-summary">
+          <div class="pd-stat"><span class="pd-stat-label">已匹配笔数</span><span class="pd-stat-val blue" id="pd-edit-count">0 笔</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">订单金额</span><span class="pd-stat-val">${r.due} USDT</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">合计实付</span><span class="pd-stat-val" id="pd-edit-paid">${initPaid} USDT</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">合计手续费</span><span class="pd-stat-val" id="pd-edit-fee">${initFee} USDT</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">合计净额</span><span class="pd-stat-val" id="pd-edit-net">${initNet} USDT</span></div>
+        </div>
+        <div class="pd-edit-note">仅显示代币币种、网络匹配的充币记录，点击「匹配入账」完成匹配，订单状态将根据充值金额合计与应付金额对比自动更新。</div>
+        ${depItems}
+      </div>
+    `;
+    // footer buttons
+    document.querySelector('#detail-modal .modal-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="pdConfirmMatch(${idx})">匹配入账</button>
     `;
     document.getElementById('detail-modal').classList.add('show');
   }
-  function openEdit(idx) { openDetail(idx); } // placeholder
-  function closeModal() { document.getElementById('detail-modal').classList.remove('show'); }
+
+  function pdEditCalc() {
+    const items = document.querySelectorAll('#modal-body .pd-dep-item.selectable.checked');
+    let paid = 0, fee = 0, net = 0;
+    items.forEach(el => {
+      paid += parseFloat(el.dataset.amount || 0);
+      fee  += parseFloat(el.dataset.fee    || 0);
+      net  += parseFloat(el.dataset.net    || 0);
+    });
+    const ec = document.getElementById('pd-edit-count');
+    const ep = document.getElementById('pd-edit-paid');
+    const ef = document.getElementById('pd-edit-fee');
+    const en = document.getElementById('pd-edit-net');
+    if (ec) ec.textContent = items.length + ' 笔';
+    if (ep) ep.textContent = paid.toFixed(2) + ' USDT';
+    if (ef) ef.textContent = fee.toFixed(2)  + ' USDT';
+    if (en) en.textContent = net.toFixed(2)  + ' USDT';
+  }
+
+  function pdConfirmMatch(idx) {
+    closeModal();
+    showToast('匹配入账成功');
+  }
+  function closeModal() {
+    document.getElementById('detail-modal').classList.remove('show');
+    const mb = document.getElementById('modal-body');
+    mb.className = 'modal-body';
+    document.querySelector('#detail-modal .modal').style.width = '';
+    document.querySelector('#detail-modal .modal-footer').innerHTML =
+      `<button class="btn btn-default btn-sm" onclick="closeModal()">关闭</button>`;
+  }
 
   // ══════════════════════════════════════════════════════
   //  商户管理 data & logic
   // ══════════════════════════════════════════════════════
   const MERCHANT_ALL = [
-    { id:'462513816', name:'shine',       status:'enabled',  wallets:0,  balance:'0',           created:'2026-06-09 10:38:16' },
-    { id:'291654802', name:'kara4',       status:'enabled',  wallets:8,  balance:'920.92',       created:'2026-05-29 18:35:11' },
-    { id:'460466234', name:'kara3',       status:'enabled',  wallets:5,  balance:'1070.14',      created:'2026-05-29 15:40:03' },
-    { id:'673738868', name:'rogan',       status:'enabled',  wallets:0,  balance:'86.29',        created:'2026-05-29 14:51:45' },
-    { id:'466332584', name:'rogan',       status:'enabled',  wallets:0,  balance:'0',            created:'2026-05-29 14:09:25' },
-    { id:'888166267', name:'rogan',       status:'enabled',  wallets:0,  balance:'0',            created:'2026-05-29 13:59:50' },
-    { id:'236751146', name:'rogan-v1',    status:'enabled',  wallets:0,  balance:'0',            created:'2026-05-29 13:46:01' },
-    { id:'848473309', name:'rogantest',   status:'enabled',  wallets:0,  balance:'156.928888',   created:'2026-05-06 15:34:16' },
-    { id:'884590488', name:'kara2',       status:'enabled',  wallets:9,  balance:'1501.06',      created:'2026-04-13 17:40:36' },
-    { id:'635102950', name:'kara',        status:'enabled',  wallets:10, balance:'1365.55',      created:'2026-04-13 16:00:01' },
-    { id:'512847362', name:'alpha-pay',   status:'enabled',  wallets:3,  balance:'580.00',       created:'2026-04-10 09:15:22' },
-    { id:'731924856', name:'betacorp',    status:'disabled', wallets:1,  balance:'0',            created:'2026-04-08 14:30:00' },
-    { id:'304857192', name:'gamma-fx',    status:'enabled',  wallets:6,  balance:'2410.75',      created:'2026-04-05 11:22:47' },
-    { id:'987654321', name:'delta-ex',    status:'enabled',  wallets:2,  balance:'318.40',       created:'2026-04-01 16:05:38' },
-    { id:'192837465', name:'epsilon',     status:'disabled', wallets:0,  balance:'0',            created:'2026-03-28 10:44:19' },
-    { id:'567891234', name:'zeta-pay',    status:'enabled',  wallets:4,  balance:'755.20',       created:'2026-03-25 08:37:56' },
-    { id:'345678912', name:'eta-trade',   status:'enabled',  wallets:7,  balance:'3210.50',      created:'2026-03-20 15:59:03' },
-    { id:'678912345', name:'theta-fin',   status:'enabled',  wallets:1,  balance:'102.88',       created:'2026-03-15 09:28:41' },
-    { id:'234567891', name:'iota-corp',   status:'disabled', wallets:0,  balance:'0',            created:'2026-03-10 17:14:29' },
-    { id:'891234567', name:'kappa-ex',    status:'enabled',  wallets:2,  balance:'490.60',       created:'2026-03-05 12:03:17' },
-    { id:'456789123', name:'lambda',      status:'enabled',  wallets:5,  balance:'1830.92',      created:'2026-02-28 14:52:44' },
-    { id:'789123456', name:'mu-pay',      status:'enabled',  wallets:3,  balance:'650.10',       created:'2026-02-20 10:19:32' },
-    { id:'123456789', name:'nu-trade',    status:'enabled',  wallets:0,  balance:'45.00',        created:'2026-02-15 08:44:11' },
-    { id:'963258741', name:'xi-corp',     status:'disabled', wallets:0,  balance:'0',            created:'2026-02-10 16:35:52' },
-    { id:'852741963', name:'omicron',     status:'enabled',  wallets:6,  balance:'2780.33',      created:'2026-02-05 11:07:28' },
-    { id:'741963852', name:'pi-finance',  status:'enabled',  wallets:2,  balance:'190.00',       created:'2026-01-30 09:22:15' },
-    { id:'630852741', name:'rho-pay',     status:'enabled',  wallets:1,  balance:'75.50',        created:'2026-01-25 14:48:37' },
-    { id:'519741630', name:'sigma-ex',    status:'disabled', wallets:0,  balance:'0',            created:'2026-01-20 10:55:04' },
-    { id:'408630519', name:'tau-corp',    status:'enabled',  wallets:8,  balance:'4120.78',      created:'2026-01-15 08:30:21' },
-    { id:'297519408', name:'upsilon',     status:'enabled',  wallets:0,  balance:'0',            created:'2026-01-10 16:17:49' },
+    { id:'462513816', name:'shine',       email:'shine@paypaz.tech',      status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',           created:'2026-06-09 10:38:16' },
+    { id:'291654802', name:'kara4',       email:'kara4@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:5,    matchLower:90,  matchUpper:110, wallets:8,  balance:'920.92',       created:'2026-05-29 18:35:11' },
+    { id:'460466234', name:'kara3',       email:'kara3@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'disabled', orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:85,  matchUpper:120, wallets:5,  balance:'1070.14',      created:'2026-05-29 15:40:03' },
+    { id:'673738868', name:'rogan',       email:'rogan@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'86.29',        created:'2026-05-29 14:51:45' },
+    { id:'466332584', name:'rogan',       email:'rogan2@bdy.tech',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-05-29 14:09:25' },
+    { id:'888166267', name:'rogan',       email:'rogan3@bdy.tech',        status:'enabled',  deposit:'enabled',  withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-05-29 13:59:50' },
+    { id:'236751146', name:'rogan-v1',    email:'rogan-v1@bdy.tech',      status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-05-29 13:46:01' },
+    { id:'848473309', name:'rogantest',   email:'rogantest@bdy.tech',     status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:115, wallets:0,  balance:'156.928888',   created:'2026-05-06 15:34:16' },
+    { id:'884590488', name:'kara2',       email:'kara2@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:10,   matchLower:90,  matchUpper:110, wallets:9,  balance:'1501.06',      created:'2026-04-13 17:40:36' },
+    { id:'635102950', name:'kara',        email:'kara@bdy.tech',          status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:5,    matchLower:90,  matchUpper:110, wallets:10, balance:'1365.55',      created:'2026-04-13 16:00:01' },
+    { id:'512847362', name:'alpha-pay',   email:'admin@alpha-pay.com',    status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:3,  balance:'580.00',       created:'2026-04-10 09:15:22' },
+    { id:'731924856', name:'betacorp',    email:'admin@betacorp.com',     status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:1,  balance:'0',            created:'2026-04-08 14:30:00' },
+    { id:'304857192', name:'gamma-fx',    email:'ops@gamma-fx.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:6,  balance:'2410.75',      created:'2026-04-05 11:22:47' },
+    { id:'987654321', name:'delta-ex',    email:'support@delta-ex.com',   status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:2,  balance:'318.40',       created:'2026-04-01 16:05:38' },
+    { id:'192837465', name:'epsilon',     email:'admin@epsilon.finance',  status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-03-28 10:44:19' },
+    { id:'567891234', name:'zeta-pay',    email:'ops@zeta-pay.com',       status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:4,  balance:'755.20',       created:'2026-03-25 08:37:56' },
+    { id:'345678912', name:'eta-trade',   email:'admin@eta-trade.com',    status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:7,  balance:'3210.50',      created:'2026-03-20 15:59:03' },
+    { id:'678912345', name:'theta-fin',   email:'ops@theta-fin.io',       status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:1,  balance:'102.88',       created:'2026-03-15 09:28:41' },
+    { id:'234567891', name:'iota-corp',   email:'admin@iota-corp.com',    status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-03-10 17:14:29' },
+    { id:'891234567', name:'kappa-ex',    email:'support@kappa-ex.com',   status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:2,  balance:'490.60',       created:'2026-03-05 12:03:17' },
+    { id:'456789123', name:'lambda',      email:'ops@lambda.finance',     status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:5,  balance:'1830.92',      created:'2026-02-28 14:52:44' },
+    { id:'789123456', name:'mu-pay',      email:'admin@mu-pay.com',       status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:3,  balance:'650.10',       created:'2026-02-20 10:19:32' },
+    { id:'123456789', name:'nu-trade',    email:'ops@nu-trade.com',       status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'45.00',        created:'2026-02-15 08:44:11' },
+    { id:'963258741', name:'xi-corp',     email:'admin@xi-corp.io',       status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-02-10 16:35:52' },
+    { id:'852741963', name:'omicron',     email:'ops@omicron.finance',    status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:6,  balance:'2780.33',      created:'2026-02-05 11:07:28' },
+    { id:'741963852', name:'pi-finance',  email:'admin@pi-finance.com',   status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:2,  balance:'190.00',       created:'2026-01-30 09:22:15' },
+    { id:'630852741', name:'rho-pay',     email:'ops@rho-pay.com',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:1,  balance:'75.50',        created:'2026-01-25 14:48:37' },
+    { id:'519741630', name:'sigma-ex',    email:'admin@sigma-ex.com',     status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-01-20 10:55:04' },
+    { id:'408630519', name:'tau-corp',    email:'ops@tau-corp.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:8,  balance:'4120.78',      created:'2026-01-15 08:30:21' },
+    { id:'297519408', name:'upsilon',     email:'admin@upsilon.finance',  status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-01-10 16:17:49' },
   ];
 
   const M_STATUS = {
@@ -3501,17 +3971,167 @@
 
   function openMerchantEdit(absIdx) {
     const r = MERCHANT_ALL[absIdx];
-    const st = M_STATUS[r.status];
     document.querySelector('#detail-modal .modal-title').textContent = '编辑商户';
+    document.querySelector('#detail-modal .modal').style.width = '520px';
+    document.getElementById('modal-body').className = 'modal-body me-body';
+
+    const matchOn = r.orderMatch !== false;
+
     document.getElementById('modal-body').innerHTML = `
-      <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.name}</span></div>
-      <div class="detail-item"><span class="detail-label">商户 ID</span><span class="detail-value" style="font-family:Inter,sans-serif">${r.id}</span></div>
-      <div class="detail-item"><span class="detail-label">状态</span><span class="detail-value"><span class="${st.cls}">${st.label}</span></span></div>
-      <div class="detail-item"><span class="detail-label">子钱包数</span><span class="detail-value">${r.wallets}</span></div>
-      <div class="detail-item"><span class="detail-label">资产余额</span><span class="detail-value">${r.balance === '0' ? '0' : r.balance} USDT</span></div>
-      <div class="detail-item"><span class="detail-label">创建时间</span><span class="detail-value" style="font-family:Inter,sans-serif">${r.created}</span></div>
+      <div class="me-section">
+        <div class="me-section-title">基本信息</div>
+        <div class="me-row">
+          <div class="me-label">商户 ID</div>
+          <input class="me-input" readonly value="${r.id}">
+        </div>
+        <div class="me-row">
+          <div class="me-label">商户名称<span>*</span></div>
+          <input class="me-input" id="me-name" value="${r.name}" placeholder="请输入商户名称">
+        </div>
+        <div class="me-row">
+          <div class="me-label">邮箱</div>
+          <input class="me-input" id="me-email" value="${r.email || ''}" placeholder="请输入邮箱">
+        </div>
+        <div class="me-row">
+          <div class="me-label">状态</div>
+          <div class="me-radio-group">
+            <label class="me-radio"><input type="radio" name="me-status" value="enabled" ${r.status==='enabled'?'checked':''}><span class="me-dot"></span> 启用</label>
+            <label class="me-radio"><input type="radio" name="me-status" value="disabled" ${r.status==='disabled'?'checked':''}><span class="me-dot"></span> 禁用</label>
+          </div>
+        </div>
+        <div class="me-row">
+          <div class="me-label">充币</div>
+          <div class="me-radio-group">
+            <label class="me-radio"><input type="radio" name="me-deposit" value="enabled" ${(r.deposit||'enabled')==='enabled'?'checked':''}><span class="me-dot"></span> 开启</label>
+            <label class="me-radio"><input type="radio" name="me-deposit" value="disabled" ${(r.deposit||'enabled')==='disabled'?'checked':''}><span class="me-dot"></span> 关闭</label>
+          </div>
+        </div>
+        <div class="me-row">
+          <div class="me-label">提币</div>
+          <div class="me-radio-group">
+            <label class="me-radio"><input type="radio" name="me-withdraw" value="enabled" ${(r.withdraw||'enabled')==='enabled'?'checked':''}><span class="me-dot"></span> 开启</label>
+            <label class="me-radio"><input type="radio" name="me-withdraw" value="disabled" ${(r.withdraw||'enabled')==='disabled'?'checked':''}><span class="me-dot"></span> 关闭</label>
+          </div>
+        </div>
+      </div>
+      <div class="me-section">
+        <div class="me-toggle-row">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div class="me-section-title" style="margin-bottom:0">订单匹配</div>
+            <span class="me-info-wrap">
+              <span class="me-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+              <div class="me-info-tip">开启后，系统自动匹配充币记录与订单；未匹配成功的充币记录状态为「待匹配订单」，支持人工匹配。关闭后，充币记录无需匹配订单，状态为「已到账」，后续也不可人工匹配订单。</div>
+            </span>
+          </div>
+          <label class="me-toggle">
+            <input type="checkbox" id="me-match-toggle" ${matchOn?'checked':''} onchange="meTog()">
+            <span class="me-toggle-track"></span>
+          </label>
+        </div>
+        <div id="me-match-config" class="me-match-config" style="display:${matchOn?'block':'none'}">
+          <label class="me-check-row">
+            <input type="checkbox" id="me-min-dep-ck" ${r.minDepCheck!==false?'checked':''} onchange="mePreview()">
+            <span class="me-checkbox"></span>
+            <span class="me-check-text">充币金额 ≥ 最小充币金额</span>
+            <span class="me-check-hint">（各代币单独配置）</span>
+          </label>
+          <label class="me-check-row" style="margin-bottom:8px">
+            <input type="checkbox" id="me-ratio-ck" ${r.matchRatioCheck!==false?'checked':''} onchange="meRatioCkChange()">
+            <span class="me-checkbox"></span>
+            <span class="me-check-text">充币金额占订单金额的比例</span>
+          </label>
+          <div class="me-ratio-wrap" id="me-ratio-wrap" style="display:${r.matchRatioCheck!==false?'flex':'none'}; align-items:center; gap:8px;">
+            <input class="me-match-input" id="me-lower" type="number" min="1" max="200" step="1" value="${r.matchLower||90}" oninput="mePreview()">
+            <span class="me-match-unit">%</span>
+            <span class="me-match-sep">~</span>
+            <input class="me-match-input" id="me-upper" type="number" min="1" max="500" step="1" value="${r.matchUpper||110}" oninput="mePreview()">
+            <span class="me-match-unit">%</span>
+          </div>
+          <div class="me-preview" id="me-preview-box">
+            <div id="me-preview-text"></div>
+          </div>
+        </div>
+      </div>
     `;
+
+    document.querySelector('#detail-modal .modal-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveMerchantEdit(${absIdx})">确定</button>
+    `;
+
+    mePreview();
     document.getElementById('detail-modal').classList.add('show');
+  }
+
+  function meTog() {
+    const on = document.getElementById('me-match-toggle').checked;
+    document.getElementById('me-match-config').style.display = on ? 'block' : 'none';
+    if (on) mePreview();
+  }
+
+  function meRatioCkChange() {
+    const on = document.getElementById('me-ratio-ck').checked;
+    document.getElementById('me-ratio-wrap').style.display = on ? 'flex' : 'none';
+    mePreview();
+  }
+
+  function mePreview() {
+    const minDepOn = document.getElementById('me-min-dep-ck')?.checked;
+    const ratioOn  = document.getElementById('me-ratio-ck')?.checked;
+    const lower    = parseFloat(document.getElementById('me-lower')?.value) || 90;
+    const upper    = parseFloat(document.getElementById('me-upper')?.value) || 110;
+    const box      = document.getElementById('me-preview-text');
+    if (!box) return;
+
+    if (!minDepOn && !ratioOn) {
+      box.innerHTML = `<span class="me-prev-none">请至少启用一个匹配条件</span>`;
+      return;
+    }
+
+    const lo = (100 * lower / 100).toFixed(2);
+    const hi = (100 * upper / 100).toFixed(2);
+
+    const conds = [];
+    if (minDepOn) conds.push(`充币金额 ≥ <strong>47.5 USDT</strong>（最小充币金额）`);
+    if (ratioOn)  conds.push(`<strong>${lo} USDT</strong> ≤ 充币金额 ≤ <strong>${hi} USDT</strong>`);
+
+    const condsHtml = conds.map(c => `<div class="me-prev-cond">${c}</div>`)
+      .join(`<span class="me-prev-and">且</span>`);
+
+    box.innerHTML = `
+      <div class="me-prev-header">以订单金额 <strong>100 USDT</strong>，充币 <strong>95 USDT</strong> 为例：</div>
+      ${condsHtml}
+      <div class="me-prev-result">→ 充币记录自动匹配订单</div>
+    `;
+  }
+
+  function saveMerchantEdit(absIdx) {
+    const r = MERCHANT_ALL[absIdx];
+    const nameEl = document.getElementById('me-name');
+    const emailEl = document.getElementById('me-email');
+    const statusEl = document.querySelector('input[name="me-status"]:checked');
+    const depositEl = document.querySelector('input[name="me-deposit"]:checked');
+    const withdrawEl = document.querySelector('input[name="me-withdraw"]:checked');
+    const matchOn = document.getElementById('me-match-toggle')?.checked;
+    const minDepCkEl = document.getElementById('me-min-dep-ck');
+    const lowerEl = document.getElementById('me-lower');
+    const upperEl = document.getElementById('me-upper');
+
+    if (nameEl && nameEl.value.trim()) r.name = nameEl.value.trim();
+    if (emailEl) r.email = emailEl.value.trim();
+    if (statusEl) r.status = statusEl.value;
+    if (depositEl) r.deposit = depositEl.value;
+    if (withdrawEl) r.withdraw = withdrawEl.value;
+    r.orderMatch = !!matchOn;
+    const ratioCkEl = document.getElementById('me-ratio-ck');
+    if (matchOn && minDepCkEl) r.minDepCheck    = minDepCkEl.checked;
+    if (matchOn && ratioCkEl)  r.matchRatioCheck = ratioCkEl.checked;
+    if (matchOn && lowerEl)    r.matchLower     = parseFloat(lowerEl.value)  || 90;
+    if (matchOn && upperEl)    r.matchUpper     = parseFloat(upperEl.value)  || 110;
+
+    closeModal();
+    merchantRender();
+    showToast('商户信息已更新');
   }
 
   function openMerchantDetail(absIdx) {
@@ -5289,6 +5909,8 @@
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     renderTabs();
+    document.getElementById('d-status').value = 'pending';
+    dState.rows = DEPOSIT_ALL.filter(r => r.status === 'pending');
     depositRender();
     withdrawRender();
     paymentRender();

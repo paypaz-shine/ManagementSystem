@@ -1577,14 +1577,14 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1720px;">
+            <table style="min-width:1780px;">
               <colgroup>
                 <col style="width:220px"><col style="width:85px"><col style="width:90px"><!-- 订单号/商户ID/商户名称 -->
-                <col style="width:90px"><col style="width:60px"><col style="width:70px"><!-- 用户ID/代币/网络 -->
+                <col style="width:100px"><col style="width:60px"><col style="width:70px"><!-- 用户ID/代币/网络 -->
                 <col style="width:80px"><col style="width:80px"><col style="width:70px"><!-- 应付/实付/手续费 -->
                 <col style="width:70px"><col style="width:160px"><col style="width:80px"><!-- 净入账/充值地址/订单来源 -->
-                <col style="width:100px"><col style="width:145px"><col style="width:145px"><!-- 合作伙伴/创建时间/完成时间 -->
-                <col style="width:80px"><col style="width:60px"><!-- 状态/操作 -->
+                <col style="width:110px"><col style="width:155px"><col style="width:155px"><!-- 合作伙伴/创建时间/完成时间 -->
+                <col style="width:100px"><col style="width:60px"><!-- 状态/操作 -->
               </colgroup>
               <thead>
                 <tr>
@@ -3591,12 +3591,13 @@
           <div class="pd-dep-item">
             <div class="pd-dep-left">
               <span class="pd-dep-txid">${d.txid}</span>
-              <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}</span>
+              <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="copyText('${d.hash}')">${_COPY_SVG}</span></span>
               <span class="pd-dep-sub">${d.time}</span>
             </div>
             <div class="pd-dep-right">
               <span class="pd-dep-amount">+${d.amount} USDT</span>
-              <span class="pd-dep-net">净额: ${d.net} USDT</span>
+              <span class="pd-dep-net">手续费: ${d.fee} USDT</span>
+              <span class="pd-dep-net">净入账: ${d.net} USDT</span>
             </div>
           </div>`).join('');
 
@@ -3663,11 +3664,11 @@
         <div class="pd-section-title">充值记录</div>
         <div class="pd-summary">
           <div class="pd-stat">
-            <span class="pd-stat-label">笔数</span>
+            <span class="pd-stat-label">条数</span>
             <span class="pd-stat-val blue">${deps.length} 笔</span>
           </div>
           <div class="pd-stat">
-            <span class="pd-stat-label">订单金额</span>
+            <span class="pd-stat-label">应付金额</span>
             <span class="pd-stat-val">${r.due} USDT</span>
           </div>
           <div class="pd-stat">
@@ -3679,7 +3680,7 @@
             <span class="pd-stat-val">${totalFee} USDT</span>
           </div>
           <div class="pd-stat">
-            <span class="pd-stat-label">合计净额</span>
+            <span class="pd-stat-label">合计净入账</span>
             <span class="pd-stat-val">${totalNet} USDT</span>
           </div>
         </div>
@@ -3720,7 +3721,8 @@
             <div class="pd-dep-ck"><svg width="10" height="10" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>
             <div class="pd-dep-left" style="flex:1;">
               <span class="pd-dep-txid">流水号：${d.userId}-${d.hash.slice(0,8)}</span>
-              <span class="pd-dep-sub">${d.time}&nbsp;&nbsp;Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="event.stopPropagation();copyText('${d.hash}')">${_COPY_SVG}</span></span>
+              <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="event.stopPropagation();copyText('${d.hash}')">${_COPY_SVG}</span></span>
+              <span class="pd-dep-sub">${d.time}</span>
             </div>
             <div class="pd-dep-right">
               <span class="pd-dep-amount">+${d.amount} USDT</span>
@@ -3766,20 +3768,20 @@
       <div class="pd-section">
         <div class="pd-section-title">充值记录</div>
         <div class="pd-summary">
-          <div class="pd-stat"><span class="pd-stat-label">已匹配笔数</span><span class="pd-stat-val blue" id="pd-edit-count">0 笔</span></div>
-          <div class="pd-stat"><span class="pd-stat-label">订单金额</span><span class="pd-stat-val">${r.due} USDT</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">已选条数</span><span class="pd-stat-val blue" id="pd-edit-count">0 笔</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">应付金额</span><span class="pd-stat-val">${r.due} USDT</span></div>
           <div class="pd-stat"><span class="pd-stat-label">合计实付</span><span class="pd-stat-val" id="pd-edit-paid">${initPaid} USDT</span></div>
           <div class="pd-stat"><span class="pd-stat-label">合计手续费</span><span class="pd-stat-val" id="pd-edit-fee">${initFee} USDT</span></div>
-          <div class="pd-stat"><span class="pd-stat-label">合计净额</span><span class="pd-stat-val" id="pd-edit-net">${initNet} USDT</span></div>
+          <div class="pd-stat"><span class="pd-stat-label">合计净入账</span><span class="pd-stat-val" id="pd-edit-net">${initNet} USDT</span></div>
         </div>
-        <div class="pd-edit-note">仅显示代币币种、网络匹配的充币记录，点击「匹配入账」完成匹配，订单状态将根据充值金额合计与应付金额对比自动更新。</div>
+        <div class="pd-edit-note">仅显示代币币种、网络匹配的充币记录，点击「关联入账」完成匹配，订单状态将根据充值金额合计与应付金额对比自动更新。</div>
         ${depItems}
       </div>
     `;
     // footer buttons
     document.querySelector('#detail-modal .modal-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeModal()">取消</button>
-      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="pdConfirmMatch(${idx})">匹配入账</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="pdConfirmMatch(${idx})">关联入账</button>
     `;
     document.getElementById('detail-modal').classList.add('show');
   }
@@ -3804,7 +3806,7 @@
 
   function pdConfirmMatch(idx) {
     closeModal();
-    showToast('匹配入账成功');
+    showToast('关联入账成功');
   }
   function closeModal() {
     document.getElementById('detail-modal').classList.remove('show');

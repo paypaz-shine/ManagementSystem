@@ -2104,8 +2104,7 @@
                 <div class="filter-control">
                   <div class="select-wrap">
                     <select class="field-select" id="asset-f-type">
-                      <option value="">全部</option>
-                      <option value="in">充币</option>
+                      <option value="in" selected>充币</option>
                       <option value="out">提币</option>
                     </select>
                     <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
@@ -4139,7 +4138,9 @@
 
   function openMerchantDetail(absIdx) {
     currentMerchantIdx = absIdx;
-    aState.rows = [...ASSET_ALL]; aState.page = 1;
+    const assetTypeEl = document.getElementById('asset-f-type');
+    if (assetTypeEl) assetTypeEl.value = 'in';
+    aState.rows = ASSET_ALL.filter(r => r.type === 'in'); aState.page = 1;
     mdRenderAssetTable();
     // default to asset (渠道) tab
     document.querySelectorAll('.md-tab').forEach(el => el.classList.toggle('md-tab-active', el.dataset.tab === 'tunnel'));
@@ -4388,13 +4389,15 @@
     aState.page = 1; mdRenderAssetTable();
   }
   function mdAssetReset() {
-    ['asset-f-token','asset-f-network','asset-f-type','asset-f-channel'].forEach(id => {
+    ['asset-f-token','asset-f-network','asset-f-channel'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
     ['asset-f-date-start','asset-f-date-end'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
-    aState.rows = [...ASSET_ALL]; aState.page = 1; mdRenderAssetTable();
+    const assetTypeEl = document.getElementById('asset-f-type');
+    if (assetTypeEl) assetTypeEl.value = 'in';
+    aState.rows = ASSET_ALL.filter(r => r.type === 'in'); aState.page = 1; mdRenderAssetTable();
   }
   function mdAssetRefresh() {
     const icon = document.getElementById('asset-refresh-icon');

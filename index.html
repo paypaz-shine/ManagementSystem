@@ -674,6 +674,7 @@
     /* ── 出入金订单 ──────────────────────────────────── */
     .badge-amber  { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
     .badge-purple { background:#f5f0ff; color:#8B5CF6; border:1px solid #ddd6fe; }
+    .badge-orange { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
     .dir-tag { display:inline-flex; align-items:center; padding:2px 8px; border-radius:3px; font-size:12px; font-weight:500; white-space:nowrap; }
     .dir-in  { background:#ecf5ff; color:#409EFF; border:1px solid #d9ecff; }
     .dir-out { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
@@ -1247,9 +1248,9 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1400px;">
+            <table style="min-width:1445px;">
               <colgroup>
-                <col style="width:95px"><col style="width:100px"><col style="width:95px">
+                <col style="width:95px"><col style="width:145px"><col style="width:95px">
                 <col style="width:70px"><col style="width:80px"><col style="width:80px">
                 <col style="width:72px"><col style="width:70px"><col style="width:155px">
                 <col style="width:152px"><col style="width:150px"><col style="width:110px">
@@ -1409,13 +1410,13 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1580px;">
+            <table style="min-width:1710px;">
               <colgroup>
                 <col style="width:90px"><col style="width:74px"><col style="width:56px">
                 <col style="width:56px"><col style="width:66px"><col style="width:60px">
                 <col style="width:138px"><col style="width:138px"><col style="width:126px">
-                <col style="width:150px"><col style="width:158px"><col style="width:66px">
-                <col style="width:80px"><col style="width:70px">
+                <col style="width:175px"><col style="width:220px"><col style="width:66px">
+                <col style="width:120px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
@@ -1745,13 +1746,13 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1890px;">
+            <table style="min-width:1925px;">
               <colgroup>
                 <col style="width:90px"><col style="width:110px"><col style="width:68px">
                 <col style="width:175px"><col style="width:170px"><col style="width:138px">
                 <col style="width:110px"><col style="width:155px">
                 <col style="width:80px"><col style="width:110px"><col style="width:105px"><col style="width:100px">
-                <col style="width:115px"><col style="width:148px"><col style="width:148px">
+                <col style="width:150px"><col style="width:148px"><col style="width:148px">
                 <col style="width:65px">
               </colgroup>
               <thead>
@@ -1925,13 +1926,13 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1890px;">
+            <table style="min-width:1925px;">
               <colgroup>
                 <col style="width:90px"><col style="width:110px"><col style="width:68px">
                 <col style="width:175px"><col style="width:170px"><col style="width:138px">
                 <col style="width:110px"><col style="width:155px">
                 <col style="width:80px"><col style="width:110px"><col style="width:105px"><col style="width:100px">
-                <col style="width:115px"><col style="width:148px"><col style="width:148px">
+                <col style="width:150px"><col style="width:148px"><col style="width:148px">
                 <col style="width:65px">
               </colgroup>
               <thead>
@@ -2356,7 +2357,7 @@
               <colgroup>
                 <col style="width:46px;">
                 <col style="width:190px;">
-                <col style="width:210px;">
+                <col style="width:240px;">
                 <col style="width:90px;">
                 <col style="width:120px;">
                 <col style="width:210px;">
@@ -3421,7 +3422,7 @@
   const PAYMENT_ALL = [
     { order:'291654802-52081422241536', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'0.70',   paid:'0.70',   fee:'0.01', net:'0.69',   source:'Paypaz', token:'USDT', network:'TRON', channel:'Meta Trader', time:'2026-06-12 15:57:35', doneTime:'-',                    addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'processing', editable:true,
       deposits:[] },
-    { order:'291654802-52081414206720', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', doneTime:'2026-06-12 16:03:21', addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'completed',  editable:false,
+    { order:'291654802-52081414206720', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', doneTime:'2026-06-12 16:03:21', addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'completed',  editable:false, manual:true, operator:'Chris',
       deposits:[
         { txid:'52081414206001', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', amount:'0.40', fee:'0.01', net:'0.39', time:'2026-06-12 15:46:45' },
         { txid:'52081414206002', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', amount:'0.40', fee:'0.01', net:'0.39', time:'2026-06-12 15:57:35' },
@@ -3661,7 +3662,7 @@
       </div>
       <!-- 充值记录 -->
       <div class="pd-section">
-        <div class="pd-section-title">充值记录</div>
+        <div class="pd-section-title" style="display:flex;align-items:center;justify-content:space-between">充值记录${r.manual ? `<span style="font-size:13px;color:#909399;font-weight:400">人工关联：${r.operator}</span>` : ''}</div>
         <div class="pd-summary">
           <div class="pd-stat">
             <span class="pd-stat-label">条数</span>

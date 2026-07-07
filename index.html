@@ -455,6 +455,14 @@
     }
     .btn-sm { height: 28px; padding: 0 16px; font-size: 13px; }
 
+    /* ── 导出确认弹窗 ──────────────────────────────── */
+    .exp-body { padding: 4px 20px !important; display: block !important; }
+    .exp-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; font-size:13px; }
+    .exp-label { color:#606266; }
+    .exp-value { color:#303133; display:flex; align-items:center; gap:20px; }
+    .exp-value.mono { font-family:Inter,sans-serif; }
+    #w-export-modal .ak-radio-item:has(input:checked) { color:#409EFF; }
+
     /* ── 支付订单详情弹窗 ──────────────────────────── */
     .pd-body { padding: 0 !important; display: block !important; }
     .pd-section { padding: 16px 20px 18px; }
@@ -1301,9 +1309,19 @@
         <div class="filter-card">
           <div class="filter-grid">
             <div class="filter-item">
-              <span class="filter-label-el">UID</span>
+              <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="请输入内容" id="w-uid">
+                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
+                       id="w-merchant" autocomplete="off"
+                       oninput="wMerchantInput()" onfocus="wMerchantInput()"
+                       onblur="setTimeout(wHideMerchantDrop, 150)">
+              </div>
+              <div class="p-merch-dropdown" id="w-merch-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">用户 ID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="w-userid">
               </div>
             </div>
             <div class="filter-item">
@@ -1380,12 +1398,22 @@
                 <input class="field-input" type="text" placeholder="请输入内容" id="w-supplierid">
               </div>
             </div>
-            <div class="filter-item" style="grid-column:span 2;">
-              <span class="filter-label-el">时间范围</span>
+            <div class="filter-item">
+              <span class="filter-label-el">提币时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="w-wdtime-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="w-wdtime-end">
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">到账时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="w-date-start">
-                  <span class="range-sep-el">-</span>
+                  <span class="range-sep-el">—</span>
                   <input class="date-input-el" type="date" id="w-date-end">
                 </div>
               </div>
@@ -1405,24 +1433,25 @@
         <div class="table-card">
           <div class="summary-bar">
             <div class="summary-spacer"></div>
-            <button class="export-btn" onclick="withdrawExport()">
+            <button class="export-btn" onclick="openWdExportModal()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1710px;">
+            <table style="min-width:2190px;">
               <colgroup>
-                <col style="width:90px"><col style="width:74px"><col style="width:56px">
-                <col style="width:56px"><col style="width:66px"><col style="width:60px">
-                <col style="width:138px"><col style="width:138px"><col style="width:126px">
-                <col style="width:175px"><col style="width:220px"><col style="width:66px">
+                <col style="width:108px"><col style="width:145px"><col style="width:108px">
+                <col style="width:68px"><col style="width:76px"><col style="width:66px">
+                <col style="width:70px"><col style="width:150px"><col style="width:165px">
+                <col style="width:165px"><col style="width:150px">
+                <col style="width:330px"><col style="width:330px"><col style="width:66px">
                 <col style="width:120px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>UID</th><th>名称</th><th>代币</th><th>网络</th>
+                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
                   <th>净入账</th><th>手续费</th><th>钱包地址</th>
-                  <th>到账时间</th><th>哈希</th>
+                  <th>提币时间</th><th>到账时间</th><th>哈希</th>
                   <th>PayPaz 订单号</th><th>供应商订单号</th>
                   <th>渠道</th><th>状态</th><th>操作</th>
                 </tr>
@@ -1482,21 +1511,9 @@
               <div class="p-merch-dropdown" id="p-merch-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">User ID</span>
+              <span class="filter-label-el">用户 ID</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="p-uid">
-              </div>
-            </div>
-            <div class="filter-item">
-              <span class="filter-label-el">订单来源</span>
-              <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="p-source">
-                    <option value="">请选择</option>
-                    <option value="Paypaz">Paypaz</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
-                </div>
               </div>
             </div>
             <!-- Row 2 -->
@@ -1521,6 +1538,34 @@
                     <option value="">请选择</option>
                     <option value="processing">处理中</option>
                     <option value="completed">已完成</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="p-token">
+                    <option value="">请选择</option>
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="Ethereum">Ethereum</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="p-network">
+                    <option value="">请选择</option>
+                    <option value="TRON">TRON</option>
+                    <option value="Ethereum">Ethereum</option>
+                    <option value="BSC">BSC</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
@@ -1583,7 +1628,7 @@
                 <col style="width:220px"><col style="width:85px"><col style="width:90px"><!-- 订单号/商户ID/商户名称 -->
                 <col style="width:100px"><col style="width:60px"><col style="width:70px"><!-- 用户ID/代币/网络 -->
                 <col style="width:80px"><col style="width:80px"><col style="width:70px"><!-- 应付/实付/手续费 -->
-                <col style="width:70px"><col style="width:160px"><col style="width:80px"><!-- 净入账/充值地址/订单来源 -->
+                <col style="width:70px"><col style="width:160px"><!-- 净入账/充值地址 -->
                 <col style="width:110px"><col style="width:155px"><col style="width:155px"><!-- 合作伙伴/创建时间/完成时间 -->
                 <col style="width:100px"><col style="width:60px"><!-- 状态/操作 -->
               </colgroup>
@@ -1591,7 +1636,7 @@
                 <tr>
                   <th>订单号</th><th>商户 ID</th><th>商户名称</th><th>用户 ID</th>
                   <th>代币</th><th>网络</th><th>应付金额</th><th>实付金额</th><th>手续费</th><th>净入账</th>
-                  <th>充值地址</th><th>订单来源</th><th>合作伙伴</th>
+                  <th>充值地址</th><th>合作伙伴</th>
                   <th>创建时间</th><th>完成时间</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -2512,6 +2557,43 @@
     </div>
   </div>
 
+  <!-- ── Withdraw Export Confirm Modal ───────────────── -->
+  <div class="modal-overlay" id="w-export-modal" onclick="if(event.target===this)closeWdExportModal()">
+    <div class="modal" style="width:420px;">
+      <div class="modal-header">
+        <span class="modal-title">导出</span>
+        <span class="modal-close" onclick="closeWdExportModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body exp-body">
+        <div class="exp-row">
+          <span class="exp-label">类型</span>
+          <span class="exp-value">提币</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">状态</span>
+          <span class="exp-value" id="w-export-status">全部</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">格式</span>
+          <div class="exp-value">
+            <label class="ak-radio-item"><input type="radio" name="w-export-format" value="csv" checked><span class="ak-dot"></span>CSV</label>
+            <label class="ak-radio-item"><input type="radio" name="w-export-format" value="xlsx"><span class="ak-dot"></span>XLSX</label>
+          </div>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">条数</span>
+          <span class="exp-value mono" id="w-export-count">0</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeWdExportModal()">取消</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdExport()">导出</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Invite Modal ──────────────────────────────── -->
   <div class="modal-overlay" id="invite-modal" onclick="if(event.target===this)closeInviteModal()">
     <div class="modal" style="width:460px;">
@@ -3163,7 +3245,7 @@
     const r = DEPOSIT_ALL[idx];
     document.getElementById('p-uid').value = r.userId;
     document.getElementById('p-status').value = 'processing';
-    ['p-order','p-merchant','p-source','p-channel','p-addr','p-hash','p-date-start','p-date-end']
+    ['p-order','p-merchant','p-channel','p-addr','p-hash','p-date-start','p-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     navigateTo('payment');
     paymentSearch();
@@ -3188,27 +3270,33 @@
     failed:        { label:'提币失败',   cls:'badge-red'   },
   };
 
+  const W_MERCHANTS = [
+    { id:'635102950', name:'kara'  },
+    { id:'460466234', name:'kara3' },
+    { id:'291654802', name:'kara4' },
+  ];
+
   const WITHDRAW_ALL = [
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { uid:'460466234', name:'kara3', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'manual_review' },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'WD00000000000031',                supplierId:'-',                                    channel:'Cobo', status:'withdrawing'},
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', time:'-', hash:'70659db1-a9dc-4198-9ab9-7a1f3ceB5d27',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-74.01',fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 16:26:32', hash:'80b6301a92da4a741ce8069f07f3a52bdec14e8f',             paypazId:'Shine0000000000004',              supplierId:'41b27011-3b3b-4103-8463-c04a5ef62d1c', channel:'Cobo', status:'completed' },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.31', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 16:24:48', hash:'0570b042ea4b99d72fe5e910fa63c28b5d1a7f9e',             paypazId:'Shine0000000000003',              supplierId:'c55570d7-e464-4e94-bf74-9cfb3a82d50e', channel:'Cobo', status:'completed' },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.21', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'-', hash:'-',                                                                       paypazId:'-',                               supplierId:'Udf20260624161152492022274D',            channel:'Payme',status:'failed'    },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-7.11', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 16:12:18', hash:'Textbvdxxxxxxxxxxxxxxxxxxxxxxxx9e4f3a',               paypazId:'shine0000000000001',              supplierId:'Udf20260624161152385285r80r95',         channel:'Payme',status:'completed' },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-6.81', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 15:35:28', hash:'f3761637e63afe678d9335fdb542a18c9e07b4d2',             paypazId:'00b0bb0b-1d8a-4d50-8032-514f3c9e7a21', supplierId:'47623fa6-7875-430d-9c44-43cf8d1b5e92', channel:'Cobo', status:'completed' },
-    { uid:'291654802', name:'kara4', token:'USDT', network:'TRON', net:'-6.67', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-06-24 15:23:59', hash:'e170de42bb24a554d9216d8285f6c3a71b9e04d8',             paypazId:'5bf9659b-51f1-4f6f-b39a-3426f9d2c10e', supplierId:'93140917-fa86-4614-826d-3d0f5c72b48a', channel:'Cobo', status:'completed' },
-    { uid:'635102950', name:'kara',  token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', time:'-', hash:'-',                                                                       paypazId:'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', wdTime:'2026-06-25 09:12:03', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-25 09:15:47', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011003', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', wdTime:'2026-06-25 09:18:22', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 10:02:11', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:05:38', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 09:58:04', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:08:15', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:11:29', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', wdTime:'2026-06-20 14:22:56', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'manual_review' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:03:12', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:10:47', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023842', token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-19 09:41:20', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'WD00000000000031',                supplierId:'-',                                    channel:'Cobo', status:'withdrawing'},
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023842', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-19 10:02:55', time:'-', hash:'70659db1-a9dc-4198-9ab9-7a1f3ceB5d27',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-74.01',fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 16:26:05', time:'2026-06-24 16:26:32', hash:'80b6301a92da4a741ce8069f07f3a52bdec14e8f',             paypazId:'Shine0000000000004',              supplierId:'41b27011-3b3b-4103-8463-c04a5ef62d1c', channel:'Cobo', status:'completed' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-7.31', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 16:24:19', time:'2026-06-24 16:24:48', hash:'0570b042ea4b99d72fe5e910fa63c28b5d1a7f9e',             paypazId:'Shine0000000000003',              supplierId:'c55570d7-e464-4e94-bf74-9cfb3a82d50e', channel:'Cobo', status:'completed' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-7.21', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 16:15:40', time:'-', hash:'-',                                                                       paypazId:'-',                               supplierId:'Udf20260624161152492022274D',            channel:'Payme',status:'failed'    },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-7.11', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 16:11:52', time:'2026-06-24 16:12:18', hash:'Textbvdxxxxxxxxxxxxxxxxxxxxxxxx9e4f3a',               paypazId:'shine0000000000001',              supplierId:'Udf20260624161152385285r80r95',         channel:'Payme',status:'completed' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-6.81', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 15:35:01', time:'2026-06-24 15:35:28', hash:'f3761637e63afe678d9335fdb542a18c9e07b4d2',             paypazId:'00b0bb0b-1d8a-4d50-8032-514f3c9e7a21', supplierId:'47623fa6-7875-430d-9c44-43cf8d1b5e92', channel:'Cobo', status:'completed' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-6.67', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 15:23:33', time:'2026-06-24 15:23:59', hash:'e170de42bb24a554d9216d8285f6c3a71b9e04d8',             paypazId:'5bf9659b-51f1-4f6f-b39a-3426f9d2c10e', supplierId:'93140917-fa86-4614-826d-3d0f5c72b48a', channel:'Cobo', status:'completed' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-17 08:44:19', time:'-', hash:'-',                                                                       paypazId:'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', supplierId:'-',                                    channel:'Cobo', status:'failed'    },
   ];
 
   const wState = { rows: [...WITHDRAW_ALL], page: 1, size: 20 };
@@ -3225,16 +3313,19 @@
       const st  = W_STATUS[r.status];
       const idx = WITHDRAW_ALL.indexOf(r);
       const hashCell     = r.hash === '-'       ? '-' : truncCell(r.hash);
-      const paypazCell   = r.paypazId === '-'   ? '-' : truncCell(r.paypazId);
-      const supplierCell = r.supplierId === '-' ? '-' : truncCell(r.supplierId);
+      const paypazCell   = r.paypazId === '-'   ? '-' : fullCell(r.paypazId);
+      const supplierCell = r.supplierId === '-' ? '-' : fullCell(r.supplierId);
       const editIcon = r.status === 'manual_review'
         ? `<span class="action-icon" onclick="openWdEdit(${idx})" title="处理订单">${_PEN_SVG}</span>` : '';
       return `<tr>
-        <td style="font-family:Inter,sans-serif">${r.uid}</td>
-        <td>${r.name}</td><td>${r.token}</td><td>${r.network}</td>
+        <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
+        <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td><td>${r.network}</td>
         <td class="cell-red">${r.net}</td>
         <td>${r.fee}</td>
         <td>${truncCell(r.wallet)}</td>
+        <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.wdTime}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.time}</td>
         <td>${hashCell}</td>
         <td>${paypazCell}</td>
@@ -3267,8 +3358,29 @@
     wState.size = +document.getElementById('w-page-size').value;
     wState.page = 1; withdrawRender();
   }
+  function wMerchantInput() {
+    const val = document.getElementById('w-merchant').value.trim().toLowerCase();
+    const dd  = document.getElementById('w-merch-dropdown');
+    const list = val ? W_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : W_MERCHANTS;
+    if (!list.length) { dd.style.display = 'none'; return; }
+    dd.innerHTML = list.map(m =>
+      `<div class="p-merch-opt" onmousedown="wSelectMerchant('${m.name}')">
+        ${m.name}<span class="p-merch-id">${m.id}</span>
+      </div>`
+    ).join('');
+    dd.style.display = '';
+  }
+  function wSelectMerchant(name) {
+    document.getElementById('w-merchant').value = name;
+    document.getElementById('w-merch-dropdown').style.display = 'none';
+  }
+  function wHideMerchantDrop() {
+    const dd = document.getElementById('w-merch-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
   function withdrawSearch() {
-    const uid      = document.getElementById('w-uid').value.trim().toLowerCase();
+    const merchant = document.getElementById('w-merchant').value.trim().toLowerCase();
+    const userId   = document.getElementById('w-userid').value.trim().toLowerCase();
     const token    = document.getElementById('w-token').value;
     const net      = document.getElementById('w-network').value;
     const st       = document.getElementById('w-status').value;
@@ -3276,10 +3388,13 @@
     const hash     = document.getElementById('w-hash').value.trim().toLowerCase();
     const paypaz   = document.getElementById('w-paypazid').value.trim().toLowerCase();
     const supplier = document.getElementById('w-supplierid').value.trim().toLowerCase();
+    const wds      = document.getElementById('w-wdtime-start').value;
+    const wde      = document.getElementById('w-wdtime-end').value;
     const ds       = document.getElementById('w-date-start').value;
     const de       = document.getElementById('w-date-end').value;
     wState.rows = WITHDRAW_ALL.filter(r => {
-      if (uid      && !r.uid.toLowerCase().includes(uid))             return false;
+      if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
+      if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
       if (token    && r.token !== token)                               return false;
       if (net      && r.network !== net)                               return false;
       if (st       && r.status !== st)                                 return false;
@@ -3287,6 +3402,8 @@
       if (hash     && !r.hash.toLowerCase().includes(hash))           return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
       if (supplier && !r.supplierId.toLowerCase().includes(supplier)) return false;
+      if (wds      && r.wdTime !== '-' && r.wdTime.split(' ')[0] < wds) return false;
+      if (wde      && r.wdTime !== '-' && r.wdTime.split(' ')[0] > wde) return false;
       if (ds       && r.time !== '-' && r.time.split(' ')[0] < ds)    return false;
       if (de       && r.time !== '-' && r.time.split(' ')[0] > de)    return false;
       return true;
@@ -3294,16 +3411,33 @@
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
-    ['w-uid','w-token','w-network','w-status','w-channel','w-hash','w-paypazid','w-supplierid','w-date-start','w-date-end']
+    ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-paypazid','w-supplierid','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     wState.rows = [...WITHDRAW_ALL]; wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
-    const headers = ['UID','名称','代币','网络','净入账','手续费','钱包地址','到账时间','哈希','PayPaz订单号','供应商订单号','渠道','状态'];
+    const headers = ['商户ID','商户名称','用户ID','代币','网络','净入账','手续费','钱包地址','提币时间','到账时间','哈希','PayPaz订单号','供应商订单号','渠道','状态'];
     csvDownload(headers, wState.rows.map(r => [
-      r.uid, r.name, r.token, r.network, r.net, r.fee, r.wallet,
-      r.time, r.hash, r.paypazId, r.supplierId, r.channel, W_STATUS[r.status].label
+      r.merchantId, r.merchantName, r.userId, r.token, r.network, r.net, r.fee, r.wallet,
+      r.wdTime, r.time, r.hash, r.paypazId, r.supplierId, r.channel, W_STATUS[r.status].label
     ]), '提币记录.csv');
+  }
+  function openWdExportModal() {
+    const stVal = document.getElementById('w-status').value;
+    document.getElementById('w-export-status').textContent = stVal ? W_STATUS[stVal].label : '全部';
+    document.getElementById('w-export-count').textContent = wState.rows.length;
+    document.querySelector('#w-export-modal input[name="w-export-format"][value="csv"]').checked = true;
+    document.getElementById('w-export-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeWdExportModal() {
+    document.getElementById('w-export-modal').classList.remove('show');
+  }
+  function confirmWdExport() {
+    const format = document.querySelector('#w-export-modal input[name="w-export-format"]:checked').value;
+    closeWdExportModal();
+    if (format === 'xlsx') { showToast('XLSX 导出功能开发中'); return; }
+    withdrawExport();
   }
 
   // ── Withdraw Modals ────────────────────────────────────
@@ -3315,13 +3449,16 @@
         <span class="detail-value">${value}</span>
       </div>`;
     return [
-      di('UID',          r.uid),
+      di('商户 ID',      r.merchantId),
+      di('商户名称',     r.merchantName),
+      di('用户 ID',      r.userId),
       di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
       di('净入账',      `<span style="color:#F56C6C;font-family:Inter,sans-serif">${r.net} USDT</span>`),
       di('手续费',      `${r.fee} USDT`),
       di('代币',         r.token),
       di('网络',         r.network),
       di('渠道',         r.channel === '-' ? '—' : r.channel),
+      di('提币时间',     r.wdTime === '-' ? '—' : r.wdTime),
       di('到账时间',     r.time === '-' ? '—' : r.time),
       di('哈希',         r.hash === '-' ? '—' : r.hash,          true),
       di('PayPaz 订单号', r.paypazId === '-' ? '—' : r.paypazId,  true),
@@ -3467,7 +3604,6 @@
         <td>${r.token}</td><td>${r.network}</td>
         <td>${r.due}</td><td>${r.paid}</td><td>${r.fee}</td><td>${r.net}</td>
         <td>${truncCell(r.addr)}</td>
-        <td>${r.source}</td>
         <td>${r.channel || '直连'}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
         <td style="font-family:Inter,sans-serif;color:${r.doneTime==='-'?'#C0C4CC':'#303133'}">${r.doneTime}</td>
@@ -3513,9 +3649,10 @@
     const order   = document.getElementById('p-order').value.trim().toLowerCase();
     const merch   = document.getElementById('p-merchant').value.trim().toLowerCase();
     const uid     = document.getElementById('p-uid').value.trim().toLowerCase();
-    const source  = document.getElementById('p-source').value;
     const channel = document.getElementById('p-channel').value;
     const st      = document.getElementById('p-status').value;
+    const token   = document.getElementById('p-token').value;
+    const network = document.getElementById('p-network').value;
     const addr    = document.getElementById('p-addr').value.trim().toLowerCase();
     const hash    = document.getElementById('p-hash').value.trim().toLowerCase();
     const ds      = document.getElementById('p-date-start').value;
@@ -3526,10 +3663,11 @@
       if (order  && !r.order.toLowerCase().includes(order))                                                return false;
       if (merch  && !r.merchantId.toLowerCase().includes(merch) && !r.merchantName.toLowerCase().includes(merch)) return false;
       if (uid    && !r.userId.toLowerCase().includes(uid))                                                return false;
-      if (source && r.source !== source)                                                                  return false;
       if (channel === 'direct' && r.channel !== '')                                                       return false;
       if (channel && channel !== 'direct' && r.channel !== channel)                                       return false;
       if (st     && r.status !== st)                                                                      return false;
+      if (token  && r.token !== token)                                                                    return false;
+      if (network && r.network !== network)                                                               return false;
       if (addr   && !r.addr.toLowerCase().includes(addr))                                                 return false;
       if (ds     && r.time.split(' ')[0] < ds)                                                            return false;
       if (de     && r.time.split(' ')[0] > de)                                                            return false;
@@ -3540,7 +3678,7 @@
     pState.page = 1; paymentRender();
   }
   function paymentReset() {
-    ['p-order','p-merchant','p-uid','p-source','p-channel','p-status','p-addr','p-hash','p-date-start','p-date-end','p-done-start','p-done-end']
+    ['p-order','p-merchant','p-uid','p-channel','p-status','p-token','p-network','p-addr','p-hash','p-date-start','p-date-end','p-done-start','p-done-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     pState.rows = [...PAYMENT_ALL]; pState.page = 1; paymentRender();
   }
@@ -3566,10 +3704,10 @@
   }
 
   function paymentExport() {
-    const headers = ['订单号','商户 ID','商户名称','用户 ID','应付金额','实付金额','手续费','净入账','代币','网络','订单来源','合作伙伴','创建时间','完成时间','充值地址','状态'];
+    const headers = ['订单号','商户 ID','商户名称','用户 ID','应付金额','实付金额','手续费','净入账','代币','网络','合作伙伴','创建时间','完成时间','充值地址','状态'];
     csvDownload(headers, pState.rows.map(r => [
       r.order, r.merchantId, r.merchantName, r.userId, r.due, r.paid, r.fee, r.net,
-      r.token, r.network, r.source, r.channel || '直连', r.time, r.doneTime, r.addr, P_STATUS[r.status].label
+      r.token, r.network, r.channel || '直连', r.time, r.doneTime, r.addr, P_STATUS[r.status].label
     ]), '支付订单.csv');
   }
 
@@ -4585,6 +4723,12 @@
     const short = truncateStr(val);
     const esc = val.replace(/'/g, '&#39;');
     return `<div class="copy-cell"><span style="font-family:Inter,sans-serif;cursor:default" onmouseenter="showTip(event,'${esc}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${short}</span><span class="copy-icon" onclick="copyText('${esc}')">${_COPY_SVG}</span></div>`;
+  }
+
+  function fullCell(val) {
+    if (!val) return `<span class="cell-empty">—</span>`;
+    const esc = val.replace(/'/g, '&#39;');
+    return `<div class="copy-cell"><span style="font-family:Inter,sans-serif;cursor:default">${esc}</span><span class="copy-icon" onclick="copyText('${esc}')">${_COPY_SVG}</span></div>`;
   }
 
   function csvDownload(headers, rows, filename) {

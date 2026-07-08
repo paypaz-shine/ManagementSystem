@@ -1103,6 +1103,10 @@
             <i data-lucide="briefcase" class="nav-icon" style="width:14px;height:14px;"></i>
             <span class="nav-label">岗位管理</span>
           </div>
+          <div class="nav-item nav-sub-item" data-page="sys-operlog">
+            <i data-lucide="history" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">操作日志</span>
+          </div>
         </div>
       </div>
     </nav>
@@ -2501,6 +2505,123 @@
       </div>
     </div><!-- /page-sys-role-users -->
 
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 操作日志                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-sys-operlog">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">操作人</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入操作人账号" id="ol-operator">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">操作模块</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ol-module">
+                    <option value="">全部</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">操作类型</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ol-type">
+                    <option value="">全部</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">敏感等级</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ol-sensitive">
+                    <option value="">全部</option>
+                    <option value="high">高敏感</option>
+                    <option value="medium">中敏感</option>
+                    <option value="normal">普通</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">操作时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="ol-date-start">
+                  <span class="range-sep-el">-</span>
+                  <input class="date-input-el" type="date" id="ol-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-primary" onclick="operlogSearch()">
+              <i data-lucide="search" style="width:14px;height:14px;"></i>搜索
+            </button>
+            <button class="btn btn-default" onclick="operlogReset()">
+              <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>重置
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="summary-bar">
+            <span id="ol-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
+            <div class="summary-spacer"></div>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1220px;">
+              <colgroup>
+                <col style="width:150px;"><col style="width:90px;"><col style="width:110px;">
+                <col style="width:90px;"><col style="width:170px;"><col style="width:260px;">
+                <col style="width:70px;"><col style="width:80px;"><col style="width:130px;">
+                <col style="width:60px;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>操作时间</th><th>操作人</th><th>操作模块</th><th>操作类型</th>
+                  <th>操作对象</th><th>操作内容</th><th>结果</th><th>敏感等级</th>
+                  <th>IP 地址</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="ol-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="ol-page-total">共 0 条</span>
+            <select class="page-size-select" id="ol-page-size" onchange="operlogPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="ol-btn-prev" onclick="operlogPage(olState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="operlogPage(1)">1</button>
+            <button class="page-btn" onclick="operlogPage(2)">2</button>
+            <button class="page-btn" onclick="operlogPage(3)">3</button>
+            <button class="page-btn" id="ol-btn-next" onclick="operlogPage(olState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')operlogPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-sys-operlog -->
+
   </div><!-- /main-area -->
 
   <!-- ── Detail Modal ───────────────────────────────── -->
@@ -2982,10 +3103,11 @@
     'sys-menu': { label: '菜单管理', icon: 'list-tree', parent: '系统管理' },
     'sys-dept': { label: '部门管理', icon: 'building-2', parent: '系统管理' },
     'sys-post': { label: '岗位管理', icon: 'briefcase', parent: '系统管理' },
+    'sys-operlog': { label: '操作日志', icon: 'history', parent: '系统管理' },
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users']);
+  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -3051,7 +3173,7 @@
       rampGhd.classList.toggle('group-active', pid === 'ramp-in' || pid === 'ramp-out');
     }
 
-    const systemPages = ['sys-user', 'sys-role', 'sys-role-users', 'sys-menu', 'sys-dept', 'sys-post'];
+    const systemPages = ['sys-user', 'sys-role', 'sys-role-users', 'sys-menu', 'sys-dept', 'sys-post', 'sys-operlog'];
     const systemGhd = document.getElementById('nav-ghd-system');
     if (systemGhd) {
       const isSystemPage = systemPages.includes(pid);
@@ -6059,6 +6181,188 @@
 
   function closeRampDetail() { closeModal(); }
 
+  // ══════════════════════════════════════════════════════
+  //  系统管理 / 操作日志 data & logic
+  // ══════════════════════════════════════════════════════
+  const OPERLOG_MODULES = ['用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
+    '客户端管理','对象存储配置','个人信息','登录日志','操作日志','在线用户',
+    '商户管理','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录'];
+
+  const OPERLOG_TYPES = ['新增','修改','删除','状态变更','审批','授权','强退','导出'];
+
+  const OPERLOG_LEVEL_CLS = { high: 'badge-red', medium: 'badge-amber', normal: 'badge-gray' };
+  const OPERLOG_LEVEL_LABEL = { high: '高敏感', medium: '中敏感', normal: '普通' };
+
+  const OPERLOG_TYPE_CLS = {
+    新增: 'badge-blue', 修改: 'badge-purple', 删除: 'badge-red', 状态变更: 'badge-amber',
+    审批: 'badge-green', 授权: 'badge-blue', 强退: 'badge-red', 导出: 'badge-gray',
+  };
+
+  const OPERLOG_ALL = [
+    { id:'ol-046', time:'2026-07-09 16:40:12', operator:'kara',   module:'充值记录',   type:'导出',   target:'充值记录导出文件（2026-06-09~2026-07-09）', content:'导出充值记录 CSV，共 2,481 条', result:'success', ip:'103.45.12.188', level:'high' },
+    { id:'ol-045', time:'2026-07-09 15:22:47', operator:'shine',  module:'提现审核',   type:'导出',   target:'提现记录导出文件（近 7 天）', content:'导出提现记录 CSV，共 316 条', result:'success', ip:'103.45.12.201', level:'high' },
+    { id:'ol-044', time:'2026-07-09 14:05:33', operator:'magic',  module:'操作日志',   type:'导出',   target:'操作日志导出文件（近 90 天）', content:'导出操作日志 Excel', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-043', time:'2026-07-09 11:18:56', operator:'rogan',  module:'登录日志',   type:'导出',   target:'登录日志导出文件（近 30 天）', content:'导出登录日志 Excel', result:'success', ip:'61.148.22.9', level:'high' },
+    { id:'ol-042', time:'2026-07-09 10:02:41', operator:'benny',  module:'登录日志',   type:'状态变更', target:'管理员账号 test02', content:'账户解锁：连续登录失败 5 次触发锁定后手动解锁', result:'success', ip:'42.63.21.7', level:'high' },
+    { id:'ol-041', time:'2026-07-08 22:47:19', operator:'kara',   module:'在线用户',   type:'强退',   target:'本人其他设备（token: 3a9f...）', content:'强退本人其他设备会话', result:'success', ip:'103.45.12.188', level:'normal' },
+    { id:'ol-040', time:'2026-07-08 21:30:04', operator:'shine',  module:'对象存储配置', type:'导出', target:'OSS 文件 merchant_kyc_2026Q2.pdf', content:'下载 OSS 对象文件', result:'success', ip:'103.45.12.201', level:'medium' },
+    { id:'ol-039', time:'2026-07-08 20:15:38', operator:'magic',  module:'客户端管理', type:'导出',   target:'客户端管理列表', content:'导出客户端管理列表 Excel', result:'success', ip:'61.148.22.44', level:'normal' },
+    { id:'ol-038', time:'2026-07-08 19:03:22', operator:'rogan',  module:'字典管理',   type:'导出',   target:'字典类型列表', content:'导出字典类型 Excel', result:'success', ip:'61.148.22.9', level:'normal' },
+    { id:'ol-037', time:'2026-07-08 17:48:07', operator:'benny',  module:'参数配置',   type:'导出',   target:'参数配置列表', content:'导出参数配置 Excel（含提现限额等关键参数）', result:'success', ip:'42.63.21.7', level:'medium' },
+    { id:'ol-036', time:'2026-07-08 16:22:51', operator:'kara',   module:'岗位管理',   type:'导出',   target:'岗位列表', content:'导出岗位列表 Excel', result:'success', ip:'103.45.12.188', level:'normal' },
+    { id:'ol-035', time:'2026-07-08 14:55:36', operator:'shine',  module:'角色管理',   type:'导出',   target:'角色列表', content:'导出角色列表 Excel', result:'success', ip:'103.45.12.201', level:'normal' },
+    { id:'ol-034', time:'2026-07-08 13:10:22', operator:'magic',  module:'用户管理',   type:'导出',   target:'用户列表', content:'导出用户列表 Excel', result:'success', ip:'61.148.22.44', level:'medium' },
+    { id:'ol-033', time:'2026-07-08 12:05:47', operator:'rogan',  module:'用户管理',   type:'新增',   target:'批量导入用户数据（12 条）', content:'导入用户数据 Excel，成功 12 条', result:'success', ip:'42.63.21.7', level:'high' },
+    { id:'ol-032', time:'2026-07-08 09:41:05', operator:'shine',  module:'提现审核',   type:'审批',   target:'提现单 WD-20260708-00248', content:'审核结果：通过，备注：链上地址已核实', result:'success', ip:'103.45.12.201', level:'high' },
+    { id:'ol-031', time:'2026-07-08 08:12:37', operator:'kara',   module:'在线用户',   type:'强退',   target:'在线用户 andy（token: 8f3c...）', content:'强制退出登录', result:'success', ip:'103.45.12.188', level:'high' },
+    { id:'ol-030', time:'2026-07-07 22:03:14', operator:'rogan',  module:'商户管理',   type:'删除',   target:'商户 MCH-1042（TradeMax Ltd）', content:'删除商户账号', result:'success', ip:'61.148.22.9', level:'high' },
+    { id:'ol-029', time:'2026-07-07 20:55:41', operator:'magic',  module:'API管理',    type:'修改',   target:'商户 MCH-1017 API Key ak_7f2e...', content:'更新 API Key 权限范围（新增 withdraw:write）与 IP 白名单', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-028', time:'2026-07-07 18:20:09', operator:'shine',  module:'提现审核',   type:'审批',   target:'提现单 WD-20260707-00231', content:'审核结果：驳回，原因：收款地址不在白名单', result:'success', ip:'103.45.12.201', level:'high' },
+    { id:'ol-027', time:'2026-07-07 17:02:53', operator:'benny',  module:'提现审核',   type:'审批',   target:'提现单 WD-20260707-00219', content:'审核结果：驳回，原因：超过单笔限额', result:'fail', errorMsg:'审核服务超时，操作未生效，请重试', ip:'42.63.21.7', level:'high' },
+    { id:'ol-026', time:'2026-07-07 15:44:28', operator:'kara',   module:'订单管理',   type:'修改',   target:'充值订单 ORD-20260705-00087', content:'运营人工匹配充值到订单，订单状态：处理中→已完成', result:'success', ip:'103.45.12.188', level:'high' },
+    { id:'ol-025', time:'2026-07-07 14:10:02', operator:'rogan',  module:'商户管理',   type:'状态变更', target:'商户 MCH-1029（GlobalPay Inc）', content:'重置商户 2FA', result:'success', ip:'61.148.22.9', level:'high' },
+    { id:'ol-024', time:'2026-07-06 19:38:47', operator:'shine',  module:'角色管理',   type:'修改',   target:'角色 管理员（admin1）', content:'修改数据权限：本部门数据权限 → 本部门及以下数据权限', result:'success', ip:'103.45.12.201', level:'high' },
+    { id:'ol-023', time:'2026-07-06 16:27:19', operator:'magic',  module:'角色管理',   type:'授权',   target:'角色 admintest', content:'批量授权用户：+kara +benny', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-022', time:'2026-07-06 11:05:56', operator:'kara',   module:'用户管理',   type:'删除',   target:'管理员账号 test01', content:'删除系统用户', result:'success', ip:'103.45.12.188', level:'high' },
+    { id:'ol-021', time:'2026-07-06 10:12:31', operator:'benny',  module:'用户管理',   type:'修改',   target:'管理员账号 magic', content:'重置登录密码', result:'success', ip:'42.63.21.7', level:'high' },
+    { id:'ol-019', time:'2026-07-05 17:33:40', operator:'shine',  module:'参数配置',   type:'修改',   target:'参数 sys.withdraw.dailyLimit', content:'修改参数值：50000 → 100000', result:'success', ip:'103.45.12.201', level:'high' },
+    { id:'ol-018', time:'2026-07-05 14:02:15', operator:'kara',   module:'对象存储配置', type:'修改', target:'OSS 配置 aliyun-oss-prod', content:'修改 AccessKey 配置', result:'success', ip:'103.45.12.188', level:'high' },
+    { id:'ol-017', time:'2026-07-04 20:18:52', operator:'magic',  module:'商户管理',   type:'新增',   target:'商户 MCH-1055（NovaFX）', content:'创建商户账号', result:'success', ip:'61.148.22.44', level:'medium' },
+    { id:'ol-016', time:'2026-07-04 16:41:07', operator:'benny',  module:'商户管理',   type:'修改',   target:'商户 MCH-1029（GlobalPay Inc）', content:'修改商户币种配置：新增支持 USDC-Polygon', result:'success', ip:'42.63.21.7', level:'medium' },
+    { id:'ol-015', time:'2026-07-04 11:26:33', operator:'rogan',  module:'企业观察账号', type:'新增', target:'观察账号 obs_kara@paypaz.tech', content:'新增企业观察账号，关联商户 MCH-1017', result:'success', ip:'61.148.22.9', level:'medium' },
+    { id:'ol-014', time:'2026-07-03 22:09:48', operator:'shine',  module:'企业观察账号', type:'删除', target:'观察账号 obs_riv1@paypaz.tech', content:'删除企业观察账号', result:'success', ip:'103.45.12.201', level:'medium' },
+    { id:'ol-013', time:'2026-07-03 15:55:21', operator:'kara',   module:'币种/链配置', type:'新增', target:'链 Arbitrum One', content:'新增链配置', result:'success', ip:'103.45.12.188', level:'medium' },
+    { id:'ol-012', time:'2026-07-03 10:34:09', operator:'magic',  module:'币种/链配置', type:'修改', target:'币种 USDT-TRC20', content:'修改提现手续费配置', result:'success', ip:'61.148.22.44', level:'medium' },
+    { id:'ol-011', time:'2026-07-02 19:47:55', operator:'benny',  module:'用户管理',   type:'新增',   target:'管理员账号 nio', content:'新增系统用户', result:'success', ip:'42.63.21.7', level:'medium' },
+    { id:'ol-010', time:'2026-07-02 14:23:17', operator:'rogan',  module:'用户管理',   type:'状态变更', target:'管理员账号 rogan', content:'账号状态：启用 → 禁用', result:'success', ip:'61.148.22.9', level:'medium' },
+    { id:'ol-009', time:'2026-07-01 20:06:44', operator:'shine',  module:'角色管理',   type:'新增',   target:'角色 风控专员', content:'新增角色', result:'success', ip:'103.45.12.201', level:'medium' },
+    { id:'ol-008', time:'2026-07-01 16:52:30', operator:'kara',   module:'菜单管理',   type:'新增',   target:'菜单 操作日志', content:'新增系统管理子菜单', result:'success', ip:'103.45.12.188', level:'normal' },
+    { id:'ol-007', time:'2026-06-30 22:14:02', operator:'magic',  module:'部门管理',   type:'修改',   target:'部门 风控部', content:'修改部门负责人', result:'success', ip:'61.148.22.44', level:'normal' },
+    { id:'ol-006', time:'2026-06-30 11:38:19', operator:'benny',  module:'岗位管理',   type:'删除',   target:'岗位 测试岗', content:'删除岗位', result:'success', ip:'42.63.21.7', level:'normal' },
+    { id:'ol-005', time:'2026-06-29 17:25:46', operator:'rogan',  module:'字典管理',   type:'修改',   target:'字典 order_status', content:'修改字典数据：新增"人工核销"选项', result:'success', ip:'61.148.22.9', level:'normal' },
+    { id:'ol-004', time:'2026-06-29 09:57:03', operator:'shine',  module:'通知公告',   type:'新增',   target:'公告 系统维护通知', content:'新增通知公告并推送全员', result:'success', ip:'103.45.12.201', level:'normal' },
+    { id:'ol-003', time:'2026-06-28 21:40:28', operator:'kara',   module:'客户端管理', type:'修改',   target:'客户端 web-admin', content:'修改客户端状态：启用', result:'success', ip:'103.45.12.188', level:'normal' },
+    { id:'ol-002', time:'2026-06-28 13:11:52', operator:'magic',  module:'个人信息',   type:'修改',   target:'账号 shine', content:'修改个人登录密码', result:'success', ip:'61.148.22.44', level:'medium' },
+  ];
+
+  const olState = { rows: [...OPERLOG_ALL], page: 1, size: 10 };
+
+  function olTrunc(val, len = 18) {
+    if (!val) return `<span class="cell-empty">—</span>`;
+    const str = String(val);
+    const esc = str.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+    if (str.length <= len) return `<span>${htmlSafe(str)}</span>`;
+    const short = htmlSafe(str.slice(0, len - 1)) + '…';
+    return `<span style="cursor:default" onmouseenter="showTip(event,'${esc}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${short}</span>`;
+  }
+
+  function operlogPopulateFilters() {
+    const moduleSel = document.getElementById('ol-module');
+    const typeSel = document.getElementById('ol-type');
+    if (moduleSel) OPERLOG_MODULES.forEach(m => moduleSel.insertAdjacentHTML('beforeend', `<option value="${m}">${m}</option>`));
+    if (typeSel) OPERLOG_TYPES.forEach(t => typeSel.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`));
+  }
+
+  const _OL_EYE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
+  function operlogRender() {
+    const tbody = document.getElementById('ol-tbody');
+    if (!tbody) return;
+    const start = (olState.page - 1) * olState.size;
+    const slice = olState.rows.slice(start, start + olState.size);
+    if (!slice.length) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无操作日志</td></tr>`;
+    } else {
+      tbody.innerHTML = slice.map(r => {
+        const idx = OPERLOG_ALL.indexOf(r);
+        const resultBadge = r.result === 'success'
+          ? `<span class="badge badge-green">成功</span>`
+          : `<span class="badge badge-red">失败</span>`;
+        const sensitiveBadge = `<span class="badge ${OPERLOG_LEVEL_CLS[r.level]}">${OPERLOG_LEVEL_LABEL[r.level]}</span>`;
+        return `<tr>
+          <td style="font-family:'Inter',sans-serif;color:#606266;">${r.time}</td>
+          <td style="font-family:'Inter',sans-serif;">${htmlSafe(r.operator)}</td>
+          <td>${htmlSafe(r.module)}</td>
+          <td><span class="badge ${OPERLOG_TYPE_CLS[r.type] || 'badge-gray'}">${r.type}</span></td>
+          <td>${olTrunc(r.target)}</td>
+          <td>${olTrunc(r.content, 24)}</td>
+          <td>${resultBadge}</td>
+          <td>${sensitiveBadge}</td>
+          <td style="font-family:'Inter',sans-serif;color:#606266;">${r.ip}</td>
+          <td><div class="action-cell"><span class="action-icon" onclick="openOperlogDetail(${idx})" title="查看详情">${_OL_EYE_SVG}</span></div></td>
+        </tr>`;
+      }).join('');
+    }
+    document.getElementById('ol-page-total').textContent = `共 ${olState.rows.length} 条`;
+    const sc = document.getElementById('ol-summary-count');
+    if (sc) sc.textContent = `条数: ${olState.rows.length}`;
+    const total = Math.max(1, Math.ceil(olState.rows.length / olState.size));
+    document.getElementById('ol-btn-prev').disabled = olState.page <= 1;
+    document.getElementById('ol-btn-next').disabled = olState.page >= total;
+    document.querySelectorAll('#page-sys-operlog .page-btn:not(#ol-btn-prev):not(#ol-btn-next)').forEach((btn, i) => {
+      const pg = i + 1;
+      btn.style.display = pg <= total ? '' : 'none';
+      btn.classList.toggle('active', pg === olState.page);
+    });
+  }
+
+  function operlogPage(p) {
+    const total = Math.max(1, Math.ceil(olState.rows.length / olState.size));
+    if (p < 1 || p > total) return;
+    olState.page = p; operlogRender();
+  }
+  function operlogPageSize() {
+    olState.size = +document.getElementById('ol-page-size').value;
+    olState.page = 1; operlogRender();
+  }
+  function operlogSearch() {
+    const operator  = document.getElementById('ol-operator').value.trim().toLowerCase();
+    const module    = document.getElementById('ol-module').value;
+    const type      = document.getElementById('ol-type').value;
+    const sensitive = document.getElementById('ol-sensitive').value;
+    const ds        = document.getElementById('ol-date-start').value;
+    const de        = document.getElementById('ol-date-end').value;
+    olState.rows = OPERLOG_ALL.filter(r => {
+      if (operator  && !r.operator.toLowerCase().includes(operator))    return false;
+      if (module    && r.module !== module)                            return false;
+      if (type      && r.type !== type)                                return false;
+      if (sensitive && r.level !== sensitive)                          return false;
+      if (ds        && r.time.split(' ')[0] < ds)                      return false;
+      if (de        && r.time.split(' ')[0] > de)                      return false;
+      return true;
+    });
+    olState.page = 1; operlogRender();
+  }
+  function operlogReset() {
+    ['ol-operator','ol-module','ol-type','ol-sensitive','ol-date-start','ol-date-end']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    olState.rows = [...OPERLOG_ALL];
+    olState.page = 1; operlogRender();
+  }
+  function openOperlogDetail(idx) {
+    const r = OPERLOG_ALL[idx];
+    if (!r) return;
+    document.querySelector('#detail-modal .modal-title').textContent = '操作日志详情';
+    document.querySelector('#detail-modal .modal').style.width = '';
+    document.getElementById('modal-body').className = 'modal-body';
+    const errRow = r.result === 'fail'
+      ? `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">失败原因</span><span class="detail-value" style="color:#F56C6C;">${htmlSafe(r.errorMsg || '')}</span></div>`
+      : '';
+    document.getElementById('modal-body').innerHTML = `
+      <div class="detail-item"><span class="detail-label">操作时间</span><span class="detail-value">${r.time}</span></div>
+      <div class="detail-item"><span class="detail-label">操作人</span><span class="detail-value">${htmlSafe(r.operator)}</span></div>
+      <div class="detail-item"><span class="detail-label">操作模块</span><span class="detail-value">${htmlSafe(r.module)}</span></div>
+      <div class="detail-item"><span class="detail-label">操作类型</span><span class="detail-value"><span class="badge ${OPERLOG_TYPE_CLS[r.type] || 'badge-gray'}">${r.type}</span></span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">操作对象</span><span class="detail-value">${htmlSafe(r.target)}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">操作内容</span><span class="detail-value">${htmlSafe(r.content)}</span></div>
+      <div class="detail-item"><span class="detail-label">结果</span><span class="detail-value">${r.result === 'success' ? '<span class="badge badge-green">成功</span>' : '<span class="badge badge-red">失败</span>'}</span></div>
+      <div class="detail-item"><span class="detail-label">敏感等级</span><span class="detail-value"><span class="badge ${OPERLOG_LEVEL_CLS[r.level]}">${OPERLOG_LEVEL_LABEL[r.level]}</span></span></div>
+      <div class="detail-item"><span class="detail-label">IP 地址</span><span class="detail-value">${r.ip}</span></div>
+      ${errRow}
+    `;
+    document.getElementById('detail-modal').classList.add('show');
+  }
+
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     renderTabs();
@@ -6071,6 +6375,8 @@
     rampOutRender();
     merchantRender();
     roleRender();
+    operlogPopulateFilters();
+    operlogRender();
     if (window.lucide) lucide.createIcons();
   });
   </script>

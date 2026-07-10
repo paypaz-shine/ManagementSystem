@@ -333,6 +333,9 @@
     }
 
     .summary-spacer { flex: 1; }
+    .summary-stats { display: flex; align-items: center; gap: 20px; font-size: 13px; color: #606266; white-space: nowrap; }
+    .summary-stats b { font-weight: 600; color: #303133; font-family: 'Inter', sans-serif; margin-left: 4px; }
+    .summary-stats b.neg { color: #F56C6C; }
     .export-btn {
       height: 30px; padding: 0 14px; border-radius: 4px; border: 1px solid #409EFF;
       background: #fff; color: #409EFF; font-size: 13px; font-family: 'Noto Sans SC', sans-serif;
@@ -679,6 +682,13 @@
     .ak-textarea { width:100%; height:80px; border:1px solid #DCDFE6; border-radius:4px; padding:8px 10px; font-size:13px; color:#303133; font-family:'Noto Sans SC',sans-serif; resize:vertical; outline:none; transition:border-color 0.2s; box-sizing:border-box; }
     .ak-textarea:focus { border-color:#409EFF; }
     .ak-textarea::placeholder { color:#C0C4CC; }
+    /* ── 代币编辑弹窗 ──────────────────────────────────── */
+    .tk-row { display:grid; grid-template-columns:132px 1fr; align-items:center; gap:10px; margin-bottom:16px; }
+    .tk-row .ak-label { text-align:right; }
+    .tk-section { font-size:12px; font-weight:600; color:#606266; letter-spacing:0.5px; padding-bottom:8px; border-bottom:1px solid #EBEEF5; margin-bottom:14px; }
+    .tk-addon-wrap { display:flex; align-items:stretch; width:100%; }
+    .tk-addon-wrap .field-input { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none; width:100%; min-width:0; }
+    .tk-addon { display:flex; align-items:center; padding:0 12px; background:#F5F7FA; border:1px solid #DCDFE6; border-left:none; border-radius:0 4px 4px 0; color:#606266; font-size:13px; white-space:nowrap; flex-shrink:0; }
     /* ── 出入金订单 ──────────────────────────────────── */
     .badge-amber  { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
     .badge-purple { background:#f5f0ff; color:#8B5CF6; border:1px solid #ddd6fe; }
@@ -743,6 +753,10 @@
     .wm-remark { width:100%; box-sizing:border-box; padding:8px 12px; border:1px solid #DCDFE6; border-radius:4px; font-size:13px; font-family:'Noto Sans SC',sans-serif; resize:vertical; min-height:72px; color:#303133; outline:none; }
     .wm-remark:focus { border-color:#409EFF; }
     .wm-remark-count { display:block; text-align:right; font-size:12px; color:#C0C4CC; margin-top:4px; line-height:1; }
+    /* withdraw manage modal - channel reselect */
+    .wd-channel-row { border-top:1px solid #EBEEF5; padding-top:16px; margin-top:4px; }
+    .wd-channel-edit { display:flex; align-items:center; gap:10px; margin-top:2px; flex-wrap:wrap; }
+    .wd-channel-balance { font-size:12px; color:#F56C6C; }
 
     /* ── 系统管理 / 角色管理 ───────────────────────────── */
     .role-toolbar {
@@ -1391,6 +1405,12 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">批次号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="w-batch">
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">PayPaz 订单号</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="w-paypazid">
@@ -1436,26 +1456,32 @@
         <!-- Table -->
         <div class="table-card">
           <div class="summary-bar">
+            <div class="summary-stats" id="w-stats">
+              <span>提币笔数：<b id="w-stat-count">0</b></span>
+              <span>提币金额（合计）：<b class="neg" id="w-stat-amt">0.00</b></span>
+              <span>手续费（合计）：<b class="neg" id="w-stat-fee">0.00</b></span>
+              <span>净入账（合计）：<b class="neg" id="w-stat-net">0.00</b></span>
+            </div>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="openWdExportModal()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2190px;">
+            <table style="min-width:2470px;">
               <colgroup>
                 <col style="width:108px"><col style="width:145px"><col style="width:108px">
-                <col style="width:68px"><col style="width:76px"><col style="width:66px">
-                <col style="width:70px"><col style="width:150px"><col style="width:165px">
-                <col style="width:165px"><col style="width:150px">
-                <col style="width:330px"><col style="width:330px"><col style="width:66px">
-                <col style="width:120px"><col style="width:70px">
+                <col style="width:68px"><col style="width:76px"><col style="width:76px">
+                <col style="width:70px"><col style="width:66px"><col style="width:150px">
+                <col style="width:165px"><col style="width:165px"><col style="width:150px">
+                <col style="width:200px"><col style="width:330px"><col style="width:330px">
+                <col style="width:66px"><col style="width:120px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
-                  <th>净入账</th><th>手续费</th><th>钱包地址</th>
-                  <th>提币时间</th><th>到账时间</th><th>哈希</th>
+                  <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
+                  <th>提币时间</th><th>到账时间</th><th>哈希</th><th>批次号</th>
                   <th>PayPaz 订单号</th><th>供应商订单号</th>
                   <th>渠道</th><th>状态</th><th>操作</th>
                 </tr>
@@ -2238,18 +2264,18 @@
         <div class="content-area">
           <div class="table-card">
             <div class="table-wrap">
-              <table style="min-width:1060px;">
+              <table style="min-width:1040px;">
                 <colgroup>
                   <col style="width:80px"><col style="width:160px"><col style="width:100px">
                   <col style="width:80px"><col style="width:80px"><col style="width:110px">
-                  <col style="width:80px"><col style="width:140px"><col style="width:140px">
-                  <col>
+                  <col style="width:80px"><col style="width:140px"><col style="width:150px"><col style="width:150px">
+                  <col style="width:70px">
                 </colgroup>
                 <thead>
                   <tr>
                     <th>代币</th><th>网络全称</th><th>最小充币</th>
                     <th>状态</th><th>充币</th><th>充币渠道</th>
-                    <th>提币</th><th>单笔提币渠道</th><th>批量提币渠道</th>
+                    <th>提币</th><th>单笔提币渠道</th><th>Excel批量提币渠道</th><th>Open API提币渠道</th>
                     <th>操作</th>
                   </tr>
                 </thead>
@@ -2522,12 +2548,14 @@
               <span class="filter-label-el">操作模块</span>
               <div class="filter-control">
                 <div class="select-wrap">
-                  <select class="field-select" id="ol-module">
-                    <option value="">全部</option>
-                  </select>
+                  <input class="field-input" type="text" placeholder="全部" autocomplete="off"
+                         style="padding-right:28px;" id="ol-module"
+                         oninput="olModuleInput()" onfocus="olModuleInput()"
+                         onblur="setTimeout(olHideModuleDrop, 150)">
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ol-module-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">操作类型</span>
@@ -2636,6 +2664,24 @@
       <div class="modal-body" id="modal-body"></div>
       <div class="modal-footer">
         <button class="btn btn-default btn-sm" onclick="closeModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Deposit Edit Modal ───────────────────────────── -->
+  <div class="modal-overlay" id="d-edit-modal" onclick="if(event.target===this)closeDepositEdit()">
+    <div class="modal" style="width:560px;">
+      <div class="modal-header">
+        <span class="modal-title" id="d-edit-title">编辑充币记录</span>
+        <span class="modal-close" onclick="closeDepositEdit()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" id="d-edit-body">
+        <!-- populated by JS -->
+      </div>
+      <div class="modal-footer" id="d-edit-footer">
+        <!-- populated by JS -->
       </div>
     </div>
   </div>
@@ -2952,6 +2998,132 @@
       <div class="modal-footer">
         <button class="btn btn-default btn-sm" onclick="closeRampPairEdit()" style="margin-right:8px;">取消</button>
         <button class="btn btn-primary btn-sm" onclick="saveRampPairEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 代币编辑弹窗 -->
+  <div class="modal-overlay" id="token-edit-modal" onclick="if(event.target===this)closeTokenEdit()">
+    <div class="modal" style="width:480px;">
+      <div class="modal-header">
+        <span class="modal-title" id="tk-title">USDT - Ethereum</span>
+        <span class="modal-close" onclick="closeTokenEdit()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div style="padding:20px 24px 8px;max-height:78vh;overflow-y:auto;">
+        <div class="tk-row" style="margin-bottom:20px;">
+          <span class="ak-label"><span class="ak-req">*</span>状态</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="tk-status" value="on"><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="tk-status" value="off"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+
+        <div class="tk-section">充币</div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>充币</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="tk-deposit" value="on"><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="tk-deposit" value="off"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>最小充币</span>
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-min-deposit" style="width:100%;">
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>充币手续费</span>
+          <div class="tk-addon-wrap">
+            <input class="field-input" type="number" step="0.0001" min="0" id="tk-deposit-fee-rate">
+            <span class="tk-addon">%</span>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>最小充币手续费</span>
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-deposit-fee-min" style="width:100%;">
+        </div>
+        <div class="tk-row" style="margin-bottom:20px;">
+          <span class="ak-label"><span class="ak-req">*</span>充币渠道</span>
+          <div class="select-wrap" style="width:100%;">
+            <select class="field-select" id="tk-deposit-ch" style="width:100%;">
+              <option value="Cobo">Cobo</option>
+              <option value="PayMe">PayMe</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+        </div>
+
+        <div class="tk-section">提币</div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>提币</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="tk-withdraw" value="on"><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="tk-withdraw" value="off"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>每日最大提币</span>
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-max" style="width:100%;">
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>最小提币</span>
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-min" style="width:100%;">
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>提币手续费</span>
+          <div class="tk-addon-wrap">
+            <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-fee-rate">
+            <span class="tk-addon">%</span>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>最小提币手续费</span>
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-fee-min" style="width:100%;">
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>单笔提币渠道</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="select-wrap" style="flex:1;">
+              <select class="field-select" id="tk-withdraw-ch" style="width:100%;">
+                <option value="Cobo">Cobo</option>
+                <option value="PayMe">PayMe</option>
+              </select>
+              <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+            </div>
+            <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#606266;"><span>人工审核</span><label class="role-switch"><input type="checkbox" id="tk-withdraw-review"><span></span></label></span>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>Excel 批量提币渠道</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="select-wrap" style="flex:1;">
+              <select class="field-select" id="tk-excel-batch-ch" style="width:100%;">
+                <option value="Cobo">Cobo</option>
+                <option value="PayMe">PayMe</option>
+              </select>
+              <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+            </div>
+            <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#606266;"><span>人工审核</span><label class="role-switch"><input type="checkbox" id="tk-excel-batch-review"><span></span></label></span>
+          </div>
+        </div>
+        <div class="tk-row" style="margin-bottom:20px;">
+          <span class="ak-label"><span class="ak-req">*</span>Open API 提币渠道</span>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="select-wrap" style="flex:1;">
+              <select class="field-select" id="tk-openapi-ch" style="width:100%;">
+                <option value="Cobo">Cobo</option>
+                <option value="PayMe">PayMe</option>
+              </select>
+              <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+            </div>
+            <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#606266;"><span>人工审核</span><label class="role-switch"><input type="checkbox" id="tk-openapi-review"><span></span></label></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" onclick="saveTokenEdit()">确定</button>
+        <button class="btn btn-default btn-sm" onclick="closeTokenEdit()" style="margin-left:8px;">取消</button>
       </div>
     </div>
   </div>
@@ -3280,6 +3452,8 @@
   const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
 
   const _MATCH_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
+  const _D_PEN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
+  const _D_EYE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
 
   function depositRender() {
     const tbody = document.getElementById('d-tbody');
@@ -3288,9 +3462,14 @@
     tbody.innerHTML = slice.map(r => {
       const st = D_STATUS[r.status];
       const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
+      const idx = DEPOSIT_ALL.indexOf(r);
       const matchBtn = r.status === 'pending'
-        ? `<span class="action-icon" title="关联订单" onclick="openDepositMatch(${DEPOSIT_ALL.indexOf(r)})" style="color:#409EFF;">${_MATCH_SVG}</span>`
+        ? `<span class="action-icon" title="关联订单" onclick="openDepositMatch(${idx})" style="color:#409EFF;">${_MATCH_SVG}</span>`
         : '';
+      const editBtn = r.status === 'pending'
+        ? `<span class="action-icon" title="编辑" onclick="openDepositEdit(${idx})">${_D_PEN_SVG}</span>`
+        : '';
+      const viewBtn = `<span class="action-icon" title="详情" onclick="openDepositView(${idx})">${_D_EYE_SVG}</span>`;
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
         <td>${r.name}</td>
@@ -3304,7 +3483,7 @@
         <td>${truncCell(r.hash)}</td>
         <td>${r.channel || '直连'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
-        <td style="text-align:center;">${matchBtn}</td>
+        <td><div class="action-cell">${viewBtn}${matchBtn}${editBtn}</div></td>
       </tr>`;
     }).join('');
     document.getElementById('d-page-total').textContent = `共 ${dState.rows.length} 条`;
@@ -3381,6 +3560,113 @@
     }), '充币记录.csv');
   }
 
+  // ── Deposit Edit Modal ─────────────────────────────────
+  let dEditIdx = -1;
+
+  function _dItems(r) {
+    const st = D_STATUS[r.status];
+    const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
+    const di = (label, value) =>
+      `<div class="detail-item">
+        <span class="detail-label">${label}</span>
+        <span class="detail-value">${value}</span>
+      </div>`;
+    const diCopy = (label, value) =>
+      `<div class="detail-item">
+        <span class="detail-label">${label}</span>
+        ${(!value || value === '-') ? '<span class="detail-value">—</span>' : truncCell(value)}
+      </div>`;
+    return [
+      di('商户 ID',   r.uid),
+      di('商户名称',  r.name),
+      di('用户 ID',   r.userId),
+      di('状态',     `<span class="badge ${st.cls}">${st.label}</span>`),
+      di('到账金额', `<span style="color:#67C23A;font-family:Inter,sans-serif">${r.amount} ${r.token}</span>`),
+      di('手续费',   `${r.fee} ${r.token}`),
+      di('净入账',   `<span style="color:#67C23A;font-family:Inter,sans-serif">${net} ${r.token}</span>`),
+      di('代币',     r.token),
+      di('网络',     r.network),
+      di('合作伙伴', r.channel || '直连'),
+      di('到账时间', r.time),
+      diCopy('哈希', r.hash),
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">钱包地址</span>
+        ${truncCell(r.wallet)}
+      </div>`,
+    ].join('');
+  }
+
+  function openDepositView(idx) {
+    dEditIdx = idx;
+    const r = DEPOSIT_ALL[idx];
+    document.getElementById('d-edit-title').textContent = '充币记录详情';
+    document.getElementById('d-edit-body').innerHTML = _dItems(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">备注</span>
+        <span class="detail-value">${r.remark || '—'}</span>
+      </div>`;
+    document.getElementById('d-edit-footer').innerHTML =
+      `<button class="btn btn-default btn-sm" onclick="closeDepositEdit()">关闭</button>`;
+    document.getElementById('d-edit-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function openDepositEdit(idx) {
+    dEditIdx = idx;
+    const r = DEPOSIT_ALL[idx];
+    document.getElementById('d-edit-title').textContent = '编辑充币记录';
+    document.getElementById('d-edit-body').innerHTML = _dItems(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">修改状态</span>
+        <div class="select-wrap" style="width:100%;">
+          <select class="field-select" id="d-edit-status" style="width:100%;" onchange="updateDepositEditSaveState()">
+            <option value="pending"${r.status === 'pending' ? ' selected' : ''}>待匹配订单</option>
+            <option value="arrived"${r.status === 'arrived' ? ' selected' : ''}>已到账</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+        </div>
+      </div>
+      <div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">备注</span>
+        <div class="wm-remark-wrap">
+          <textarea class="wm-remark" id="d-edit-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('d-edit-remark-count').textContent=this.value.length">${r.remark || ''}</textarea>
+          <span class="wm-remark-count"><span id="d-edit-remark-count">${(r.remark || '').length}</span>/200</span>
+        </div>
+      </div>`;
+    document.getElementById('d-edit-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeDepositEdit()">取消</button>
+      <button class="btn btn-primary btn-sm" id="d-edit-save-btn" style="margin-left:8px;" onclick="saveDepositEdit()" disabled>保存</button>
+    `;
+    document.getElementById('d-edit-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function updateDepositEditSaveState() {
+    if (dEditIdx < 0) return;
+    const r = DEPOSIT_ALL[dEditIdx];
+    const sel = document.getElementById('d-edit-status');
+    const saveBtn = document.getElementById('d-edit-save-btn');
+    if (!sel || !saveBtn) return;
+    saveBtn.disabled = sel.value === r.status;
+  }
+
+  function closeDepositEdit() {
+    document.getElementById('d-edit-modal').classList.remove('show');
+    dEditIdx = -1;
+  }
+
+  function saveDepositEdit() {
+    if (dEditIdx < 0) return;
+    const r = DEPOSIT_ALL[dEditIdx];
+    const newStatus = document.getElementById('d-edit-status').value;
+    if (newStatus === r.status) return;
+    r.status = newStatus;
+    r.remark = (document.getElementById('d-edit-remark')?.value || '').trim();
+    closeDepositEdit();
+    depositRender();
+    showToast('保存成功，状态已更新为' + D_STATUS[newStatus].label);
+  }
+
   // ══════════════════════════════════════════════════════
   //  提币记录 data & logic
   // ══════════════════════════════════════════════════════
@@ -3399,14 +3685,14 @@
   ];
 
   const WITHDRAW_ALL = [
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', wdTime:'2026-06-25 09:12:03', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-25 09:15:47', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011003', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', wdTime:'2026-06-25 09:18:22', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending'  },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 10:02:11', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:05:38', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 09:58:04', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:08:15', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:11:29', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', wdTime:'2026-06-25 09:12:03', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-25 09:15:47', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011003', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', wdTime:'2026-06-25 09:18:22', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 10:02:11', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:05:38', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 09:58:04', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:08:15', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:11:29', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', wdTime:'2026-06-20 14:22:56', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'manual_review' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDT', network:'TRON', net:'-5.01', fee:'0.01', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-06-26 09:20:14', time:'-', hash:'-',                                                                       paypazId:'WD00000000000041',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDT', network:'TRON', net:'-12.30',fee:'0.01', wallet:'TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS', wdTime:'2026-06-26 09:35:47', time:'-', hash:'-',                                                                       paypazId:'WD00000000000042',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
@@ -3423,6 +3709,17 @@
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-6.67', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 15:23:33', time:'2026-06-24 15:23:59', hash:'e170de42bb24a554d9216d8285f6c3a71b9e04d8',             paypazId:'5bf9659b-51f1-4f6f-b39a-3426f9d2c10e', supplierId:'93140917-fa86-4614-826d-3d0f5c72b48a', channel:'Cobo', status:'completed' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-17 08:44:19', time:'-', hash:'-',                                                                       paypazId:'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', supplierId:'-',                                    channel:'Cobo', status:'failed'    },
   ];
+
+  (function assignWithdrawBatches() {
+    // 只有通过 Excel 发起的批量提币才有批次号，其余单笔提币批次号为空
+    const excelDates = [...new Set(WITHDRAW_ALL.filter(r => r.viaExcel).map(r => r.wdTime.split(' ')[0]))].sort();
+    const batchMap = {};
+    excelDates.forEach((d, i) => { batchMap[d] = `BWD-${d.replace(/-/g, '')}-${String(i + 1).padStart(4, '0')}`; });
+    WITHDRAW_ALL.forEach(r => { r.batch = r.viaExcel ? batchMap[r.wdTime.split(' ')[0]] : '-'; });
+  })();
+
+  function wAmt(r) { return (parseFloat(r.net) + parseFloat(r.fee)).toFixed(2); }
+  function wFeeNeg(r) { return (-parseFloat(r.fee)).toFixed(2); }
 
   const wState = { rows: [...WITHDRAW_ALL], page: 1, size: 20 };
   let wdManageIdx = -1;
@@ -3447,12 +3744,14 @@
         <td>${r.merchantName}</td>
         <td style="font-family:Inter,sans-serif">${r.userId}</td>
         <td>${r.token}</td><td>${r.network}</td>
+        <td class="cell-red">${wAmt(r)}</td>
+        <td>${wFeeNeg(r)}</td>
         <td class="cell-red">${r.net}</td>
-        <td>${r.fee}</td>
         <td>${truncCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.wdTime}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.time}</td>
         <td>${hashCell}</td>
+        <td>${r.batch === '-' ? '-' : fullCell(r.batch)}</td>
         <td>${paypazCell}</td>
         <td>${supplierCell}</td>
         <td>${r.channel === '-' ? '-' : r.channel}</td>
@@ -3463,6 +3762,13 @@
         </div></td>
       </tr>`;
     }).join('');
+    const wSumAmt = wState.rows.reduce((s, r) => s + parseFloat(wAmt(r)), 0);
+    const wSumFee = wState.rows.reduce((s, r) => s + parseFloat(wFeeNeg(r)), 0);
+    const wSumNet = wState.rows.reduce((s, r) => s + parseFloat(r.net), 0);
+    document.getElementById('w-stat-count').textContent = wState.rows.length;
+    document.getElementById('w-stat-amt').textContent = wSumAmt.toFixed(2);
+    document.getElementById('w-stat-fee').textContent = wSumFee.toFixed(2);
+    document.getElementById('w-stat-net').textContent = wSumNet.toFixed(2);
     document.getElementById('w-page-total').textContent = `共 ${wState.rows.length} 条`;
     const total = Math.max(1, Math.ceil(wState.rows.length / wState.size));
     document.getElementById('w-btn-prev').disabled = wState.page <= 1;
@@ -3511,6 +3817,7 @@
     const st       = document.getElementById('w-status').value;
     const channel  = document.getElementById('w-channel').value;
     const hash     = document.getElementById('w-hash').value.trim().toLowerCase();
+    const batch    = document.getElementById('w-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('w-paypazid').value.trim().toLowerCase();
     const supplier = document.getElementById('w-supplierid').value.trim().toLowerCase();
     const wds      = document.getElementById('w-wdtime-start').value;
@@ -3525,6 +3832,7 @@
       if (st       && r.status !== st)                                 return false;
       if (channel  && r.channel !== channel)                           return false;
       if (hash     && !r.hash.toLowerCase().includes(hash))           return false;
+      if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
       if (supplier && !r.supplierId.toLowerCase().includes(supplier)) return false;
       if (wds      && r.wdTime !== '-' && r.wdTime.split(' ')[0] < wds) return false;
@@ -3536,15 +3844,15 @@
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
-    ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-paypazid','w-supplierid','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
+    ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     wState.rows = [...WITHDRAW_ALL]; wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
-    const headers = ['商户ID','商户名称','用户ID','代币','网络','净入账','手续费','钱包地址','提币时间','到账时间','哈希','PayPaz订单号','供应商订单号','渠道','状态'];
+    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','PayPaz订单号','供应商订单号','渠道','状态'];
     csvDownload(headers, wState.rows.map(r => [
-      r.merchantId, r.merchantName, r.userId, r.token, r.network, r.net, r.fee, r.wallet,
-      r.wdTime, r.time, r.hash, r.paypazId, r.supplierId, r.channel, W_STATUS[r.status].label
+      r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
+      r.wdTime, r.time, r.hash, r.batch, r.paypazId, r.supplierId, r.channel, W_STATUS[r.status].label
     ]), '提币记录.csv');
   }
   function openWdExportModal() {
@@ -3566,30 +3874,83 @@
   }
 
   // ── Withdraw Modals ────────────────────────────────────
-  function _wdItems(r) {
+  function _wdItems(r, opts) {
+    opts = opts || {};
     const st = W_STATUS[r.status];
     const di = (label, value, full) =>
       `<div class="detail-item"${full ? ' style="grid-column:1/-1"' : ''}>
         <span class="detail-label">${label}</span>
         <span class="detail-value">${value}</span>
       </div>`;
+    const diCopy = (label, value) =>
+      `<div class="detail-item">
+        <span class="detail-label">${label}</span>
+        ${(!value || value === '-') ? '<span class="detail-value">—</span>' : truncCell(value)}
+      </div>`;
     return [
       di('商户 ID',      r.merchantId),
       di('商户名称',     r.merchantName),
       di('用户 ID',      r.userId),
       di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
+      di('提币金额',    `<span style="color:#F56C6C;font-family:Inter,sans-serif">${wAmt(r)} USDT</span>`),
+      di('手续费',      `${wFeeNeg(r)} USDT`),
       di('净入账',      `<span style="color:#F56C6C;font-family:Inter,sans-serif">${r.net} USDT</span>`),
-      di('手续费',      `${r.fee} USDT`),
       di('代币',         r.token),
       di('网络',         r.network),
-      di('渠道',         r.channel === '-' ? '—' : r.channel),
+      opts.hideChannel ? '' : di('渠道', r.channel === '-' ? '—' : r.channel),
       di('提币时间',     r.wdTime === '-' ? '—' : r.wdTime),
       di('到账时间',     r.time === '-' ? '—' : r.time),
-      di('哈希',         r.hash === '-' ? '—' : r.hash,          true),
-      di('PayPaz 订单号', r.paypazId === '-' ? '—' : r.paypazId,  true),
-      di('供应商订单号',  r.supplierId === '-' ? '—' : r.supplierId, true),
-      di('钱包地址',     r.wallet,                                 true),
+      diCopy('哈希',         r.hash),
+      diCopy('批次号',       r.batch),
+      diCopy('PayPaz 订单号', r.paypazId),
+      diCopy('供应商订单号',  r.supplierId),
+      diCopy('钱包地址',     r.wallet),
     ].join('');
+  }
+
+  // ── mock channel balances (per channel + token + network) ──
+  function _wdBalanceSeed(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    return h;
+  }
+  function wdChannelBalanceValue(channel, token, network) {
+    const seed = _wdBalanceSeed(`${channel}|${token}|${network}`);
+    return 5000 + (seed % 250000) / 100;
+  }
+  function wdChannelBalanceLabel(channel, token, network) {
+    return wdChannelBalanceValue(channel, token, network).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function _wdChannelEditor(r) {
+    const balCobo  = wdChannelBalanceLabel('Cobo',  r.token, r.network);
+    const balPayMe = wdChannelBalanceLabel('PayMe', r.token, r.network);
+    return `
+      <div class="detail-item wd-channel-row" style="grid-column:1/-1">
+        <span class="detail-label">渠道</span>
+        <div class="wd-channel-edit" style="width:100%;">
+          <div class="select-wrap" style="width:100%;">
+            <select class="field-select" id="wd-channel-select" style="width:100%;" onchange="updateWdChannelBalance()">
+              <option value="Cobo"${r.channel === 'Cobo' ? ' selected' : ''}>Cobo · 余额 ${balCobo} ${r.token}</option>
+              <option value="PayMe"${r.channel === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe} ${r.token}</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+          <span class="wd-channel-balance" id="wd-channel-balance-hint"></span>
+        </div>
+      </div>`;
+  }
+
+  function updateWdChannelBalance() {
+    if (wdManageIdx < 0) return;
+    const r = WITHDRAW_ALL[wdManageIdx];
+    const sel = document.getElementById('wd-channel-select');
+    const hint = document.getElementById('wd-channel-balance-hint');
+    if (!sel || !hint) return;
+    const channel = sel.value;
+    const balVal = wdChannelBalanceValue(channel, r.token, r.network);
+    const needed = Math.abs(parseFloat(r.net));
+    hint.textContent = balVal < needed ? '该渠道余额不足，请更换渠道或先充值' : '';
   }
 
   function openWdView(idx) {
@@ -3610,7 +3971,9 @@
   function openWdEdit(idx) {
     wdManageIdx = idx;
     document.querySelector('#wd-manage-modal .modal-title').textContent = '处理提币订单';
-    document.getElementById('wd-manage-body').innerHTML = _wdItems(WITHDRAW_ALL[idx]) +
+    const r = WITHDRAW_ALL[idx];
+    document.getElementById('wd-manage-body').innerHTML = _wdItems(r, { hideChannel: true }) +
+      _wdChannelEditor(r) +
       `<div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">备注</span>
         <div class="wm-remark-wrap">
@@ -3621,15 +3984,16 @@
     document.getElementById('wd-manage-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeWdManage()">取消</button>
       <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdAction('failed')">拒绝</button>
-      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdAction('withdrawing')">重试</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdAction('withdrawing')">通过</button>
     `;
     document.getElementById('wd-manage-modal').classList.add('show');
+    updateWdChannelBalance();
     if (window.lucide) lucide.createIcons();
   }
 
   const WD_CONFIRM_CFG = {
-    failed:     { icon:'alert-circle', iconColor:'#F56C6C', title:'拒绝提币',         msg:'拒绝后，订单状态将更新为「提币失败」，且无法撤销。确认继续吗？',                     btnCls:'btn-danger',  btnTxt:'确认拒绝' },
-    withdrawing:{ icon:'rotate-ccw',   iconColor:'#409EFF', title:'确认重新发起提币', msg:'系统将重新提交该提币订单，订单状态将更新为「提币中」。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认重试' },
+    failed:     { icon:'alert-circle', iconColor:'#F56C6C', title:'拒绝提币',   msg:'拒绝后，订单状态将更新为「提币失败」，且无法撤销。确认继续吗？', btnCls:'btn-danger',  btnTxt:'确认拒绝' },
+    withdrawing:{ icon:'check-circle', iconColor:'#67C23A', title:'通过提币订单', msg:'系统将使用所选渠道重新发起提币，订单状态将更新为「提币中」。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认通过' },
   };
 
   function confirmWdAction(action) {
@@ -3637,7 +4001,12 @@
     document.getElementById('wd-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
     document.getElementById('wd-confirm-title').textContent = cfg.title;
-    document.getElementById('wd-confirm-msg').textContent  = cfg.msg;
+    let msg = cfg.msg;
+    if (action === 'withdrawing') {
+      const sel = document.getElementById('wd-channel-select');
+      if (sel) msg = `系统将使用「${sel.value}」渠道重新发起提币，订单状态将更新为「提币中」。确认继续吗？`;
+    }
+    document.getElementById('wd-confirm-msg').textContent  = msg;
     const okBtn = document.getElementById('wd-confirm-ok');
     okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
     okBtn.textContent = cfg.btnTxt;
@@ -3652,12 +4021,17 @@
 
   function wdAction(newStatus) {
     if (wdManageIdx < 0) return;
-    WITHDRAW_ALL[wdManageIdx].remark = (document.getElementById('wd-remark')?.value || '').trim();
-    WITHDRAW_ALL[wdManageIdx].status = newStatus;
+    const r = WITHDRAW_ALL[wdManageIdx];
+    r.remark = (document.getElementById('wd-remark')?.value || '').trim();
+    if (newStatus === 'withdrawing') {
+      const sel = document.getElementById('wd-channel-select');
+      if (sel) r.channel = sel.value;
+    }
+    r.status = newStatus;
     closeWdConfirm();
     closeWdManage();
     withdrawRender();
-    const msgs = { failed:'已拒绝，订单状态更新为提币失败', withdrawing:'已重新发起提币，状态更新为提币中' };
+    const msgs = { failed:'已拒绝，订单状态更新为提币失败', withdrawing:`已通过，使用${r.channel}渠道重新发起提币，状态更新为提币中` };
     showToast(msgs[newStatus] || '操作成功');
   }
 
@@ -4415,25 +4789,42 @@
   let currentMerchantIdx = 0;
 
   const TOKEN_ROWS = [
-    { token:'USDT', network:'TRON',            minDeposit:'0.1', status:'on', deposit:'on', depositCh:'Cobo',  withdraw:'on',  withdrawCh:'PayMe', batchCh:'PayMe' },
-    { token:'USDT', network:'Ethereum',        minDeposit:'',    status:'off',deposit:'on', depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'PayMe' },
-    { token:'USDC', network:'Ethereum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDC', network:'Arbitrum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDC', network:'Base',            minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDC', network:'Polygon',         minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDC', network:'BNB Smart Chain', minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDC', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDT', network:'Arbitrum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDT', network:'Base',            minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDT', network:'Polygon',         minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDT', network:'BNB Smart Chain', minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
-    { token:'USDT', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  batchCh:'Cobo'  },
+    { token:'USDT', network:'TRON',            minDeposit:'0.1', status:'on', deposit:'on', depositCh:'Cobo',  withdraw:'on',  withdrawCh:'PayMe', excelBatchCh:'PayMe' },
+    { token:'USDT', network:'Ethereum',        minDeposit:'',    status:'off',deposit:'on', depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'PayMe' },
+    { token:'USDC', network:'Ethereum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDC', network:'Arbitrum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDC', network:'Base',            minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDC', network:'Polygon',         minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDC', network:'BNB Smart Chain', minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDC', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDT', network:'Arbitrum',        minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDT', network:'Base',            minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDT', network:'Polygon',         minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDT', network:'BNB Smart Chain', minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
+    { token:'USDT', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
   ];
+  TOKEN_ROWS.forEach(r => {
+    r.depositFeeRate  = r.depositFeeRate  ?? '0.01';
+    r.depositFeeMin   = r.depositFeeMin   ?? '0.01';
+    r.withdrawMax     = r.withdrawMax     ?? '10000';
+    r.withdrawMin     = r.withdrawMin     ?? (r.minDeposit || '0.1');
+    r.withdrawFeeRate = r.withdrawFeeRate ?? '0.01';
+    r.withdrawFeeMin  = r.withdrawFeeMin  ?? '0.01';
+    r.withdrawReview     = r.withdrawReview     ?? false;
+    r.excelBatchCh        = r.excelBatchCh        ?? 'Cobo';
+    r.excelBatchReview    = r.excelBatchReview    ?? true;
+    r.openApiCh           = r.openApiCh           ?? 'Cobo';
+    r.openApiReview        = r.openApiReview       ?? false;
+  });
 
   function tBadge(flag) {
     return flag === 'on'
       ? '<span class="badge-ton">启用</span>'
       : '<span class="badge-toff">禁用</span>';
+  }
+
+  function reviewTag(flag) {
+    return flag ? ' <span class="badge badge-purple">人工审核</span>' : '';
   }
 
   function mdRenderTokenTable() {
@@ -4446,12 +4837,76 @@
       <td>${tBadge(r.deposit)}</td>
       <td>${r.depositCh}</td>
       <td>${tBadge(r.withdraw)}</td>
-      <td>${r.withdrawCh}</td>
-      <td>${r.batchCh}</td>
+      <td>${r.withdrawCh}${reviewTag(r.withdrawReview)}</td>
+      <td>${r.excelBatchCh}${reviewTag(r.excelBatchReview)}</td>
+      <td>${r.openApiCh}${reviewTag(r.openApiReview)}</td>
       <td>
-        <span class="action-icon" onclick="showToast('功能开发中')" title="编辑">${_EDIT_SVG}</span>
+        <span class="action-icon" onclick="openTokenEdit(${i})" title="编辑">${_EDIT_SVG}</span>
       </td>
     </tr>`).join('');
+  }
+
+  let _tkIdx = -1;
+
+  function openTokenEdit(i) {
+    _tkIdx = i;
+    const r = TOKEN_ROWS[i];
+    document.getElementById('tk-title').textContent = `${r.token} - ${r.network}`;
+    document.querySelectorAll('input[name="tk-status"]').forEach(el   => { el.checked = el.value === r.status; });
+    document.querySelectorAll('input[name="tk-deposit"]').forEach(el  => { el.checked = el.value === r.deposit; });
+    document.querySelectorAll('input[name="tk-withdraw"]').forEach(el => { el.checked = el.value === r.withdraw; });
+    document.getElementById('tk-min-deposit').value      = r.minDeposit;
+    document.getElementById('tk-deposit-fee-rate').value = r.depositFeeRate;
+    document.getElementById('tk-deposit-fee-min').value  = r.depositFeeMin;
+    document.getElementById('tk-deposit-ch').value        = r.depositCh;
+    document.getElementById('tk-withdraw-max').value      = r.withdrawMax;
+    document.getElementById('tk-withdraw-min').value      = r.withdrawMin;
+    document.getElementById('tk-withdraw-fee-rate').value = r.withdrawFeeRate;
+    document.getElementById('tk-withdraw-fee-min').value  = r.withdrawFeeMin;
+    document.getElementById('tk-withdraw-ch').value        = r.withdrawCh;
+    document.getElementById('tk-withdraw-review').checked   = r.withdrawReview;
+    document.getElementById('tk-excel-batch-ch').value      = r.excelBatchCh;
+    document.getElementById('tk-excel-batch-review').checked= r.excelBatchReview;
+    document.getElementById('tk-openapi-ch').value          = r.openApiCh;
+    document.getElementById('tk-openapi-review').checked    = r.openApiReview;
+
+    document.getElementById('token-edit-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeTokenEdit() {
+    document.getElementById('token-edit-modal').classList.remove('show');
+  }
+
+  function saveTokenEdit() {
+    if (_tkIdx < 0) return;
+    const requiredIds = ['tk-min-deposit','tk-deposit-fee-rate','tk-deposit-fee-min','tk-withdraw-max','tk-withdraw-min','tk-withdraw-fee-rate','tk-withdraw-fee-min'];
+    for (const id of requiredIds) {
+      if (!document.getElementById(id).value.trim()) { showToast('请完整填写必填项'); return; }
+    }
+
+    const r = TOKEN_ROWS[_tkIdx];
+    r.status   = document.querySelector('input[name="tk-status"]:checked')?.value   || 'off';
+    r.deposit  = document.querySelector('input[name="tk-deposit"]:checked')?.value  || 'off';
+    r.withdraw = document.querySelector('input[name="tk-withdraw"]:checked')?.value || 'off';
+    r.minDeposit      = document.getElementById('tk-min-deposit').value.trim();
+    r.depositFeeRate  = document.getElementById('tk-deposit-fee-rate').value.trim();
+    r.depositFeeMin   = document.getElementById('tk-deposit-fee-min').value.trim();
+    r.depositCh       = document.getElementById('tk-deposit-ch').value;
+    r.withdrawMax     = document.getElementById('tk-withdraw-max').value.trim();
+    r.withdrawMin     = document.getElementById('tk-withdraw-min').value.trim();
+    r.withdrawFeeRate = document.getElementById('tk-withdraw-fee-rate').value.trim();
+    r.withdrawFeeMin  = document.getElementById('tk-withdraw-fee-min').value.trim();
+    r.withdrawCh      = document.getElementById('tk-withdraw-ch').value;
+    r.withdrawReview  = document.getElementById('tk-withdraw-review').checked;
+    r.excelBatchCh    = document.getElementById('tk-excel-batch-ch').value;
+    r.excelBatchReview= document.getElementById('tk-excel-batch-review').checked;
+    r.openApiCh       = document.getElementById('tk-openapi-ch').value;
+    r.openApiReview   = document.getElementById('tk-openapi-review').checked;
+
+    closeTokenEdit();
+    mdRenderTokenTable();
+    showToast('保存成功');
   }
 
   const RAMP_PAIRS = [
@@ -6257,10 +6712,32 @@
   }
 
   function operlogPopulateFilters() {
-    const moduleSel = document.getElementById('ol-module');
     const typeSel = document.getElementById('ol-type');
-    if (moduleSel) OPERLOG_MODULES.forEach(m => moduleSel.insertAdjacentHTML('beforeend', `<option value="${m}">${m}</option>`));
     if (typeSel) OPERLOG_TYPES.forEach(t => typeSel.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`));
+  }
+
+  function olModuleInput() {
+    const input = document.getElementById('ol-module');
+    const dd = document.getElementById('ol-module-dropdown');
+    const q = input.value.trim().toLowerCase();
+    const items = ['全部', ...OPERLOG_MODULES];
+    const list = q ? items.filter(m => m.toLowerCase().includes(q)) : items;
+    if (!list.length) { dd.style.display = 'none'; return; }
+    dd.innerHTML = list.map(m =>
+      `<div class="p-merch-opt" onmousedown="olSelectModule('${m === '全部' ? '' : m}')">${m}</div>`
+    ).join('');
+    dd.style.display = '';
+  }
+  function olSelectModule(value) {
+    document.getElementById('ol-module').value = value;
+    document.getElementById('ol-module-dropdown').style.display = 'none';
+  }
+  function olHideModuleDrop() {
+    const dd = document.getElementById('ol-module-dropdown');
+    if (dd) dd.style.display = 'none';
+    const input = document.getElementById('ol-module');
+    const val = input.value.trim();
+    if (val && !OPERLOG_MODULES.includes(val)) input.value = '';
   }
 
   const _OL_EYE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;

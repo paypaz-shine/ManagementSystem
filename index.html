@@ -773,6 +773,11 @@
       color:#F56C6C;
       border:1px solid #fbc4c4;
     }
+    .btn-primary-soft {
+      background:#ecf5ff;
+      color:#409EFF;
+      border:1px solid #b3d8ff;
+    }
     .role-switch {
       position:relative;
       display:inline-flex;
@@ -1337,7 +1342,7 @@
               <div class="p-merch-dropdown" id="w-merch-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">用户 ID</span>
+              <span class="filter-label-el">客户 ID</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="w-userid">
               </div>
@@ -1463,13 +1468,17 @@
               <span>净入账（合计）：<b class="neg" id="w-stat-net">0.00</b></span>
             </div>
             <div class="summary-spacer"></div>
+            <button class="btn btn-primary-soft" id="w-batch-btn" onclick="openWdBatchReview()" disabled style="margin-right:8px;">
+              <i data-lucide="check-square" style="width:13px;height:13px;"></i>批量审核
+            </button>
             <button class="export-btn" onclick="openWdExportModal()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2470px;">
+            <table style="min-width:2510px;">
               <colgroup>
+                <col style="width:40px">
                 <col style="width:108px"><col style="width:145px"><col style="width:108px">
                 <col style="width:68px"><col style="width:76px"><col style="width:76px">
                 <col style="width:70px"><col style="width:66px"><col style="width:150px">
@@ -1479,7 +1488,8 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
+                  <th><label class="ak-check-item" style="justify-content:center"><input type="checkbox" id="w-check-all" onchange="wToggleAllVisible(this.checked)"><span class="ak-box"></span></label></th>
+                  <th>商户 ID</th><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th>
                   <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>提币时间</th><th>到账时间</th><th>哈希</th><th>批次号</th>
                   <th>PayPaz 订单号</th><th>供应商订单号</th>
@@ -2717,9 +2727,49 @@
         </div>
         <p class="wd-confirm-msg" id="wd-confirm-msg"></p>
         <div class="wd-confirm-actions">
-          <button class="btn btn-default btn-sm" onclick="closeWdConfirm()">取消</button>
+          <button class="btn btn-default btn-sm" id="wd-confirm-cancel" onclick="closeWdConfirm()">取消</button>
           <button class="btn btn-sm" id="wd-confirm-ok"></button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Withdraw Batch Review Modal ──────────────────── -->
+  <div class="modal-overlay" id="wd-batch-modal" onclick="if(event.target===this)closeWdBatch()">
+    <div class="modal" style="width:560px;">
+      <div class="modal-header">
+        <span class="modal-title">批量审核</span>
+        <span class="modal-close" onclick="closeWdBatch()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body">
+        <div class="summary-stats" id="wd-batch-stats" style="grid-column:1/-1;">
+          <span>提币笔数：<b id="wd-batch-count">0</b></span>
+          <span>提币金额（合计）：<b class="neg" id="wd-batch-amt">0.00</b></span>
+        </div>
+        <div class="detail-item wd-channel-row" style="grid-column:1/-1" id="wd-batch-channel-editor"></div>
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label">备注</span>
+          <div class="wm-remark-wrap">
+            <textarea class="wm-remark" id="wd-batch-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('wd-batch-remark-count').textContent=this.value.length"></textarea>
+            <span class="wm-remark-count"><span id="wd-batch-remark-count">0</span>/200</span>
+          </div>
+        </div>
+        <div class="table-wrap" style="grid-column:1/-1;max-height:280px;border:1px solid #EBEEF5;border-radius:4px;">
+          <table>
+            <colgroup>
+              <col style="width:90px"><col style="width:90px"><col style="width:60px"><col style="width:70px"><col style="width:80px">
+            </colgroup>
+            <thead><tr><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th><th>提币金额</th></tr></thead>
+            <tbody id="wd-batch-list"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeWdBatch()">取消</button>
+        <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdBatchAction('failed')">拒绝</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdBatchAction('withdrawing')">通过</button>
       </div>
     </div>
   </div>
@@ -3721,7 +3771,7 @@
   function wAmt(r) { return (parseFloat(r.net) + parseFloat(r.fee)).toFixed(2); }
   function wFeeNeg(r) { return (-parseFloat(r.fee)).toFixed(2); }
 
-  const wState = { rows: [...WITHDRAW_ALL], page: 1, size: 20 };
+  const wState = { rows: [...WITHDRAW_ALL], page: 1, size: 20, selected: new Set() };
   let wdManageIdx = -1;
 
   function withdrawRender() {
@@ -3739,7 +3789,11 @@
       const supplierCell = r.supplierId === '-' ? '-' : fullCell(r.supplierId);
       const editIcon = r.status === 'manual_review'
         ? `<span class="action-icon" onclick="openWdEdit(${idx})" title="处理订单">${_PEN_SVG}</span>` : '';
+      const checkCell = r.status === 'manual_review'
+        ? `<label class="ak-check-item" style="justify-content:center"><input type="checkbox" ${wState.selected.has(idx) ? 'checked' : ''} onchange="wToggleSelected(${idx}, this.checked)"><span class="ak-box"></span></label>`
+        : '';
       return `<tr>
+        <td>${checkCell}</td>
         <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
         <td>${r.merchantName}</td>
         <td style="font-family:Inter,sans-serif">${r.userId}</td>
@@ -3778,6 +3832,38 @@
       btn.style.display = pg <= total ? '' : 'none';
       btn.classList.toggle('active', pg === wState.page);
     });
+    wUpdateBatchToolbar(slice);
+  }
+
+  function wUpdateBatchToolbar(slice) {
+    const visibleReviewable = (slice || []).filter(r => r.status === 'manual_review').map(r => WITHDRAW_ALL.indexOf(r));
+    const checkedVisible = visibleReviewable.filter(idx => wState.selected.has(idx));
+    const all = document.getElementById('w-check-all');
+    if (all) {
+      all.checked = visibleReviewable.length > 0 && checkedVisible.length === visibleReviewable.length;
+      all.indeterminate = checkedVisible.length > 0 && checkedVisible.length < visibleReviewable.length;
+    }
+    const batchBtn = document.getElementById('w-batch-btn');
+    if (batchBtn) batchBtn.disabled = wState.selected.size === 0;
+  }
+
+  function wToggleSelected(idx, checked) {
+    if (checked) wState.selected.add(idx);
+    else wState.selected.delete(idx);
+    const start = (wState.page - 1) * wState.size;
+    wUpdateBatchToolbar(wState.rows.slice(start, start + wState.size));
+  }
+
+  function wToggleAllVisible(checked) {
+    const start = (wState.page - 1) * wState.size;
+    const slice = wState.rows.slice(start, start + wState.size);
+    slice.forEach(r => {
+      if (r.status !== 'manual_review') return;
+      const idx = WITHDRAW_ALL.indexOf(r);
+      if (checked) wState.selected.add(idx);
+      else wState.selected.delete(idx);
+    });
+    withdrawRender();
   }
 
   function withdrawPage(p) {
@@ -3841,12 +3927,13 @@
       if (de       && r.time !== '-' && r.time.split(' ')[0] > de)    return false;
       return true;
     });
+    wState.selected.clear();
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
     ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    wState.rows = [...WITHDRAW_ALL]; wState.page = 1; withdrawRender();
+    wState.rows = [...WITHDRAW_ALL]; wState.selected.clear(); wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
     const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','PayPaz订单号','供应商订单号','渠道','状态'];
@@ -3931,7 +4018,7 @@
         <div class="wd-channel-edit" style="width:100%;">
           <div class="select-wrap" style="width:100%;">
             <select class="field-select" id="wd-channel-select" style="width:100%;" onchange="updateWdChannelBalance()">
-              <option value="Cobo"${r.channel === 'Cobo' ? ' selected' : ''}>Cobo · 余额 ${balCobo} ${r.token}</option>
+              <option value="Cobo"${r.channel === 'Cobo' ? ' selected' : ''}>Cobo(${r.merchantName}) · 余额 ${balCobo} ${r.token}</option>
               <option value="PayMe"${r.channel === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe} ${r.token}</option>
             </select>
             <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
@@ -3998,6 +4085,7 @@
 
   function confirmWdAction(action) {
     const cfg = WD_CONFIRM_CFG[action];
+    document.getElementById('wd-confirm-cancel').style.display = '';
     document.getElementById('wd-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
     document.getElementById('wd-confirm-title').textContent = cfg.title;
@@ -4038,6 +4126,130 @@
   function closeWdManage() {
     document.getElementById('wd-manage-modal').classList.remove('show');
     wdManageIdx = -1;
+  }
+
+  let wBatchToken = 'USDT';
+  let wBatchNetwork = 'TRON';
+  let wBatchNeeded = 0;
+
+  function _wdBatchChannelEditor(token, network, selected, merchantName) {
+    const balCobo  = wdChannelBalanceLabel('Cobo',  token, network);
+    const balPayMe = wdChannelBalanceLabel('PayMe', token, network);
+    return `
+      <span class="detail-label">渠道</span>
+      <div class="wd-channel-edit" style="width:100%;">
+        <div class="select-wrap" style="width:100%;">
+          <select class="field-select" id="wd-batch-channel-select" style="width:100%;" onchange="updateWdBatchChannelBalance()">
+            <option value="Cobo"${selected === 'Cobo' ? ' selected' : ''}>Cobo(${merchantName}) · 余额 ${balCobo} ${token}</option>
+            <option value="PayMe"${selected === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe} ${token}</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+        </div>
+        <span class="wd-channel-balance" id="wd-batch-channel-hint"></span>
+      </div>`;
+  }
+
+  function updateWdBatchChannelBalance() {
+    const sel = document.getElementById('wd-batch-channel-select');
+    const hint = document.getElementById('wd-batch-channel-hint');
+    if (!sel || !hint) return;
+    const balVal = wdChannelBalanceValue(sel.value, wBatchToken, wBatchNetwork);
+    hint.textContent = balVal < wBatchNeeded ? '该渠道余额不足，请更换渠道或先充值' : '';
+  }
+
+  function showWdBatchMerchantAlert() {
+    document.getElementById('wd-confirm-icon').innerHTML =
+      `<i data-lucide="alert-circle" style="width:22px;height:22px;color:#E6A23C;flex-shrink:0;"></i>`;
+    document.getElementById('wd-confirm-title').textContent = '批量审核';
+    document.getElementById('wd-confirm-msg').textContent  = '批量审核仅支持同一商户的提币记录，请重新选择。';
+    document.getElementById('wd-confirm-cancel').style.display = 'none';
+    const okBtn = document.getElementById('wd-confirm-ok');
+    okBtn.className   = 'btn btn-primary btn-sm';
+    okBtn.textContent = '我知道了';
+    okBtn.onclick = () => { closeWdConfirm(); };
+    document.getElementById('wd-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function openWdBatchReview() {
+    const rows = Array.from(wState.selected).map(idx => WITHDRAW_ALL[idx]).filter(r => r && r.status === 'manual_review');
+    if (!rows.length) { showToast('请选择待人工审核的提币记录'); return; }
+    if (new Set(rows.map(r => r.merchantId)).size > 1) { showWdBatchMerchantAlert(); return; }
+    document.getElementById('wd-batch-count').textContent = rows.length;
+    document.getElementById('wd-batch-amt').textContent = rows.reduce((s, r) => s + parseFloat(wAmt(r)), 0).toFixed(2);
+    document.getElementById('wd-batch-list').innerHTML = rows.map(r =>
+      `<tr>
+        <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td>
+        <td>${r.network}</td>
+        <td class="cell-red">${wAmt(r)}</td>
+      </tr>`
+    ).join('');
+    wBatchToken = rows[0].token;
+    wBatchNetwork = rows[0].network;
+    wBatchNeeded = rows.reduce((s, r) => s + Math.abs(parseFloat(r.net)), 0);
+    const defaultChannel = rows[0].channel && rows[0].channel !== '-' ? rows[0].channel : 'Cobo';
+    document.getElementById('wd-batch-channel-editor').innerHTML = _wdBatchChannelEditor(wBatchToken, wBatchNetwork, defaultChannel, rows[0].merchantName);
+    document.getElementById('wd-batch-remark').value = '';
+    document.getElementById('wd-batch-remark-count').textContent = '0';
+    document.getElementById('wd-batch-modal').classList.add('show');
+    updateWdBatchChannelBalance();
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeWdBatch() {
+    document.getElementById('wd-batch-modal').classList.remove('show');
+  }
+
+  const WD_BATCH_CONFIRM_CFG = {
+    failed:      { icon:'alert-circle', iconColor:'#F56C6C', title:'批量拒绝提币',     btnCls:'btn-danger',  btnTxt:'确认拒绝' },
+    withdrawing: { icon:'check-circle', iconColor:'#67C23A', title:'批量通过提币订单', btnCls:'btn-primary', btnTxt:'确认通过' },
+  };
+
+  function confirmWdBatchAction(action) {
+    const count = Array.from(wState.selected).filter(idx => WITHDRAW_ALL[idx] && WITHDRAW_ALL[idx].status === 'manual_review').length;
+    if (!count) { showToast('请选择待人工审核的提币记录'); return; }
+    const cfg = WD_BATCH_CONFIRM_CFG[action];
+    closeWdBatch();
+    document.getElementById('wd-confirm-cancel').style.display = '';
+    document.getElementById('wd-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
+    document.getElementById('wd-confirm-title').textContent = cfg.title;
+    let msg = action === 'failed'
+      ? `拒绝后，选中的 ${count} 条订单状态将更新为「提币失败」，且无法撤销。确认继续吗？`
+      : `系统将使用所选渠道重新发起提币，选中的 ${count} 条订单状态将更新为「提币中」。确认继续吗？`;
+    if (action === 'withdrawing') {
+      const sel = document.getElementById('wd-batch-channel-select');
+      if (sel) msg = `系统将使用「${sel.value}」渠道重新发起提币，选中的 ${count} 条订单状态将更新为「提币中」。确认继续吗？`;
+    }
+    document.getElementById('wd-confirm-msg').textContent = msg;
+    const okBtn = document.getElementById('wd-confirm-ok');
+    okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
+    okBtn.textContent = cfg.btnTxt;
+    okBtn.onclick = () => { wdBatchAction(action); };
+    document.getElementById('wd-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function wdBatchAction(newStatus) {
+    const ids = Array.from(wState.selected).filter(idx => WITHDRAW_ALL[idx] && WITHDRAW_ALL[idx].status === 'manual_review');
+    const remark = (document.getElementById('wd-batch-remark')?.value || '').trim();
+    const channelSel = document.getElementById('wd-batch-channel-select');
+    ids.forEach(idx => {
+      const r = WITHDRAW_ALL[idx];
+      r.remark = remark;
+      if (newStatus === 'withdrawing' && channelSel) r.channel = channelSel.value;
+      r.status = newStatus;
+    });
+    wState.selected.clear();
+    closeWdConfirm();
+    withdrawRender();
+    const msgs = {
+      failed:      `已批量拒绝 ${ids.length} 条订单，状态更新为提币失败`,
+      withdrawing: `已批量通过 ${ids.length} 条订单，状态更新为提币中`,
+    };
+    showToast(msgs[newStatus] || '操作成功');
   }
 
   // ══════════════════════════════════════════════════════

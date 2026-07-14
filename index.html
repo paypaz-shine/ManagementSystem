@@ -2744,26 +2744,57 @@
         </span>
       </div>
       <div class="modal-body">
-        <div class="summary-stats" id="wd-batch-stats" style="grid-column:1/-1;">
-          <span>提币笔数：<b id="wd-batch-count">0</b></span>
-          <span>提币金额（合计）：<b class="neg" id="wd-batch-amt">0.00</b></span>
-        </div>
         <div class="detail-item wd-channel-row" style="grid-column:1/-1" id="wd-batch-channel-editor"></div>
+        <div class="table-wrap" style="grid-column:1/-1;max-height:200px;border:1px solid #EBEEF5;border-radius:4px;">
+          <table>
+            <colgroup>
+              <col style="width:90px"><col style="width:110px"><col style="width:90px"><col style="width:110px">
+            </colgroup>
+            <thead><tr><th>代币</th><th>网络</th><th>余额</th><th style="text-align:right;">提币金额（合计）</th></tr></thead>
+            <tbody id="wd-batch-balance-list"></tbody>
+          </table>
+        </div>
         <div class="detail-item" style="grid-column:1/-1">
-          <span class="detail-label">备注</span>
+          <span class="detail-label" style="font-weight:600;color:#606266;">备注</span>
           <div class="wm-remark-wrap">
             <textarea class="wm-remark" id="wd-batch-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('wd-batch-remark-count').textContent=this.value.length"></textarea>
             <span class="wm-remark-count"><span id="wd-batch-remark-count">0</span>/200</span>
           </div>
         </div>
-        <div class="table-wrap" style="grid-column:1/-1;max-height:280px;border:1px solid #EBEEF5;border-radius:4px;">
-          <table>
-            <colgroup>
-              <col style="width:90px"><col style="width:90px"><col style="width:60px"><col style="width:70px"><col style="width:80px">
-            </colgroup>
-            <thead><tr><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th><th>提币金额</th></tr></thead>
-            <tbody id="wd-batch-list"></tbody>
-          </table>
+        <div class="pd-section-title" style="grid-column:1/-1;margin-bottom:0;display:flex;align-items:center;justify-content:space-between;">
+          提币记录
+          <span style="font-size:13px;color:#909399;font-weight:400">笔数：<span id="wd-batch-list-count">0</span></span>
+        </div>
+        <div style="grid-column:1/-1;border:1px solid #EBEEF5;border-radius:4px;overflow:hidden;">
+          <div class="table-wrap" style="max-height:320px;">
+            <table>
+              <colgroup>
+                <col style="width:90px"><col style="width:90px"><col style="width:60px"><col style="width:70px"><col style="width:80px">
+              </colgroup>
+              <thead><tr><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th><th>提币金额</th></tr></thead>
+              <tbody id="wd-batch-list"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" style="height:44px;padding:0 12px;">
+            <span class="pagination-total" id="wd-batch-page-total">共 0 条</span>
+            <select class="page-size-select" id="wd-batch-page-size" onchange="wBatchListPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="wd-batch-btn-prev" onclick="wBatchListPage(wBatchListState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" id="wd-batch-p-1" onclick="wBatchListPage(1)">1</button>
+            <button class="page-btn" id="wd-batch-p-2" onclick="wBatchListPage(2)">2</button>
+            <button class="page-btn" id="wd-batch-p-3" onclick="wBatchListPage(3)">3</button>
+            <button class="page-btn" id="wd-batch-btn-next" onclick="wBatchListPage(wBatchListState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')wBatchListPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -3747,6 +3778,12 @@
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDT', network:'TRON', net:'-5.01', fee:'0.01', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-06-26 09:20:14', time:'-', hash:'-',                                                                       paypazId:'WD00000000000041',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDT', network:'TRON', net:'-12.30',fee:'0.01', wallet:'TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS', wdTime:'2026-06-26 09:35:47', time:'-', hash:'-',                                                                       paypazId:'WD00000000000042',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011008', token:'USDT', network:'TRON', net:'-3.20', fee:'0.01', wallet:'TWq7HXxCyGw1F3vmA9Zz2Kd6RpNjLtEo4B', wdTime:'2026-06-26 10:02:33', time:'-', hash:'-',                                                                       paypazId:'WD00000000000043',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011009', token:'USDC', network:'BNB Smart Chain', net:'-8.51', fee:'0.01', wallet:'0xA1b2C3d4E5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0', wdTime:'2026-06-26 10:15:47', time:'-', hash:'-', paypazId:'WD00000000000044', supplierId:'-', channel:'-',    status:'manual_review' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'BNB Smart Chain', net:'-2.51', fee:'0.01', wallet:'0xB2c3D4e5F6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1', wdTime:'2026-06-26 10:24:19', time:'-', hash:'-', paypazId:'WD00000000000045', supplierId:'-', channel:'Cobo', status:'manual_review' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDC', network:'Ethereum',       net:'-15.31',fee:'0.01', wallet:'0xC3d4E5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2', wdTime:'2026-06-26 10:33:02', time:'-', hash:'-', paypazId:'WD00000000000046', supplierId:'-', channel:'Cobo', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011010', token:'USDT', network:'Ethereum',       net:'-4.21', fee:'0.01', wallet:'0xD4e5F6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1D2e3', wdTime:'2026-06-26 10:41:56', time:'-', hash:'-', paypazId:'WD00000000000047', supplierId:'-', channel:'PayMe', status:'manual_review' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022007', token:'USDC', network:'TRON',           net:'-6.11', fee:'0.01', wallet:'TZk8LmH2rXjJUyDCF8ZbnR7wKxN2mQqPzv',       wdTime:'2026-06-26 10:52:38', time:'-', hash:'-', paypazId:'WD00000000000048', supplierId:'-', channel:'-',    status:'manual_review' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023847', token:'USDT', network:'BNB Smart Chain', net:'-9.01', fee:'0.01', wallet:'0xE5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2E3f4', wdTime:'2026-06-26 11:03:15', time:'-', hash:'-', paypazId:'WD00000000000049', supplierId:'-', channel:'PayMe', status:'manual_review' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:03:12', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:10:47', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023842', token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-19 09:41:20', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'WD00000000000031',                supplierId:'-',                                    channel:'Cobo', status:'withdrawing'},
@@ -4008,6 +4045,13 @@
   function wdChannelBalanceLabel(channel, token, network) {
     return wdChannelBalanceValue(channel, token, network).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  function wdChannelTotalBalanceValue(channel) {
+    const seed = _wdBalanceSeed(`${channel}|TOTAL`);
+    return 5000 + (seed % 250000) / 100;
+  }
+  function wdChannelTotalBalanceLabel(channel) {
+    return wdChannelTotalBalanceValue(channel).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
 
   function _wdChannelEditor(r) {
     const balCobo  = wdChannelBalanceLabel('Cobo',  r.token, r.network);
@@ -4018,7 +4062,7 @@
         <div class="wd-channel-edit" style="width:100%;">
           <div class="select-wrap" style="width:100%;">
             <select class="field-select" id="wd-channel-select" style="width:100%;" onchange="updateWdChannelBalance()">
-              <option value="Cobo"${r.channel === 'Cobo' ? ' selected' : ''}>Cobo(${r.merchantName}) · 余额 ${balCobo} ${r.token}</option>
+              <option value="Cobo"${r.channel === 'Cobo' ? ' selected' : ''}>Cobo · 余额 ${balCobo} ${r.token}</option>
               <option value="PayMe"${r.channel === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe} ${r.token}</option>
             </select>
             <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
@@ -4128,20 +4172,57 @@
     wdManageIdx = -1;
   }
 
-  let wBatchToken = 'USDT';
-  let wBatchNetwork = 'TRON';
+  let wBatchGroups = [];
   let wBatchNeeded = 0;
+  const wBatchListState = { rows: [], page: 1, size: 10 };
 
-  function _wdBatchChannelEditor(token, network, selected, merchantName) {
-    const balCobo  = wdChannelBalanceLabel('Cobo',  token, network);
-    const balPayMe = wdChannelBalanceLabel('PayMe', token, network);
+  function wBatchListRender() {
+    const { rows, page, size } = wBatchListState;
+    const start = (page - 1) * size;
+    const slice = rows.slice(start, start + size);
+    document.getElementById('wd-batch-list').innerHTML = slice.map(r =>
+      `<tr>
+        <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td>
+        <td>${r.network}</td>
+        <td class="cell-red">${wAmt(r)}</td>
+      </tr>`
+    ).join('');
+    const total = rows.length;
+    document.getElementById('wd-batch-page-total').textContent = `共 ${total} 条`;
+    const pages = Math.ceil(total / size) || 1;
+    for (let k = 1; k <= 3; k++) {
+      const btn = document.getElementById('wd-batch-p-' + k);
+      if (btn) { btn.textContent = k; btn.classList.toggle('active', k === page); btn.style.display = k <= pages ? '' : 'none'; }
+    }
+    const prev = document.getElementById('wd-batch-btn-prev');
+    const next = document.getElementById('wd-batch-btn-next');
+    if (prev) prev.disabled = page <= 1;
+    if (next) next.disabled = page >= pages;
+  }
+
+  function wBatchListPage(n) {
+    const pages = Math.ceil(wBatchListState.rows.length / wBatchListState.size) || 1;
+    wBatchListState.page = Math.max(1, Math.min(n, pages));
+    wBatchListRender();
+  }
+
+  function wBatchListPageSize() {
+    wBatchListState.size = +document.getElementById('wd-batch-page-size').value;
+    wBatchListState.page = 1;
+    wBatchListRender();
+  }
+
+  function _wdBatchChannelEditor(selected) {
+    const balPayMe = wdChannelTotalBalanceLabel('PayMe');
     return `
-      <span class="detail-label">渠道</span>
+      <span class="detail-label" style="font-weight:600;color:#606266;">渠道</span>
       <div class="wd-channel-edit" style="width:100%;">
         <div class="select-wrap" style="width:100%;">
           <select class="field-select" id="wd-batch-channel-select" style="width:100%;" onchange="updateWdBatchChannelBalance()">
-            <option value="Cobo"${selected === 'Cobo' ? ' selected' : ''}>Cobo(${merchantName}) · 余额 ${balCobo} ${token}</option>
-            <option value="PayMe"${selected === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe} ${token}</option>
+            <option value="Cobo"${selected === 'Cobo' ? ' selected' : ''}>Cobo</option>
+            <option value="PayMe"${selected === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe}USDT</option>
           </select>
           <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
         </div>
@@ -4152,45 +4233,42 @@
   function updateWdBatchChannelBalance() {
     const sel = document.getElementById('wd-batch-channel-select');
     const hint = document.getElementById('wd-batch-channel-hint');
-    if (!sel || !hint) return;
-    const balVal = wdChannelBalanceValue(sel.value, wBatchToken, wBatchNetwork);
-    hint.textContent = balVal < wBatchNeeded ? '该渠道余额不足，请更换渠道或先充值' : '';
-  }
-
-  function showWdBatchMerchantAlert() {
-    document.getElementById('wd-confirm-icon').innerHTML =
-      `<i data-lucide="alert-circle" style="width:22px;height:22px;color:#E6A23C;flex-shrink:0;"></i>`;
-    document.getElementById('wd-confirm-title').textContent = '批量审核';
-    document.getElementById('wd-confirm-msg').textContent  = '批量审核仅支持同一商户的提币记录，请重新选择。';
-    document.getElementById('wd-confirm-cancel').style.display = 'none';
-    const okBtn = document.getElementById('wd-confirm-ok');
-    okBtn.className   = 'btn btn-primary btn-sm';
-    okBtn.textContent = '我知道了';
-    okBtn.onclick = () => { closeWdConfirm(); };
-    document.getElementById('wd-confirm-modal').classList.add('show');
-    if (window.lucide) lucide.createIcons();
+    const list = document.getElementById('wd-batch-balance-list');
+    if (!sel || !hint || !list) return;
+    const channel = sel.value;
+    list.innerHTML = wBatchGroups.map(g => {
+      const balCell = channel === 'PayMe' ? '-' : wdChannelBalanceLabel(channel, g.token, g.network);
+      return `<tr>
+        <td>${g.token}</td>
+        <td>${g.network}</td>
+        <td>${balCell}</td>
+        <td class="cell-red" style="text-align:right;">${g.amt.toFixed(2)}</td>
+      </tr>`;
+    }).join('');
+    hint.textContent = '该渠道余额不足，请更换渠道或先充值';
   }
 
   function openWdBatchReview() {
     const rows = Array.from(wState.selected).map(idx => WITHDRAW_ALL[idx]).filter(r => r && r.status === 'manual_review');
     if (!rows.length) { showToast('请选择待人工审核的提币记录'); return; }
-    if (new Set(rows.map(r => r.merchantId)).size > 1) { showWdBatchMerchantAlert(); return; }
-    document.getElementById('wd-batch-count').textContent = rows.length;
-    document.getElementById('wd-batch-amt').textContent = rows.reduce((s, r) => s + parseFloat(wAmt(r)), 0).toFixed(2);
-    document.getElementById('wd-batch-list').innerHTML = rows.map(r =>
-      `<tr>
-        <td>${r.merchantName}</td>
-        <td style="font-family:Inter,sans-serif">${r.userId}</td>
-        <td>${r.token}</td>
-        <td>${r.network}</td>
-        <td class="cell-red">${wAmt(r)}</td>
-      </tr>`
-    ).join('');
-    wBatchToken = rows[0].token;
-    wBatchNetwork = rows[0].network;
-    wBatchNeeded = rows.reduce((s, r) => s + Math.abs(parseFloat(r.net)), 0);
+    document.getElementById('wd-batch-list-count').textContent = rows.length;
+    wBatchListState.rows = rows;
+    wBatchListState.page = 1;
+    wBatchListState.size = 10;
+    document.getElementById('wd-batch-page-size').value = '10';
+    wBatchListRender();
+    const groupMap = new Map();
+    rows.forEach(r => {
+      const key = `${r.token}|${r.network}`;
+      if (!groupMap.has(key)) groupMap.set(key, { token: r.token, network: r.network, amt: 0, need: 0 });
+      const g = groupMap.get(key);
+      g.amt  += parseFloat(wAmt(r));
+      g.need += Math.abs(parseFloat(r.net));
+    });
+    wBatchGroups = Array.from(groupMap.values());
+    wBatchNeeded = wBatchGroups.reduce((s, g) => s + g.need, 0);
     const defaultChannel = rows[0].channel && rows[0].channel !== '-' ? rows[0].channel : 'Cobo';
-    document.getElementById('wd-batch-channel-editor').innerHTML = _wdBatchChannelEditor(wBatchToken, wBatchNetwork, defaultChannel, rows[0].merchantName);
+    document.getElementById('wd-batch-channel-editor').innerHTML = _wdBatchChannelEditor(defaultChannel);
     document.getElementById('wd-batch-remark').value = '';
     document.getElementById('wd-batch-remark-count').textContent = '0';
     document.getElementById('wd-batch-modal').classList.add('show');
@@ -4204,7 +4282,7 @@
 
   const WD_BATCH_CONFIRM_CFG = {
     failed:      { icon:'alert-circle', iconColor:'#F56C6C', title:'批量拒绝提币',     btnCls:'btn-danger',  btnTxt:'确认拒绝' },
-    withdrawing: { icon:'check-circle', iconColor:'#67C23A', title:'批量通过提币订单', btnCls:'btn-primary', btnTxt:'确认通过' },
+    withdrawing: { icon:'check-circle', iconColor:'#67C23A', title:'提币批量审核', btnCls:'btn-primary', btnTxt:'确认' },
   };
 
   function confirmWdBatchAction(action) {
@@ -4218,10 +4296,10 @@
     document.getElementById('wd-confirm-title').textContent = cfg.title;
     let msg = action === 'failed'
       ? `拒绝后，选中的 ${count} 条订单状态将更新为「提币失败」，且无法撤销。确认继续吗？`
-      : `系统将使用所选渠道重新发起提币，选中的 ${count} 条订单状态将更新为「提币中」。确认继续吗？`;
+      : `${count} 条提币申请将通过所选渠道发起提币，确认继续吗？`;
     if (action === 'withdrawing') {
       const sel = document.getElementById('wd-batch-channel-select');
-      if (sel) msg = `系统将使用「${sel.value}」渠道重新发起提币，选中的 ${count} 条订单状态将更新为「提币中」。确认继续吗？`;
+      if (sel) msg = `${count} 条提币申请将通过「${sel.value}」渠道发起提币，确认继续吗？`;
     }
     document.getElementById('wd-confirm-msg').textContent = msg;
     const okBtn = document.getElementById('wd-confirm-ok');
@@ -4247,7 +4325,7 @@
     withdrawRender();
     const msgs = {
       failed:      `已批量拒绝 ${ids.length} 条订单，状态更新为提币失败`,
-      withdrawing: `已批量通过 ${ids.length} 条订单，状态更新为提币中`,
+      withdrawing: `已批量通过${ids.length}条提币申请`,
     };
     showToast(msgs[newStatus] || '操作成功');
   }

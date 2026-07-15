@@ -4092,14 +4092,9 @@
 
   function updateWdChannelBalance() {
     if (wdManageIdx < 0) return;
-    const r = WITHDRAW_ALL[wdManageIdx];
-    const sel = document.getElementById('wd-channel-select');
     const hint = document.getElementById('wd-channel-balance-hint');
-    if (!sel || !hint) return;
-    const channel = sel.value;
-    const balVal = wdChannelBalanceValue(channel, r.token, r.network);
-    const needed = Math.abs(parseFloat(r.net));
-    hint.textContent = balVal < needed ? '该渠道余额不足，请更换渠道或先充值' : '';
+    if (!hint) return;
+    hint.textContent = '该渠道余额不足，请更换渠道或先充值';
   }
 
   function openWdView(idx) {

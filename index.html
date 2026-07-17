@@ -685,10 +685,14 @@
     /* ── 代币编辑弹窗 ──────────────────────────────────── */
     .tk-row { display:grid; grid-template-columns:132px 1fr; align-items:center; gap:10px; margin-bottom:16px; }
     .tk-row .ak-label { text-align:right; }
-    .tk-section { font-size:12px; font-weight:600; color:#606266; letter-spacing:0.5px; padding-bottom:8px; border-bottom:1px solid #EBEEF5; margin-bottom:14px; }
+    .tk-section { font-size:12px; font-weight:600; color:#606266; letter-spacing:0.5px; margin:26px 0 10px; }
     .tk-addon-wrap { display:flex; align-items:stretch; width:100%; }
     .tk-addon-wrap .field-input { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none; width:100%; min-width:0; }
     .tk-addon { display:flex; align-items:center; padding:0 12px; background:#F5F7FA; border:1px solid #DCDFE6; border-left:none; border-radius:0 4px 4px 0; color:#606266; font-size:13px; white-space:nowrap; flex-shrink:0; }
+    .tk-partner-tabs { display:flex; gap:20px; border-bottom:1px solid #EBEEF5; margin-bottom:14px; }
+    .tk-partner-tab { padding:0 0 8px; font-size:13px; color:#606266; cursor:pointer; border-bottom:2px solid transparent; transition:color 0.15s, border-color 0.15s; }
+    .tk-partner-tab:hover { color:#409EFF; }
+    .tk-partner-tab.active { color:#409EFF; border-bottom-color:#409EFF; font-weight:600; }
     /* ── 出入金订单 ──────────────────────────────────── */
     .badge-amber  { background:#fdf6ec; color:#E6A23C; border:1px solid #faecd8; }
     .badge-purple { background:#f5f0ff; color:#8B5CF6; border:1px solid #ddd6fe; }
@@ -2288,19 +2292,15 @@
         <div class="content-area">
           <div class="table-card">
             <div class="table-wrap">
-              <table style="min-width:1040px;">
+              <table style="width:100%;table-layout:fixed;">
                 <colgroup>
-                  <col style="width:80px"><col style="width:160px"><col style="width:100px">
-                  <col style="width:80px"><col style="width:80px"><col style="width:110px">
-                  <col style="width:80px"><col style="width:140px"><col style="width:150px"><col style="width:150px">
-                  <col style="width:70px">
+                  <col style="width:120px"><col>
+                  <col style="width:110px"><col style="width:90px">
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>代币</th><th>网络全称</th><th>最小充币</th>
-                    <th>状态</th><th>充币</th><th>充币渠道</th>
-                    <th>提币</th><th>单笔提币渠道</th><th>Excel批量提币渠道</th><th>Open API提币渠道</th>
-                    <th>操作</th>
+                    <th style="white-space:nowrap;">代币</th><th style="white-space:nowrap;">网络全称</th>
+                    <th style="white-space:nowrap;">状态</th><th>操作</th>
                   </tr>
                 </thead>
                 <tbody id="md-token-tbody"></tbody>
@@ -3120,6 +3120,10 @@
         </div>
 
         <div class="tk-section">充币</div>
+        <div class="tk-partner-tabs" id="tk-deposit-partner-tabs">
+          <span class="tk-partner-tab active" data-partner="direct" onclick="tkSwitchPartner('deposit','direct')">直连</span>
+          <span class="tk-partner-tab" data-partner="metatrader" onclick="tkSwitchPartner('deposit','metatrader')">Meta Trader</span>
+        </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>充币</span>
           <div class="ak-radios">
@@ -3129,20 +3133,9 @@
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>最小充币</span>
-          <input class="field-input" type="number" step="0.0001" min="0" id="tk-min-deposit" style="width:100%;">
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-min-deposit" placeholder="请输入" style="width:100%;">
         </div>
         <div class="tk-row">
-          <span class="ak-label"><span class="ak-req">*</span>充币手续费</span>
-          <div class="tk-addon-wrap">
-            <input class="field-input" type="number" step="0.0001" min="0" id="tk-deposit-fee-rate">
-            <span class="tk-addon">%</span>
-          </div>
-        </div>
-        <div class="tk-row">
-          <span class="ak-label"><span class="ak-req">*</span>最小充币手续费</span>
-          <input class="field-input" type="number" step="0.0001" min="0" id="tk-deposit-fee-min" style="width:100%;">
-        </div>
-        <div class="tk-row" style="margin-bottom:20px;">
           <span class="ak-label"><span class="ak-req">*</span>充币渠道</span>
           <div class="select-wrap" style="width:100%;">
             <select class="field-select" id="tk-deposit-ch" style="width:100%;">
@@ -3152,8 +3145,23 @@
             <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
           </div>
         </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>充币手续费</span>
+          <div class="tk-addon-wrap">
+            <input class="field-input" type="number" step="0.0001" min="0" id="tk-deposit-fee-rate" placeholder="请输入">
+            <span class="tk-addon">%</span>
+          </div>
+        </div>
+        <div class="tk-row" style="margin-bottom:20px;">
+          <span class="ak-label"><span class="ak-req">*</span>最小充币手续费</span>
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-deposit-fee-min" placeholder="请输入" style="width:100%;">
+        </div>
 
         <div class="tk-section">提币</div>
+        <div class="tk-partner-tabs" id="tk-withdraw-partner-tabs">
+          <span class="tk-partner-tab active" data-partner="direct" onclick="tkSwitchPartner('withdraw','direct')">直连</span>
+          <span class="tk-partner-tab" data-partner="metatrader" onclick="tkSwitchPartner('withdraw','metatrader')">Meta Trader</span>
+        </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>提币</span>
           <div class="ak-radios">
@@ -3163,23 +3171,24 @@
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>每日最大提币</span>
-          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-max" style="width:100%;">
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-max" placeholder="请输入" style="width:100%;">
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>最小提币</span>
-          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-min" style="width:100%;">
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-min" placeholder="请输入" style="width:100%;">
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>提币手续费</span>
           <div class="tk-addon-wrap">
-            <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-fee-rate">
+            <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-fee-rate" placeholder="请输入">
             <span class="tk-addon">%</span>
           </div>
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>最小提币手续费</span>
-          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-fee-min" style="width:100%;">
+          <input class="field-input" type="number" step="0.0001" min="0" id="tk-withdraw-fee-min" placeholder="请输入" style="width:100%;">
         </div>
+
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>单笔提币渠道</span>
           <div style="display:flex;align-items:center;gap:12px;">
@@ -3206,7 +3215,7 @@
             <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#606266;"><span>人工审核</span><label class="role-switch"><input type="checkbox" id="tk-excel-batch-review"><span></span></label></span>
           </div>
         </div>
-        <div class="tk-row" style="margin-bottom:20px;">
+        <div class="tk-row" style="margin-bottom:8px;">
           <span class="ak-label"><span class="ak-req">*</span>Open API 提币渠道</span>
           <div style="display:flex;align-items:center;gap:12px;">
             <div class="select-wrap" style="flex:1;">
@@ -3223,6 +3232,41 @@
       <div class="modal-footer">
         <button class="btn btn-primary btn-sm" onclick="saveTokenEdit()">确定</button>
         <button class="btn btn-default btn-sm" onclick="closeTokenEdit()" style="margin-left:8px;">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 代币配置详情弹窗 -->
+  <div class="modal-overlay" id="token-detail-modal" onclick="if(event.target===this)closeTokenDetail()">
+    <div class="modal" style="width:560px;">
+      <div class="modal-header">
+        <span class="modal-title" id="tk-detail-title">USDT - Ethereum 配置详情</span>
+        <span class="modal-close" onclick="closeTokenDetail()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" id="tk-detail-body">
+        <div class="detail-item" style="grid-column:1/-1;">
+          <span class="detail-label">状态</span>
+          <span class="detail-value" id="tk-detail-status"></span>
+        </div>
+
+        <div class="tk-section" style="grid-column:1/-1;margin-top:0;">充币</div>
+        <div class="tk-partner-tabs" id="tk-detail-deposit-tabs" style="grid-column:1/-1;">
+          <span class="tk-partner-tab active" data-partner="direct" onclick="tkDetailSwitchPartner('deposit','direct')">直连</span>
+          <span class="tk-partner-tab" data-partner="metatrader" onclick="tkDetailSwitchPartner('deposit','metatrader')">Meta Trader</span>
+        </div>
+        <div id="tk-detail-deposit-items" style="display:contents;"></div>
+
+        <div class="tk-section" style="grid-column:1/-1;">提币</div>
+        <div class="tk-partner-tabs" id="tk-detail-withdraw-tabs" style="grid-column:1/-1;">
+          <span class="tk-partner-tab active" data-partner="direct" onclick="tkDetailSwitchPartner('withdraw','direct')">直连</span>
+          <span class="tk-partner-tab" data-partner="metatrader" onclick="tkDetailSwitchPartner('withdraw','metatrader')">Meta Trader</span>
+        </div>
+        <div id="tk-detail-withdraw-items" style="display:contents;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeTokenDetail()">关闭</button>
       </div>
     </div>
   </div>
@@ -5107,17 +5151,34 @@
     { token:'USDT', network:'Solana',          minDeposit:'',    status:'off',deposit:'off',depositCh:'Cobo',  withdraw:'off', withdrawCh:'Cobo',  excelBatchCh:'Cobo'  },
   ];
   TOKEN_ROWS.forEach(r => {
-    r.depositFeeRate  = r.depositFeeRate  ?? '0.01';
-    r.depositFeeMin   = r.depositFeeMin   ?? '0.01';
-    r.withdrawMax     = r.withdrawMax     ?? '10000';
-    r.withdrawMin     = r.withdrawMin     ?? (r.minDeposit || '0.1');
-    r.withdrawFeeRate = r.withdrawFeeRate ?? '0.01';
-    r.withdrawFeeMin  = r.withdrawFeeMin  ?? '0.01';
-    r.withdrawReview     = r.withdrawReview     ?? false;
-    r.excelBatchCh        = r.excelBatchCh        ?? 'Cobo';
-    r.excelBatchReview    = r.excelBatchReview    ?? true;
-    r.openApiCh           = r.openApiCh           ?? 'Cobo';
-    r.openApiReview        = r.openApiReview       ?? false;
+    const directDeposit = {
+      enabled: r.deposit ?? 'off',
+      minDeposit: r.minDeposit || '',
+      ch: r.depositCh ?? 'Cobo',
+      feeRate: r.depositFeeRate ?? '0.01',
+      feeMin: r.depositFeeMin ?? '0.01',
+    };
+    const directWithdraw = {
+      enabled: r.withdraw ?? 'off',
+      max: r.withdrawMax ?? '10000',
+      min: r.withdrawMin ?? (r.minDeposit || '0.1'),
+      ch: r.withdrawCh ?? 'Cobo',
+      feeRate: r.withdrawFeeRate ?? '0.01',
+      feeMin: r.withdrawFeeMin ?? '0.01',
+      review: r.withdrawReview ?? false,
+      excelCh: r.excelBatchCh ?? 'Cobo',
+      excelReview: r.excelBatchReview ?? true,
+      openApiCh: r.openApiCh ?? 'Cobo',
+      openApiReview: r.openApiReview ?? false,
+    };
+    r.depositByPartner  = { direct: directDeposit,  metatrader: { ...directDeposit } };
+    r.withdrawByPartner = { direct: directWithdraw, metatrader: { ...directWithdraw } };
+
+    delete r.deposit; delete r.minDeposit; delete r.depositCh; delete r.depositFeeRate; delete r.depositFeeMin;
+    delete r.withdraw; delete r.withdrawMax; delete r.withdrawMin; delete r.withdrawCh;
+    delete r.withdrawFeeRate; delete r.withdrawFeeMin; delete r.withdrawReview;
+    delete r.excelBatchCh; delete r.excelBatchReview;
+    delete r.openApiCh; delete r.openApiReview;
   });
 
   function tBadge(flag) {
@@ -5130,48 +5191,105 @@
     return flag ? ' <span class="badge badge-purple">人工审核</span>' : '';
   }
 
+  const _TK_EYE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
   function mdRenderTokenTable() {
     const tbody = document.getElementById('md-token-tbody');
     tbody.innerHTML = TOKEN_ROWS.map((r, i) => `<tr>
       <td>${r.token}</td>
       <td>${r.network}</td>
-      <td>${r.minDeposit || '<span class="cell-empty">—</span>'}</td>
       <td>${tBadge(r.status)}</td>
-      <td>${tBadge(r.deposit)}</td>
-      <td>${r.depositCh}</td>
-      <td>${tBadge(r.withdraw)}</td>
-      <td>${r.withdrawCh}${reviewTag(r.withdrawReview)}</td>
-      <td>${r.excelBatchCh}${reviewTag(r.excelBatchReview)}</td>
-      <td>${r.openApiCh}${reviewTag(r.openApiReview)}</td>
       <td>
-        <span class="action-icon" onclick="openTokenEdit(${i})" title="编辑">${_EDIT_SVG}</span>
+        <div class="action-cell">
+          <span class="action-icon" onclick="openTokenDetail(${i})" title="详情">${_TK_EYE_SVG}</span>
+          <span class="action-icon" onclick="openTokenEdit(${i})" title="编辑">${_EDIT_SVG}</span>
+        </div>
       </td>
     </tr>`).join('');
   }
 
   let _tkIdx = -1;
+  let _tkDepositPartner = 'direct';
+  let _tkWithdrawPartner = 'direct';
+  let _tkDepositDraft = null;
+  let _tkWithdrawDraft = null;
+
+  function tkFillDepositForm(cfg) {
+    document.querySelectorAll('input[name="tk-deposit"]').forEach(el => { el.checked = el.value === cfg.enabled; });
+    document.getElementById('tk-min-deposit').value = cfg.minDeposit;
+    document.getElementById('tk-deposit-ch').value = cfg.ch;
+    document.getElementById('tk-deposit-fee-rate').value = cfg.feeRate;
+    document.getElementById('tk-deposit-fee-min').value = cfg.feeMin;
+  }
+
+  function tkCollectDepositForm() {
+    return {
+      enabled: document.querySelector('input[name="tk-deposit"]:checked')?.value || 'off',
+      minDeposit: document.getElementById('tk-min-deposit').value.trim(),
+      ch: document.getElementById('tk-deposit-ch').value,
+      feeRate: document.getElementById('tk-deposit-fee-rate').value.trim(),
+      feeMin: document.getElementById('tk-deposit-fee-min').value.trim(),
+    };
+  }
+
+  function tkFillWithdrawForm(cfg) {
+    document.querySelectorAll('input[name="tk-withdraw"]').forEach(el => { el.checked = el.value === cfg.enabled; });
+    document.getElementById('tk-withdraw-max').value = cfg.max;
+    document.getElementById('tk-withdraw-min').value = cfg.min;
+    document.getElementById('tk-withdraw-ch').value = cfg.ch;
+    document.getElementById('tk-withdraw-fee-rate').value = cfg.feeRate;
+    document.getElementById('tk-withdraw-fee-min').value = cfg.feeMin;
+    document.getElementById('tk-withdraw-review').checked = cfg.review;
+    document.getElementById('tk-excel-batch-ch').value = cfg.excelCh;
+    document.getElementById('tk-excel-batch-review').checked = cfg.excelReview;
+    document.getElementById('tk-openapi-ch').value = cfg.openApiCh;
+    document.getElementById('tk-openapi-review').checked = cfg.openApiReview;
+  }
+
+  function tkCollectWithdrawForm() {
+    return {
+      enabled: document.querySelector('input[name="tk-withdraw"]:checked')?.value || 'off',
+      max: document.getElementById('tk-withdraw-max').value.trim(),
+      min: document.getElementById('tk-withdraw-min').value.trim(),
+      ch: document.getElementById('tk-withdraw-ch').value,
+      feeRate: document.getElementById('tk-withdraw-fee-rate').value.trim(),
+      feeMin: document.getElementById('tk-withdraw-fee-min').value.trim(),
+      review: document.getElementById('tk-withdraw-review').checked,
+      excelCh: document.getElementById('tk-excel-batch-ch').value,
+      excelReview: document.getElementById('tk-excel-batch-review').checked,
+      openApiCh: document.getElementById('tk-openapi-ch').value,
+      openApiReview: document.getElementById('tk-openapi-review').checked,
+    };
+  }
+
+  function tkSwitchPartner(section, partner) {
+    if (section === 'deposit') {
+      _tkDepositDraft[_tkDepositPartner] = tkCollectDepositForm();
+      _tkDepositPartner = partner;
+      tkFillDepositForm(_tkDepositDraft[partner]);
+      document.querySelectorAll('#tk-deposit-partner-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === partner));
+    } else {
+      _tkWithdrawDraft[_tkWithdrawPartner] = tkCollectWithdrawForm();
+      _tkWithdrawPartner = partner;
+      tkFillWithdrawForm(_tkWithdrawDraft[partner]);
+      document.querySelectorAll('#tk-withdraw-partner-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === partner));
+    }
+  }
 
   function openTokenEdit(i) {
     _tkIdx = i;
     const r = TOKEN_ROWS[i];
     document.getElementById('tk-title').textContent = `${r.token} - ${r.network}`;
-    document.querySelectorAll('input[name="tk-status"]').forEach(el   => { el.checked = el.value === r.status; });
-    document.querySelectorAll('input[name="tk-deposit"]').forEach(el  => { el.checked = el.value === r.deposit; });
-    document.querySelectorAll('input[name="tk-withdraw"]').forEach(el => { el.checked = el.value === r.withdraw; });
-    document.getElementById('tk-min-deposit').value      = r.minDeposit;
-    document.getElementById('tk-deposit-fee-rate').value = r.depositFeeRate;
-    document.getElementById('tk-deposit-fee-min').value  = r.depositFeeMin;
-    document.getElementById('tk-deposit-ch').value        = r.depositCh;
-    document.getElementById('tk-withdraw-max').value      = r.withdrawMax;
-    document.getElementById('tk-withdraw-min').value      = r.withdrawMin;
-    document.getElementById('tk-withdraw-fee-rate').value = r.withdrawFeeRate;
-    document.getElementById('tk-withdraw-fee-min').value  = r.withdrawFeeMin;
-    document.getElementById('tk-withdraw-ch').value        = r.withdrawCh;
-    document.getElementById('tk-withdraw-review').checked   = r.withdrawReview;
-    document.getElementById('tk-excel-batch-ch').value      = r.excelBatchCh;
-    document.getElementById('tk-excel-batch-review').checked= r.excelBatchReview;
-    document.getElementById('tk-openapi-ch').value          = r.openApiCh;
-    document.getElementById('tk-openapi-review').checked    = r.openApiReview;
+    document.querySelectorAll('input[name="tk-status"]').forEach(el => { el.checked = el.value === r.status; });
+
+    _tkDepositDraft  = { direct: { ...r.depositByPartner.direct },  metatrader: { ...r.depositByPartner.metatrader } };
+    _tkWithdrawDraft = { direct: { ...r.withdrawByPartner.direct }, metatrader: { ...r.withdrawByPartner.metatrader } };
+    _tkDepositPartner = 'direct';
+    _tkWithdrawPartner = 'direct';
+    document.querySelectorAll('#tk-deposit-partner-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === 'direct'));
+    document.querySelectorAll('#tk-withdraw-partner-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === 'direct'));
+    tkFillDepositForm(_tkDepositDraft.direct);
+    tkFillWithdrawForm(_tkWithdrawDraft.direct);
 
     document.getElementById('token-edit-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
@@ -5179,6 +5297,80 @@
 
   function closeTokenEdit() {
     document.getElementById('token-edit-modal').classList.remove('show');
+  }
+
+  function _tkDetailItem(label, value) {
+    return `<div class="detail-item"><span class="detail-label">${label}</span><span class="detail-value">${value}</span></div>`;
+  }
+
+  function _tkDepositDetailItems(cfg) {
+    return [
+      _tkDetailItem('状态', tBadge(cfg.enabled)),
+      _tkDetailItem('最小充币', cfg.minDeposit || '—'),
+      _tkDetailItem('充币渠道', cfg.ch),
+      _tkDetailItem('充币手续费', `${cfg.feeRate}%`),
+      _tkDetailItem('最小充币手续费', cfg.feeMin),
+    ].join('');
+  }
+
+  function _tkWithdrawDetailItems(cfg) {
+    return [
+      _tkDetailItem('状态', tBadge(cfg.enabled)),
+      _tkDetailItem('每日最大提币', cfg.max),
+      _tkDetailItem('最小提币', cfg.min),
+      _tkDetailItem('提币手续费', `${cfg.feeRate}%`),
+      _tkDetailItem('最小提币手续费', cfg.feeMin),
+      _tkDetailItem('单笔提币渠道', cfg.ch + reviewTag(cfg.review)),
+      _tkDetailItem('Excel 批量提币渠道', cfg.excelCh + reviewTag(cfg.excelReview)),
+      _tkDetailItem('Open API 提币渠道', cfg.openApiCh + reviewTag(cfg.openApiReview)),
+    ].join('');
+  }
+
+  let _tkDetailRow = null;
+  let _tkDetailDepositPartner = 'direct';
+  let _tkDetailWithdrawPartner = 'direct';
+
+  function tkDetailRenderDeposit() {
+    document.getElementById('tk-detail-deposit-items').innerHTML =
+      _tkDepositDetailItems(_tkDetailRow.depositByPartner[_tkDetailDepositPartner]);
+  }
+
+  function tkDetailRenderWithdraw() {
+    document.getElementById('tk-detail-withdraw-items').innerHTML =
+      _tkWithdrawDetailItems(_tkDetailRow.withdrawByPartner[_tkDetailWithdrawPartner]);
+  }
+
+  function tkDetailSwitchPartner(section, partner) {
+    if (section === 'deposit') {
+      _tkDetailDepositPartner = partner;
+      document.querySelectorAll('#tk-detail-deposit-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === partner));
+      tkDetailRenderDeposit();
+    } else {
+      _tkDetailWithdrawPartner = partner;
+      document.querySelectorAll('#tk-detail-withdraw-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === partner));
+      tkDetailRenderWithdraw();
+    }
+  }
+
+  function openTokenDetail(i) {
+    _tkDetailRow = TOKEN_ROWS[i];
+    const r = _tkDetailRow;
+    document.getElementById('tk-detail-title').textContent = `${r.token} - ${r.network} 配置详情`;
+    document.getElementById('tk-detail-status').innerHTML = tBadge(r.status);
+
+    _tkDetailDepositPartner = 'direct';
+    _tkDetailWithdrawPartner = 'direct';
+    document.querySelectorAll('#tk-detail-deposit-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === 'direct'));
+    document.querySelectorAll('#tk-detail-withdraw-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === 'direct'));
+    tkDetailRenderDeposit();
+    tkDetailRenderWithdraw();
+
+    document.getElementById('token-detail-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeTokenDetail() {
+    document.getElementById('token-detail-modal').classList.remove('show');
   }
 
   function saveTokenEdit() {
@@ -5189,23 +5381,12 @@
     }
 
     const r = TOKEN_ROWS[_tkIdx];
-    r.status   = document.querySelector('input[name="tk-status"]:checked')?.value   || 'off';
-    r.deposit  = document.querySelector('input[name="tk-deposit"]:checked')?.value  || 'off';
-    r.withdraw = document.querySelector('input[name="tk-withdraw"]:checked')?.value || 'off';
-    r.minDeposit      = document.getElementById('tk-min-deposit').value.trim();
-    r.depositFeeRate  = document.getElementById('tk-deposit-fee-rate').value.trim();
-    r.depositFeeMin   = document.getElementById('tk-deposit-fee-min').value.trim();
-    r.depositCh       = document.getElementById('tk-deposit-ch').value;
-    r.withdrawMax     = document.getElementById('tk-withdraw-max').value.trim();
-    r.withdrawMin     = document.getElementById('tk-withdraw-min').value.trim();
-    r.withdrawFeeRate = document.getElementById('tk-withdraw-fee-rate').value.trim();
-    r.withdrawFeeMin  = document.getElementById('tk-withdraw-fee-min').value.trim();
-    r.withdrawCh      = document.getElementById('tk-withdraw-ch').value;
-    r.withdrawReview  = document.getElementById('tk-withdraw-review').checked;
-    r.excelBatchCh    = document.getElementById('tk-excel-batch-ch').value;
-    r.excelBatchReview= document.getElementById('tk-excel-batch-review').checked;
-    r.openApiCh       = document.getElementById('tk-openapi-ch').value;
-    r.openApiReview   = document.getElementById('tk-openapi-review').checked;
+    r.status = document.querySelector('input[name="tk-status"]:checked')?.value || 'off';
+
+    _tkDepositDraft[_tkDepositPartner]   = tkCollectDepositForm();
+    _tkWithdrawDraft[_tkWithdrawPartner] = tkCollectWithdrawForm();
+    r.depositByPartner  = _tkDepositDraft;
+    r.withdrawByPartner = _tkWithdrawDraft;
 
     closeTokenEdit();
     mdRenderTokenTable();

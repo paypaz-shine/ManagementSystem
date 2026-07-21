@@ -503,6 +503,7 @@
     .pd-dep-item.selectable.checked .pd-dep-ck {
       background: #409EFF; border-color: #409EFF; color: #fff;
     }
+    .pd-dep-item.pd-dep-warn { background: #fdf6ec; margin: 0 -20px; padding: 10px 20px; border-radius: 4px; }
     .pd-edit-note {
       font-size: 12px; color: #909399; line-height: 1.6;
       background: #F5F7FA; border-radius: 4px; padding: 8px 12px; margin-bottom: 14px;
@@ -1253,6 +1254,12 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">订单号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="d-order">
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
@@ -1283,19 +1290,19 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1445px;">
+            <table style="min-width:1665px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:95px">
                 <col style="width:70px"><col style="width:80px"><col style="width:80px">
                 <col style="width:72px"><col style="width:70px"><col style="width:155px">
                 <col style="width:152px"><col style="width:150px"><col style="width:110px">
-                <col style="width:100px"><col style="width:55px">
+                <col style="width:220px"><col style="width:100px"><col style="width:55px">
               </colgroup>
               <thead>
                 <tr>
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
                   <th>到账金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
-                  <th>到账时间</th><th>哈希</th><th>合作伙伴</th><th>状态</th><th>操作</th>
+                  <th>到账时间</th><th>哈希</th><th>合作伙伴</th><th>订单号</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="d-tbody"></tbody>
@@ -3583,7 +3590,7 @@
   const DEPOSIT_ALL = [
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', channel:'Meta Trader', status:'arrived' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:45', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', channel:'',           status:'arrived' },
-    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.3',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a7d8e5f2c9b4a1d6e8f3c7b2a5d9e0f4c8b3a7d6e2f1c5b4', channel:'',           status:'pending' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'BSC',  amount:'0.3',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a7d8e5f2c9b4a1d6e8f3c7b2a5d9e0f4c8b3a7d6e2f1c5b4', channel:'',           status:'pending' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.2',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:44', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', channel:'',           status:'pending' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.1',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:45:14', hash:'1f517b0132c981af8d2e6b4c7f9a3d5e8c1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a', channel:'',           status:'invalid' },
     { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', network:'TRON', amount:'7.19', fee:'0.07', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', time:'2026-05-20 12:46:07', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', channel:'',           status:'arrived' },
@@ -3597,6 +3604,11 @@
   const _MATCH_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
   const _D_PEN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
   const _D_EYE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
+  function depositOrderNo(r) {
+    const p = PAYMENT_ALL.find(p => p.deposits && p.deposits.some(d => d.hash === r.hash));
+    return p ? p.order : '';
+  }
 
   function depositRender() {
     const tbody = document.getElementById('d-tbody');
@@ -3613,6 +3625,7 @@
         ? `<span class="action-icon" title="编辑" onclick="openDepositEdit(${idx})">${_D_PEN_SVG}</span>`
         : '';
       const viewBtn = `<span class="action-icon" title="详情" onclick="openDepositView(${idx})">${_D_EYE_SVG}</span>`;
+      const orderNo = depositOrderNo(r);
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
         <td>${r.name}</td>
@@ -3625,6 +3638,7 @@
         <td style="font-family:Inter,sans-serif">${r.time}</td>
         <td>${truncCell(r.hash)}</td>
         <td>${r.channel || '直连'}</td>
+        <td>${orderNo ? fullCell(orderNo) : '<span class="cell-empty">-</span>'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td><div class="action-cell">${viewBtn}${matchBtn}${editBtn}</div></td>
       </tr>`;
@@ -3660,6 +3674,7 @@
     const st      = document.getElementById('d-status').value;
     const channel = document.getElementById('d-channel').value;
     const hash    = document.getElementById('d-hash').value.trim().toLowerCase();
+    const order   = document.getElementById('d-order').value.trim().toLowerCase();
     const ds      = document.getElementById('d-date-start').value;
     const de      = document.getElementById('d-date-end').value;
     dState.rows = DEPOSIT_ALL.filter(r => {
@@ -3672,6 +3687,7 @@
       if (channel === 'direct' && r.channel !== '')            return false;
       if (channel && channel !== 'direct' && r.channel !== channel) return false;
       if (hash    && !r.hash.toLowerCase().includes(hash))    return false;
+      if (order   && !depositOrderNo(r).toLowerCase().includes(order)) return false;
       if (ds      && r.time.split(' ')[0] < ds)               return false;
       if (de      && r.time.split(' ')[0] > de)               return false;
       return true;
@@ -3679,7 +3695,7 @@
     dState.page = 1; depositRender();
   }
   function depositReset() {
-    ['d-uid','d-userid','d-wallet','d-token','d-network','d-channel','d-hash','d-date-start','d-date-end']
+    ['d-uid','d-userid','d-wallet','d-token','d-network','d-channel','d-hash','d-order','d-date-start','d-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     document.getElementById('d-status').value = 'pending';
     dState.rows = DEPOSIT_ALL.filter(r => r.status === 'pending');
@@ -3695,11 +3711,11 @@
     paymentSearch();
   }
   function depositExport() {
-    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','手续费','净入账','钱包地址','到账时间','哈希','合作伙伴','状态'];
+    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','手续费','净入账','钱包地址','到账时间','哈希','合作伙伴','订单号','状态'];
     csvDownload(headers, dState.rows.map(r => {
       const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
       return [r.uid, r.name, r.userId, r.token, r.network, r.amount, r.fee, net,
-              r.wallet, r.time, r.hash, r.channel || '直连', D_STATUS[r.status].label];
+              r.wallet, r.time, r.hash, r.channel || '直连', depositOrderNo(r) || '-', D_STATUS[r.status].label];
     }), '充币记录.csv');
   }
 
@@ -3732,10 +3748,17 @@
       di('合作伙伴', r.channel || '直连'),
       di('到账时间', r.time),
       diCopy('哈希', r.hash),
-      `<div class="detail-item" style="grid-column:1/-1">
+      `<div class="detail-item">
         <span class="detail-label">钱包地址</span>
         ${truncCell(r.wallet)}
       </div>`,
+      (() => {
+        const orderNo = depositOrderNo(r);
+        return `<div class="detail-item">
+        <span class="detail-label">订单号</span>
+        ${orderNo ? fullCell(orderNo) : '<span class="detail-value">-</span>'}
+      </div>`;
+      })(),
     ].join('');
   }
 
@@ -4406,17 +4429,17 @@
       deposits:[] },
     { order:'291654802-52081414206720', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'0.80',   paid:'0.80',   fee:'0.01', net:'0.79',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-12 15:57:04', doneTime:'2026-06-12 16:03:21', addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'completed',  editable:false, manual:true, operator:'Chris',
       deposits:[
-        { txid:'52081414206001', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', amount:'0.40', fee:'0.01', net:'0.39', time:'2026-06-12 15:46:45' },
-        { txid:'52081414206002', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', amount:'0.40', fee:'0.01', net:'0.39', time:'2026-06-12 15:57:35' },
+        { txid:'52081414206001', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', amount:'0.40', fee:'0.01', net:'0.39', network:'BSC',  time:'2026-06-12 15:46:45' },
+        { txid:'52081414206002', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', amount:'0.40', fee:'0.01', net:'0.39', network:'TRON', time:'2026-06-12 15:57:35' },
       ]},
     { order:'291654802-52079444850688', merchantId:'M002', merchantName:'XM Japan', userId:'U20048762', due:'0.20',   paid:'0.20',   fee:'0.01', net:'0.19',   source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-13 13:48:51', doneTime:'2026-06-13 14:02:07', addr:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', status:'completed',  editable:false,
       deposits:[
-        { txid:'52079444850001', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', amount:'0.20', fee:'0.01', net:'0.19', time:'2026-06-13 13:48:51' },
+        { txid:'52079444850001', hash:'d641bab856175231e8c9f2a4b7d3e6c8f1a5b9d2e7c4f6b3a8d1e5c7f2b4a9d6', amount:'0.20', fee:'0.01', net:'0.19', network:'TRON', time:'2026-06-13 13:48:51' },
       ]},
     { order:'291654802-51905185772032', merchantId:'M002', merchantName:'XM Japan', userId:'U20048762', due:'400.00', paid:'400.00', fee:'0.04', net:'399.96', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-04 16:43:51', doneTime:'2026-06-04 16:58:34', addr:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', status:'completed',  editable:false,
       deposits:[
-        { txid:'51905185772001', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', amount:'200.00', fee:'0.02', net:'199.98', time:'2026-06-04 16:43:51' },
-        { txid:'51905185772002', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', amount:'200.00', fee:'0.02', net:'199.98', time:'2026-06-04 16:51:22' },
+        { txid:'51905185772001', hash:'913021142d6b8ad2e5c8f3b6a9d4c7e2f5b8a1d6e3c7f4b2a9d5e8c1f7b4a6d3', amount:'200.00', fee:'0.02', net:'199.98', network:'TRON', time:'2026-06-04 16:43:51' },
+        { txid:'51905185772002', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', amount:'200.00', fee:'0.02', net:'199.98', network:'TRON', time:'2026-06-04 16:51:22' },
       ]},
     { order:'460004375-52085120983040', merchantId:'M003', merchantName:'IG Japan', userId:'U30015923', due:'5.00', paid:'0.00', fee:'0.00', net:'0.00', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-14 09:22:10', doneTime:'-',                    addr:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', status:'processing', editable:true,
       deposits:[] },
@@ -4571,10 +4594,13 @@
            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C0C4CC" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v4M16 4v4M2 10h20"/></svg>
            <span class="pd-empty-text">暂无记录</span>
          </div>`
-      : deps.map(d => `
-          <div class="pd-dep-item">
+      : deps.map(d => {
+          const netMismatch = d.network !== r.network;
+          return `
+          <div class="pd-dep-item${netMismatch ? ' pd-dep-warn' : ''}">
             <div class="pd-dep-left">
-              <span class="pd-dep-txid">${d.txid}</span>
+              <span class="pd-dep-txid">流水号：${d.txid}</span>
+              <span class="pd-dep-sub">网络: ${d.network}${netMismatch ? `<span class="badge badge-red" style="margin-left:6px;">与订单不一致</span>` : ''}</span>
               <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="copyText('${d.hash}')">${_COPY_SVG}</span></span>
               <span class="pd-dep-sub">${d.time}</span>
             </div>
@@ -4583,7 +4609,8 @@
               <span class="pd-dep-net">手续费: ${d.fee} USDT</span>
               <span class="pd-dep-net">净入账: ${d.net} USDT</span>
             </div>
-          </div>`).join('');
+          </div>`;
+        }).join('');
 
     document.querySelector('#detail-modal .modal-title').textContent = '订单详情';
     document.querySelector('#detail-modal .modal').style.width = '640px';
@@ -4678,8 +4705,8 @@
     const r  = PAYMENT_ALL[idx];
     const st = P_STATUS[r.status];
 
-    // Pending deposits available for this user
-    const available = DEPOSIT_ALL.filter(d => d.userId === r.userId && d.status === 'pending')
+    // Pending deposits available for this user: same token, network may differ (flagged below)
+    const available = DEPOSIT_ALL.filter(d => d.userId === r.userId && d.status === 'pending' && d.token === r.token)
       .map(d => ({ ...d, net: (parseFloat(d.amount) - parseFloat(d.fee)).toFixed(2) }));
 
     function calcSummary() {
@@ -4700,11 +4727,14 @@
            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C0C4CC" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 4v4M16 4v4M2 10h20"/></svg>
            <span class="pd-empty-text">暂无记录</span>
          </div>`
-      : available.map((d, i) => `
-          <div class="pd-dep-item selectable" data-amount="${d.amount}" data-fee="${d.fee}" data-net="${d.net}" onclick="this.classList.toggle('checked');pdEditCalc()">
+      : available.map((d, i) => {
+          const netMismatch = d.network !== r.network;
+          return `
+          <div class="pd-dep-item selectable${netMismatch ? ' pd-dep-warn' : ''}" data-amount="${d.amount}" data-fee="${d.fee}" data-net="${d.net}" onclick="this.classList.toggle('checked');pdEditCalc()">
             <div class="pd-dep-ck"><svg width="10" height="10" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>
             <div class="pd-dep-left" style="flex:1;">
               <span class="pd-dep-txid">流水号：${d.userId}-${d.hash.slice(0,8)}</span>
+              <span class="pd-dep-sub">网络: ${d.network}${netMismatch ? `<span class="badge badge-red" style="margin-left:6px;">与订单不一致</span>` : ''}</span>
               <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="event.stopPropagation();copyText('${d.hash}')">${_COPY_SVG}</span></span>
               <span class="pd-dep-sub">${d.time}</span>
             </div>
@@ -4713,7 +4743,8 @@
               <span class="pd-dep-net">手续费: ${d.fee} USDT</span>
               <span class="pd-dep-net">净入账: ${d.net} USDT</span>
             </div>
-          </div>`).join('');
+          </div>`;
+        }).join('');
 
     const initPaid = '0.00';
     const initFee  = '0.00';
@@ -4758,7 +4789,7 @@
           <div class="pd-stat"><span class="pd-stat-label">合计手续费</span><span class="pd-stat-val" id="pd-edit-fee">${initFee} USDT</span></div>
           <div class="pd-stat"><span class="pd-stat-label">合计净入账</span><span class="pd-stat-val" id="pd-edit-net">${initNet} USDT</span></div>
         </div>
-        <div class="pd-edit-note">仅显示代币币种、网络匹配的充币记录，点击「关联入账」完成匹配，订单状态将根据充值金额合计与应付金额对比自动更新。</div>
+        <div class="pd-edit-note">仅显示同代币的未匹配充币记录，若充值网络与订单网络不一致，请务必核实后再关联。点击「关联入账」完成匹配，订单状态将根据充值金额合计与应付金额对比自动更新。</div>
         ${depItems}
       </div>
     `;

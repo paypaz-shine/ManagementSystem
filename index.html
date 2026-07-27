@@ -1311,11 +1311,11 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1665px;">
+            <table style="min-width:1890px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:95px">
                 <col style="width:70px"><col style="width:80px"><col style="width:80px">
-                <col style="width:72px"><col style="width:70px"><col style="width:155px">
+                <col style="width:72px"><col style="width:70px"><col style="width:380px">
                 <col style="width:152px"><col style="width:150px"><col style="width:110px">
                 <col style="width:220px"><col style="width:100px"><col style="width:55px">
               </colgroup>
@@ -1516,12 +1516,12 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2510px;">
+            <table style="min-width:2740px;">
               <colgroup>
                 <col style="width:40px">
                 <col style="width:108px"><col style="width:145px"><col style="width:108px">
                 <col style="width:68px"><col style="width:76px"><col style="width:76px">
-                <col style="width:70px"><col style="width:66px"><col style="width:150px">
+                <col style="width:70px"><col style="width:66px"><col style="width:380px">
                 <col style="width:165px"><col style="width:165px"><col style="width:150px">
                 <col style="width:200px"><col style="width:330px"><col style="width:330px">
                 <col style="width:66px"><col style="width:120px"><col style="width:70px">
@@ -1619,6 +1619,20 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="wa-status">
+                    <option value="">请选择</option>
+                    <option value="manual_review">待人工审核</option>
+                    <option value="audit_approved">已通过</option>
+                    <option value="audit_rejected">已拒绝</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">渠道</span>
               <div class="filter-control">
                 <div class="select-wrap">
@@ -1682,12 +1696,12 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1865px;">
+            <table style="min-width:2095px;">
               <colgroup>
                 <col style="width:40px">
                 <col style="width:108px"><col style="width:145px"><col style="width:108px">
                 <col style="width:68px"><col style="width:76px"><col style="width:76px">
-                <col style="width:70px"><col style="width:66px"><col style="width:150px">
+                <col style="width:70px"><col style="width:66px"><col style="width:380px">
                 <col style="width:165px">
                 <col style="width:200px"><col style="width:330px">
                 <col style="width:66px"><col style="width:120px"><col style="width:70px">
@@ -3165,8 +3179,8 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-default btn-sm" onclick="closeWdaBatch()">取消</button>
-        <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaBatchAction('failed')">拒绝</button>
-        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaBatchAction('withdrawing')">通过</button>
+        <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaBatchAction('audit_rejected')">拒绝</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaBatchAction('audit_approved')">通过</button>
       </div>
     </div>
   </div>
@@ -3982,7 +3996,7 @@
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
         <td style="font-family:Inter,sans-serif">${r.fee}</td>
         <td style="font-family:Inter,sans-serif;color:#67C23A;">${net}</td>
-        <td>${truncCell(r.wallet)}</td>
+        <td>${fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
         <td>${truncCell(r.hash)}</td>
         <td>${r.channel || '直连'}</td>
@@ -4098,7 +4112,7 @@
       diCopy('哈希', r.hash),
       `<div class="detail-item">
         <span class="detail-label">钱包地址</span>
-        ${truncCell(r.wallet)}
+        ${fullCell(r.wallet)}
       </div>`,
       (() => {
         const orderNo = depositOrderNo(r);
@@ -4185,11 +4199,13 @@
   //  提币记录 data & logic
   // ══════════════════════════════════════════════════════
   const W_STATUS = {
-    manual_review: { label:'待人工审核', cls:'badge-purple' },
-    risk_pending:  { label:'风控待处理', cls:'badge-amber' },
-    withdrawing:   { label:'提币中',     cls:'badge-blue'  },
-    completed:     { label:'已到账',     cls:'badge-green' },
-    failed:        { label:'提币失败',   cls:'badge-red'   },
+    manual_review:  { label:'待人工审核', cls:'badge-purple' },
+    risk_pending:   { label:'风控待处理', cls:'badge-amber' },
+    withdrawing:    { label:'提币中',     cls:'badge-blue'  },
+    completed:      { label:'已到账',     cls:'badge-green' },
+    failed:         { label:'提币失败',   cls:'badge-red'   },
+    audit_approved: { label:'已通过',     cls:'badge-green' },
+    audit_rejected: { label:'已拒绝',     cls:'badge-red'   },
   };
 
   const W_MERCHANTS = [
@@ -4218,10 +4234,10 @@
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022007', token:'USDC', network:'TRON',           net:'-6.11', fee:'0.01', wallet:'TZk8LmH2rXjJUyDCF8ZbnR7wKxN2mQqPzv',       wdTime:'2026-06-26 10:52:38', time:'-', hash:'-', paypazId:'WD00000000000048', supplierId:'-', channel:'-',    status:'manual_review', reviewType:'balance_retry' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023847', token:'USDT', network:'BNB Smart Chain', net:'-9.01', fee:'0.01', wallet:'0xE5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2E3f4', wdTime:'2026-06-26 11:03:15', time:'-', hash:'-', paypazId:'WD00000000000049', supplierId:'-', channel:'PayMe', status:'manual_review', reviewType:'balance_retry' },
     // 代币出金渠道配置了"人工审核"，提币请求需先经过审核才会进入提币流程，审核完成前只在「提币审核」中展示
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023850', token:'USDC', network:'Polygon',  net:'-2.50', fee:'0.01', wallet:'0xF1a2B3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0', wdTime:'2026-07-20 09:12:30', time:'-', hash:'-', paypazId:'WD00000000000060', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011012', token:'USDC', network:'Arbitrum', net:'-1.80', fee:'0.01', wallet:'0xA2b3C4d5E6f7A8b9C0d1E2f3A4b5C6d7E8f9A0b1', wdTime:'2026-07-20 14:35:47', time:'-', hash:'-', paypazId:'WD00000000000061', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022009', token:'USDC', network:'Base',     net:'-3.40', fee:'0.01', wallet:'0xB3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0B1c2', wdTime:'2026-07-21 10:08:19', time:'-', hash:'-', paypazId:'WD00000000000062', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023852', token:'USDC', network:'Polygon',  net:'-5.00', fee:'0.01', wallet:'0xC4d5E6f7A8b9C0d1E2f3A4b5C6d7E8f9A0b1C2d3', wdTime:'2026-07-21 16:44:02', time:'-', hash:'-', paypazId:'WD00000000000063', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023850', token:'USDC', network:'Polygon',  net:'-2.50', fee:'0.01', wallet:'0xF1a2B3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0', wdTime:'2026-07-20 09:12:30', time:'-', hash:'-', paypazId:'WD00000000000060', supplierId:'-', channel:'Cobo', status:'manual_review', reviewType:'token_review', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011012', token:'USDC', network:'Arbitrum', net:'-1.80', fee:'0.01', wallet:'0xA2b3C4d5E6f7A8b9C0d1E2f3A4b5C6d7E8f9A0b1', wdTime:'2026-07-20 14:35:47', time:'-', hash:'-', paypazId:'WD00000000000061', supplierId:'-', channel:'PayMe', status:'manual_review', reviewType:'token_review' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022009', token:'USDC', network:'Base',     net:'-3.40', fee:'0.01', wallet:'0xB3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0B1c2', wdTime:'2026-07-21 10:08:19', time:'-', hash:'-', paypazId:'WD00000000000062', supplierId:'-', channel:'Cobo', status:'manual_review', reviewType:'token_review', viaExcel:true },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023852', token:'USDC', network:'Polygon',  net:'-5.00', fee:'0.01', wallet:'0xC4d5E6f7A8b9C0d1E2f3A4b5C6d7E8f9A0b1C2d3', wdTime:'2026-07-21 16:44:02', time:'-', hash:'-', paypazId:'WD00000000000063', supplierId:'-', channel:'PayMe', status:'manual_review', reviewType:'token_review' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:03:12', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:10:47', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023842', token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-19 09:41:20', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'WD00000000000031',                supplierId:'-',                                    channel:'Cobo', status:'withdrawing'},
@@ -4260,7 +4276,7 @@
   function wAmt(r) { return (parseFloat(r.net) + parseFloat(r.fee)).toFixed(2); }
   function wFeeNeg(r) { return (-parseFloat(r.fee)).toFixed(2); }
 
-  const wState = { rows: WITHDRAW_ALL.filter(r => !wIsAuditPending(r)), page: 1, size: 20, selected: new Set() };
+  const wState = { rows: WITHDRAW_ALL.filter(r => !wIsAuditRecord(r)), page: 1, size: 20, selected: new Set() };
   let wdManageIdx = -1;
 
   function withdrawRender() {
@@ -4276,7 +4292,7 @@
       const hashCell     = r.hash === '-'       ? '-' : truncCell(r.hash);
       const paypazCell   = r.paypazId === '-'   ? '-' : fullCell(r.paypazId);
       const supplierCell = (r.supplierId === '-' && r.channelBatch === '-')
-        ? '-' : fullCellStack(r.supplierId, '批次', r.channelBatch);
+        ? '-' : fullCellStack(r.supplierId, '', r.channelBatch);
       const editIcon = r.status === 'manual_review'
         ? `<span class="action-icon" onclick="openWdEdit(${idx})" title="处理订单">${_PEN_SVG}</span>` : '';
       const checkCell = r.status === 'manual_review'
@@ -4291,7 +4307,7 @@
         <td class="cell-red">${wAmt(r)}</td>
         <td>${wFeeNeg(r)}</td>
         <td class="cell-red">${r.net}</td>
-        <td>${truncCell(r.wallet)}</td>
+        <td>${fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.wdTime}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.time}</td>
         <td>${hashCell}</td>
@@ -4402,7 +4418,7 @@
     const ds       = document.getElementById('w-date-start').value;
     const de       = document.getElementById('w-date-end').value;
     wState.rows = WITHDRAW_ALL.filter(r => {
-      if (wIsAuditPending(r)) return false;
+      if (wIsAuditRecord(r)) return false;
       if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
       if (token    && r.token !== token)                               return false;
@@ -4426,7 +4442,7 @@
   function withdrawReset() {
     ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditPending(r)); wState.selected.clear(); wState.page = 1; withdrawRender();
+    wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditRecord(r)); wState.selected.clear(); wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
     const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','商户订单号','渠道订单号','渠道批次号','渠道','状态'];
@@ -4781,9 +4797,9 @@
   //  在审核通过/拒绝前只在本页展示；渠道余额不足导致的重试类人工审核
   //  （reviewType:'balance_retry'）仍归「提币记录」处理，不在本页出现。
   // ══════════════════════════════════════════════════════
-  function wIsAuditPending(r) { return r.status === 'manual_review' && r.reviewType === 'token_review'; }
+  function wIsAuditRecord(r) { return r.reviewType === 'token_review'; }
 
-  const waState = { rows: WITHDRAW_ALL.filter(wIsAuditPending), page: 1, size: 20, selected: new Set() };
+  const waState = { rows: WITHDRAW_ALL.filter(wIsAuditRecord), page: 1, size: 20, selected: new Set() };
   let wdaManageIdx = -1;
 
   function withdrawAuditRender() {
@@ -4811,7 +4827,7 @@
         <td class="cell-red">${wAmt(r)}</td>
         <td>${wFeeNeg(r)}</td>
         <td class="cell-red">${r.net}</td>
-        <td>${truncCell(r.wallet)}</td>
+        <td>${fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.wdTime}</td>
         <td>${r.batch === '-' ? '-' : fullCell(r.batch)}</td>
         <td>${paypazCell}</td>
@@ -4907,17 +4923,19 @@
     const userId   = document.getElementById('wa-userid').value.trim().toLowerCase();
     const token    = document.getElementById('wa-token').value;
     const net      = document.getElementById('wa-network').value;
+    const status   = document.getElementById('wa-status').value;
     const channel  = document.getElementById('wa-channel').value;
     const batch    = document.getElementById('wa-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('wa-paypazid').value.trim().toLowerCase();
     const wds      = document.getElementById('wa-wdtime-start').value;
     const wde      = document.getElementById('wa-wdtime-end').value;
     waState.rows = WITHDRAW_ALL.filter(r => {
-      if (!wIsAuditPending(r)) return false;
+      if (!wIsAuditRecord(r)) return false;
       if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
       if (token    && r.token !== token)                               return false;
       if (net      && r.network !== net)                               return false;
+      if (status   && r.status !== status)                             return false;
       if (channel  && r.channel !== channel)                           return false;
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
@@ -4929,9 +4947,9 @@
     waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditReset() {
-    ['wa-merchant','wa-userid','wa-token','wa-network','wa-channel','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
+    ['wa-merchant','wa-userid','wa-token','wa-network','wa-status','wa-channel','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    waState.rows = WITHDRAW_ALL.filter(wIsAuditPending); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
+    waState.rows = WITHDRAW_ALL.filter(wIsAuditRecord); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditExport() {
     const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','批次号','商户订单号','渠道','状态'];
@@ -4941,7 +4959,8 @@
     ]), '提币审核.csv');
   }
   function openWaExportModal() {
-    document.getElementById('wa-export-status').textContent = W_STATUS.manual_review.label;
+    const waStVal = document.getElementById('wa-status').value;
+    document.getElementById('wa-export-status').textContent = waStVal ? W_STATUS[waStVal].label : '全部';
     document.getElementById('wa-export-count').textContent = waState.rows.length;
     document.querySelector('#wa-export-modal input[name="wa-export-format"][value="csv"]').checked = true;
     document.getElementById('wa-export-modal').classList.add('show');
@@ -4974,20 +4993,18 @@
     return [
       di('商户 ID',      r.merchantId),
       di('商户名称',     r.merchantName),
-      di('用户 ID',      r.userId),
-      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
+      di('客户 ID',      r.userId),
+      di('代币',         r.token),
+      di('网络',         r.network),
       di('提币金额',    `<span style="color:#F56C6C;font-family:Inter,sans-serif">${wAmt(r)} USDT</span>`),
       di('手续费',      `${wFeeNeg(r)} USDT`),
       di('净入账',      `<span style="color:#F56C6C;font-family:Inter,sans-serif">${r.net} USDT</span>`),
-      di('代币',         r.token),
-      di('网络',         r.network),
-      opts.hideChannel ? '' : di('渠道', r.channel === '-' ? '—' : r.channel),
+      diCopy('钱包地址',     r.wallet),
       di('提币时间',     r.wdTime === '-' ? '—' : r.wdTime),
-      di('到账时间',     r.time === '-' ? '—' : r.time),
-      diCopy('哈希',         r.hash),
       diCopy('批次号',       r.batch),
       diCopy('商户订单号', r.paypazId),
-      diCopy('钱包地址',     r.wallet),
+      opts.hideChannel ? '' : di('渠道', r.channel === '-' ? '—' : r.channel),
+      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
     ].join('');
   }
 
@@ -5034,7 +5051,7 @@
 
   function openWdaEdit(idx) {
     wdaManageIdx = idx;
-    document.querySelector('#wda-manage-modal .modal-title').textContent = '处理提币订单';
+    document.querySelector('#wda-manage-modal .modal-title').textContent = '提币审核';
     const r = WITHDRAW_ALL[idx];
     document.getElementById('wda-manage-body').innerHTML = _wdaItems(r, { hideChannel: true }) +
       _wdaChannelEditor(r) +
@@ -5047,16 +5064,21 @@
       </div>`;
     document.getElementById('wda-manage-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeWdaManage()">取消</button>
-      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('failed')">拒绝</button>
-      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('withdrawing')">通过</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('audit_rejected')">拒绝</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('audit_approved')">通过</button>
     `;
     document.getElementById('wda-manage-modal').classList.add('show');
     updateWdaChannelBalance();
     if (window.lucide) lucide.createIcons();
   }
 
+  const WDA_CONFIRM_CFG = {
+    audit_rejected: { icon:'alert-circle',  iconColor:'#F56C6C', title:'拒绝提币申请', msg:'拒绝后，订单状态将更新为「已拒绝」，且无法撤销，该笔提币不会进入提币记录。确认继续吗？', btnCls:'btn-danger',  btnTxt:'确认拒绝' },
+    audit_approved: { icon:'check-circle', iconColor:'#67C23A', title:'通过提币申请', msg:'通过后，订单状态将更新为「已通过」，并生成对应的提币记录，进入提币流程。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认通过' },
+  };
+
   function confirmWdaAction(action) {
-    const cfg = WD_CONFIRM_CFG[action];
+    const cfg = WDA_CONFIRM_CFG[action];
     document.getElementById('wda-confirm-cancel').style.display = '';
     document.getElementById('wda-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
@@ -5079,17 +5101,31 @@
     if (wdaManageIdx < 0) return;
     const r = WITHDRAW_ALL[wdaManageIdx];
     r.remark = (document.getElementById('wda-remark')?.value || '').trim();
-    if (newStatus === 'withdrawing') {
+    let channel = r.channel;
+    if (newStatus === 'audit_approved') {
       const sel = document.getElementById('wda-channel-select');
-      if (sel) r.channel = sel.value;
+      if (sel) channel = sel.value;
     }
     r.status = newStatus;
-    waState.rows = waState.rows.filter(x => x !== r);
+    if (newStatus === 'audit_approved') {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      const wr = {
+        merchantId: r.merchantId, merchantName: r.merchantName, userId: r.userId,
+        token: r.token, network: r.network, net: r.net, fee: r.fee,
+        wallet: r.wallet, wdTime: ts, time: '-', hash: '-',
+        batch: '-', paypazId: r.paypazId, supplierId: '-', channelBatch: '-',
+        channel: channel, status: 'withdrawing',
+      };
+      WITHDRAW_ALL.push(wr);
+      wState.rows.unshift(wr);
+    }
     waState.selected.delete(wdaManageIdx);
     closeWdaConfirm();
     closeWdaManage();
     withdrawAuditRender();
-    const msgs = { failed:'已拒绝，订单状态更新为提币失败，已进入提币记录', withdrawing:`已通过，使用${r.channel}渠道发起提币，已进入提币记录` };
+    const msgs = { audit_rejected:'已拒绝，订单状态更新为「已拒绝」', audit_approved:`已通过，使用${channel}渠道发起提币，已生成提币记录` };
     showToast(msgs[newStatus] || '操作成功');
   }
 
@@ -5208,18 +5244,23 @@
     document.getElementById('wda-batch-modal').classList.remove('show');
   }
 
+  const WDA_BATCH_CONFIRM_CFG = {
+    audit_rejected: { icon:'alert-circle',  iconColor:'#F56C6C', title:'批量拒绝提币申请', btnCls:'btn-danger',  btnTxt:'确认拒绝' },
+    audit_approved: { icon:'check-circle', iconColor:'#67C23A', title:'提币批量审核', btnCls:'btn-primary', btnTxt:'确认' },
+  };
+
   function confirmWdaBatchAction(action) {
     const count = Array.from(waState.selected).filter(idx => WITHDRAW_ALL[idx] && WITHDRAW_ALL[idx].status === 'manual_review').length;
     if (!count) { showToast('请选择待人工审核的提币记录'); return; }
-    const cfg = WD_BATCH_CONFIRM_CFG[action];
+    const cfg = WDA_BATCH_CONFIRM_CFG[action];
     closeWdaBatch();
     document.getElementById('wda-confirm-cancel').style.display = '';
     document.getElementById('wda-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
     document.getElementById('wda-confirm-title').textContent = cfg.title;
-    let msg = action === 'failed'
-      ? `拒绝后，选中的 ${count} 条订单状态将更新为「提币失败」，且无法撤销。确认继续吗？`
-      : `${count} 条提币申请将进入提币流程，确认继续吗？`;
+    let msg = action === 'audit_rejected'
+      ? `拒绝后，选中的 ${count} 条订单状态将更新为「已拒绝」，且无法撤销，不会进入提币记录。确认继续吗？`
+      : `${count} 条提币申请将更新为「已通过」，并生成对应的提币记录，进入提币流程。确认继续吗？`;
     document.getElementById('wda-confirm-msg').textContent = msg;
     const okBtn = document.getElementById('wda-confirm-ok');
     okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
@@ -5233,20 +5274,32 @@
     const ids = Array.from(waState.selected).filter(idx => WITHDRAW_ALL[idx] && WITHDRAW_ALL[idx].status === 'manual_review');
     const remark = (document.getElementById('wda-batch-remark')?.value || '').trim();
     const channelSel = document.getElementById('wda-batch-channel-select');
-    const processedRows = ids.map(idx => WITHDRAW_ALL[idx]);
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const ts = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
     ids.forEach(idx => {
       const r = WITHDRAW_ALL[idx];
       r.remark = remark;
-      if (newStatus === 'withdrawing' && channelSel && channelSel.value) r.channel = channelSel.value;
+      const channel = (newStatus === 'audit_approved' && channelSel && channelSel.value) ? channelSel.value : r.channel;
+      if (newStatus === 'audit_approved') {
+        const wr = {
+          merchantId: r.merchantId, merchantName: r.merchantName, userId: r.userId,
+          token: r.token, network: r.network, net: r.net, fee: r.fee,
+          wallet: r.wallet, wdTime: ts, time: '-', hash: '-',
+          batch: '-', paypazId: r.paypazId, supplierId: '-', channelBatch: '-',
+          channel: channel, status: 'withdrawing',
+        };
+        WITHDRAW_ALL.push(wr);
+        wState.rows.unshift(wr);
+      }
       r.status = newStatus;
     });
-    waState.rows = waState.rows.filter(r => !processedRows.includes(r));
     waState.selected.clear();
     closeWdaConfirm();
     withdrawAuditRender();
     const msgs = {
-      failed:      `已批量拒绝 ${ids.length} 条订单，状态更新为提币失败，已进入提币记录`,
-      withdrawing: `已批量通过 ${ids.length} 条提币申请，已进入提币记录`,
+      audit_rejected: `已批量拒绝 ${ids.length} 条订单，状态更新为「已拒绝」`,
+      audit_approved: `已批量通过 ${ids.length} 条提币申请，已生成提币记录`,
     };
     showToast(msgs[newStatus] || '操作成功');
   }
@@ -6691,7 +6744,8 @@
     const primary = (!primaryVal || primaryVal === '-') ? `<span class="cell-empty">—</span>` : fullCell(primaryVal);
     if (!secondaryVal || secondaryVal === '-') return `<div class="copy-cell-stack">${primary}</div>`;
     const escSec = secondaryVal.replace(/'/g, '&#39;');
-    const secondary = `<div class="copy-cell cell-sub"><span class="stack-tag">${secondaryLabel}</span><span style="font-family:Inter,sans-serif;cursor:default">${escSec}</span><span class="copy-icon" onclick="copyText('${escSec}')">${_COPY_SVG}</span></div>`;
+    const tag = secondaryLabel ? `<span class="stack-tag">${secondaryLabel}</span>` : '';
+    const secondary = `<div class="copy-cell cell-sub">${tag}<span style="font-family:Inter,sans-serif;cursor:default">${escSec}</span><span class="copy-icon" onclick="copyText('${escSec}')">${_COPY_SVG}</span></div>`;
     return `<div class="copy-cell-stack">${primary}${secondary}</div>`;
   }
 

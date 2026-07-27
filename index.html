@@ -375,6 +375,10 @@
     }
     .copy-icon:hover { opacity: 0.7; }
 
+    .copy-cell-stack { display: flex; flex-direction: column; justify-content: center; gap: 3px; height: 100%; overflow: hidden; }
+    .copy-cell-stack .copy-cell.cell-sub span:not(.stack-tag) { font-size: 12px; color: #909399; }
+    .stack-tag { font-family: 'Noto Sans SC', sans-serif; font-size: 11px; color: #909399; flex-shrink: 0; }
+
     /* Status Badges */
     .badge {
       display: inline-flex; align-items: center; justify-content: center;
@@ -482,14 +486,18 @@
     .pd-stat-label { font-size: 11px; color: #909399; }
     .pd-stat-val { font-size: 13px; font-weight: 600; color: #303133; font-family: Inter, sans-serif; }
     .pd-stat-val.blue { color: #409EFF; }
-    .pd-dep-item { padding: 10px 0; border-bottom: 1px solid #F2F3F5; display: flex; justify-content: space-between; align-items: flex-start; }
+    .pd-dep-item { padding: 10px 0; border-bottom: 1px solid #F2F3F5; display: flex; align-items: flex-start; }
     .pd-dep-item:last-child { border-bottom: none; }
-    .pd-dep-left { display: flex; flex-direction: column; gap: 3px; }
+    .pd-dep-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
     .pd-dep-txid { font-size: 13px; font-weight: 500; color: #303133; font-family: Inter, sans-serif; }
-    .pd-dep-sub { font-size: 12px; color: #909399; font-family: Inter, sans-serif; }
+    .pd-dep-cols { display: flex; justify-content: space-between; align-items: flex-start; }
+    .pd-dep-left { display: flex; flex-direction: column; gap: 3px; }
+    .pd-dep-sub { font-size: 12px; color: #909399; font-family: Inter, sans-serif; line-height: 17px; }
     .pd-dep-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-    .pd-dep-amount { font-size: 13px; font-weight: 500; color: #67C23A; font-family: Inter, sans-serif; }
-    .pd-dep-net { font-size: 12px; color: #909399; font-family: Inter, sans-serif; }
+    .pd-dep-row { display: flex; align-items: baseline; gap: 6px; }
+    .pd-dep-row-label { font-size: 12px; color: #909399; width: 56px; text-align: right; flex-shrink: 0; line-height: 17px; }
+    .pd-dep-amount { font-size: 13px; font-weight: 500; color: #67C23A; font-family: Inter, sans-serif; line-height: 17px; }
+    .pd-dep-net { font-size: 12px; color: #909399; font-family: Inter, sans-serif; line-height: 17px; }
     .pd-empty { display: flex; flex-direction: column; align-items: center; padding: 28px 0; gap: 8px; }
     .pd-empty-text { font-size: 13px; color: #C0C4CC; }
     .pd-dep-item.selectable { cursor: pointer; align-items: center; }
@@ -1067,9 +1075,22 @@
         <i data-lucide="circle-arrow-down" class="nav-icon" style="width:16px;height:16px;"></i>
         <span class="nav-label">充币记录</span>
       </div>
-      <div class="nav-item" data-page="withdraw">
-        <i data-lucide="circle-arrow-up" class="nav-icon" style="width:16px;height:16px;"></i>
-        <span class="nav-label">提币记录</span>
+      <div class="nav-group">
+        <div class="nav-group-hd" id="nav-ghd-withdraw" onclick="toggleNavGroup('withdraw')">
+          <i data-lucide="circle-arrow-up" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">提币</span>
+          <i data-lucide="chevron-up" id="nav-caret-withdraw" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-withdraw">
+          <div class="nav-item nav-sub-item" data-page="withdraw">
+            <i data-lucide="circle-arrow-up" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">提币记录</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="withdraw-audit">
+            <i data-lucide="shield-check" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">提币审核</span>
+          </div>
+        </div>
       </div>
       <div class="nav-item" data-page="payment">
         <i data-lucide="file-text" class="nav-icon" style="width:16px;height:16px;"></i>
@@ -1429,15 +1450,21 @@
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">PayPaz 订单号</span>
+              <span class="filter-label-el">商户订单号</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="w-paypazid">
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">供应商订单号</span>
+              <span class="filter-label-el">渠道订单号</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="w-supplierid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">渠道批次号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="w-channelbatch">
               </div>
             </div>
             <div class="filter-item">
@@ -1505,7 +1532,7 @@
                   <th>商户 ID</th><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th>
                   <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>提币时间</th><th>到账时间</th><th>哈希</th><th>批次号</th>
-                  <th>PayPaz 订单号</th><th>供应商订单号</th>
+                  <th>商户订单号</th><th>渠道订单号 / 批次号</th>
                   <th>渠道</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -1538,6 +1565,172 @@
 
       </div>
     </div><!-- /page-withdraw -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 提币审核                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-withdraw-audit">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">商户</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
+                       id="wa-merchant" autocomplete="off"
+                       oninput="waMerchantInput()" onfocus="waMerchantInput()"
+                       onblur="setTimeout(waHideMerchantDrop, 150)">
+              </div>
+              <div class="p-merch-dropdown" id="wa-merch-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">客户 ID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="wa-userid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="wa-token">
+                    <option value="">请选择</option>
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="wa-network">
+                    <option value="">请选择</option>
+                    <option value="TRON">TRON</option>
+                    <option value="Ethereum">Ethereum</option>
+                    <option value="BSC">BSC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">渠道</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="wa-channel">
+                    <option value="">请选择</option>
+                    <option value="Cobo">Cobo</option>
+                    <option value="Payme">Payme</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">批次号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="wa-batch">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">商户订单号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="wa-paypazid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">提币时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="wa-wdtime-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="wa-wdtime-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="withdrawAuditReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="withdrawAuditSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-stats" id="wa-stats">
+              <span>提币笔数：<b id="wa-stat-count">0</b></span>
+              <span>提币金额（合计）：<b class="neg" id="wa-stat-amt">0.00</b></span>
+              <span>手续费（合计）：<b class="neg" id="wa-stat-fee">0.00</b></span>
+              <span>净入账（合计）：<b class="neg" id="wa-stat-net">0.00</b></span>
+            </div>
+            <div class="summary-spacer"></div>
+            <button class="btn btn-primary-soft" id="wa-batch-btn" onclick="openWdaBatchReview()" disabled style="margin-right:8px;">
+              <i data-lucide="check-square" style="width:13px;height:13px;"></i>批量审核
+            </button>
+            <button class="export-btn" onclick="openWaExportModal()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1865px;">
+              <colgroup>
+                <col style="width:40px">
+                <col style="width:108px"><col style="width:145px"><col style="width:108px">
+                <col style="width:68px"><col style="width:76px"><col style="width:76px">
+                <col style="width:70px"><col style="width:66px"><col style="width:150px">
+                <col style="width:165px">
+                <col style="width:200px"><col style="width:330px">
+                <col style="width:66px"><col style="width:120px"><col style="width:70px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><label class="ak-check-item" style="justify-content:center"><input type="checkbox" id="wa-check-all" onchange="waToggleAllVisible(this.checked)"><span class="ak-box"></span></label></th>
+                  <th>商户 ID</th><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th>
+                  <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
+                  <th>提币时间</th><th>批次号</th>
+                  <th>商户订单号</th>
+                  <th>渠道</th><th>状态</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="wa-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="wa-page-total">共 571 条</span>
+            <select class="page-size-select" id="wa-page-size" onchange="withdrawAuditPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20" selected>20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+              <option value="200">200条/页</option>
+            </select>
+            <button class="page-btn" id="wa-btn-prev" onclick="withdrawAuditPage(waState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="withdrawAuditPage(1)">1</button>
+            <button class="page-btn" onclick="withdrawAuditPage(2)">2</button>
+            <button class="page-btn" onclick="withdrawAuditPage(3)">3</button>
+            <button class="page-btn" id="wa-btn-next" onclick="withdrawAuditPage(waState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')withdrawAuditPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-withdraw-audit -->
 
     <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 支付订单                                  -->
@@ -2867,6 +3060,154 @@
     </div>
   </div>
 
+  <!-- ── Withdraw Audit Manage Modal ────────────────────────── -->
+  <div class="modal-overlay" id="wda-manage-modal" onclick="if(event.target===this)closeWdaManage()">
+    <div class="modal" style="width:560px;">
+      <div class="modal-header">
+        <span class="modal-title">管理提币订单</span>
+        <span class="modal-close" onclick="closeWdaManage()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" id="wda-manage-body">
+        <!-- populated by JS -->
+      </div>
+      <div class="modal-footer" id="wda-manage-footer">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Withdraw Audit Confirm Modal ───────────────────────── -->
+  <div class="modal-overlay" id="wda-confirm-modal" style="z-index:1100;" onclick="if(event.target===this)closeWdaConfirm()">
+    <div class="modal" style="width:380px;">
+      <div class="wd-confirm-box">
+        <button class="wd-confirm-close" onclick="closeWdaConfirm()">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <div class="wd-confirm-hd">
+          <span id="wda-confirm-icon"></span>
+          <span class="wd-confirm-title" id="wda-confirm-title"></span>
+        </div>
+        <p class="wd-confirm-msg" id="wda-confirm-msg"></p>
+        <div class="wd-confirm-actions">
+          <button class="btn btn-default btn-sm" id="wda-confirm-cancel" onclick="closeWdaConfirm()">取消</button>
+          <button class="btn btn-sm" id="wda-confirm-ok"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Withdraw Audit Batch Review Modal ──────────────────── -->
+  <div class="modal-overlay" id="wda-batch-modal" onclick="if(event.target===this)closeWdaBatch()">
+    <div class="modal" style="width:560px;">
+      <div class="modal-header">
+        <span class="modal-title">批量审核</span>
+        <span class="modal-close" onclick="closeWdaBatch()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body">
+        <div class="detail-item wd-channel-row" style="grid-column:1/-1" id="wda-batch-channel-editor"></div>
+        <div class="table-wrap" style="grid-column:1/-1;max-height:200px;border:1px solid #EBEEF5;border-radius:4px;">
+          <table>
+            <colgroup>
+              <col style="width:90px"><col style="width:110px"><col style="width:90px"><col style="width:110px">
+            </colgroup>
+            <thead><tr><th>代币</th><th>网络</th><th>余额</th><th style="text-align:right;">提币金额（合计）</th></tr></thead>
+            <tbody id="wda-batch-balance-list"></tbody>
+          </table>
+        </div>
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label" style="font-weight:600;color:#606266;">备注</span>
+          <div class="wm-remark-wrap">
+            <textarea class="wm-remark" id="wda-batch-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('wda-batch-remark-count').textContent=this.value.length"></textarea>
+            <span class="wm-remark-count"><span id="wda-batch-remark-count">0</span>/200</span>
+          </div>
+        </div>
+        <div class="pd-section-title" style="grid-column:1/-1;margin-bottom:0;display:flex;align-items:center;justify-content:space-between;">
+          提币记录
+          <span style="font-size:13px;color:#909399;font-weight:400">笔数：<span id="wda-batch-list-count">0</span></span>
+        </div>
+        <div style="grid-column:1/-1;border:1px solid #EBEEF5;border-radius:4px;overflow:hidden;">
+          <div class="table-wrap" style="max-height:320px;">
+            <table>
+              <colgroup>
+                <col style="width:90px"><col style="width:90px"><col style="width:60px"><col style="width:70px"><col style="width:80px">
+              </colgroup>
+              <thead><tr><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th><th>提币金额</th></tr></thead>
+              <tbody id="wda-batch-list"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" style="height:44px;padding:0 12px;">
+            <span class="pagination-total" id="wda-batch-page-total">共 0 条</span>
+            <select class="page-size-select" id="wda-batch-page-size" onchange="waBatchListPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+              <option value="200">200条/页</option>
+            </select>
+            <button class="page-btn" id="wda-batch-btn-prev" onclick="waBatchListPage(waBatchListState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" id="wda-batch-p-1" onclick="waBatchListPage(1)">1</button>
+            <button class="page-btn" id="wda-batch-p-2" onclick="waBatchListPage(2)">2</button>
+            <button class="page-btn" id="wda-batch-p-3" onclick="waBatchListPage(3)">3</button>
+            <button class="page-btn" id="wda-batch-btn-next" onclick="waBatchListPage(waBatchListState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')waBatchListPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeWdaBatch()">取消</button>
+        <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaBatchAction('failed')">拒绝</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaBatchAction('withdrawing')">通过</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Withdraw Audit Export Confirm Modal ───────────────── -->
+  <div class="modal-overlay" id="wa-export-modal" onclick="if(event.target===this)closeWaExportModal()">
+    <div class="modal" style="width:420px;">
+      <div class="modal-header">
+        <span class="modal-title">导出</span>
+        <span class="modal-close" onclick="closeWaExportModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body exp-body">
+        <div class="exp-row">
+          <span class="exp-label">类型</span>
+          <span class="exp-value">提币</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">状态</span>
+          <span class="exp-value" id="wa-export-status">全部</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">格式</span>
+          <div class="exp-value">
+            <label class="ak-radio-item"><input type="radio" name="wa-export-format" value="csv" checked><span class="ak-dot"></span>CSV</label>
+            <label class="ak-radio-item"><input type="radio" name="wa-export-format" value="xlsx"><span class="ak-dot"></span>XLSX</label>
+          </div>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">条数</span>
+          <span class="exp-value mono" id="wa-export-count">0</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeWaExportModal()">取消</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWaExport()">导出</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Invite Modal ──────────────────────────────── -->
   <div class="modal-overlay" id="invite-modal" onclick="if(event.target===this)closeInviteModal()">
     <div class="modal" style="width:460px;">
@@ -3416,6 +3757,7 @@
     merchant: { label: '商户管理',  icon: 'users' },
     'merchant-detail': { label: '商户详情', icon: 'layout-grid' },
     withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
+    'withdraw-audit': { label: '提币审核', icon: 'shield-check' },
     currency: { label: '币种管理',  icon: 'circle-dollar-sign' },
     feedback: { label: '反馈收集',  icon: 'message-square' },
     system:   { label: '系统管理',  icon: 'settings' },
@@ -3429,7 +3771,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
+  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'withdraw-audit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -3493,6 +3835,12 @@
     const rampGhd = document.getElementById('nav-ghd-ramp');
     if (rampGhd) {
       rampGhd.classList.toggle('group-active', pid === 'ramp-in' || pid === 'ramp-out');
+    }
+
+    // update withdraw group header active state
+    const withdrawGhd = document.getElementById('nav-ghd-withdraw');
+    if (withdrawGhd) {
+      withdrawGhd.classList.toggle('group-active', pid === 'withdraw' || pid === 'withdraw-audit');
     }
 
     const systemPages = ['sys-user', 'sys-role', 'sys-role-users', 'sys-menu', 'sys-dept', 'sys-post', 'sys-operlog'];
@@ -3854,21 +4202,26 @@
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', wdTime:'2026-06-25 09:12:03', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-25 09:15:47', time:'-', hash:'ZROX3DqxcSgVBUJWMMP2gY6FtxH3pnDq8Ks',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011003', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TV9yXLS9mQWvWpwTjbeJqey8ZPknH4fRLd', wdTime:'2026-06-25 09:18:22', time:'-', hash:'4c80af2f-e0a1-421a-acbd-4001e7a93b52',                                   paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 10:02:11', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:05:38', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 09:58:04', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:08:15', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:11:29', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', viaExcel:true },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', wdTime:'2026-06-20 14:22:56', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'manual_review' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDT', network:'TRON', net:'-5.01', fee:'0.01', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-06-26 09:20:14', time:'-', hash:'-',                                                                       paypazId:'WD00000000000041',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDT', network:'TRON', net:'-12.30',fee:'0.01', wallet:'TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS', wdTime:'2026-06-26 09:35:47', time:'-', hash:'-',                                                                       paypazId:'WD00000000000042',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011008', token:'USDT', network:'TRON', net:'-3.20', fee:'0.01', wallet:'TWq7HXxCyGw1F3vmA9Zz2Kd6RpNjLtEo4B', wdTime:'2026-06-26 10:02:33', time:'-', hash:'-',                                                                       paypazId:'WD00000000000043',                supplierId:'-',                                    channel:'Cobo', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011009', token:'USDC', network:'BNB Smart Chain', net:'-8.51', fee:'0.01', wallet:'0xA1b2C3d4E5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0', wdTime:'2026-06-26 10:15:47', time:'-', hash:'-', paypazId:'WD00000000000044', supplierId:'-', channel:'-',    status:'manual_review' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'BNB Smart Chain', net:'-2.51', fee:'0.01', wallet:'0xB2c3D4e5F6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1', wdTime:'2026-06-26 10:24:19', time:'-', hash:'-', paypazId:'WD00000000000045', supplierId:'-', channel:'Cobo', status:'manual_review' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDC', network:'Ethereum',       net:'-15.31',fee:'0.01', wallet:'0xC3d4E5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2', wdTime:'2026-06-26 10:33:02', time:'-', hash:'-', paypazId:'WD00000000000046', supplierId:'-', channel:'Cobo', status:'manual_review' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011010', token:'USDT', network:'Ethereum',       net:'-4.21', fee:'0.01', wallet:'0xD4e5F6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1D2e3', wdTime:'2026-06-26 10:41:56', time:'-', hash:'-', paypazId:'WD00000000000047', supplierId:'-', channel:'PayMe', status:'manual_review' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022007', token:'USDC', network:'TRON',           net:'-6.11', fee:'0.01', wallet:'TZk8LmH2rXjJUyDCF8ZbnR7wKxN2mQqPzv',       wdTime:'2026-06-26 10:52:38', time:'-', hash:'-', paypazId:'WD00000000000048', supplierId:'-', channel:'-',    status:'manual_review' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023847', token:'USDT', network:'BNB Smart Chain', net:'-9.01', fee:'0.01', wallet:'0xE5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2E3f4', wdTime:'2026-06-26 11:03:15', time:'-', hash:'-', paypazId:'WD00000000000049', supplierId:'-', channel:'PayMe', status:'manual_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 10:02:11', time:'-', hash:'-',                                                                       paypazId:'WD00000000000026',                supplierId:'-',                                    channel:'PayMe', status:'manual_review', reviewType:'balance_retry', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:05:38', time:'-', hash:'bviamTNyPzVJkwtmSPJyPuARZk9dE1Qcf8',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', reviewType:'balance_retry', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-06-25 09:58:04', time:'-', hash:'-',                                                                       paypazId:'WD00000000000024',                supplierId:'-',                                    channel:'PayMe', status:'manual_review', reviewType:'balance_retry', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:08:15', time:'-', hash:'FAMQMgF1YloUuflDLP6MdO9ovBtW3czRxZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', reviewType:'balance_retry', viaExcel:true },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011005', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TX1jLfveNpwscB7rpRocnPN3XmKt2sGqYh', wdTime:'2026-06-25 10:11:29', time:'-', hash:'VK0Mq5dpD69FUGT99t3kKBAqYnWcR1mJeZ',                                    paypazId:'-',                               supplierId:'-',                                    channel:'PayMe', status:'manual_review', reviewType:'balance_retry', viaExcel:true },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TMcWprf8aV1UJY3eLLRFAXHi3dNpqoGbKs', wdTime:'2026-06-20 14:22:56', time:'-', hash:'BxQS6PcRPSNXRZZMcJ56KZXh8vdYtL2Wm',                                    paypazId:'-',                               supplierId:'-',                                    channel:'-',    status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDT', network:'TRON', net:'-5.01', fee:'0.01', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-06-26 09:20:14', time:'-', hash:'-',                                                                       paypazId:'WD00000000000041',                supplierId:'-',                                    channel:'Cobo', status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDT', network:'TRON', net:'-12.30',fee:'0.01', wallet:'TYASr5UV6HEcXatwdFQfmLVUqQQQMUxHLS', wdTime:'2026-06-26 09:35:47', time:'-', hash:'-',                                                                       paypazId:'WD00000000000042',                supplierId:'-',                                    channel:'Cobo', status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011008', token:'USDT', network:'TRON', net:'-3.20', fee:'0.01', wallet:'TWq7HXxCyGw1F3vmA9Zz2Kd6RpNjLtEo4B', wdTime:'2026-06-26 10:02:33', time:'-', hash:'-',                                                                       paypazId:'WD00000000000043',                supplierId:'-',                                    channel:'Cobo', status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011009', token:'USDC', network:'BNB Smart Chain', net:'-8.51', fee:'0.01', wallet:'0xA1b2C3d4E5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0', wdTime:'2026-06-26 10:15:47', time:'-', hash:'-', paypazId:'WD00000000000044', supplierId:'-', channel:'-',    status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'BNB Smart Chain', net:'-2.51', fee:'0.01', wallet:'0xB2c3D4e5F6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1', wdTime:'2026-06-26 10:24:19', time:'-', hash:'-', paypazId:'WD00000000000045', supplierId:'-', channel:'Cobo', status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDC', network:'Ethereum',       net:'-15.31',fee:'0.01', wallet:'0xC3d4E5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2', wdTime:'2026-06-26 10:33:02', time:'-', hash:'-', paypazId:'WD00000000000046', supplierId:'-', channel:'Cobo', status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011010', token:'USDT', network:'Ethereum',       net:'-4.21', fee:'0.01', wallet:'0xD4e5F6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1D2e3', wdTime:'2026-06-26 10:41:56', time:'-', hash:'-', paypazId:'WD00000000000047', supplierId:'-', channel:'PayMe', status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022007', token:'USDC', network:'TRON',           net:'-6.11', fee:'0.01', wallet:'TZk8LmH2rXjJUyDCF8ZbnR7wKxN2mQqPzv',       wdTime:'2026-06-26 10:52:38', time:'-', hash:'-', paypazId:'WD00000000000048', supplierId:'-', channel:'-',    status:'manual_review', reviewType:'balance_retry' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023847', token:'USDT', network:'BNB Smart Chain', net:'-9.01', fee:'0.01', wallet:'0xE5f6A7b8C9d0E1f2A3b4C5d6E7f8A9b0C1d2E3f4', wdTime:'2026-06-26 11:03:15', time:'-', hash:'-', paypazId:'WD00000000000049', supplierId:'-', channel:'PayMe', status:'manual_review', reviewType:'balance_retry' },
+    // 代币出金渠道配置了"人工审核"，提币请求需先经过审核才会进入提币流程，审核完成前只在「提币审核」中展示
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023850', token:'USDC', network:'Polygon',  net:'-2.50', fee:'0.01', wallet:'0xF1a2B3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0', wdTime:'2026-07-20 09:12:30', time:'-', hash:'-', paypazId:'WD00000000000060', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011012', token:'USDC', network:'Arbitrum', net:'-1.80', fee:'0.01', wallet:'0xA2b3C4d5E6f7A8b9C0d1E2f3A4b5C6d7E8f9A0b1', wdTime:'2026-07-20 14:35:47', time:'-', hash:'-', paypazId:'WD00000000000061', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022009', token:'USDC', network:'Base',     net:'-3.40', fee:'0.01', wallet:'0xB3c4D5e6F7a8B9c0D1e2F3a4B5c6D7e8F9a0B1c2', wdTime:'2026-07-21 10:08:19', time:'-', hash:'-', paypazId:'WD00000000000062', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023852', token:'USDC', network:'Polygon',  net:'-5.00', fee:'0.01', wallet:'0xC4d5E6f7A8b9C0d1E2f3A4b5C6d7E8f9A0b1C2d3', wdTime:'2026-07-21 16:44:02', time:'-', hash:'-', paypazId:'WD00000000000063', supplierId:'-', channel:'-', status:'manual_review', reviewType:'token_review' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:03:12', time:'-', hash:'3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf',                                    paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-18 11:10:47', time:'-', hash:'dsUgvQdhJ6Dq4BjkaDAgVSnwIrtzPcYXe2',                                   paypazId:'-',                               supplierId:'-',                                    channel:'Cobo', status:'failed'    },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023842', token:'USDT', network:'TRON', net:'-0.21', fee:'0.01', wallet:'TX3ogswuX8pXS1Ey2mj3ETdFbx4oMqCpb', wdTime:'2026-06-19 09:41:20', time:'-', hash:'tlqxAmGEQqOCgU66d5hiZwvBnRjP9kms3',                                     paypazId:'WD00000000000031',                supplierId:'-',                                    channel:'Cobo', status:'withdrawing'},
@@ -3890,10 +4243,24 @@
     WITHDRAW_ALL.forEach(r => { r.batch = r.viaExcel ? batchMap[r.wdTime.split(' ')[0]] : '-'; });
   })();
 
+  (function assignChannelBatches() {
+    // 渠道批次号：Cobo 批量处理提币时返回的批次标识，仅渠道已实际处理（有渠道订单号）的提币才有
+    const groups = {};
+    WITHDRAW_ALL.filter(r => r.channel === 'Cobo' && r.supplierId !== '-').forEach(r => {
+      const d = (r.time !== '-' ? r.time : r.wdTime).split(' ')[0];
+      (groups[d] = groups[d] || []).push(r);
+    });
+    Object.keys(groups).sort().forEach((d, i) => {
+      const batchId = `CB-${d.replace(/-/g, '')}-${String(i + 1).padStart(3, '0')}`;
+      groups[d].forEach(r => { r.channelBatch = batchId; });
+    });
+    WITHDRAW_ALL.forEach(r => { if (!r.channelBatch) r.channelBatch = '-'; });
+  })();
+
   function wAmt(r) { return (parseFloat(r.net) + parseFloat(r.fee)).toFixed(2); }
   function wFeeNeg(r) { return (-parseFloat(r.fee)).toFixed(2); }
 
-  const wState = { rows: [...WITHDRAW_ALL], page: 1, size: 20, selected: new Set() };
+  const wState = { rows: WITHDRAW_ALL.filter(r => !wIsAuditPending(r)), page: 1, size: 20, selected: new Set() };
   let wdManageIdx = -1;
 
   function withdrawRender() {
@@ -3908,7 +4275,8 @@
       const idx = WITHDRAW_ALL.indexOf(r);
       const hashCell     = r.hash === '-'       ? '-' : truncCell(r.hash);
       const paypazCell   = r.paypazId === '-'   ? '-' : fullCell(r.paypazId);
-      const supplierCell = r.supplierId === '-' ? '-' : fullCell(r.supplierId);
+      const supplierCell = (r.supplierId === '-' && r.channelBatch === '-')
+        ? '-' : fullCellStack(r.supplierId, '批次', r.channelBatch);
       const editIcon = r.status === 'manual_review'
         ? `<span class="action-icon" onclick="openWdEdit(${idx})" title="处理订单">${_PEN_SVG}</span>` : '';
       const checkCell = r.status === 'manual_review'
@@ -4028,11 +4396,13 @@
     const batch    = document.getElementById('w-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('w-paypazid').value.trim().toLowerCase();
     const supplier = document.getElementById('w-supplierid').value.trim().toLowerCase();
+    const chBatch  = document.getElementById('w-channelbatch').value.trim().toLowerCase();
     const wds      = document.getElementById('w-wdtime-start').value;
     const wde      = document.getElementById('w-wdtime-end').value;
     const ds       = document.getElementById('w-date-start').value;
     const de       = document.getElementById('w-date-end').value;
     wState.rows = WITHDRAW_ALL.filter(r => {
+      if (wIsAuditPending(r)) return false;
       if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
       if (token    && r.token !== token)                               return false;
@@ -4043,6 +4413,7 @@
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
       if (supplier && !r.supplierId.toLowerCase().includes(supplier)) return false;
+      if (chBatch  && !r.channelBatch.toLowerCase().includes(chBatch)) return false;
       if (wds      && r.wdTime !== '-' && r.wdTime.split(' ')[0] < wds) return false;
       if (wde      && r.wdTime !== '-' && r.wdTime.split(' ')[0] > wde) return false;
       if (ds       && r.time !== '-' && r.time.split(' ')[0] < ds)    return false;
@@ -4053,15 +4424,15 @@
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
-    ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
+    ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    wState.rows = [...WITHDRAW_ALL]; wState.selected.clear(); wState.page = 1; withdrawRender();
+    wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditPending(r)); wState.selected.clear(); wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
-    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','PayPaz订单号','供应商订单号','渠道','状态'];
+    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','商户订单号','渠道订单号','渠道批次号','渠道','状态'];
     csvDownload(headers, wState.rows.map(r => [
       r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
-      r.wdTime, r.time, r.hash, r.batch, r.paypazId, r.supplierId, r.channel, W_STATUS[r.status].label
+      r.wdTime, r.time, r.hash, r.batch, r.paypazId, r.supplierId, r.channelBatch, r.channel, W_STATUS[r.status].label
     ]), '提币记录.csv');
   }
   function openWdExportModal() {
@@ -4111,8 +4482,9 @@
       di('到账时间',     r.time === '-' ? '—' : r.time),
       diCopy('哈希',         r.hash),
       diCopy('批次号',       r.batch),
-      diCopy('PayPaz 订单号', r.paypazId),
-      diCopy('供应商订单号',  r.supplierId),
+      diCopy('商户订单号', r.paypazId),
+      diCopy('渠道订单号',  r.supplierId),
+      diCopy('渠道批次号',  r.channelBatch),
       diCopy('钱包地址',     r.wallet),
     ].join('');
   }
@@ -4204,7 +4576,7 @@
 
   const WD_CONFIRM_CFG = {
     failed:     { icon:'alert-circle', iconColor:'#F56C6C', title:'拒绝提币',   msg:'拒绝后，订单状态将更新为「提币失败」，且无法撤销。确认继续吗？', btnCls:'btn-danger',  btnTxt:'确认拒绝' },
-    withdrawing:{ icon:'check-circle', iconColor:'#67C23A', title:'通过提币订单', msg:'系统将使用所选渠道重新发起提币，订单状态将更新为「提币中」。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认通过' },
+    withdrawing:{ icon:'check-circle', iconColor:'#67C23A', title:'通过提币订单', msg:'提币申请将进入提币流程，确认继续吗？', btnCls:'btn-primary', btnTxt:'确认通过' },
   };
 
   function confirmWdAction(action) {
@@ -4213,11 +4585,7 @@
     document.getElementById('wd-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
     document.getElementById('wd-confirm-title').textContent = cfg.title;
-    let msg = cfg.msg;
-    if (action === 'withdrawing') {
-      const sel = document.getElementById('wd-channel-select');
-      if (sel) msg = `系统将使用「${sel.value}」渠道重新发起提币，订单状态将更新为「提币中」。确认继续吗？`;
-    }
+    const msg = cfg.msg;
     document.getElementById('wd-confirm-msg').textContent  = msg;
     const okBtn = document.getElementById('wd-confirm-ok');
     okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
@@ -4376,11 +4744,7 @@
     document.getElementById('wd-confirm-title').textContent = cfg.title;
     let msg = action === 'failed'
       ? `拒绝后，选中的 ${count} 条订单状态将更新为「提币失败」，且无法撤销。确认继续吗？`
-      : `${count} 条提币申请将通过所选渠道发起提币，确认继续吗？`;
-    if (action === 'withdrawing') {
-      const sel = document.getElementById('wd-batch-channel-select');
-      if (sel) msg = `${count} 条提币申请将通过「${sel.value}」渠道发起提币，确认继续吗？`;
-    }
+      : `${count} 条提币申请将进入提币流程，确认继续吗？`;
     document.getElementById('wd-confirm-msg').textContent = msg;
     const okBtn = document.getElementById('wd-confirm-ok');
     okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
@@ -4406,6 +4770,483 @@
     const msgs = {
       failed:      `已批量拒绝 ${ids.length} 条订单，状态更新为提币失败`,
       withdrawing: `已批量通过${ids.length}条提币申请`,
+    };
+    showToast(msgs[newStatus] || '操作成功');
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  提币审核 data & logic
+  //  与「提币记录」共用同一份 WITHDRAW_ALL 数据源：
+  //  代币出金渠道配置了"人工审核"（reviewType:'token_review'）的提币请求，
+  //  在审核通过/拒绝前只在本页展示；渠道余额不足导致的重试类人工审核
+  //  （reviewType:'balance_retry'）仍归「提币记录」处理，不在本页出现。
+  // ══════════════════════════════════════════════════════
+  function wIsAuditPending(r) { return r.status === 'manual_review' && r.reviewType === 'token_review'; }
+
+  const waState = { rows: WITHDRAW_ALL.filter(wIsAuditPending), page: 1, size: 20, selected: new Set() };
+  let wdaManageIdx = -1;
+
+  function withdrawAuditRender() {
+    const tbody = document.getElementById('wa-tbody');
+    if (!tbody) return;
+    const start = (waState.page - 1) * waState.size;
+    const slice = waState.rows.slice(start, start + waState.size);
+    const _EYE_SVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const _PEN_SVG  = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
+    tbody.innerHTML = slice.map(r => {
+      const st  = W_STATUS[r.status];
+      const idx = WITHDRAW_ALL.indexOf(r);
+      const paypazCell   = r.paypazId === '-'   ? '-' : fullCell(r.paypazId);
+      const editIcon = r.status === 'manual_review'
+        ? `<span class="action-icon" onclick="openWdaEdit(${idx})" title="处理订单">${_PEN_SVG}</span>` : '';
+      const checkCell = r.status === 'manual_review'
+        ? `<label class="ak-check-item" style="justify-content:center"><input type="checkbox" ${waState.selected.has(idx) ? 'checked' : ''} onchange="waToggleSelected(${idx}, this.checked)"><span class="ak-box"></span></label>`
+        : '';
+      return `<tr>
+        <td>${checkCell}</td>
+        <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
+        <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td><td>${r.network}</td>
+        <td class="cell-red">${wAmt(r)}</td>
+        <td>${wFeeNeg(r)}</td>
+        <td class="cell-red">${r.net}</td>
+        <td>${truncCell(r.wallet)}</td>
+        <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.wdTime}</td>
+        <td>${r.batch === '-' ? '-' : fullCell(r.batch)}</td>
+        <td>${paypazCell}</td>
+        <td>${r.channel === '-' ? '-' : r.channel}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td><div class="action-cell">
+          <span class="action-icon" onclick="openWdaView(${idx})" title="查看详情">${_EYE_SVG}</span>
+          ${editIcon}
+        </div></td>
+      </tr>`;
+    }).join('');
+    const wSumAmt = waState.rows.reduce((s, r) => s + parseFloat(wAmt(r)), 0);
+    const wSumFee = waState.rows.reduce((s, r) => s + parseFloat(wFeeNeg(r)), 0);
+    const wSumNet = waState.rows.reduce((s, r) => s + parseFloat(r.net), 0);
+    document.getElementById('wa-stat-count').textContent = waState.rows.length;
+    document.getElementById('wa-stat-amt').textContent = wSumAmt.toFixed(2);
+    document.getElementById('wa-stat-fee').textContent = wSumFee.toFixed(2);
+    document.getElementById('wa-stat-net').textContent = wSumNet.toFixed(2);
+    document.getElementById('wa-page-total').textContent = `共 ${waState.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(waState.rows.length / waState.size));
+    document.getElementById('wa-btn-prev').disabled = waState.page <= 1;
+    document.getElementById('wa-btn-next').disabled = waState.page >= total;
+    document.querySelectorAll('#page-withdraw-audit .pagination-bar .page-btn:not(#wa-btn-prev):not(#wa-btn-next)').forEach((btn, i) => {
+      const pg = i + 1;
+      btn.style.display = pg <= total ? '' : 'none';
+      btn.classList.toggle('active', pg === waState.page);
+    });
+    waUpdateBatchToolbar(slice);
+  }
+
+  function waUpdateBatchToolbar(slice) {
+    const visibleReviewable = (slice || []).filter(r => r.status === 'manual_review').map(r => WITHDRAW_ALL.indexOf(r));
+    const checkedVisible = visibleReviewable.filter(idx => waState.selected.has(idx));
+    const all = document.getElementById('wa-check-all');
+    if (all) {
+      all.checked = visibleReviewable.length > 0 && checkedVisible.length === visibleReviewable.length;
+      all.indeterminate = checkedVisible.length > 0 && checkedVisible.length < visibleReviewable.length;
+    }
+    const batchBtn = document.getElementById('wa-batch-btn');
+    if (batchBtn) batchBtn.disabled = waState.selected.size === 0;
+  }
+
+  function waToggleSelected(idx, checked) {
+    if (checked) waState.selected.add(idx);
+    else waState.selected.delete(idx);
+    const start = (waState.page - 1) * waState.size;
+    waUpdateBatchToolbar(waState.rows.slice(start, start + waState.size));
+  }
+
+  function waToggleAllVisible(checked) {
+    const start = (waState.page - 1) * waState.size;
+    const slice = waState.rows.slice(start, start + waState.size);
+    slice.forEach(r => {
+      if (r.status !== 'manual_review') return;
+      const idx = WITHDRAW_ALL.indexOf(r);
+      if (checked) waState.selected.add(idx);
+      else waState.selected.delete(idx);
+    });
+    withdrawAuditRender();
+  }
+
+  function withdrawAuditPage(p) {
+    const total = Math.max(1, Math.ceil(waState.rows.length / waState.size));
+    if (p < 1 || p > total) return;
+    waState.page = p; withdrawAuditRender();
+  }
+  function withdrawAuditPageSize() {
+    waState.size = +document.getElementById('wa-page-size').value;
+    waState.page = 1; withdrawAuditRender();
+  }
+  function waMerchantInput() {
+    const val = document.getElementById('wa-merchant').value.trim().toLowerCase();
+    const dd  = document.getElementById('wa-merch-dropdown');
+    const list = val ? W_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : W_MERCHANTS;
+    if (!list.length) { dd.style.display = 'none'; return; }
+    dd.innerHTML = list.map(m =>
+      `<div class="p-merch-opt" onmousedown="waSelectMerchant('${m.name}')">
+        ${m.name}<span class="p-merch-id">${m.id}</span>
+      </div>`
+    ).join('');
+    dd.style.display = '';
+  }
+  function waSelectMerchant(name) {
+    document.getElementById('wa-merchant').value = name;
+    document.getElementById('wa-merch-dropdown').style.display = 'none';
+  }
+  function waHideMerchantDrop() {
+    const dd = document.getElementById('wa-merch-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+  function withdrawAuditSearch() {
+    const merchant = document.getElementById('wa-merchant').value.trim().toLowerCase();
+    const userId   = document.getElementById('wa-userid').value.trim().toLowerCase();
+    const token    = document.getElementById('wa-token').value;
+    const net      = document.getElementById('wa-network').value;
+    const channel  = document.getElementById('wa-channel').value;
+    const batch    = document.getElementById('wa-batch').value.trim().toLowerCase();
+    const paypaz   = document.getElementById('wa-paypazid').value.trim().toLowerCase();
+    const wds      = document.getElementById('wa-wdtime-start').value;
+    const wde      = document.getElementById('wa-wdtime-end').value;
+    waState.rows = WITHDRAW_ALL.filter(r => {
+      if (!wIsAuditPending(r)) return false;
+      if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
+      if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
+      if (token    && r.token !== token)                               return false;
+      if (net      && r.network !== net)                               return false;
+      if (channel  && r.channel !== channel)                           return false;
+      if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
+      if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
+      if (wds      && r.wdTime !== '-' && r.wdTime.split(' ')[0] < wds) return false;
+      if (wde      && r.wdTime !== '-' && r.wdTime.split(' ')[0] > wde) return false;
+      return true;
+    });
+    waState.selected.clear();
+    waState.page = 1; withdrawAuditRender();
+  }
+  function withdrawAuditReset() {
+    ['wa-merchant','wa-userid','wa-token','wa-network','wa-channel','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    waState.rows = WITHDRAW_ALL.filter(wIsAuditPending); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
+  }
+  function withdrawAuditExport() {
+    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','批次号','商户订单号','渠道','状态'];
+    csvDownload(headers, waState.rows.map(r => [
+      r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
+      r.wdTime, r.batch, r.paypazId, r.channel, W_STATUS[r.status].label
+    ]), '提币审核.csv');
+  }
+  function openWaExportModal() {
+    document.getElementById('wa-export-status').textContent = W_STATUS.manual_review.label;
+    document.getElementById('wa-export-count').textContent = waState.rows.length;
+    document.querySelector('#wa-export-modal input[name="wa-export-format"][value="csv"]').checked = true;
+    document.getElementById('wa-export-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeWaExportModal() {
+    document.getElementById('wa-export-modal').classList.remove('show');
+  }
+  function confirmWaExport() {
+    const format = document.querySelector('#wa-export-modal input[name="wa-export-format"]:checked').value;
+    closeWaExportModal();
+    if (format === 'xlsx') { showToast('XLSX 导出功能开发中'); return; }
+    withdrawAuditExport();
+  }
+
+  // ── Withdraw Modals ────────────────────────────────────
+  function _wdaItems(r, opts) {
+    opts = opts || {};
+    const st = W_STATUS[r.status];
+    const di = (label, value, full) =>
+      `<div class="detail-item"${full ? ' style="grid-column:1/-1"' : ''}>
+        <span class="detail-label">${label}</span>
+        <span class="detail-value">${value}</span>
+      </div>`;
+    const diCopy = (label, value) =>
+      `<div class="detail-item">
+        <span class="detail-label">${label}</span>
+        ${(!value || value === '-') ? '<span class="detail-value">—</span>' : truncCell(value)}
+      </div>`;
+    return [
+      di('商户 ID',      r.merchantId),
+      di('商户名称',     r.merchantName),
+      di('用户 ID',      r.userId),
+      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
+      di('提币金额',    `<span style="color:#F56C6C;font-family:Inter,sans-serif">${wAmt(r)} USDT</span>`),
+      di('手续费',      `${wFeeNeg(r)} USDT`),
+      di('净入账',      `<span style="color:#F56C6C;font-family:Inter,sans-serif">${r.net} USDT</span>`),
+      di('代币',         r.token),
+      di('网络',         r.network),
+      opts.hideChannel ? '' : di('渠道', r.channel === '-' ? '—' : r.channel),
+      di('提币时间',     r.wdTime === '-' ? '—' : r.wdTime),
+      di('到账时间',     r.time === '-' ? '—' : r.time),
+      diCopy('哈希',         r.hash),
+      diCopy('批次号',       r.batch),
+      diCopy('商户订单号', r.paypazId),
+      diCopy('钱包地址',     r.wallet),
+    ].join('');
+  }
+
+  function _wdaChannelEditor(r) {
+    const balCobo  = wdChannelBalanceLabel('Cobo',  r.token, r.network);
+    const balPayMe = wdChannelBalanceLabel('PayMe', r.token, r.network);
+    return `
+      <div class="detail-item wd-channel-row" style="grid-column:1/-1">
+        <span class="detail-label">渠道</span>
+        <div class="wd-channel-edit" style="width:100%;">
+          <div class="select-wrap" style="width:100%;">
+            <select class="field-select" id="wda-channel-select" style="width:100%;" onchange="updateWdaChannelBalance()">
+              <option value="Cobo"${r.channel === 'Cobo' ? ' selected' : ''}>Cobo · 余额 ${balCobo} ${r.token}</option>
+              <option value="PayMe"${r.channel === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe} ${r.token}</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+          <span class="wd-channel-balance" id="wda-channel-balance-hint"></span>
+        </div>
+      </div>`;
+  }
+
+  function updateWdaChannelBalance() {
+    if (wdaManageIdx < 0) return;
+    const hint = document.getElementById('wda-channel-balance-hint');
+    if (!hint) return;
+    hint.textContent = '该渠道余额不足，请更换渠道或先充值';
+  }
+
+  function openWdaView(idx) {
+    wdaManageIdx = idx;
+    const r = WITHDRAW_ALL[idx];
+    document.querySelector('#wda-manage-modal .modal-title').textContent = '提币详情';
+    document.getElementById('wda-manage-body').innerHTML = _wdaItems(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">备注</span>
+        <span class="detail-value">${r.remark || '—'}</span>
+      </div>`;
+    document.getElementById('wda-manage-footer').innerHTML =
+      `<button class="btn btn-default btn-sm" onclick="closeWdaManage()">关闭</button>`;
+    document.getElementById('wda-manage-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function openWdaEdit(idx) {
+    wdaManageIdx = idx;
+    document.querySelector('#wda-manage-modal .modal-title').textContent = '处理提币订单';
+    const r = WITHDRAW_ALL[idx];
+    document.getElementById('wda-manage-body').innerHTML = _wdaItems(r, { hideChannel: true }) +
+      _wdaChannelEditor(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">备注</span>
+        <div class="wm-remark-wrap">
+          <textarea class="wm-remark" id="wda-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('wda-remark-count').textContent=this.value.length"></textarea>
+          <span class="wm-remark-count"><span id="wda-remark-count">0</span>/200</span>
+        </div>
+      </div>`;
+    document.getElementById('wda-manage-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeWdaManage()">取消</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('failed')">拒绝</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('withdrawing')">通过</button>
+    `;
+    document.getElementById('wda-manage-modal').classList.add('show');
+    updateWdaChannelBalance();
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function confirmWdaAction(action) {
+    const cfg = WD_CONFIRM_CFG[action];
+    document.getElementById('wda-confirm-cancel').style.display = '';
+    document.getElementById('wda-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
+    document.getElementById('wda-confirm-title').textContent = cfg.title;
+    const msg = cfg.msg;
+    document.getElementById('wda-confirm-msg').textContent  = msg;
+    const okBtn = document.getElementById('wda-confirm-ok');
+    okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
+    okBtn.textContent = cfg.btnTxt;
+    okBtn.onclick = () => { wdaAction(action); };
+    document.getElementById('wda-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeWdaConfirm() {
+    document.getElementById('wda-confirm-modal').classList.remove('show');
+  }
+
+  function wdaAction(newStatus) {
+    if (wdaManageIdx < 0) return;
+    const r = WITHDRAW_ALL[wdaManageIdx];
+    r.remark = (document.getElementById('wda-remark')?.value || '').trim();
+    if (newStatus === 'withdrawing') {
+      const sel = document.getElementById('wda-channel-select');
+      if (sel) r.channel = sel.value;
+    }
+    r.status = newStatus;
+    waState.rows = waState.rows.filter(x => x !== r);
+    waState.selected.delete(wdaManageIdx);
+    closeWdaConfirm();
+    closeWdaManage();
+    withdrawAuditRender();
+    const msgs = { failed:'已拒绝，订单状态更新为提币失败，已进入提币记录', withdrawing:`已通过，使用${r.channel}渠道发起提币，已进入提币记录` };
+    showToast(msgs[newStatus] || '操作成功');
+  }
+
+  function closeWdaManage() {
+    document.getElementById('wda-manage-modal').classList.remove('show');
+    wdaManageIdx = -1;
+  }
+
+  let waBatchGroups = [];
+  let waBatchNeeded = 0;
+  const waBatchListState = { rows: [], page: 1, size: 10 };
+
+  function waBatchListRender() {
+    const { rows, page, size } = waBatchListState;
+    const start = (page - 1) * size;
+    const slice = rows.slice(start, start + size);
+    document.getElementById('wda-batch-list').innerHTML = slice.map(r =>
+      `<tr>
+        <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td>
+        <td>${r.network}</td>
+        <td class="cell-red">${wAmt(r)}</td>
+      </tr>`
+    ).join('');
+    const total = rows.length;
+    document.getElementById('wda-batch-page-total').textContent = `共 ${total} 条`;
+    const pages = Math.ceil(total / size) || 1;
+    for (let k = 1; k <= 3; k++) {
+      const btn = document.getElementById('wda-batch-p-' + k);
+      if (btn) { btn.textContent = k; btn.classList.toggle('active', k === page); btn.style.display = k <= pages ? '' : 'none'; }
+    }
+    const prev = document.getElementById('wda-batch-btn-prev');
+    const next = document.getElementById('wda-batch-btn-next');
+    if (prev) prev.disabled = page <= 1;
+    if (next) next.disabled = page >= pages;
+  }
+
+  function waBatchListPage(n) {
+    const pages = Math.ceil(waBatchListState.rows.length / waBatchListState.size) || 1;
+    waBatchListState.page = Math.max(1, Math.min(n, pages));
+    waBatchListRender();
+  }
+
+  function waBatchListPageSize() {
+    waBatchListState.size = +document.getElementById('wda-batch-page-size').value;
+    waBatchListState.page = 1;
+    waBatchListRender();
+  }
+
+  function _wdaBatchChannelEditor(selected) {
+    const balPayMe = wdChannelTotalBalanceLabel('PayMe');
+    return `
+      <span class="detail-label" style="font-weight:600;color:#606266;">渠道</span>
+      <div class="wd-channel-edit" style="width:100%;">
+        <div class="select-wrap" style="width:100%;">
+          <select class="field-select" id="wda-batch-channel-select" style="width:100%;" onchange="updateWdaBatchChannelBalance()">
+            <option value=""${selected === '' ? ' selected' : ''}>默认（发起提币时已选择的渠道）</option>
+            <option value="Cobo"${selected === 'Cobo' ? ' selected' : ''}>Cobo</option>
+            <option value="PayMe"${selected === 'PayMe' ? ' selected' : ''}>PayMe · 余额 ${balPayMe}USDT</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+        </div>
+        <span class="wd-channel-balance" id="wda-batch-channel-hint"></span>
+      </div>`;
+  }
+
+  function updateWdaBatchChannelBalance() {
+    const sel = document.getElementById('wda-batch-channel-select');
+    const hint = document.getElementById('wda-batch-channel-hint');
+    const list = document.getElementById('wda-batch-balance-list');
+    if (!sel || !hint || !list) return;
+    const channel = sel.value;
+    list.innerHTML = waBatchGroups.map(g => {
+      const balCell = (channel === '' || channel === 'PayMe') ? '-' : wdChannelBalanceLabel(channel, g.token, g.network);
+      return `<tr>
+        <td>${g.token}</td>
+        <td>${g.network}</td>
+        <td>${balCell}</td>
+        <td class="cell-red" style="text-align:right;">${g.amt.toFixed(2)}</td>
+      </tr>`;
+    }).join('');
+    hint.textContent = channel === ''
+      ? '将按各笔提币发起时已选择的渠道处理，请确认对应渠道余额充足'
+      : '该渠道余额不足，请更换渠道或先充值';
+  }
+
+  function openWdaBatchReview() {
+    const rows = Array.from(waState.selected).map(idx => WITHDRAW_ALL[idx]).filter(r => r && r.status === 'manual_review');
+    if (!rows.length) { showToast('请选择待人工审核的提币记录'); return; }
+    document.getElementById('wda-batch-list-count').textContent = rows.length;
+    waBatchListState.rows = rows;
+    waBatchListState.page = 1;
+    waBatchListState.size = 10;
+    document.getElementById('wda-batch-page-size').value = '10';
+    waBatchListRender();
+    const groupMap = new Map();
+    rows.forEach(r => {
+      const key = `${r.token}|${r.network}`;
+      if (!groupMap.has(key)) groupMap.set(key, { token: r.token, network: r.network, amt: 0, need: 0 });
+      const g = groupMap.get(key);
+      g.amt  += parseFloat(wAmt(r));
+      g.need += Math.abs(parseFloat(r.net));
+    });
+    waBatchGroups = Array.from(groupMap.values());
+    waBatchNeeded = waBatchGroups.reduce((s, g) => s + g.need, 0);
+    document.getElementById('wda-batch-channel-editor').innerHTML = _wdaBatchChannelEditor('');
+    document.getElementById('wda-batch-remark').value = '';
+    document.getElementById('wda-batch-remark-count').textContent = '0';
+    document.getElementById('wda-batch-modal').classList.add('show');
+    updateWdaBatchChannelBalance();
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeWdaBatch() {
+    document.getElementById('wda-batch-modal').classList.remove('show');
+  }
+
+  function confirmWdaBatchAction(action) {
+    const count = Array.from(waState.selected).filter(idx => WITHDRAW_ALL[idx] && WITHDRAW_ALL[idx].status === 'manual_review').length;
+    if (!count) { showToast('请选择待人工审核的提币记录'); return; }
+    const cfg = WD_BATCH_CONFIRM_CFG[action];
+    closeWdaBatch();
+    document.getElementById('wda-confirm-cancel').style.display = '';
+    document.getElementById('wda-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
+    document.getElementById('wda-confirm-title').textContent = cfg.title;
+    let msg = action === 'failed'
+      ? `拒绝后，选中的 ${count} 条订单状态将更新为「提币失败」，且无法撤销。确认继续吗？`
+      : `${count} 条提币申请将进入提币流程，确认继续吗？`;
+    document.getElementById('wda-confirm-msg').textContent = msg;
+    const okBtn = document.getElementById('wda-confirm-ok');
+    okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
+    okBtn.textContent = cfg.btnTxt;
+    okBtn.onclick = () => { wdaBatchAction(action); };
+    document.getElementById('wda-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function wdaBatchAction(newStatus) {
+    const ids = Array.from(waState.selected).filter(idx => WITHDRAW_ALL[idx] && WITHDRAW_ALL[idx].status === 'manual_review');
+    const remark = (document.getElementById('wda-batch-remark')?.value || '').trim();
+    const channelSel = document.getElementById('wda-batch-channel-select');
+    const processedRows = ids.map(idx => WITHDRAW_ALL[idx]);
+    ids.forEach(idx => {
+      const r = WITHDRAW_ALL[idx];
+      r.remark = remark;
+      if (newStatus === 'withdrawing' && channelSel && channelSel.value) r.channel = channelSel.value;
+      r.status = newStatus;
+    });
+    waState.rows = waState.rows.filter(r => !processedRows.includes(r));
+    waState.selected.clear();
+    closeWdaConfirm();
+    withdrawAuditRender();
+    const msgs = {
+      failed:      `已批量拒绝 ${ids.length} 条订单，状态更新为提币失败，已进入提币记录`,
+      withdrawing: `已批量通过 ${ids.length} 条提币申请，已进入提币记录`,
     };
     showToast(msgs[newStatus] || '操作成功');
   }
@@ -4443,6 +5284,18 @@
       ]},
     { order:'460004375-52085120983040', merchantId:'M003', merchantName:'IG Japan', userId:'U30015923', due:'5.00', paid:'0.00', fee:'0.00', net:'0.00', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-14 09:22:10', doneTime:'-',                    addr:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', status:'processing', editable:true,
       deposits:[] },
+    { order:'291654802-52088813204480', merchantId:'M001', merchantName:'GMTM', userId:'U10023841', due:'1.50', paid:'1.50', fee:'0.02', net:'1.48', source:'Paypaz', token:'USDT', network:'TRON', channel:'Meta Trader', time:'2026-06-15 10:22:18', doneTime:'2026-06-15 10:35:42', addr:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', status:'completed', editable:false, manual:true, operator:'kara',
+      deposits:[
+        { txid:'52088813204001', hash:'a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9', amount:'1.50', fee:'0.02', net:'1.48', network:'BSC', time:'2026-06-15 10:22:18' },
+      ]},
+    { order:'291654802-52091672019968', merchantId:'M002', merchantName:'XM Japan', userId:'U20048762', due:'3.00', paid:'3.00', fee:'0.03', net:'2.97', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-16 09:10:03', doneTime:'2026-06-16 09:24:51', addr:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', status:'completed', editable:false, manual:true, operator:'Chris',
+      deposits:[
+        { txid:'52091672019001', hash:'b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1', amount:'3.00', fee:'0.03', net:'2.97', network:'Ethereum', time:'2026-06-16 09:10:03' },
+      ]},
+    { order:'460004375-52095508107264', merchantId:'M003', merchantName:'IG Japan', userId:'U30015923', due:'0.90', paid:'0.90', fee:'0.01', net:'0.89', source:'Paypaz', token:'USDT', network:'TRON', channel:'',            time:'2026-06-17 14:05:27', doneTime:'2026-06-17 14:19:36', addr:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', status:'completed', editable:false, manual:true, operator:'kara',
+      deposits:[
+        { txid:'52095508107001', hash:'c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2', amount:'0.90', fee:'0.01', net:'0.89', network:'Polygon', time:'2026-06-17 14:05:27' },
+      ]},
   ];
 
   const pState = { rows: [...PAYMENT_ALL], page: 1, size: 10 };
@@ -4598,16 +5451,20 @@
           const netMismatch = d.network !== r.network;
           return `
           <div class="pd-dep-item${netMismatch ? ' pd-dep-warn' : ''}">
-            <div class="pd-dep-left">
+            <div class="pd-dep-body">
               <span class="pd-dep-txid">流水号：${d.txid}</span>
-              <span class="pd-dep-sub">网络: ${d.network}${netMismatch ? `<span class="badge badge-red" style="margin-left:6px;">与订单不一致</span>` : ''}</span>
-              <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="copyText('${d.hash}')">${_COPY_SVG}</span></span>
-              <span class="pd-dep-sub">${d.time}</span>
-            </div>
-            <div class="pd-dep-right">
-              <span class="pd-dep-amount">+${d.amount} USDT</span>
-              <span class="pd-dep-net">手续费: ${d.fee} USDT</span>
-              <span class="pd-dep-net">净入账: ${d.net} USDT</span>
+              <div class="pd-dep-cols">
+                <div class="pd-dep-left">
+                  <span class="pd-dep-sub">网络: ${d.network}${netMismatch ? `<span class="badge badge-red" style="margin-left:6px;">与订单不一致</span>` : ''}</span>
+                  <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="copyText('${d.hash}')">${_COPY_SVG}</span></span>
+                  <span class="pd-dep-sub">${d.time}</span>
+                </div>
+                <div class="pd-dep-right">
+                  <div class="pd-dep-row"><span class="pd-dep-row-label">到账金额:</span><span class="pd-dep-amount">+${d.amount} USDT</span></div>
+                  <div class="pd-dep-row"><span class="pd-dep-row-label">手续费:</span><span class="pd-dep-net">${d.fee} USDT</span></div>
+                  <div class="pd-dep-row"><span class="pd-dep-row-label">净入账:</span><span class="pd-dep-net">${d.net} USDT</span></div>
+                </div>
+              </div>
             </div>
           </div>`;
         }).join('');
@@ -4732,16 +5589,20 @@
           return `
           <div class="pd-dep-item selectable${netMismatch ? ' pd-dep-warn' : ''}" data-amount="${d.amount}" data-fee="${d.fee}" data-net="${d.net}" onclick="this.classList.toggle('checked');pdEditCalc()">
             <div class="pd-dep-ck"><svg width="10" height="10" viewBox="0 0 12 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,5 4,8 11,1"/></svg></div>
-            <div class="pd-dep-left" style="flex:1;">
+            <div class="pd-dep-body" style="flex:1;">
               <span class="pd-dep-txid">流水号：${d.userId}-${d.hash.slice(0,8)}</span>
-              <span class="pd-dep-sub">网络: ${d.network}${netMismatch ? `<span class="badge badge-red" style="margin-left:6px;">与订单不一致</span>` : ''}</span>
-              <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="event.stopPropagation();copyText('${d.hash}')">${_COPY_SVG}</span></span>
-              <span class="pd-dep-sub">${d.time}</span>
-            </div>
-            <div class="pd-dep-right">
-              <span class="pd-dep-amount">+${d.amount} USDT</span>
-              <span class="pd-dep-net">手续费: ${d.fee} USDT</span>
-              <span class="pd-dep-net">净入账: ${d.net} USDT</span>
+              <div class="pd-dep-cols">
+                <div class="pd-dep-left">
+                  <span class="pd-dep-sub">网络: ${d.network}${netMismatch ? `<span class="badge badge-red" style="margin-left:6px;">与订单不一致</span>` : ''}</span>
+                  <span class="pd-dep-sub">Hash: ${truncateStr(d.hash)}<span class="copy-icon" style="margin-left:4px;" onclick="event.stopPropagation();copyText('${d.hash}')">${_COPY_SVG}</span></span>
+                  <span class="pd-dep-sub">${d.time}</span>
+                </div>
+                <div class="pd-dep-right">
+                  <div class="pd-dep-row"><span class="pd-dep-row-label">到账金额:</span><span class="pd-dep-amount">+${d.amount} USDT</span></div>
+                  <div class="pd-dep-row"><span class="pd-dep-row-label">手续费:</span><span class="pd-dep-net">${d.fee} USDT</span></div>
+                  <div class="pd-dep-row"><span class="pd-dep-row-label">净入账:</span><span class="pd-dep-net">${d.net} USDT</span></div>
+                </div>
+              </div>
             </div>
           </div>`;
         }).join('');
@@ -5824,6 +6685,14 @@
     if (!val) return `<span class="cell-empty">—</span>`;
     const esc = val.replace(/'/g, '&#39;');
     return `<div class="copy-cell"><span style="font-family:Inter,sans-serif;cursor:default">${esc}</span><span class="copy-icon" onclick="copyText('${esc}')">${_COPY_SVG}</span></div>`;
+  }
+
+  function fullCellStack(primaryVal, secondaryLabel, secondaryVal) {
+    const primary = (!primaryVal || primaryVal === '-') ? `<span class="cell-empty">—</span>` : fullCell(primaryVal);
+    if (!secondaryVal || secondaryVal === '-') return `<div class="copy-cell-stack">${primary}</div>`;
+    const escSec = secondaryVal.replace(/'/g, '&#39;');
+    const secondary = `<div class="copy-cell cell-sub"><span class="stack-tag">${secondaryLabel}</span><span style="font-family:Inter,sans-serif;cursor:default">${escSec}</span><span class="copy-icon" onclick="copyText('${escSec}')">${_COPY_SVG}</span></div>`;
+    return `<div class="copy-cell-stack">${primary}${secondary}</div>`;
   }
 
   function csvDownload(headers, rows, filename) {
@@ -7362,6 +8231,7 @@
     dState.rows = DEPOSIT_ALL.filter(r => r.status === 'pending');
     depositRender();
     withdrawRender();
+    withdrawAuditRender();
     paymentRender();
     rampInRender();
     rampOutRender();

@@ -469,6 +469,8 @@
     .exp-value { color:#303133; display:flex; align-items:center; gap:20px; }
     .exp-value.mono { font-family:Inter,sans-serif; }
     #w-export-modal .ak-radio-item:has(input:checked) { color:#409EFF; }
+    #d-export-modal .ak-radio-item:has(input:checked) { color:#409EFF; }
+    #de-export-modal .ak-radio-item:has(input:checked) { color:#409EFF; }
 
     /* ── 支付订单详情弹窗 ──────────────────────────── */
     .pd-body { padding: 0 !important; display: block !important; }
@@ -1071,9 +1073,22 @@
         <i data-lucide="users" class="nav-icon" style="width:16px;height:16px;"></i>
         <span class="nav-label">商户管理</span>
       </div>
-      <div class="nav-item active" data-page="deposit">
-        <i data-lucide="circle-arrow-down" class="nav-icon" style="width:16px;height:16px;"></i>
-        <span class="nav-label">充币记录</span>
+      <div class="nav-group">
+        <div class="nav-group-hd group-active" id="nav-ghd-deposit" onclick="toggleNavGroup('deposit')">
+          <i data-lucide="circle-arrow-down" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">充币</span>
+          <i data-lucide="chevron-up" id="nav-caret-deposit" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-deposit">
+          <div class="nav-item nav-sub-item active" data-page="deposit">
+            <i data-lucide="circle-arrow-down" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">充币记录</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="deposit-exception">
+            <i data-lucide="triangle-alert" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">异常充币</span>
+          </div>
+        </div>
       </div>
       <div class="nav-group">
         <div class="nav-group-hd" id="nav-ghd-withdraw" onclick="toggleNavGroup('withdraw')">
@@ -1281,7 +1296,7 @@
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">时间</span>
+              <span class="filter-label-el">到账时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="d-date-start">
@@ -1306,7 +1321,7 @@
           <div class="summary-bar">
             <span id="d-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
             <div class="summary-spacer"></div>
-            <button class="export-btn" onclick="depositExport()">
+            <button class="export-btn" onclick="openDExportModal()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
             </button>
           </div>
@@ -1355,6 +1370,156 @@
 
       </div>
     </div><!-- /page-deposit -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 异常充币                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-deposit-exception">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">商户</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
+                       id="de-merchant" autocomplete="off"
+                       oninput="deMerchantInput()" onfocus="deMerchantInput()"
+                       onblur="setTimeout(deHideMerchantDrop, 150)">
+              </div>
+              <div class="p-merch-dropdown" id="de-merch-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">用户 ID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="de-userid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="de-token">
+                    <option value="">请选择</option>
+                    <option value="USDT">USDT</option>
+                    <option value="BTC">BTC</option>
+                    <option value="Ethereum">Ethereum</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">异常类型</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="de-type">
+                    <option value="">请选择</option>
+                    <option value="wrong_chain">错链充值</option>
+                    <option value="unsupported">未开通代币/网络</option>
+                    <option value="account_frozen">商户/用户已冻结或注销</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="de-status">
+                    <option value="">请选择</option>
+                    <option value="pending">待人工审核</option>
+                    <option value="refunded">已退款</option>
+                    <option value="confirmed">已确认入账</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">哈希</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="de-hash">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">到账时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="de-date-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="de-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="depositExceptionReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="depositExceptionSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <span id="de-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
+            <div class="summary-spacer"></div>
+            <button class="export-btn" onclick="openDeExportModal()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:2170px;">
+              <colgroup>
+                <col style="width:95px"><col style="width:145px"><col style="width:95px">
+                <col style="width:70px"><col style="width:90px"><col style="width:90px">
+                <col style="width:95px"><col style="width:380px">
+                <col style="width:152px"><col style="width:150px">
+                <col style="width:130px"><col style="width:190px"><col style="width:110px">
+                <col style="width:70px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>实际充值网络</th>
+                  <th>应充值网络</th><th>充值金额</th><th>钱包地址</th>
+                  <th>到账时间</th><th>哈希</th><th>异常类型</th><th>异常说明</th><th>状态</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="de-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="de-page-total">共 0 条</span>
+            <select class="page-size-select" id="de-page-size" onchange="depositExceptionPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+              <option value="200">200条/页</option>
+            </select>
+            <button class="page-btn" id="de-btn-prev" onclick="depositExceptionPage(deState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="depositExceptionPage(1)">1</button>
+            <button class="page-btn" onclick="depositExceptionPage(2)">2</button>
+            <button class="page-btn" onclick="depositExceptionPage(3)">3</button>
+            <button class="page-btn" id="de-btn-next" onclick="depositExceptionPage(deState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')depositExceptionPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-deposit-exception -->
 
     <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 提币记录                                  -->
@@ -2926,6 +3091,80 @@
     </div>
   </div>
 
+  <!-- ── Deposit Export Confirm Modal ─────────────────── -->
+  <div class="modal-overlay" id="d-export-modal" onclick="if(event.target===this)closeDExportModal()">
+    <div class="modal" style="width:420px;">
+      <div class="modal-header">
+        <span class="modal-title">导出</span>
+        <span class="modal-close" onclick="closeDExportModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body exp-body">
+        <div class="exp-row">
+          <span class="exp-label">类型</span>
+          <span class="exp-value">充值</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">状态</span>
+          <span class="exp-value" id="d-export-status">全部</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">格式</span>
+          <div class="exp-value">
+            <label class="ak-radio-item"><input type="radio" name="d-export-format" value="csv" checked><span class="ak-dot"></span>CSV</label>
+            <label class="ak-radio-item"><input type="radio" name="d-export-format" value="xlsx"><span class="ak-dot"></span>XLSX</label>
+          </div>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">条数</span>
+          <span class="exp-value mono" id="d-export-count">0</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeDExportModal()">取消</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmDExport()">导出</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Deposit Exception Export Confirm Modal ───────── -->
+  <div class="modal-overlay" id="de-export-modal" onclick="if(event.target===this)closeDeExportModal()">
+    <div class="modal" style="width:420px;">
+      <div class="modal-header">
+        <span class="modal-title">导出</span>
+        <span class="modal-close" onclick="closeDeExportModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body exp-body">
+        <div class="exp-row">
+          <span class="exp-label">类型</span>
+          <span class="exp-value">异常充值</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">状态</span>
+          <span class="exp-value" id="de-export-status">全部</span>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">格式</span>
+          <div class="exp-value">
+            <label class="ak-radio-item"><input type="radio" name="de-export-format" value="csv" checked><span class="ak-dot"></span>CSV</label>
+            <label class="ak-radio-item"><input type="radio" name="de-export-format" value="xlsx"><span class="ak-dot"></span>XLSX</label>
+          </div>
+        </div>
+        <div class="exp-row">
+          <span class="exp-label">条数</span>
+          <span class="exp-value mono" id="de-export-count">0</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeDeExportModal()">取消</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmDeExport()">导出</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Withdraw Manage Modal ────────────────────────── -->
   <div class="modal-overlay" id="wd-manage-modal" onclick="if(event.target===this)closeWdManage()">
     <div class="modal" style="width:560px;">
@@ -3218,6 +3457,44 @@
       <div class="modal-footer">
         <button class="btn btn-default btn-sm" onclick="closeWaExportModal()">取消</button>
         <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWaExport()">导出</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Deposit Exception Manage Modal ─────────────────────── -->
+  <div class="modal-overlay" id="de-manage-modal" onclick="if(event.target===this)closeDeManage()">
+    <div class="modal" style="width:560px;">
+      <div class="modal-header">
+        <span class="modal-title" id="de-manage-title">异常充币详情</span>
+        <span class="modal-close" onclick="closeDeManage()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" id="de-manage-body">
+        <!-- populated by JS -->
+      </div>
+      <div class="modal-footer" id="de-manage-footer">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Deposit Exception Confirm Modal ─────────────────────── -->
+  <div class="modal-overlay" id="de-confirm-modal" style="z-index:1100;" onclick="if(event.target===this)closeDeConfirm()">
+    <div class="modal" style="width:380px;">
+      <div class="wd-confirm-box">
+        <button class="wd-confirm-close" onclick="closeDeConfirm()">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <div class="wd-confirm-hd">
+          <span id="de-confirm-icon"></span>
+          <span class="wd-confirm-title" id="de-confirm-title"></span>
+        </div>
+        <p class="wd-confirm-msg" id="de-confirm-msg"></p>
+        <div class="wd-confirm-actions">
+          <button class="btn btn-default btn-sm" id="de-confirm-cancel" onclick="closeDeConfirm()">取消</button>
+          <button class="btn btn-sm" id="de-confirm-ok"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -3762,6 +4039,7 @@
   // ══════════════════════════════════════════════════════
   const PAGE_META = {
     deposit:  { label: '充币记录',  icon: 'circle-arrow-down' },
+    'deposit-exception': { label: '异常充币', icon: 'triangle-alert' },
     payment:  { label: '支付订单',  icon: 'file-text' },
     'ramp-in':  { label: '入金订单', icon: 'circle-arrow-down' },
     'ramp-out': { label: '出金订单', icon: 'circle-arrow-up' },
@@ -3785,7 +4063,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'withdraw', 'withdraw-audit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
+  const IMPL_PAGES = new Set(['deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -3849,6 +4127,12 @@
     const rampGhd = document.getElementById('nav-ghd-ramp');
     if (rampGhd) {
       rampGhd.classList.toggle('group-active', pid === 'ramp-in' || pid === 'ramp-out');
+    }
+
+    // update deposit group header active state
+    const depositGhd = document.getElementById('nav-ghd-deposit');
+    if (depositGhd) {
+      depositGhd.classList.toggle('group-active', pid === 'deposit' || pid === 'deposit-exception');
     }
 
     // update withdraw group header active state
@@ -4080,6 +4364,23 @@
               r.wallet, r.time, r.hash, r.channel || '直连', depositOrderNo(r) || '-', D_STATUS[r.status].label];
     }), '充币记录.csv');
   }
+  function openDExportModal() {
+    const stVal = document.getElementById('d-status').value;
+    document.getElementById('d-export-status').textContent = stVal ? D_STATUS[stVal].label : '全部';
+    document.getElementById('d-export-count').textContent = dState.rows.length;
+    document.querySelector('#d-export-modal input[name="d-export-format"][value="csv"]').checked = true;
+    document.getElementById('d-export-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeDExportModal() {
+    document.getElementById('d-export-modal').classList.remove('show');
+  }
+  function confirmDExport() {
+    const format = document.querySelector('#d-export-modal input[name="d-export-format"]:checked').value;
+    closeDExportModal();
+    if (format === 'xlsx') { showToast('XLSX 导出功能开发中'); return; }
+    depositExport();
+  }
 
   // ── Deposit Edit Modal ─────────────────────────────────
   let dEditIdx = -1;
@@ -4193,6 +4494,284 @@
     closeDepositEdit();
     depositRender();
     showToast('保存成功，状态已更新为' + D_STATUS[newStatus].label);
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  异常充币 data & logic
+  //  用户充值到错误网络（如应充 TRON 却充到 Ethereum），或充值了商户
+  //  代币设置中未开启的代币/网络，产生的异常充值记录需人工审核。
+  //  审核结果：退款（不进入充币记录）/ 确认入账（写入 DEPOSIT_ALL，
+  //  进入「充币记录」，状态为「已到账」）。
+  // ══════════════════════════════════════════════════════
+  function deMerchantInput() {
+    const val = document.getElementById('de-merchant').value.trim().toLowerCase();
+    const dd  = document.getElementById('de-merch-dropdown');
+    const list = val ? D_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : D_MERCHANTS;
+    if (!list.length) { dd.style.display = 'none'; return; }
+    dd.innerHTML = list.map(m =>
+      `<div class="p-merch-opt" onmousedown="deSelectMerchant('${m.name}')">
+        ${m.name}<span class="p-merch-id">${m.id}</span>
+      </div>`
+    ).join('');
+    dd.style.display = '';
+  }
+  function deSelectMerchant(name) {
+    document.getElementById('de-merchant').value = name;
+    document.getElementById('de-merch-dropdown').style.display = 'none';
+  }
+  function deHideMerchantDrop() {
+    const dd = document.getElementById('de-merch-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+
+  const DE_STATUS = {
+    pending:   { label:'待人工审核',  cls:'badge-purple' },
+    refunded:  { label:'已退款',     cls:'badge-gray'   },
+    confirmed: { label:'已确认入账', cls:'badge-green'  },
+  };
+  const DE_TYPE = {
+    wrong_chain:    { label:'错链充值',       cls:'badge-red'  },
+    unsupported:    { label:'未开通代币/网络', cls:'badge-gray' },
+    account_frozen: { label:'商户/用户已冻结或注销', cls:'badge-blue' },
+  };
+
+  const DEPOSIT_EXCEPTION_ALL = [
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', actualNetwork:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'50.00', wallet:'0x8f3Ab2c9E4d6B1a7F2c5D8e3B6a9C1d4E7f0A2b5', hash:'a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5', time:'2026-07-20 14:22:31', status:'pending', remark:'', note:'' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'BTC',  actualNetwork:'Lightning', expectedNetwork:'—',    exceptionType:'unsupported', amount:'0.015', wallet:'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', hash:'f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4', time:'2026-07-21 09:03:12', status:'pending', remark:'', note:'' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', actualNetwork:'BSC',      expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'12.30', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', hash:'d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8', time:'2026-07-22 18:47:05', status:'pending', remark:'', note:'' },
+    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', actualNetwork:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'8.00', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a', hash:'b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3', time:'2026-06-30 10:15:40', status:'confirmed', remark:'已核实为用户误操作，确认入账', note:'' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', actualNetwork:'Polygon',  expectedNetwork:'—',    exceptionType:'unsupported', amount:'3.20', wallet:'0x6f9a1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f', hash:'c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9', time:'2026-06-25 16:08:22', status:'refunded', remark:'商户未开通 Polygon 网络，已原路退回', note:'' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'15.00', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', hash:'e9c3f6b1a4d7e3c8f5b9a2d6e4c1d74fd43877809e3ff5c2a8d6e1b4f7c9a3d5', time:'2026-07-23 10:41:18', status:'pending', remark:'', note:'商户账户已于 2026-07-18 冻结，链上充值仍到账，需人工核实商户状态后处理' },
+    { uid:'635102950', name:'kara',            userId:'U10099231', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'6.50', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', hash:'1d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d7b39f8e1fac2a6b6a3d7e4c8f1b5a9d2', time:'2026-07-24 15:02:47', status:'pending', remark:'', note:'该用户账户已注销，链上充值无法计入用户余额，需人工核实' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'22.00', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', hash:'a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b574fd43877809e3ff', time:'2026-06-18 09:20:03', status:'refunded', remark:'已核实该商户账户已长期冻结，原路退回', note:'商户账户已冻结超过 30 天，判定为长期停用商户' },
+  ];
+
+  const deState = { rows: DEPOSIT_EXCEPTION_ALL.filter(r => r.status === 'pending'), page: 1, size: 10 };
+
+  function depositExceptionRender() {
+    const tbody = document.getElementById('de-tbody');
+    const start = (deState.page - 1) * deState.size;
+    const slice = deState.rows.slice(start, start + deState.size);
+    tbody.innerHTML = slice.map(r => {
+      const st = DE_STATUS[r.status];
+      const tp = DE_TYPE[r.exceptionType];
+      const idx = DEPOSIT_EXCEPTION_ALL.indexOf(r);
+      const viewBtn = `<span class="action-icon" title="详情" onclick="openDeView(${idx})">${_D_EYE_SVG}</span>`;
+      const reviewBtn = r.status === 'pending'
+        ? `<span class="action-icon" title="审核" onclick="openDeReview(${idx})">${_D_PEN_SVG}</span>`
+        : '';
+      return `<tr>
+        <td style="font-family:Inter,sans-serif">${r.uid}</td>
+        <td>${r.name}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td>${r.token}</td><td>${r.actualNetwork}</td>
+        <td>${r.expectedNetwork}</td>
+        <td style="font-family:Inter,sans-serif">${r.amount}</td>
+        <td>${fullCell(r.wallet)}</td>
+        <td style="font-family:Inter,sans-serif">${r.time}</td>
+        <td>${truncCell(r.hash)}</td>
+        <td><span class="badge ${tp.cls}">${tp.label}</span></td>
+        <td>${truncNote(r.note)}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td><div class="action-cell">${viewBtn}${reviewBtn}</div></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('de-page-total').textContent = `共 ${deState.rows.length} 条`;
+    const sc = document.getElementById('de-summary-count');
+    if (sc) sc.textContent = `条数: ${deState.rows.length}`;
+    const total = Math.max(1, Math.ceil(deState.rows.length / deState.size));
+    document.getElementById('de-btn-prev').disabled = deState.page <= 1;
+    document.getElementById('de-btn-next').disabled = deState.page >= total;
+    document.querySelectorAll('#page-deposit-exception .page-btn:not(#de-btn-prev):not(#de-btn-next)').forEach((btn, i) => {
+      const pg = i + 1;
+      btn.style.display = pg <= total ? '' : 'none';
+      btn.classList.toggle('active', pg === deState.page);
+    });
+  }
+
+  function depositExceptionPage(p) {
+    const total = Math.max(1, Math.ceil(deState.rows.length / deState.size));
+    if (p < 1 || p > total) return;
+    deState.page = p; depositExceptionRender();
+  }
+  function depositExceptionPageSize() {
+    deState.size = +document.getElementById('de-page-size').value;
+    deState.page = 1; depositExceptionRender();
+  }
+  function depositExceptionSearch() {
+    const uid    = document.getElementById('de-merchant').value.trim().toLowerCase();
+    const userId = document.getElementById('de-userid').value.trim().toLowerCase();
+    const token  = document.getElementById('de-token').value;
+    const type   = document.getElementById('de-type').value;
+    const st     = document.getElementById('de-status').value;
+    const hash   = document.getElementById('de-hash').value.trim().toLowerCase();
+    const ds     = document.getElementById('de-date-start').value;
+    const de     = document.getElementById('de-date-end').value;
+    deState.rows = DEPOSIT_EXCEPTION_ALL.filter(r => {
+      if (uid    && !r.uid.toLowerCase().includes(uid) && !r.name.toLowerCase().includes(uid)) return false;
+      if (userId && !r.userId.toLowerCase().includes(userId)) return false;
+      if (token  && r.token !== token)              return false;
+      if (type   && r.exceptionType !== type)       return false;
+      if (st     && r.status !== st)                return false;
+      if (hash   && !r.hash.toLowerCase().includes(hash)) return false;
+      if (ds     && r.time.split(' ')[0] < ds)      return false;
+      if (de     && r.time.split(' ')[0] > de)      return false;
+      return true;
+    });
+    deState.page = 1; depositExceptionRender();
+  }
+  function depositExceptionReset() {
+    ['de-merchant','de-userid','de-token','de-type','de-hash','de-date-start','de-date-end']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('de-status').value = 'pending';
+    deState.rows = DEPOSIT_EXCEPTION_ALL.filter(r => r.status === 'pending');
+    deState.page = 1; depositExceptionRender();
+  }
+  function depositExceptionExport() {
+    const headers = ['商户 ID','商户名称','用户 ID','代币','实际充值网络','应充值网络','异常类型','异常说明','充值金额','钱包地址','到账时间','哈希','状态','备注'];
+    csvDownload(headers, deState.rows.map(r => [
+      r.uid, r.name, r.userId, r.token, r.actualNetwork, r.expectedNetwork,
+      DE_TYPE[r.exceptionType].label, r.note || '-', r.amount, r.wallet, r.time, r.hash, DE_STATUS[r.status].label, r.remark || '-',
+    ]), '异常充币.csv');
+  }
+  function openDeExportModal() {
+    const stVal = document.getElementById('de-status').value;
+    document.getElementById('de-export-status').textContent = stVal ? DE_STATUS[stVal].label : '全部';
+    document.getElementById('de-export-count').textContent = deState.rows.length;
+    document.querySelector('#de-export-modal input[name="de-export-format"][value="csv"]').checked = true;
+    document.getElementById('de-export-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeDeExportModal() {
+    document.getElementById('de-export-modal').classList.remove('show');
+  }
+  function confirmDeExport() {
+    const format = document.querySelector('#de-export-modal input[name="de-export-format"]:checked').value;
+    closeDeExportModal();
+    if (format === 'xlsx') { showToast('XLSX 导出功能开发中'); return; }
+    depositExceptionExport();
+  }
+
+  // ── Deposit Exception Modals ────────────────────────────
+  let deManageIdx = -1;
+
+  function _deItems(r) {
+    const st = DE_STATUS[r.status];
+    const tp = DE_TYPE[r.exceptionType];
+    const di = (label, value) =>
+      `<div class="detail-item">
+        <span class="detail-label">${label}</span>
+        <span class="detail-value">${value}</span>
+      </div>`;
+    return [
+      di('商户 ID',     r.uid),
+      di('商户名称',    r.name),
+      di('用户 ID',     r.userId),
+      di('代币',        r.token),
+      di('实际充值网络', r.actualNetwork),
+      di('应充值网络',  r.expectedNetwork),
+      di('充值金额',    `<span style="font-family:Inter,sans-serif">${r.amount} ${r.token}</span>`),
+      `<div class="detail-item">
+        <span class="detail-label">钱包地址</span>
+        ${fullCell(r.wallet)}
+      </div>`,
+      di('到账时间',    r.time),
+      `<div class="detail-item">
+        <span class="detail-label">哈希</span>
+        ${truncCell(r.hash)}
+      </div>`,
+      di('异常类型',    `<span class="badge ${tp.cls}">${tp.label}</span>`),
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">异常说明</span>
+        <span class="detail-value">${r.note || '—'}</span>
+      </div>`,
+      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
+    ].join('');
+  }
+
+  function openDeView(idx) {
+    deManageIdx = idx;
+    const r = DEPOSIT_EXCEPTION_ALL[idx];
+    document.getElementById('de-manage-title').textContent = '异常充值详情';
+    document.getElementById('de-manage-body').innerHTML = _deItems(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">处理备注</span>
+        <span class="detail-value">${r.remark || '—'}</span>
+      </div>`;
+    document.getElementById('de-manage-footer').innerHTML =
+      `<button class="btn btn-default btn-sm" onclick="closeDeManage()">关闭</button>`;
+    document.getElementById('de-manage-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function openDeReview(idx) {
+    deManageIdx = idx;
+    const r = DEPOSIT_EXCEPTION_ALL[idx];
+    document.getElementById('de-manage-title').textContent = '异常充币审核';
+    document.getElementById('de-manage-body').innerHTML = _deItems(r) +
+      `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">处理备注</span>
+        <div class="wm-remark-wrap">
+          <textarea class="wm-remark" id="de-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('de-remark-count').textContent=this.value.length"></textarea>
+          <span class="wm-remark-count"><span id="de-remark-count">0</span>/200</span>
+        </div>
+      </div>`;
+    document.getElementById('de-manage-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeDeManage()">取消</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmDeAction('refunded')">退款</button>
+      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmDeAction('confirmed')">确认入账</button>
+    `;
+    document.getElementById('de-manage-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  const DE_CONFIRM_CFG = {
+    refunded:  { icon:'alert-circle',  iconColor:'#F56C6C', title:'退款确认', msg:'退款后，该笔充值不会进入充币记录，且无法撤销，请确认已完成原路退款操作。确认继续吗？', btnCls:'btn-danger',  btnTxt:'确认退款' },
+    confirmed: { icon:'check-circle', iconColor:'#67C23A', title:'确认入账', msg:'确认入账后，将按实际到账代币和金额生成充币记录，状态为「待匹配订单」，需在充币记录中人工关联订单或直接修改为已到账。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认入账' },
+  };
+
+  function confirmDeAction(action) {
+    const cfg = DE_CONFIRM_CFG[action];
+    document.getElementById('de-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
+    document.getElementById('de-confirm-title').textContent = cfg.title;
+    document.getElementById('de-confirm-msg').textContent = cfg.msg;
+    const okBtn = document.getElementById('de-confirm-ok');
+    okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
+    okBtn.textContent = cfg.btnTxt;
+    okBtn.onclick = () => { deAction(action); };
+    document.getElementById('de-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeDeConfirm() {
+    document.getElementById('de-confirm-modal').classList.remove('show');
+  }
+
+  function deAction(newStatus) {
+    if (deManageIdx < 0) return;
+    const r = DEPOSIT_EXCEPTION_ALL[deManageIdx];
+    r.remark = (document.getElementById('de-remark')?.value || '').trim();
+    r.status = newStatus;
+    if (newStatus === 'confirmed') {
+      const dr = {
+        uid: r.uid, name: r.name, userId: r.userId, token: r.token, network: r.actualNetwork,
+        amount: r.amount, fee: '0.00', wallet: r.wallet, time: r.time, hash: r.hash,
+        channel: '', status: 'pending',
+      };
+      DEPOSIT_ALL.unshift(dr);
+      dState.rows.unshift(dr);
+    }
+    closeDeConfirm();
+    closeDeManage();
+    depositExceptionRender();
+    const msgs = { refunded:'已退款，该笔充值不会进入充币记录', confirmed:'已确认入账，已生成充币记录，状态为「待匹配订单」' };
+    showToast(msgs[newStatus] || '操作成功');
+  }
+
+  function closeDeManage() {
+    document.getElementById('de-manage-modal').classList.remove('show');
+    deManageIdx = -1;
   }
 
   // ══════════════════════════════════════════════════════
@@ -6725,6 +7304,14 @@
     return str.slice(0, 5) + '...' + str.slice(-5);
   }
 
+  function truncNote(val) {
+    if (!val) return `<span class="cell-empty">—</span>`;
+    const esc = val.replace(/'/g, '&#39;');
+    if (val.length <= 20) return `<span>${val}</span>`;
+    const short = val.slice(0, 20) + '...';
+    return `<span style="cursor:default" onmouseenter="showTip(event,'${esc}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${short}</span>`;
+  }
+
   const _COPY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
 
   function truncCell(val) {
@@ -8284,6 +8871,9 @@
     document.getElementById('d-status').value = 'pending';
     dState.rows = DEPOSIT_ALL.filter(r => r.status === 'pending');
     depositRender();
+    document.getElementById('de-status').value = 'pending';
+    deState.rows = DEPOSIT_EXCEPTION_ALL.filter(r => r.status === 'pending');
+    depositExceptionRender();
     withdrawRender();
     withdrawAuditRender();
     paymentRender();

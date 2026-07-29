@@ -6482,6 +6482,10 @@
     { id:'297519408', name:'upsilon',     email:'admin@upsilon.finance',  status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-01-10 16:17:49' },
   ];
 
+  const PARTNER_OPTIONS = [
+    { key:'metatrader', label:'Meta Trader' },
+  ];
+
   const M_STATUS = {
     enabled:  { label:'启用中', cls:'badge-enabled'  },
     disabled: { label:'已禁用', cls:'badge-disabled' },
@@ -6683,6 +6687,16 @@
           </div>
         </div>
       </div>
+      <div class="me-section">
+        <div class="me-section-title">合作伙伴</div>
+        ${PARTNER_OPTIONS.map(p => `
+          <label class="me-check-row" style="margin-bottom:8px">
+            <input type="checkbox" class="me-partner-ck" value="${p.key}" ${(r.partners||[]).includes(p.key)?'checked':''}>
+            <span class="me-checkbox"></span>
+            <span class="me-check-text">${p.label}</span>
+          </label>
+        `).join('')}
+      </div>
     `;
 
     document.querySelector('#detail-modal .modal-footer').innerHTML = `
@@ -6759,6 +6773,7 @@
     if (matchOn && ratioCkEl)  r.matchRatioCheck = ratioCkEl.checked;
     if (matchOn && lowerEl)    r.matchLower     = parseFloat(lowerEl.value)  || 90;
     if (matchOn && upperEl)    r.matchUpper     = parseFloat(upperEl.value)  || 110;
+    r.partners = Array.from(document.querySelectorAll('.me-partner-ck:checked')).map(el => el.value);
 
     closeModal();
     merchantRender();
@@ -6779,6 +6794,21 @@
 
   // ── Merchant Detail ───────────────────────────────────
   let currentMerchantIdx = 0;
+
+  function currentMerchantPartners() {
+    return (MERCHANT_ALL[currentMerchantIdx] && MERCHANT_ALL[currentMerchantIdx].partners) || [];
+  }
+
+  function tkApplyPartnerVisibility() {
+    const partners = currentMerchantPartners();
+    document.querySelectorAll('.tk-partner-tabs').forEach(el => {
+      el.style.display = partners.length ? '' : 'none';
+    });
+    document.querySelectorAll('.tk-partner-tab').forEach(el => {
+      if (el.dataset.partner === 'direct') return;
+      el.style.display = partners.includes(el.dataset.partner) ? '' : 'none';
+    });
+  }
 
   const TOKEN_ROWS = [
     { token:'USDT', network:'TRON',            minDeposit:'0.1', status:'on', deposit:'on', depositCh:'Cobo',  withdraw:'on',  withdrawCh:'PayMe', excelBatchCh:'PayMe' },
@@ -6935,6 +6965,7 @@
     document.querySelectorAll('#tk-withdraw-partner-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === 'direct'));
     tkFillDepositForm(_tkDepositDraft.direct);
     tkFillWithdrawForm(_tkWithdrawDraft.direct);
+    tkApplyPartnerVisibility();
 
     document.getElementById('token-edit-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
@@ -7009,6 +7040,7 @@
     document.querySelectorAll('#tk-detail-withdraw-tabs .tk-partner-tab').forEach(el => el.classList.toggle('active', el.dataset.partner === 'direct'));
     tkDetailRenderDeposit();
     tkDetailRenderWithdraw();
+    tkApplyPartnerVisibility();
 
     document.getElementById('token-detail-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();

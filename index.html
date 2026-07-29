@@ -1475,11 +1475,12 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2170px;">
+            <table style="min-width:2470px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:95px">
                 <col style="width:70px"><col style="width:90px"><col style="width:90px">
-                <col style="width:95px"><col style="width:380px">
+                <col style="width:95px"><col style="width:100px"><col style="width:100px"><col style="width:100px">
+                <col style="width:380px">
                 <col style="width:152px"><col style="width:150px">
                 <col style="width:130px"><col style="width:190px"><col style="width:110px">
                 <col style="width:70px">
@@ -1487,7 +1488,7 @@
               <thead>
                 <tr>
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>实际充值网络</th>
-                  <th>应充值网络</th><th>充值金额</th><th>钱包地址</th>
+                  <th>应充值网络</th><th>到账金额</th><th>充值手续费</th><th>退款手续费</th><th>退款金额</th><th>钱包地址</th>
                   <th>到账时间</th><th>哈希</th><th>异常类型</th><th>异常说明</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -1571,6 +1572,12 @@
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">地址</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="w-wallet">
               </div>
             </div>
             <div class="filter-item">
@@ -1781,6 +1788,12 @@
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">地址</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="wa-wallet">
               </div>
             </div>
             <div class="filter-item">
@@ -4536,14 +4549,14 @@
   };
 
   const DEPOSIT_EXCEPTION_ALL = [
-    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', actualNetwork:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'50.00', wallet:'0x8f3Ab2c9E4d6B1a7F2c5D8e3B6a9C1d4E7f0A2b5', hash:'a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5', time:'2026-07-20 14:22:31', status:'pending', remark:'', note:'' },
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'BTC',  actualNetwork:'Lightning', expectedNetwork:'—',    exceptionType:'unsupported', amount:'0.015', wallet:'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', hash:'f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4', time:'2026-07-21 09:03:12', status:'pending', remark:'', note:'' },
-    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', actualNetwork:'BSC',      expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'12.30', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', hash:'d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8', time:'2026-07-22 18:47:05', status:'pending', remark:'', note:'' },
-    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', actualNetwork:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'8.00', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a', hash:'b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3', time:'2026-06-30 10:15:40', status:'confirmed', remark:'已核实为用户误操作，确认入账', note:'' },
-    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', actualNetwork:'Polygon',  expectedNetwork:'—',    exceptionType:'unsupported', amount:'3.20', wallet:'0x6f9a1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f', hash:'c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9', time:'2026-06-25 16:08:22', status:'refunded', remark:'商户未开通 Polygon 网络，已原路退回', note:'' },
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'15.00', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', hash:'e9c3f6b1a4d7e3c8f5b9a2d6e4c1d74fd43877809e3ff5c2a8d6e1b4f7c9a3d5', time:'2026-07-23 10:41:18', status:'pending', remark:'', note:'商户账户已于 2026-07-18 冻结，链上充值仍到账，需人工核实商户状态后处理' },
-    { uid:'635102950', name:'kara',            userId:'U10099231', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'6.50', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', hash:'1d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d7b39f8e1fac2a6b6a3d7e4c8f1b5a9d2', time:'2026-07-24 15:02:47', status:'pending', remark:'', note:'该用户账户已注销，链上充值无法计入用户余额，需人工核实' },
-    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'22.00', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', hash:'a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b574fd43877809e3ff', time:'2026-06-18 09:20:03', status:'refunded', remark:'已核实该商户账户已长期冻结，原路退回', note:'商户账户已冻结超过 30 天，判定为长期停用商户' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', actualNetwork:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'50.00', depositFee:'0.15', refundFee:'', refundAmount:'', wallet:'0x8f3Ab2c9E4d6B1a7F2c5D8e3B6a9C1d4E7f0A2b5', hash:'a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5', time:'2026-07-20 14:22:31', status:'pending', remark:'', note:'' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'BTC',  actualNetwork:'Lightning', expectedNetwork:'—',    exceptionType:'unsupported', amount:'0.015', depositFee:'', refundFee:'', refundAmount:'', wallet:'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', hash:'f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4', time:'2026-07-21 09:03:12', status:'pending', remark:'', note:'' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', actualNetwork:'BSC',      expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'12.30', depositFee:'0.05', refundFee:'', refundAmount:'', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', hash:'d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8', time:'2026-07-22 18:47:05', status:'pending', remark:'', note:'' },
+    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', actualNetwork:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain', amount:'8.00', depositFee:'0.02', refundFee:'', refundAmount:'', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a', hash:'b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3', time:'2026-06-30 10:15:40', status:'confirmed', remark:'已核实为用户误操作，确认入账', note:'' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', actualNetwork:'Polygon',  expectedNetwork:'—',    exceptionType:'unsupported', amount:'3.20', depositFee:'', refundFee:'1.00', refundAmount:'2.20', wallet:'0x6f9a1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f', hash:'c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9', time:'2026-06-25 16:08:22', status:'refunded', remark:'商户未开通 Polygon 网络，已原路退回', note:'' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'15.00', depositFee:'0.01', refundFee:'', refundAmount:'', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', hash:'e9c3f6b1a4d7e3c8f5b9a2d6e4c1d74fd43877809e3ff5c2a8d6e1b4f7c9a3d5', time:'2026-07-23 10:41:18', status:'pending', remark:'', note:'商户账户已于 2026-07-18 冻结，链上充值仍到账，需人工核实商户状态后处理' },
+    { uid:'635102950', name:'kara',            userId:'U10099231', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'6.50', depositFee:'0.01', refundFee:'', refundAmount:'', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', hash:'1d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d7b39f8e1fac2a6b6a3d7e4c8f1b5a9d2', time:'2026-07-24 15:02:47', status:'pending', remark:'', note:'该用户账户已注销，链上充值无法计入用户余额，需人工核实' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', actualNetwork:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'22.00', depositFee:'0.02', refundFee:'0.50', refundAmount:'21.50', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', hash:'a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b574fd43877809e3ff', time:'2026-06-18 09:20:03', status:'refunded', remark:'已核实该商户账户已长期冻结，原路退回', note:'商户账户已冻结超过 30 天，判定为长期停用商户' },
   ];
 
   const deState = { rows: DEPOSIT_EXCEPTION_ALL.filter(r => r.status === 'pending'), page: 1, size: 10 };
@@ -4567,6 +4580,9 @@
         <td>${r.token}</td><td>${r.actualNetwork}</td>
         <td>${r.expectedNetwork}</td>
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
+        <td style="font-family:Inter,sans-serif">${r.depositFee}</td>
+        <td style="font-family:Inter,sans-serif">${r.refundFee}</td>
+        <td style="font-family:Inter,sans-serif">${r.refundAmount}</td>
         <td>${fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
         <td>${truncCell(r.hash)}</td>
@@ -4628,10 +4644,10 @@
     deState.page = 1; depositExceptionRender();
   }
   function depositExceptionExport() {
-    const headers = ['商户 ID','商户名称','用户 ID','代币','实际充值网络','应充值网络','异常类型','异常说明','充值金额','钱包地址','到账时间','哈希','状态','备注'];
+    const headers = ['商户 ID','商户名称','用户 ID','代币','实际充值网络','应充值网络','异常类型','异常说明','到账金额','充值手续费','退款手续费','退款金额','钱包地址','到账时间','哈希','状态','备注'];
     csvDownload(headers, deState.rows.map(r => [
       r.uid, r.name, r.userId, r.token, r.actualNetwork, r.expectedNetwork,
-      DE_TYPE[r.exceptionType].label, r.note || '-', r.amount, r.wallet, r.time, r.hash, DE_STATUS[r.status].label, r.remark || '-',
+      DE_TYPE[r.exceptionType].label, r.note || '-', r.amount, r.depositFee || '-', r.refundFee || '-', r.refundAmount || '-', r.wallet, r.time, r.hash, DE_STATUS[r.status].label, r.remark || '-',
     ]), '异常充币.csv');
   }
   function openDeExportModal() {
@@ -4670,7 +4686,7 @@
       di('代币',        r.token),
       di('实际充值网络', r.actualNetwork),
       di('应充值网络',  r.expectedNetwork),
-      di('充值金额',    `<span style="font-family:Inter,sans-serif">${r.amount} ${r.token}</span>`),
+      di('到账金额',    `<span style="font-family:Inter,sans-serif">${r.amount} ${r.token}</span>`),
       `<div class="detail-item">
         <span class="detail-label">钱包地址</span>
         ${fullCell(r.wallet)}
@@ -4681,19 +4697,34 @@
         ${truncCell(r.hash)}
       </div>`,
       di('异常类型',    `<span class="badge ${tp.cls}">${tp.label}</span>`),
+      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
       `<div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">异常说明</span>
         <span class="detail-value">${r.note || '—'}</span>
       </div>`,
-      di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
     ].join('');
+  }
+
+  function _deFeeItems(r) {
+    return `<div class="detail-item">
+        <span class="detail-label">手续费</span>
+        <span class="detail-value">${r.depositFee ? r.depositFee + ' ' + r.token : '—'}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">退款手续费</span>
+        <span class="detail-value">${r.refundFee ? r.refundFee + ' ' + r.token : '—'}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">退款金额</span>
+        <span class="detail-value">${r.refundAmount ? r.refundAmount + ' ' + r.token : '—'}</span>
+      </div>`;
   }
 
   function openDeView(idx) {
     deManageIdx = idx;
     const r = DEPOSIT_EXCEPTION_ALL[idx];
     document.getElementById('de-manage-title').textContent = '异常充值详情';
-    document.getElementById('de-manage-body').innerHTML = _deItems(r) +
+    document.getElementById('de-manage-body').innerHTML = _deItems(r) + _deFeeItems(r) +
       `<div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">处理备注</span>
         <span class="detail-value">${r.remark || '—'}</span>
@@ -4710,6 +4741,37 @@
     document.getElementById('de-manage-title').textContent = '异常充币审核';
     document.getElementById('de-manage-body').innerHTML = _deItems(r) +
       `<div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">处理方式</span>
+        <div class="select-wrap" style="width:100%;">
+          <select class="field-select" id="de-action-select" onchange="deToggleActionFields()" style="width:100%;">
+            <option value="">请选择</option>
+            <option value="confirmed">确认入账</option>
+            <option value="refunded">退款</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+        </div>
+      </div>
+      <div id="de-refund-fields" style="display:none;">
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label">充值手续费</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="field-input" type="number" step="0.0001" min="0" id="de-deposit-fee" value="${r.depositFee || ''}" placeholder="请输入充值手续费" style="font-family:'Inter',sans-serif;flex:1;" oninput="deRecalcRefundAmount()">
+            <span style="font-size:13px;color:#909399;">${r.token}</span>
+          </div>
+        </div>
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label">退款手续费</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="field-input" type="number" step="0.0001" min="0" id="de-refund-fee" value="${r.refundFee || ''}" placeholder="请输入退款手续费" style="font-family:'Inter',sans-serif;flex:1;" oninput="deRecalcRefundAmount()">
+            <span style="font-size:13px;color:#909399;">${r.token}</span>
+          </div>
+        </div>
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label">退款金额</span>
+          <span class="detail-value" id="de-refund-amount" style="font-family:'Inter',sans-serif;"></span>
+        </div>
+      </div>
+      <div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">处理备注</span>
         <div class="wm-remark-wrap">
           <textarea class="wm-remark" id="de-remark" placeholder="选填，填写处理说明..." maxlength="200" oninput="document.getElementById('de-remark-count').textContent=this.value.length"></textarea>
@@ -4718,11 +4780,55 @@
       </div>`;
     document.getElementById('de-manage-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeDeManage()">取消</button>
-      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmDeAction('refunded')">退款</button>
-      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmDeAction('confirmed')">确认入账</button>
+      <button class="btn btn-default btn-sm" id="de-submit-btn" style="margin-left:8px;" disabled>确认</button>
     `;
     document.getElementById('de-manage-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
+  }
+
+  function deToggleActionFields() {
+    const val = document.getElementById('de-action-select').value;
+    const wrap = document.getElementById('de-refund-fields');
+    wrap.style.display = val === 'refunded' ? 'contents' : 'none';
+    if (val === 'refunded') deRecalcRefundAmount();
+    const btn = document.getElementById('de-submit-btn');
+    if (val === 'confirmed') {
+      btn.disabled = false;
+      btn.className = 'btn btn-primary btn-sm';
+      btn.textContent = '确认入账';
+      btn.onclick = () => confirmDeAction('confirmed');
+    } else if (val === 'refunded') {
+      btn.disabled = false;
+      btn.className = 'btn btn-danger btn-sm';
+      btn.textContent = '退款';
+      btn.onclick = () => confirmDeAction('refunded');
+    } else {
+      btn.disabled = true;
+      btn.className = 'btn btn-default btn-sm';
+      btn.textContent = '确认';
+      btn.onclick = null;
+    }
+  }
+
+  function _deRefundAmountValue() {
+    if (deManageIdx < 0) return '';
+    const r = DEPOSIT_EXCEPTION_ALL[deManageIdx];
+    const depositFeeStr = document.getElementById('de-deposit-fee').value.trim();
+    const refundFeeStr  = document.getElementById('de-refund-fee').value.trim();
+    if (!depositFeeStr && !refundFeeStr) return '';
+    const amount     = parseFloat(r.amount) || 0;
+    const depositFee = parseFloat(depositFeeStr) || 0;
+    const refundFee  = parseFloat(refundFeeStr) || 0;
+    const dotIdx = String(r.amount).indexOf('.');
+    const decimals = dotIdx === -1 ? 2 : String(r.amount).length - dotIdx - 1;
+    return (amount - depositFee - refundFee).toFixed(decimals);
+  }
+
+  function deRecalcRefundAmount() {
+    if (deManageIdx < 0) return;
+    const r = DEPOSIT_EXCEPTION_ALL[deManageIdx];
+    const val = _deRefundAmountValue();
+    document.getElementById('de-refund-amount').textContent = val ? `${val} ${r.token}` : '';
   }
 
   const DE_CONFIRM_CFG = {
@@ -4752,11 +4858,16 @@
     if (deManageIdx < 0) return;
     const r = DEPOSIT_EXCEPTION_ALL[deManageIdx];
     r.remark = (document.getElementById('de-remark')?.value || '').trim();
+    if (newStatus === 'refunded') {
+      r.depositFee = (document.getElementById('de-deposit-fee')?.value || '').trim();
+      r.refundFee = (document.getElementById('de-refund-fee')?.value || '').trim();
+      r.refundAmount = _deRefundAmountValue();
+    }
     r.status = newStatus;
     if (newStatus === 'confirmed') {
       const dr = {
         uid: r.uid, name: r.name, userId: r.userId, token: r.token, network: r.actualNetwork,
-        amount: r.amount, fee: '0.00', wallet: r.wallet, time: r.time, hash: r.hash,
+        amount: r.amount, fee: r.depositFee || '0.00', wallet: r.wallet, time: r.time, hash: r.hash,
         channel: '', status: 'pending',
       };
       DEPOSIT_ALL.unshift(dr);
@@ -4991,6 +5102,7 @@
     const userId   = document.getElementById('w-userid').value.trim().toLowerCase();
     const token    = document.getElementById('w-token').value;
     const net      = document.getElementById('w-network').value;
+    const wallet   = document.getElementById('w-wallet').value.trim().toLowerCase();
     const st       = document.getElementById('w-status').value;
     const channel  = document.getElementById('w-channel').value;
     const hash     = document.getElementById('w-hash').value.trim().toLowerCase();
@@ -5008,6 +5120,7 @@
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
       if (token    && r.token !== token)                               return false;
       if (net      && r.network !== net)                               return false;
+      if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
       if (st       && r.status !== st)                                 return false;
       if (channel  && r.channel !== channel)                           return false;
       if (hash     && !r.hash.toLowerCase().includes(hash))           return false;
@@ -5025,7 +5138,7 @@
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
-    ['w-merchant','w-userid','w-token','w-network','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
+    ['w-merchant','w-userid','w-token','w-network','w-wallet','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditRecord(r)); wState.selected.clear(); wState.page = 1; withdrawRender();
   }
@@ -5508,6 +5621,7 @@
     const userId   = document.getElementById('wa-userid').value.trim().toLowerCase();
     const token    = document.getElementById('wa-token').value;
     const net      = document.getElementById('wa-network').value;
+    const wallet   = document.getElementById('wa-wallet').value.trim().toLowerCase();
     const status   = document.getElementById('wa-status').value;
     const channel  = document.getElementById('wa-channel').value;
     const batch    = document.getElementById('wa-batch').value.trim().toLowerCase();
@@ -5520,6 +5634,7 @@
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
       if (token    && r.token !== token)                               return false;
       if (net      && r.network !== net)                               return false;
+      if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
       if (status   && r.status !== status)                             return false;
       if (channel  && r.channel !== channel)                           return false;
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
@@ -5532,7 +5647,7 @@
     waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditReset() {
-    ['wa-merchant','wa-userid','wa-token','wa-network','wa-status','wa-channel','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
+    ['wa-merchant','wa-userid','wa-token','wa-network','wa-wallet','wa-status','wa-channel','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     waState.rows = WITHDRAW_ALL.filter(wIsAuditRecord); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
   }

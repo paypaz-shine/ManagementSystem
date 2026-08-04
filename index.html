@@ -1039,6 +1039,60 @@
       align-items:center;
     }
     .role-remove-icon:hover { opacity:0.75; }
+
+    /* ── Home Dashboard ──────────────────────────────────── */
+    .home-stat-row { display:flex; gap:16px; flex-shrink:0; }
+    .home-stat-card {
+      flex:1; min-width:0; background:#fff; border:1px solid #EBEEF5; border-radius:4px;
+      padding:18px 20px; display:flex; flex-direction:column; gap:10px;
+    }
+    .home-stat-label { font-size:13px; color:#606266; }
+    .home-stat-value { font-size:22px; font-weight:600; color:#303133; font-family:'Inter',sans-serif; }
+    .home-stat-value .home-unit { font-size:13px; font-weight:400; color:#909399; margin-left:4px; font-family:'Noto Sans SC',sans-serif; }
+
+    .home-card { background:#fff; border:1px solid #EBEEF5; border-radius:4px; padding:20px; display:flex; flex-direction:column; gap:16px; flex-shrink:0; }
+    .home-card-hd { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .home-card-title { font-size:14px; font-weight:600; color:#303133; }
+    .home-card-actions { display:flex; align-items:center; gap:16px; }
+    .home-link-btn {
+      display:flex; align-items:center; gap:4px; font-size:13px; color:#409EFF;
+      cursor:pointer; background:none; border:none; padding:0; font-family:'Noto Sans SC',sans-serif;
+    }
+    .home-link-btn:hover { opacity:0.75; }
+
+    .home-summary-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:16px; }
+    .home-summary-box { border-radius:4px; padding:14px 16px; display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .home-summary-box.neutral { background:#F5F7FA; }
+    .home-summary-box.amber   { background:#fdf6ec; }
+    .home-summary-box.blue    { background:#ECF5FF; }
+    .home-summary-box.red     { background:#FEF0F0; }
+    .home-summary-box.purple  { background:#f5f0ff; }
+    .home-summary-label { font-size:13px; color:#606266; }
+    .home-summary-value { font-size:22px; font-weight:600; font-family:'Inter',sans-serif; color:#303133; }
+    .home-summary-box.amber  .home-summary-value { color:#E6A23C; }
+    .home-summary-box.blue   .home-summary-value { color:#409EFF; }
+    .home-summary-box.red    .home-summary-value { color:#F56C6C; }
+    .home-summary-box.purple .home-summary-value { color:#8B5CF6; }
+    .home-summary-sub { font-size:12px; color:#909399; font-family:'Inter',sans-serif; }
+    .home-summary-box.clickable { cursor:pointer; transition:opacity .15s; }
+    .home-summary-box.clickable:hover { opacity:.8; }
+
+    .home-chart-legend { display:flex; align-items:center; gap:16px; }
+    .home-legend-item { display:flex; align-items:center; gap:6px; font-size:13px; color:#606266; }
+    .home-legend-dot { width:8px; height:8px; border-radius:50%; background:currentColor; display:inline-block; }
+
+    .home-chart-filters { display:flex; align-items:center; gap:16px; }
+    .home-chart-filter { display:flex; align-items:center; gap:8px; }
+    .home-chart-filter .filter-label-el { width:auto; text-align:left; padding-right:0; }
+    .home-chart-filter .field-select { width:120px; height:28px; }
+    .home-chart-pager { display:flex; align-items:center; gap:6px; }
+    .home-chart-pager span { font-size:13px; color:#606266; font-family:'Inter',sans-serif; }
+    .home-chart-pager .page-btn { width:24px; height:24px; }
+
+    .home-chart-body { width:100%; }
+
+    .home-merchant-table th:nth-child(1) { width:22%; }
+    .home-merchant-table th:nth-child(7) { width:10%; }
   </style>
 </head>
 <body>
@@ -1193,6 +1247,165 @@
     <!-- Tab Bar -->
     <div class="tab-bar" id="tab-bar">
       <!-- tabs injected by JS -->
+    </div>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 首页                                      -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-home">
+      <div class="content-area">
+
+        <!-- 核心指标 -->
+        <div class="home-stat-row">
+          <div class="home-stat-card">
+            <span class="home-stat-label">总资产余额</span>
+            <span class="home-stat-value">8169.23<span class="home-unit">USDT</span></span>
+          </div>
+          <div class="home-stat-card">
+            <span class="home-stat-label">累计收入</span>
+            <span class="home-stat-value">48.22<span class="home-unit">USDT</span></span>
+          </div>
+          <div class="home-stat-card">
+            <span class="home-stat-label">订单数</span>
+            <span class="home-stat-value">877</span>
+          </div>
+          <div class="home-stat-card">
+            <span class="home-stat-label">今日充值</span>
+            <span class="home-stat-value">0<span class="home-unit">USDT</span></span>
+          </div>
+          <div class="home-stat-card">
+            <span class="home-stat-label">今日提现</span>
+            <span class="home-stat-value">0<span class="home-unit">USDT</span></span>
+          </div>
+        </div>
+
+        <!-- 提币订单进度 -->
+        <div class="home-card">
+          <div class="home-card-hd">
+            <span class="home-card-title">提币订单进度（全部商户）</span>
+            <div class="home-card-actions">
+              <span class="home-link-btn" id="home-merchant-toggle" onclick="homeToggleMerchantDetail()">
+                <span id="home-merchant-toggle-label">收起商户明细</span>
+                <i data-lucide="chevron-up" id="home-merchant-toggle-icon" style="width:14px;height:14px;"></i>
+              </span>
+              <span class="home-link-btn" onclick="showToast('功能开发中')">
+                查看全部
+                <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="home-summary-grid">
+            <div class="home-summary-box neutral">
+              <span class="home-summary-label">涉及商户</span>
+              <span class="home-summary-value">3</span>
+            </div>
+            <div class="home-summary-box amber clickable" onclick="homeGoWithdraw('risk_pending')">
+              <span class="home-summary-label">风控待处理</span>
+              <span class="home-summary-value">28</span>
+              <span class="home-summary-sub">29.1 USDT</span>
+            </div>
+            <div class="home-summary-box purple clickable" onclick="homeGoWithdrawAudit('token_review')">
+              <span class="home-summary-label">待人工审核</span>
+              <span class="home-summary-value">4</span>
+              <span class="home-summary-sub">12.70 USDT</span>
+            </div>
+            <div class="home-summary-box purple clickable" onclick="homeGoWithdrawAudit('balance_retry')">
+              <span class="home-summary-label">待重试</span>
+              <span class="home-summary-value">15</span>
+              <span class="home-summary-sub">70.43 USDT</span>
+            </div>
+            <div class="home-summary-box blue clickable" onclick="homeGoWithdraw('withdrawing')">
+              <span class="home-summary-label">提币中</span>
+              <span class="home-summary-value">14</span>
+              <span class="home-summary-sub">21.5 USDT</span>
+            </div>
+            <div class="home-summary-box red clickable" onclick="homeGoWithdraw('failed')">
+              <span class="home-summary-label">提币失败（24小时内）</span>
+              <span class="home-summary-value">0</span>
+              <span class="home-summary-sub">0 USDT</span>
+            </div>
+          </div>
+
+          <div class="table-wrap" id="home-merchant-detail-wrap">
+            <table class="home-merchant-table">
+              <thead>
+                <tr>
+                  <th>商户名称</th>
+                  <th>风控待处理</th>
+                  <th>待人工审核</th>
+                  <th>待重试</th>
+                  <th>提币中</th>
+                  <th>提币失败（24小时内）</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="home-merchant-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 充币 & 提币 -->
+        <div class="home-card">
+          <div class="home-card-hd">
+            <span class="home-card-title">充币 &amp; 提币</span>
+            <div class="home-chart-legend">
+              <span class="home-legend-item" style="color:#409EFF;"><span class="home-legend-dot"></span>充币</span>
+              <span class="home-legend-item" style="color:#67C23A;"><span class="home-legend-dot"></span>提币</span>
+            </div>
+            <div class="home-chart-filters">
+              <div class="home-chart-filter">
+                <span class="filter-label-el">商户名称</span>
+                <div class="select-wrap">
+                  <select class="field-select">
+                    <option>All</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:14px;height:14px;"></i>
+                </div>
+              </div>
+              <div class="home-chart-filter">
+                <span class="filter-label-el">代币</span>
+                <div class="select-wrap">
+                  <select class="field-select">
+                    <option>USDT</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:14px;height:14px;"></i>
+                </div>
+              </div>
+              <div class="home-chart-pager">
+                <button class="page-btn" disabled><i data-lucide="chevron-left" style="width:13px;height:13px;"></i></button>
+                <span>1/1</span>
+                <button class="page-btn" disabled><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="home-chart-body" id="home-chart-deposit-withdraw"></div>
+        </div>
+
+        <!-- 利润 & 订单数 -->
+        <div class="home-card">
+          <div class="home-card-hd">
+            <span class="home-card-title">利润 &amp; 订单数</span>
+            <div class="home-chart-legend">
+              <span class="home-legend-item" style="color:#409EFF;"><span class="home-legend-dot"></span>利润</span>
+              <span class="home-legend-item" style="color:#67C23A;"><span class="home-legend-dot"></span>订单数</span>
+            </div>
+            <div class="home-chart-filters">
+              <div class="home-chart-filter">
+                <span class="filter-label-el">商户名称</span>
+                <div class="select-wrap">
+                  <select class="field-select">
+                    <option>All</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:14px;height:14px;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="home-chart-body" id="home-chart-profit-orders"></div>
+        </div>
+
+      </div>
     </div>
 
     <!-- ════════════════════════════════════════════════ -->
@@ -3997,7 +4210,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
+  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -4129,6 +4342,132 @@
       navigateTo(pid);
     });
   });
+
+  // ══════════════════════════════════════════════════════
+  //  首页 data & logic
+  // ══════════════════════════════════════════════════════
+  const HOME_MERCHANT_PROGRESS = [
+    { name:'kara3', userId:'460466234', riskPending:27, manualReview:1, retry:8, withdrawing:2,  failed:0 },
+    { name:'kara',  userId:'635102950', riskPending:0,  manualReview:2, retry:3, withdrawing:12, failed:0 },
+    { name:'kara4', userId:'291654802', riskPending:1,  manualReview:1, retry:4, withdrawing:0,  failed:0 },
+  ];
+
+  function homeMerchantRender() {
+    const tbody = document.getElementById('home-merchant-tbody');
+    tbody.innerHTML = HOME_MERCHANT_PROGRESS.map(m => `<tr>
+      <td>${m.name} <span style="color:#909399;">(userId: ${m.userId})</span></td>
+      <td style="font-family:Inter,sans-serif;${m.riskPending > 0 ? 'color:#E6A23C;' : ''}">${m.riskPending}</td>
+      <td style="font-family:Inter,sans-serif;${m.manualReview > 0 ? 'color:#8B5CF6;' : ''}">${m.manualReview}</td>
+      <td style="font-family:Inter,sans-serif;${m.retry > 0 ? 'color:#8B5CF6;' : ''}">${m.retry}</td>
+      <td style="font-family:Inter,sans-serif;${m.withdrawing > 0 ? 'color:#409EFF;' : ''}">${m.withdrawing}</td>
+      <td style="font-family:Inter,sans-serif;color:#F56C6C;">${m.failed}</td>
+      <td><span class="action-icon" style="font-size:13px;" onclick="showToast('功能开发中')">查看明细</span></td>
+    </tr>`).join('');
+  }
+
+  function homeToggleMerchantDetail() {
+    const wrap = document.getElementById('home-merchant-detail-wrap');
+    const label = document.getElementById('home-merchant-toggle-label');
+    const icon = document.getElementById('home-merchant-toggle-icon');
+    const collapsed = wrap.style.display === 'none';
+    wrap.style.display = collapsed ? '' : 'none';
+    label.textContent = collapsed ? '收起商户明细' : '展开商户明细';
+    icon.setAttribute('data-lucide', collapsed ? 'chevron-up' : 'chevron-down');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // 全部商户统计框：点击进入对应列表页并按状态筛选
+  // 风控待处理/提币中/提币失败属于「提币记录」页状态；manual_review（待人工审核/待重试）
+  // 只在「提币审核」页展示，不出现在「提币记录」，因此走 withdraw-audit + reviewType 筛选
+  function homeGoWithdraw(status) {
+    navigateTo('withdraw');
+    document.getElementById('w-status').value = status;
+    withdrawSearch();
+  }
+  function homeGoWithdrawAudit(reviewType) {
+    navigateTo('withdraw-audit');
+    document.getElementById('wa-status').value = reviewType;
+    withdrawAuditSearch();
+  }
+
+  // Catmull-Rom → 三次贝塞尔，用于折线图平滑曲线
+  function homeCatmullRomPath(pts) {
+    if (pts.length < 2) return '';
+    let d = `M ${pts[0].x},${pts[0].y}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[i + 2] || p2;
+      const c1x = p1.x + (p2.x - p0.x) / 6;
+      const c1y = p1.y + (p2.y - p0.y) / 6;
+      const c2x = p2.x - (p3.x - p1.x) / 6;
+      const c2y = p2.y - (p3.y - p1.y) / 6;
+      d += ` C ${c1x},${c1y} ${c2x},${c2y} ${p2.x},${p2.y}`;
+    }
+    return d;
+  }
+
+  // 双折线图（展示态：固定 mock 数据，不随筛选联动）
+  function homeChartSVG(cfg) {
+    const W = 1000, H = 240, mL = 34, mR = 10, mT = 12, mB = 26;
+    const cw = W - mL - mR, ch = H - mT - mB;
+    const n = cfg.xLabels.length;
+    const xAt = i => mL + (cw * i) / (n - 1);
+    const yAt = v => mT + ch - (v / cfg.maxY) * ch;
+
+    const gridLines = cfg.yTicks.map(t => {
+      const y = yAt(t);
+      return `<line x1="${mL}" y1="${y}" x2="${mL + cw}" y2="${y}" stroke="#EBEEF5" stroke-width="1"/>
+        <text x="${mL - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="#909399" font-family="Inter,sans-serif">${t}</text>`;
+    }).join('');
+
+    const xLabels = cfg.xLabels.map((lb, i) => {
+      const x = xAt(i);
+      const anchor = i === 0 ? 'start' : (i === n - 1 ? 'end' : 'middle');
+      return `<text x="${x}" y="${H - 6}" text-anchor="${anchor}" font-size="11" fill="#909399" font-family="Inter,sans-serif">${lb}</text>`;
+    }).join('');
+
+    const flatPts = cfg.flatValues.map((v, i) => ({ x: xAt(i), y: yAt(v) }));
+    const peakPts = cfg.peakValues.map((v, i) => ({ x: xAt(i), y: yAt(v) }));
+    const flatPath = homeCatmullRomPath(flatPts);
+    const peakPath = homeCatmullRomPath(peakPts);
+
+    const flatMarkers = flatPts.map(p =>
+      `<circle cx="${p.x}" cy="${p.y}" r="3" fill="#fff" stroke="${cfg.flatColor}" stroke-width="2"/>`
+    ).join('');
+
+    const peakIdx = cfg.peakValues.indexOf(Math.max(...cfg.peakValues));
+    const peakPt = peakPts[peakIdx];
+    const peakMarker = peakPt ? `
+      <circle cx="${peakPt.x}" cy="${peakPt.y}" r="9" fill="${cfg.peakColor}" opacity="0.15"/>
+      <circle cx="${peakPt.x}" cy="${peakPt.y}" r="4.5" fill="#fff" stroke="${cfg.peakColor}" stroke-width="2.5"/>` : '';
+
+    return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:${H}px;display:block;">
+      ${gridLines}
+      <line x1="${mL}" y1="${mT + ch}" x2="${mL + cw}" y2="${mT + ch}" stroke="#DCDFE6" stroke-width="1"/>
+      ${xLabels}
+      <path d="${peakPath}" fill="none" stroke="${cfg.peakColor}" stroke-width="2"/>
+      <path d="${flatPath}" fill="none" stroke="${cfg.flatColor}" stroke-width="2"/>
+      ${flatMarkers}
+      ${peakMarker}
+    </svg>`;
+  }
+
+  function homeChartsRender() {
+    document.getElementById('home-chart-deposit-withdraw').innerHTML = homeChartSVG({
+      xLabels: ['2026-08-01', '2026-08-02', '2026-08-03', '2026-08-04'],
+      yTicks: [0, 1, 2, 3, 4], maxY: 4,
+      flatValues: [0, 0, 0, 0], flatColor: '#409EFF',
+      peakValues: [0, 0, 3.7, 0], peakColor: '#67C23A',
+    });
+    document.getElementById('home-chart-profit-orders').innerHTML = homeChartSVG({
+      xLabels: ['2026-08-01', '2026-08-02', '2026-08-03', '2026-08-04'],
+      yTicks: [0, 0.5, 1, 1.5, 2, 2.5, 3], maxY: 3,
+      flatValues: [0, 0, 0, 0], flatColor: '#409EFF',
+      peakValues: [0, 0, 2.8, 0], peakColor: '#67C23A',
+    });
+  }
 
   // ══════════════════════════════════════════════════════
   //  充币记录 data & logic
@@ -8765,6 +9104,8 @@
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     renderTabs();
+    homeMerchantRender();
+    homeChartsRender();
     document.getElementById('d-status').value = 'pending';
     dState.rows = DEPOSIT_ALL.filter(r => r.status === 'pending');
     depositRender();

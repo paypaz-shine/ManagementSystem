@@ -1817,6 +1817,20 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">提币方式</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="w-method">
+                    <option value="">请选择</option>
+                    <option value="API">API</option>
+                    <option value="Excel">Excel</option>
+                    <option value="单笔">单笔</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">哈希</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="w-hash">
@@ -1892,14 +1906,14 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2700px;">
+            <table style="min-width:2790px;">
               <colgroup>
                 <col style="width:108px"><col style="width:145px"><col style="width:108px">
                 <col style="width:68px"><col style="width:76px"><col style="width:76px">
                 <col style="width:70px"><col style="width:66px"><col style="width:380px">
                 <col style="width:165px"><col style="width:165px"><col style="width:150px">
                 <col style="width:200px"><col style="width:330px"><col style="width:330px">
-                <col style="width:66px"><col style="width:120px"><col style="width:70px">
+                <col style="width:66px"><col style="width:90px"><col style="width:120px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
@@ -1907,7 +1921,7 @@
                   <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>提币时间</th><th>到账时间</th><th>哈希</th><th>批次号</th>
                   <th>商户订单号</th><th>渠道订单号 / 批次号</th>
-                  <th>渠道</th><th>状态</th><th>操作</th>
+                  <th>渠道</th><th>提币方式</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="w-tbody"></tbody>
@@ -2025,6 +2039,20 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">提币方式</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="wa-method">
+                    <option value="">请选择</option>
+                    <option value="API">API</option>
+                    <option value="Excel">Excel</option>
+                    <option value="单笔">单笔</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">批次号</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="wa-batch">
@@ -2075,7 +2103,7 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2095px;">
+            <table style="min-width:2185px;">
               <colgroup>
                 <col style="width:40px">
                 <col style="width:108px"><col style="width:145px"><col style="width:108px">
@@ -2083,7 +2111,7 @@
                 <col style="width:70px"><col style="width:66px"><col style="width:380px">
                 <col style="width:165px">
                 <col style="width:200px"><col style="width:330px">
-                <col style="width:66px"><col style="width:120px"><col style="width:70px">
+                <col style="width:66px"><col style="width:90px"><col style="width:120px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
@@ -2092,7 +2120,7 @@
                   <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>提币时间</th><th>批次号</th>
                   <th>商户订单号</th>
-                  <th>渠道</th><th>状态</th><th>操作</th>
+                  <th>渠道</th><th>提币方式</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="wa-tbody"></tbody>
@@ -2358,6 +2386,19 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ramp-in-f-token">
+                    <option value="">全部</option>
+                    <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">法币币种</span>
               <div class="filter-control">
                 <div class="select-wrap">
@@ -2477,6 +2518,7 @@
                   <th>加点费用</th>
                   <th>On Ramp 手续费</th>
                   <th>净入账</th>
+                  <th>网络</th>
                   <th>地址</th>
                   <th>哈希</th>
                   <th>状态</th>
@@ -3878,17 +3920,24 @@
             <span class="tk-addon">%</span>
           </div>
         </div>
+        <div class="tk-row" style="margin-bottom:4px;">
+          <span class="ak-label"><span class="ak-req">*</span>最小入金数量</span>
+          <div class="tk-addon-wrap">
+            <input type="number" class="field-input" id="rp-on-minAmount" min="0" step="0.01" placeholder="请输入" oninput="rpValidateMinAmount()">
+            <span class="tk-addon" id="rp-on-minAmount-unit"></span>
+          </div>
+        </div>
         <div class="tk-row" style="margin-bottom:20px;">
-          <span class="ak-label">最小入金数量</span>
-          <span id="rp-on-minAmount-display" style="font-family:'Inter',sans-serif;font-size:13px;color:#606266;"></span>
+          <span class="ak-label"></span>
+          <span id="rp-on-minAmount-hint" style="font-size:12px;font-family:'Inter',sans-serif;"></span>
         </div>
 
         <div class="tk-row" style="margin-bottom:20px;align-items:flex-start;">
           <span class="ak-label" style="padding-top:2px;"><span class="ak-req">*</span>网络</span>
           <div class="ak-radios" style="flex-wrap:wrap;">
-            <label class="ak-radio-item" style="white-space:nowrap;"><input type="radio" name="rp-on-network" value="TRON"><span class="ak-dot"></span>TRON</label>
-            <label class="ak-radio-item" style="white-space:nowrap;"><input type="radio" name="rp-on-network" value="Ethereum"><span class="ak-dot"></span>Ethereum</label>
-            <label class="ak-radio-item" style="white-space:nowrap;"><input type="radio" name="rp-on-network" value="BNB Smart Chain"><span class="ak-dot"></span>BNB Smart Chain</label>
+            <label class="ak-check-item" id="rp-on-network-tron-item" style="white-space:nowrap;"><input type="checkbox" class="rp-on-network-ck" value="TRON"><span class="ak-box"></span>TRON</label>
+            <label class="ak-check-item" style="white-space:nowrap;"><input type="checkbox" class="rp-on-network-ck" value="Ethereum"><span class="ak-box"></span>Ethereum</label>
+            <label class="ak-check-item" style="white-space:nowrap;"><input type="checkbox" class="rp-on-network-ck" value="BNB Smart Chain"><span class="ak-box"></span>BNB Smart Chain</label>
           </div>
         </div>
 
@@ -4523,6 +4572,8 @@
     { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON', amount:'0.12', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:43:10', hash:'b39f8e1fac2a6b6a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b5a', channel:'',           status:'arrived' },
     { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON', amount:'0.09', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff5c2a8d6e1b4f7c9a3d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d', channel:'',           status:'arrived' },
     { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'TRON', amount:'4.5',  fee:'0.05', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', channel:'',           status:'arrived' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDC', network:'TRON',     amount:'150.00', fee:'0.15', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-09 09:20:31', hash:'8b4d1e9c6f3a7b2e5d8c1f4a9e6b3d7c2f8a5e1b6d9c3f7a2e5b8d1c4f9a6e3b', channel:'',           status:'arrived' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Ethereum', amount:'25.50',  fee:'0.03', wallet:'0x6c3f9a1d8e5b2c7f4a9d6e3b1c8f5a2d7e4b9c6f', time:'2026-06-10 08:12:47', hash:'0x9e4c7f2b5a8d1e6c3f9b4a7d2e5c8f1b6a3d9e7c4f2b8a5d1e6c9f3b7a4d2e8c', channel:'', status:'arrived' },
   ];
 
   const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
@@ -5225,6 +5276,14 @@
     WITHDRAW_ALL.forEach(r => { r.batch = r.viaExcel ? batchMap[r.wdTime.split(' ')[0]] : '-'; });
   })();
 
+  (function assignWithdrawMethod() {
+    // 提币方式：Excel 对应 viaExcel 批量导入；其余为商户后台"单笔"表单发起或直接调用 API
+    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3']);
+    WITHDRAW_ALL.forEach(r => {
+      r.method = r.viaExcel ? 'Excel' : (singleMarkers.has(r.hash) || singleMarkers.has(r.paypazId) ? '单笔' : 'API');
+    });
+  })();
+
   (function assignChannelBatches() {
     // 渠道批次号：Cobo 批量处理提币时返回的批次标识，仅渠道已实际处理（有渠道订单号）的提币才有
     const groups = {};
@@ -5277,6 +5336,7 @@
         <td>${paypazCell}</td>
         <td>${supplierCell}</td>
         <td>${r.channel === '-' ? '-' : r.channel}</td>
+        <td>${r.method}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td><div class="action-cell">
           <span class="action-icon" onclick="openWdView(${idx})" title="查看详情">${_EYE_SVG}</span>
@@ -5339,6 +5399,7 @@
     const wallet   = document.getElementById('w-wallet').value.trim().toLowerCase();
     const st       = document.getElementById('w-status').value;
     const channel  = document.getElementById('w-channel').value;
+    const method   = document.getElementById('w-method').value;
     const hash     = document.getElementById('w-hash').value.trim().toLowerCase();
     const batch    = document.getElementById('w-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('w-paypazid').value.trim().toLowerCase();
@@ -5357,6 +5418,7 @@
       if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
       if (st       && r.status !== st)                                 return false;
       if (channel  && r.channel !== channel)                           return false;
+      if (method   && r.method !== method)                             return false;
       if (hash     && !r.hash.toLowerCase().includes(hash))           return false;
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
@@ -5371,15 +5433,15 @@
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
-    ['w-merchant','w-userid','w-token','w-network','w-wallet','w-status','w-channel','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
+    ['w-merchant','w-userid','w-token','w-network','w-wallet','w-status','w-channel','w-method','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditRecord(r)); wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
-    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','商户订单号','渠道订单号','渠道批次号','渠道','状态'];
+    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','商户订单号','渠道订单号','渠道批次号','渠道','提币方式','状态'];
     csvDownload(headers, wState.rows.map(r => [
       r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
-      r.wdTime, r.time, r.hash, r.batch, r.paypazId, r.supplierId, r.channelBatch, r.channel, wdStatusView(r).label
+      r.wdTime, r.time, r.hash, r.batch, r.paypazId, r.supplierId, r.channelBatch, r.channel, r.method, wdStatusView(r).label
     ]), '提币记录.csv');
   }
   function openWdExportModal() {
@@ -5433,6 +5495,7 @@
       diCopy('渠道订单号',  r.supplierId),
       diCopy('渠道批次号',  r.channelBatch),
       diCopy('钱包地址',     r.wallet),
+      di('提币方式',     r.method),
     ].join('');
   }
 
@@ -5616,6 +5679,7 @@
         <td>${r.batch === '-' ? '-' : fullCell(r.batch)}</td>
         <td>${paypazCell}</td>
         <td>${r.channel === '-' ? '-' : r.channel}</td>
+        <td>${r.method}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td><div class="action-cell">
           <span class="action-icon" onclick="openWdaView(${idx})" title="查看详情">${_EYE_SVG}</span>
@@ -5710,6 +5774,7 @@
     const wallet   = document.getElementById('wa-wallet').value.trim().toLowerCase();
     const reviewType = document.getElementById('wa-status').value;
     const channel  = document.getElementById('wa-channel').value;
+    const method   = document.getElementById('wa-method').value;
     const batch    = document.getElementById('wa-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('wa-paypazid').value.trim().toLowerCase();
     const wds      = document.getElementById('wa-wdtime-start').value;
@@ -5723,6 +5788,7 @@
       if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
       if (reviewType && r.reviewType !== reviewType)                   return false;
       if (channel  && r.channel !== channel)                           return false;
+      if (method   && r.method !== method)                             return false;
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
       if (wds      && r.wdTime !== '-' && r.wdTime.split(' ')[0] < wds) return false;
@@ -5733,15 +5799,15 @@
     waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditReset() {
-    ['wa-merchant','wa-userid','wa-token','wa-network','wa-wallet','wa-status','wa-channel','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
+    ['wa-merchant','wa-userid','wa-token','wa-network','wa-wallet','wa-status','wa-channel','wa-method','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     waState.rows = WITHDRAW_ALL.filter(wIsAuditRecord); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditExport() {
-    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','批次号','商户订单号','渠道','状态'];
+    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','批次号','商户订单号','渠道','提币方式','状态'];
     csvDownload(headers, waState.rows.map(r => [
       r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
-      r.wdTime, r.batch, r.paypazId, r.channel, waStatusView(r).label
+      r.wdTime, r.batch, r.paypazId, r.channel, r.method, waStatusView(r).label
     ]), '提币审核.csv');
   }
   const WA_REVIEW_TYPE_LABEL = { balance_retry:'待重试', token_review:'待人工审核' };
@@ -5791,6 +5857,7 @@
       diCopy('批次号',       r.batch),
       diCopy('商户订单号', r.paypazId),
       opts.hideChannel ? '' : di('渠道', r.channel === '-' ? '—' : r.channel),
+      di('提币方式',     r.method),
       di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
     ].join('');
   }
@@ -7164,22 +7231,34 @@
 
   const RAMP_PAIRS = [
     {
-      crypto:'USDT', fiat:'JPY', network:'TRON',
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'0.00', feeRate:'0.00', minAmount:'20' },
+      crypto:'USDT', fiat:'JPY', networks:['TRON'],
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'0.00', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
     },
     {
-      crypto:'USDT', fiat:'USD', network:'TRON',
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'0.00', feeRate:'0.00', minAmount:'20' },
+      crypto:'USDT', fiat:'USD', networks:['TRON'],
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'0.00', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
     },
     {
-      crypto:'USDT', fiat:'KRW', network:'TRON',
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'0.00', feeRate:'0.00', minAmount:'20' },
+      crypto:'USDT', fiat:'KRW', networks:['TRON'],
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'0.00', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+    },
+    {
+      crypto:'USDC', fiat:'JPY', networks:['BNB Smart Chain'],
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'0.00', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+    },
+    {
+      crypto:'USDC', fiat:'USD', networks:['BNB Smart Chain'],
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'0.00', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+    },
+    {
+      crypto:'USDC', fiat:'KRW', networks:['BNB Smart Chain'],
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'0.00', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
     },
   ];
 
-  function rpNetChips(net) {
-    if (!net) return '<span style="color:#C0C4CC;">—</span>';
-    return `<span style="display:inline-block;background:#F5F7FA;border:1px solid #E4E7ED;border-radius:3px;padding:1px 6px;font-size:11px;color:#606266;font-family:'Inter',sans-serif;margin:1px 2px 1px 0;">${net}</span>`;
+  function rpNetChips(nets) {
+    if (!nets || !nets.length) return '<span style="color:#C0C4CC;">—</span>';
+    return nets.map(net => `<span style="display:inline-block;background:#F5F7FA;border:1px solid #E4E7ED;border-radius:3px;padding:1px 6px;font-size:11px;color:#606266;font-family:'Inter',sans-serif;margin:1px 2px 1px 0;">${net}</span>`).join('');
   }
 
   function rpCalcUserRate(providerRate, markupValue) {
@@ -7206,9 +7285,9 @@
     return `<span style="font-family:'Inter',sans-serif;">${feeRate}<span style="color:#909399;font-size:11px;">%</span></span>`;
   }
 
-  function rpMinAmountCell(minAmount) {
+  function rpMinAmountCell(minAmount, crypto) {
     if (!minAmount) return '<span style="color:#C0C4CC;">—</span>';
-    return `<span style="font-family:'Inter',sans-serif;">${minAmount}<span style="color:#909399;font-size:11px;"> USDT</span></span>`;
+    return `<span style="font-family:'Inter',sans-serif;">${minAmount}<span style="color:#909399;font-size:11px;"> ${crypto}</span></span>`;
   }
 
   function mdRenderRampTokenTable() {
@@ -7225,8 +7304,8 @@
         <td>${rpMarkupCell(on.markupValue)}</td>
         <td>${rpRateCell(onUR)}</td>
         <td>${rpFeeRateCell(on.feeRate)}</td>
-        <td>${rpMinAmountCell(on.minAmount)}</td>
-        <td>${rpNetChips(r.network)}</td>
+        <td>${rpMinAmountCell(on.minAmount, r.crypto)}</td>
+        <td>${rpNetChips(r.networks)}</td>
         <td><span class="action-icon" onclick="openRampPairEdit(${i})" title="编辑">${_EDIT_SVG}</span></td>
       </tr>`;
     }).join('');
@@ -8752,6 +8831,42 @@
       ],
       webhookRaw:{ event:'trade-execute', legendOrderId:'ordr_0b7e3c9a5f2d', status:'succeeded', fiatAmount:1237.80, fiatCurrency:'USD', cryptoAmount:1235.95, cryptoCurrency:'USDT', chain:'TRON', receivedAt:'2026-08-09T15:22:00Z' }
     },
+    {
+      paypazOrderId:'RAMP-20260811-0011', brokerOrderRef:'CFD-TKS-20260811-1305', legendOrderId:'ordr_3f9c6a2e8d1b',
+      brokerName:'GMTM', brokerId:'710294856', userId:'USR-51204873',
+      status:'COMPLETED', fiatAmount:'108,199', fiatCurrency:'JPY',
+      cryptoAmount:'700.00', grossCryptoAmount:'720.99', cryptoCurrency:'USDC', markupRate:'4.50',
+      provider:'Legend', channelRate:'150.07', customerRate:'154.57',
+      network:'Ethereum', walletAddress:'0x8e4f1b6c9d2a7e3f5b8c1d4a9e6f3b7c2d8e5f1a', txHash:'0x2c6f9a3d7e1b4c8f2a5d9e6c3b7f1a4d8e2c5b9f3a7d1e4c8b6f2a9d5e3c7f1b',
+      paypazFee:'3.50', kycStatus:'approved',
+      createdAt:'2026-08-11 10:00:00', completedAt:'2026-08-11 10:24:00', failReason:null,
+      timeline:[
+        { label:'已创建',     time:'2026-08-11 10:00:00', source:'系统',            desc:'Broker 调用创建订单',                       state:'done' },
+        { label:'待支付',     time:'2026-08-11 10:00:07', source:'用户',            desc:'用户进入嵌入式支付页面',                     state:'done' },
+        { label:'支付处理中', time:'2026-08-11 10:04:30', source:'用户',            desc:'用户提交信用卡支付',                         state:'done' },
+        { label:'链上划转中', time:'2026-08-11 10:18:10', source:'Legend Webhook', desc:'支付确认，Legend 处理加密资产链上划转',       state:'done' },
+        { label:'已完成',     time:'2026-08-11 10:24:00', source:'Legend Webhook', desc:'链上到账确认，Paypaz 手续费已记账',           state:'done' },
+      ],
+      webhookRaw:{ event:'trade-execute', legendOrderId:'ordr_3f9c6a2e8d1b', status:'succeeded', fiatAmount:108199, fiatCurrency:'JPY', cryptoAmount:720.99, cryptoCurrency:'USDC', chain:'Ethereum', receivedAt:'2026-08-11T10:24:00Z' }
+    },
+    {
+      paypazOrderId:'RAMP-20260812-0012', brokerOrderRef:'CFD-TKS-20260812-1410', legendOrderId:'ordr_7d2a8f4c1b9e',
+      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-62047318',
+      status:'CRYPTO_TRANSFERRING', fiatAmount:'412.60', fiatCurrency:'USD',
+      cryptoAmount:'400.00', grossCryptoAmount:'411.98', cryptoCurrency:'USDC', markupRate:'0.03',
+      provider:'Legend', channelRate:'1.0015', customerRate:'1.0315',
+      network:'BNB Smart Chain', walletAddress:'0x4a7d2e9c6f1b8a3d5e0c7f4b9a2d6e1c8f3b7a5d', txHash:null,
+      paypazFee:null, kycStatus:'approved',
+      createdAt:'2026-08-12 13:20:00', completedAt:'—', failReason:null,
+      timeline:[
+        { label:'已创建',     time:'2026-08-12 13:20:00', source:'系统',            desc:'Broker 调用创建订单',                 state:'done'   },
+        { label:'待支付',     time:'2026-08-12 13:20:09', source:'用户',            desc:'用户进入嵌入式支付页面',               state:'done'   },
+        { label:'支付处理中', time:'2026-08-12 13:24:15', source:'用户',            desc:'用户提交 Apple Pay 支付',             state:'done'   },
+        { label:'链上划转中', time:'2026-08-12 13:33:40', source:'Legend Webhook', desc:'支付确认，Legend 处理加密资产链上划转', state:'active' },
+        { label:'已完成',     time:null,                  source:'',                desc:'等待链上到账确认',                     state:''       },
+      ],
+      webhookRaw:{ event:'trade-execute', legendOrderId:'ordr_7d2a8f4c1b9e', status:'in_progress', fiatAmount:412.60, fiatCurrency:'USD', cryptoAmount:411.98, cryptoCurrency:'USDC', chain:'BNB Smart Chain', receivedAt:'2026-08-12T13:33:40Z' }
+    },
   ];
 
   // On Ramp 到账后同步生成充币记录：只要代币已上链发出（有 txHash）即视为到账，
@@ -8812,6 +8927,7 @@
         <td style="font-family:'Inter',sans-serif;font-size:12px;"><span style="color:#C0C4CC;">—</span></td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazFee ? r.paypazFee + '&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazFee ? '<span style="color:#67C23A;">+' + (parseFloat(r.cryptoAmount) - parseFloat(r.paypazFee)).toFixed(2) + '</span>&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
+        <td>${r.network}</td>
         <td>${fullCell(r.walletAddress)}</td>
         <td>${fullCell(r.txHash)}</td>
         <td>${rampInStatusBadge(r.status)}</td>
@@ -8819,7 +8935,7 @@
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.completedAt}</td>
         <td><div class="action-cell"><span class="action-icon" onclick="openRampInDetail(${idx})" title="详情">${_GRID_SVG}</span></div></td>
       </tr>`;
-    }).join('') : `<tr><td colspan="20" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无数据</td></tr>`;
+    }).join('') : `<tr><td colspan="21" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无数据</td></tr>`;
     const total = rampInState.rows.length;
     document.getElementById('ramp-in-page-total').textContent = `共 ${total} 条`;
     const pages = Math.ceil(total / rampInState.size) || 1;
@@ -8878,6 +8994,7 @@
     const legend    = document.getElementById('ramp-in-f-legend').value.trim().toLowerCase();
     const merch     = document.getElementById('ramp-in-f-merchant').value.trim().toLowerCase();
     const provider  = document.getElementById('ramp-in-f-provider').value;
+    const token     = document.getElementById('ramp-in-f-token').value;
     const fiat      = document.getElementById('ramp-in-f-fiat').value;
     const network   = document.getElementById('ramp-in-f-network').value;
     const address   = document.getElementById('ramp-in-f-address').value.trim().toLowerCase();
@@ -8893,6 +9010,7 @@
       if (legend   && !r.legendOrderId.toLowerCase().includes(legend))                       return false;
       if (merch    && !r.brokerName.toLowerCase().includes(merch) && !r.brokerId.includes(merch)) return false;
       if (provider && r.provider !== provider)                                              return false;
+      if (token    && r.cryptoCurrency !== token)                                            return false;
       if (fiat     && r.fiatCurrency !== fiat)                                               return false;
       if (network  && r.network !== network)                                                return false;
       if (address  && !r.walletAddress.toLowerCase().includes(address))                      return false;
@@ -8913,7 +9031,7 @@
      'ramp-in-f-date-from','ramp-in-f-date-to','ramp-in-f-completed-from','ramp-in-f-completed-to'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
-    ['ramp-in-f-fiat','ramp-in-f-provider','ramp-in-f-network','ramp-in-f-status'].forEach(id => {
+    ['ramp-in-f-fiat','ramp-in-f-token','ramp-in-f-provider','ramp-in-f-network','ramp-in-f-status'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
     rampInState.rows = [...RAMP_IN_ORDERS];
@@ -8977,10 +9095,13 @@
     document.getElementById('rp-on-markupValue').value = r.onRamp.markupValue;
     rpUpdateUserRate();
     document.getElementById('rp-on-feeRate').value = r.onRamp.feeRate;
-    document.getElementById('rp-on-minAmount-display').textContent = `${r.onRamp.minAmount} USDT`;
+    document.getElementById('rp-on-minAmount').value = r.onRamp.minAmount;
+    document.getElementById('rp-on-minAmount-unit').textContent = r.crypto;
+    rpValidateMinAmount();
 
-    // 网络
-    document.querySelectorAll('input[name="rp-on-network"]').forEach(el => { el.checked = el.value === r.network; });
+    // 网络：USDC 不支持 TRON
+    document.getElementById('rp-on-network-tron-item').style.display = r.crypto === 'USDC' ? 'none' : '';
+    document.querySelectorAll('.rp-on-network-ck').forEach(el => { el.checked = (r.networks || []).includes(el.value); });
 
     document.getElementById('ramp-token-edit-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
@@ -8988,6 +9109,21 @@
 
   function closeRampPairEdit() {
     document.getElementById('ramp-token-edit-modal').classList.remove('show');
+  }
+
+  function rpValidateMinAmount() {
+    const r = RAMP_PAIRS[_rpIdx];
+    if (!r) return false;
+    const input = document.getElementById('rp-on-minAmount');
+    const hint = document.getElementById('rp-on-minAmount-hint');
+    const channelMinVal = parseFloat(r.onRamp.channelMinAmount);
+    const channelMinText = `渠道最小入金数量 ${r.onRamp.channelMinAmount} ${r.crypto}`;
+    const val = parseFloat(input.value);
+    const belowChannelMin = input.value !== '' && !isNaN(val) && val < channelMinVal;
+    hint.textContent = belowChannelMin ? `不能低于${channelMinText}` : channelMinText;
+    hint.style.color = belowChannelMin ? '#F56C6C' : '#909399';
+    input.style.borderColor = belowChannelMin ? '#F56C6C' : '';
+    return !belowChannelMin;
   }
 
   function saveRampPairEdit() {
@@ -9002,9 +9138,16 @@
     r.onRamp.markupValue = onMarkupVal.toFixed(2);
     r.onRamp.feeRate = onFeeRateVal.toFixed(2);
 
+    // 最小入金数量：不可低于渠道最小限额
+    const onMinAmountVal = parseFloat(document.getElementById('rp-on-minAmount').value);
+    if (isNaN(onMinAmountVal) || onMinAmountVal <= 0) { showToast('请输入最小入金数量'); return; }
+    if (!rpValidateMinAmount()) return;
+    r.onRamp.minAmount = String(onMinAmountVal);
+
     // 网络
-    const onNetwork = document.querySelector('input[name="rp-on-network"]:checked');
-    r.network = onNetwork ? onNetwork.value : 'TRON';
+    const onNetworks = Array.from(document.querySelectorAll('.rp-on-network-ck:checked')).map(el => el.value);
+    if (!onNetworks.length) { showToast('请至少选择一个网络'); return; }
+    r.networks = onNetworks;
 
     closeRampPairEdit();
     mdRenderRampTokenTable();
@@ -9013,12 +9156,12 @@
 
   function rampInExport() {
     const headers = ['商户名称','用户ID','Paypaz订单','商户订单','渠道','渠道订单','支付法币金额','法币币种','入金代币数量','代币币种',
-      '渠道汇率','加点','客户汇率','On Ramp手续费','地址','哈希','状态','创建时间','完成时间'];
+      '渠道汇率','加点','客户汇率','On Ramp手续费','网络','地址','哈希','状态','创建时间','完成时间'];
     csvDownload(headers, rampInState.rows.map(r => [
       r.brokerName, r.userId, r.paypazOrderId, r.brokerOrderRef, r.provider, r.legendOrderId,
       r.fiatAmount, r.fiatCurrency, r.cryptoAmount, r.cryptoCurrency,
       r.channelRate, '-', r.channelRate, r.paypazFee || '-',
-      r.walletAddress, r.txHash || '-', RAMP_IN_STATUS_MAP[r.status].label, r.createdAt, r.completedAt
+      r.network, r.walletAddress, r.txHash || '-', RAMP_IN_STATUS_MAP[r.status].label, r.createdAt, r.completedAt
     ]), '入金订单.csv');
   }
   function openRampInExportModal() {

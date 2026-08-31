@@ -1537,6 +1537,43 @@
               <div class="p-merch-dropdown" id="al-merch-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">用户 ID</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入内容" id="al-userid">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="al-token">
+                    <option value="">全部</option>
+                    <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="al-network">
+                    <option value="">全部</option>
+                    <option value="TRON">TRON</option>
+                    <option value="Ethereum">Ethereum</option>
+                    <option value="BSC">BSC</option>
+                    <option value="Polygon">Polygon</option>
+                    <option value="Solana">Solana</option>
+                    <option value="Arbitrum">Arbitrum</option>
+                    <option value="Base">Base</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">类型</span>
               <div class="filter-control">
                 <div class="select-wrap">
@@ -1588,15 +1625,16 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1400px;">
+            <table style="min-width:1660px;">
               <colgroup>
-                <col style="width:95px"><col style="width:145px"><col style="width:100px">
+                <col style="width:95px"><col style="width:145px"><col style="width:100px"><col style="width:100px">
+                <col style="width:70px"><col style="width:90px">
                 <col style="width:120px"><col style="width:130px"><col style="width:260px">
                 <col style="width:260px"><col style="width:152px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>类型</th><th>金额</th>
+                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>代币</th><th>网络</th><th>金额</th>
                   <th>变动后余额</th><th>关联单号</th><th>备注</th><th>创建时间</th>
                 </tr>
               </thead>
@@ -1708,16 +1746,16 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1700px;">
+            <table style="min-width:1860px;">
               <colgroup>
-                <col style="width:95px"><col style="width:145px"><col style="width:70px">
+                <col style="width:95px"><col style="width:145px"><col style="width:70px"><col style="width:90px"><col style="width:70px">
                 <col style="width:110px"><col style="width:220px"><col style="width:90px">
                 <col style="width:152px"><col style="width:90px"><col style="width:152px">
                 <col style="width:80px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>方向</th><th>金额</th><th>备注</th>
+                  <th>商户 ID</th><th>商户名称</th><th>代币</th><th>网络</th><th>方向</th><th>金额</th><th>备注</th>
                   <th>申请人</th><th>申请时间</th><th>审核人</th><th>审核时间</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -1881,10 +1919,11 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2340px;">
+            <table style="min-width:2560px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:95px">
                 <col style="width:70px"><col style="width:80px"><col style="width:80px">
+                <col style="width:90px"><col style="width:90px">
                 <col style="width:72px"><col style="width:70px"><col style="width:380px">
                 <col style="width:152px"><col style="width:600px"><col style="width:110px">
                 <col style="width:220px"><col style="width:100px"><col style="width:55px">
@@ -1892,7 +1931,7 @@
               <thead>
                 <tr>
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
-                  <th>到账金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
+                  <th>到账金额</th><th>加点费用</th><th>订单金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>到账时间</th><th>哈希</th><th>类型</th><th>订单号</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -2008,10 +2047,9 @@
                 <div class="select-wrap">
                   <select class="field-select" id="de-type">
                     <option value="">请选择</option>
-                    <option value="wrong_chain">错链充值</option>
-                    <option value="unsupported">未开通代币/网络</option>
-                    <option value="account_frozen">商户/用户已冻结或注销</option>
-                    <option value="pending_match">待匹配订单</option>
+                    <option value="unavailable">代币/网络不可用</option>
+                    <option value="account_frozen">商户/用户已冻结</option>
+                    <option value="pending_match">自动匹配失败</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
@@ -2054,18 +2092,18 @@
             <table style="min-width:3000px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:95px">
-                <col style="width:70px"><col style="width:90px"><col style="width:90px">
+                <col style="width:70px"><col style="width:90px">
                 <col style="width:95px"><col style="width:100px">
                 <col style="width:380px">
                 <col style="width:152px"><col style="width:600px">
-                <col style="width:130px"><col style="width:480px"><col style="width:110px">
+                <col style="width:130px"><col style="width:110px">
                 <col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>实际充值网络</th>
-                  <th>应充值网络</th><th>到账金额</th><th>充值手续费</th><th>钱包地址</th>
-                  <th>到账时间</th><th>哈希</th><th>异常类型</th><th>异常说明</th><th>状态</th><th>操作</th>
+                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
+                  <th>到账金额</th><th>充值手续费</th><th>钱包地址</th>
+                  <th>到账时间</th><th>哈希</th><th>异常类型</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="de-tbody"></tbody>
@@ -4145,7 +4183,7 @@
           <i data-lucide="x" style="width:18px;height:18px;"></i>
         </span>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="display:block;padding:24px 24px 8px;">
         <div class="form-row">
           <label class="form-label"><span class="ak-req">*</span>商户：</label>
           <div style="position:relative;flex:1;">
@@ -4153,6 +4191,31 @@
                    autocomplete="off" oninput="arApplyMerchantInput()" onfocus="arApplyMerchantInput()"
                    onblur="setTimeout(arApplyHideMerchantDrop, 150)">
             <div class="p-merch-dropdown" id="ar-apply-merch-dropdown" style="display:none;left:0;"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="ak-req">*</span>代币：</label>
+          <div class="select-wrap" style="width:100%;">
+            <select class="field-select" id="ar-apply-token" style="width:100%;">
+              <option value="USDT">USDT</option>
+              <option value="USDC">USDC</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="ak-req">*</span>网络：</label>
+          <div class="select-wrap" style="width:100%;">
+            <select class="field-select" id="ar-apply-network" style="width:100%;">
+              <option value="TRON">TRON</option>
+              <option value="Ethereum">Ethereum</option>
+              <option value="BSC">BSC</option>
+              <option value="Polygon">Polygon</option>
+              <option value="Solana">Solana</option>
+              <option value="Arbitrum">Arbitrum</option>
+              <option value="Base">Base</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
           </div>
         </div>
         <div class="form-row">
@@ -5049,11 +5112,13 @@
     refunded: { label:'已退款',    cls:'badge-gray' },
   };
   // 异常类型：只对来自异常充值的记录有值（不管当前流转到哪个状态都保留，
-  // 用于「充币审核」的类型筛选/展示），正常充值产生的记录没有这个字段
+  // 用于「充币审核」的类型筛选/展示），正常充值产生的记录没有这个字段。
+  // 只有两种：unavailable（代币/网络不可用，只能退款）、account_frozen（商户/用户
+  // 已冻结，可退款或审核通过入账）——"错链充值"已并入待匹配订单的正常匹配流程，
+  // 不再是独立异常类型
   const DE_TYPE = {
-    wrong_chain:    { label:'错链充值',       cls:'badge-red'  },
-    unsupported:    { label:'未开通代币/网络', cls:'badge-gray' },
-    account_frozen: { label:'商户/用户已冻结或注销', cls:'badge-blue' },
+    unavailable:    { label:'代币/网络不可用', cls:'badge-gray' },
+    account_frozen: { label:'商户/用户已冻结', cls:'badge-blue' },
   };
 
   const DEPOSIT_ALL = [
@@ -5068,33 +5133,25 @@
     { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'TRON', amount:'4.5',  fee:'0.05', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', channel:'',           status:'arrived' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDC', network:'TRON',     amount:'150.00', fee:'0.15', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-09 09:20:31', hash:'8b4d1e9c6f3a7b2e5d8c1f4a9e6b3d7c2f8a5e1b6d9c3f7a2e5b8d1c4f9a6e3b', channel:'',           status:'arrived' },
     { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Ethereum', amount:'25.50',  fee:'0.03', wallet:'0x6c3f9a1d8e5b2c7f4a9d6e3b1c8f5a2d7e4b9c6f', time:'2026-06-10 08:12:47', hash:'0x9e4c7f2b5a8d1e6c3f9b4a7d2e5c8f1b6a3d9e7c4f2b8a5d1e6c9f3b7a4d2e8c', channel:'', status:'arrived' },
-    // 异常充值：并入同一张表、同一套状态机（待人工审核 → 已退款 / 待匹配订单 → 已到账），
-    // 不再是独立镜像数据；exceptionType/expectedNetwork/note 只在这些行上有值
-    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain',    amount:'50.00', fee:'0.15', wallet:'0x8f3Ab2c9E4d6B1a7F2c5D8e3B6a9C1d4E7f0A2b5',   time:'2026-07-20 14:22:31', hash:'a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5', channel:'', status:'manual_review' },
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Solana',    expectedNetwork:'—',    exceptionType:'unsupported',    amount:'5.00',  fee:'',     wallet:'8xJhP3vgVwqWmzXK7ZL9rQmSkNq5nsjEnj9nWXwvV3iU',          time:'2026-07-21 09:03:12', hash:'f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4', channel:'', status:'manual_review' },
-    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'BSC',      expectedNetwork:'TRON', exceptionType:'wrong_chain',    amount:'12.30', fee:'0.05', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',                   time:'2026-07-22 18:47:05', hash:'d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8', channel:'', status:'manual_review' },
-    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain',    amount:'8.00',  fee:'0.02', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a',                time:'2026-06-30 10:15:40', hash:'b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3', channel:'', status:'pending', remark:'已核实为用户误操作，审核通过' },
-    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'Polygon',  expectedNetwork:'—',    exceptionType:'unsupported',    amount:'3.20',  fee:'',     refundFee:'1.00', refundAmount:'2.20', wallet:'0x6f9a1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f', time:'2026-06-25 16:08:22', hash:'c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9', channel:'', status:'refunded', remark:'商户未开通 Polygon 网络，已原路退回' },
-    // 已退款之前只有 unsupported、account_frozen 两种异常来源，补一条 wrong_chain 的退款——
-    // 三种异常类型都补齐了走到「已退款」终态的样本
-    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'BSC',      expectedNetwork:'TRON', exceptionType:'wrong_chain',    amount:'14.60', fee:'0.04', refundFee:'0.80', refundAmount:'13.76', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a', time:'2026-07-31 15:40:22', hash:'4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f60718293a', channel:'', status:'refunded', remark:'已核实为用户误操作，商户不同意代为入账，原路退回' },
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'15.00', fee:'0.01', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim',                   time:'2026-07-23 10:41:18', hash:'e9c3f6b1a4d7e3c8f5b9a2d6e4c1d74fd43877809e3ff5c2a8d6e1b4f7c9a3d5', channel:'', status:'manual_review', note:'商户账户已于 2026-07-18 冻结，链上充值仍到账，需人工核实商户状态后处理' },
-    { uid:'635102950', name:'kara',            userId:'U10099231', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'6.50',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz',                   time:'2026-07-24 15:02:47', hash:'1d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d7b39f8e1fac2a6b6a3d7e4c8f1b5a9d2', channel:'', status:'manual_review', note:'用户账户已于 2026-07-20 注销，链上充值仍到账，需人工核实用户状态后处理' },
-    // account_frozen 异常说明模板覆盖「商户/用户」×「冻结/注销」四种组合，上面两行已经是
-    // 商户冻结、用户注销，这两行补齐商户注销、用户冻结
-    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'9.80',  fee:'0.01', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn',                   time:'2026-07-29 13:26:55', hash:'293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f60718', channel:'', status:'manual_review', note:'商户账户已于 2026-07-29 注销，链上充值仍到账，需人工核实商户状态后处理' },
-    { uid:'884590488', name:'kara2',           userId:'U20099887', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'4.40',  fee:'0.01', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim',                   time:'2026-07-30 08:09:41', hash:'3a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f6071829', channel:'', status:'manual_review', note:'用户账户已于 2026-07-30 冻结，链上充值仍到账，需人工核实用户状态后处理' },
-    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'22.00', fee:'0.02', refundFee:'0.50', refundAmount:'21.48', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-06-18 09:20:03', hash:'a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b574fd43877809e3ff', channel:'', status:'refunded', remark:'已核实该商户账户已长期冻结，原路退回', note:'商户账户已于 2026-05-15 冻结，链上充值仍到账，需人工核实商户状态后处理' },
-    // 异常充值审核通过、原地流转到「待匹配订单」，还没关联订单/编辑为已到账——
-    // 充币审核页会显示这两行，类型列走 exceptionType 对应的异常类型标签，不是「待匹配订单」标签
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Polygon',  expectedNetwork:'—',    exceptionType:'unsupported',    amount:'6.40',  fee:'0.02', wallet:'0x6f9a1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f',                time:'2026-07-29 11:18:26', hash:'0718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f6', channel:'', status:'pending', remark:'已核实为用户误操作，审核通过' },
-    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'11.20', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',                   time:'2026-07-30 16:47:09', hash:'18293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f607', channel:'', status:'pending', note:'商户账户已于 2026-07-15 冻结，链上充值仍到账，需人工核实商户状态后处理', remark:'商户账户已于 2026-07-29 解冻，审核通过' },
+    // 异常充值：并入同一张表、同一套状态机；不再是独立镜像数据；exceptionType/note
+    // 只在这些行上有值。unavailable（代币/网络不可用）只能走 待人工审核 → 已退款，
+    // fee 因为配置缺失系统算不出来，manual_review 阶段固定为空，退款时在弹窗里补录；
+    // account_frozen（商户/用户已冻结）不影响手续费计算，fee 到账时已确定，
+    // 可以走 待人工审核 → 已退款，也可以 待人工审核 → 待匹配订单（审核通过）→ 已到账
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'Ethereum', exceptionType:'unavailable',    amount:'50.00', fee:'', wallet:'0x8f3Ab2c9E4d6B1a7F2c5D8e3B6a9C1d4E7f0A2b5',   time:'2026-07-20 14:22:31', hash:'a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5', channel:'', status:'manual_review' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Solana',    exceptionType:'unavailable',    amount:'5.00',  fee:'', wallet:'8xJhP3vgVwqWmzXK7ZL9rQmSkNq5nsjEnj9nWXwvV3iU',          time:'2026-07-21 09:03:12', hash:'f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4', channel:'', status:'manual_review' },
+    { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'Polygon',  exceptionType:'unavailable',    amount:'3.20',  fee:'0.05', refundFee:'1.00', refundAmount:'2.15', wallet:'0x6f9a1c4d7e0f3a6b9c2d5a2c5d8e3b6a9c1d4e7f', time:'2026-06-25 16:08:22', hash:'c2d5a2c5d8e3b6a9c1d4e7f0a2b5c8d1e4f7a0b3c6d9e2f5a8b1c4d7e0f3a6b9', channel:'', status:'refunded', remark:'商户未开通 Polygon 网络，已原路退回' },
+    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'Ethereum', exceptionType:'unavailable',    amount:'14.60', fee:'0.04', refundFee:'0.80', refundAmount:'13.76', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a', time:'2026-07-31 15:40:22', hash:'4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f60718293a', channel:'', status:'refunded', remark:'链上到账网络 Paypaz 不支持，已原路退回' },
+    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDT', network:'TRON',     exceptionType:'account_frozen', amount:'15.00', fee:'0.01', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim',                   time:'2026-07-23 10:41:18', hash:'e9c3f6b1a4d7e3c8f5b9a2d6e4c1d74fd43877809e3ff5c2a8d6e1b4f7c9a3d5', channel:'', status:'manual_review', note:'商户账户已于 2026-07-18 冻结，链上充值仍到账，需人工核实商户状态后处理' },
+    { uid:'635102950', name:'kara',            userId:'U10099231', token:'USDT', network:'TRON',     exceptionType:'account_frozen', amount:'6.50',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz',                   time:'2026-07-24 15:02:47', hash:'1d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d7b39f8e1fac2a6b6a3d7e4c8f1b5a9d2', channel:'', status:'manual_review', note:'用户账户已于 2026-07-20 冻结，链上充值仍到账，需人工核实用户状态后处理' },
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON',     exceptionType:'account_frozen', amount:'22.00', fee:'0.02', refundFee:'0.50', refundAmount:'21.48', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-06-18 09:20:03', hash:'a3d7e4c8f1b5a9d2e6c3f8b4a7d1e5c9f2b6a3d8e4c7f1b574fd43877809e3ff', channel:'', status:'refunded', remark:'已核实该商户账户已长期冻结，原路退回', note:'商户账户已于 2026-05-15 冻结，链上充值仍到账，需人工核实商户状态后处理' },
+    // 异常充值审核通过、原地流转到「待匹配订单」，还没关联订单/编辑为已到账——只有
+    // account_frozen 能走审核通过，unavailable 只能退款，不会出现在 pending/arrived 状态
+    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON',     exceptionType:'account_frozen', amount:'11.20', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',                   time:'2026-07-30 16:47:09', hash:'18293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f607', channel:'', status:'pending', note:'商户账户已于 2026-07-15 冻结，链上充值仍到账，需人工核实商户状态后处理', remark:'商户账户已于 2026-07-29 解冻，审核通过' },
     // 异常充值审核通过后流转到「待匹配订单」，再走到「已到账」终态——exceptionType 作为
-    // 永久元数据保留在行上，详情弹窗依然展示实际/应充值网络、异常类型；订单号字段则看
-    // 这一行是运营直接编辑确认到账（没有订单号），还是关联订单成功（有订单号，见 PAYMENT_ALL）
-    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'Ethereum', expectedNetwork:'TRON', exceptionType:'wrong_chain',    amount:'18.50', fee:'0.06', wallet:'0x1b4f7a2d6e9c3b5f8a1d4e7c2b6f9a1c4d7e0f3a',                time:'2026-07-26 10:05:12', hash:'d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3', channel:'', status:'arrived', remark:'已核实为用户误操作，审核通过后运营编辑确认到账' },
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Solana',    expectedNetwork:'—',    exceptionType:'unsupported',    amount:'9.60',  fee:'0.03', wallet:'8xJhP3vgVwqWmzXK7ZL9rQmSkNq5nsjEnj9nWXwvV3iU',          time:'2026-07-27 14:33:50', hash:'e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4', channel:'', status:'arrived', remark:'已核实为用户误操作，审核通过后关联至对应支付订单' },
-    { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON',     expectedNetwork:'TRON', exceptionType:'account_frozen', amount:'30.00', fee:'0.03', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',                   time:'2026-07-28 09:12:40', hash:'f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5', channel:'', status:'arrived', note:'商户账户已于 2026-07-10 冻结，链上充值仍到账，需人工核实商户状态后处理', remark:'商户账户已于 2026-07-27 解冻，审核通过后关联至对应支付订单' },
+    // 永久元数据保留在行上，详情弹窗依然展示网络、异常类型；订单号字段则看这一行是
+    // 运营直接编辑确认到账（没有订单号），还是关联订单成功（有订单号，见 PAYMENT_ALL）
+    { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'TRON',     exceptionType:'account_frozen', amount:'30.00', fee:'0.03', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',                   time:'2026-07-28 09:12:40', hash:'f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5', channel:'', status:'arrived', note:'商户账户已于 2026-07-10 冻结，链上充值仍到账，需人工核实商户状态后处理', remark:'商户账户已于 2026-07-27 解冻，审核通过后关联至对应支付订单' },
   ];
 
   const dState = { rows: [...DEPOSIT_ALL], page: 1, size: 10 };
@@ -5106,9 +5163,14 @@
   // 订单号只在「已到账」状态显示——有订单号意味着已经完成匹配确认，
   // 待人工审核/待匹配订单/无效充值/已退款这些还没走完流程的状态统一显示"-"，
   // 不去反查哈希，避免"状态还没匹配、详情却已经有订单号"的自相矛盾
+  // 手动关联入账（人工审核通过后关联）的记录也在 PAYMENT_ALL.deposits 里，
+  // 和自动匹配走同一套 hash 查找逻辑，不需要区分
+  function depositMatchedOrder(r) {
+    if (r.status !== 'arrived') return null;
+    return PAYMENT_ALL.find(p => p.deposits && p.deposits.some(d => d.hash === r.hash)) || null;
+  }
   function depositOrderNo(r) {
-    if (r.status !== 'arrived') return '';
-    const p = PAYMENT_ALL.find(p => p.deposits && p.deposits.some(d => d.hash === r.hash));
+    const p = depositMatchedOrder(r);
     if (p) return p.order;
     const ramp = RAMP_IN_ORDERS.find(o => o.txHash === r.hash);
     return ramp ? ramp.paypazOrderId : '';
@@ -5121,6 +5183,15 @@
     const fee = depositFeeCell(r);
     return fee === '' ? '' : (parseFloat(r.amount) - parseFloat(fee)).toFixed(2);
   }
+  // 加点费用只有 On Ramp 充币产生的记录才有值，其他类型充值为空。
+  // 订单金额：On Ramp 充值取入金代币数量；其他类型充值取匹配到的订单的应付金额，
+  // 没有匹配到订单（含人工关联入账）则为空
+  function depositMarkupCell(r) { return r.channel === 'On Ramp' ? r.markupFee : ''; }
+  function depositOrderAmountCell(r) {
+    if (r.channel === 'On Ramp') return r.orderAmount;
+    const p = depositMatchedOrder(r);
+    return p ? p.due : '';
+  }
 
   function depositRender() {
     const tbody = document.getElementById('d-tbody');
@@ -5130,6 +5201,8 @@
       const st = D_STATUS[r.status];
       const fee = depositFeeCell(r);
       const net = depositNetCell(r);
+      const markup = depositMarkupCell(r);
+      const orderAmount = depositOrderAmountCell(r);
       const idx = DEPOSIT_ALL.indexOf(r);
       const viewBtn = `<span class="action-icon" title="详情" onclick="openDepositView(${idx})">${_D_EYE_SVG}</span>`;
       const orderNo = depositOrderNo(r);
@@ -5139,6 +5212,8 @@
         <td style="font-family:Inter,sans-serif">${r.userId}</td>
         <td>${r.token}</td><td>${r.network}</td>
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
+        <td style="font-family:Inter,sans-serif">${markup === '' ? '<span class="cell-empty">—</span>' : markup}</td>
+        <td style="font-family:Inter,sans-serif">${orderAmount === '' ? '<span class="cell-empty">—</span>' : orderAmount}</td>
         <td style="font-family:Inter,sans-serif">${fee === '' ? '<span class="cell-empty">—</span>' : fee}</td>
         <td style="font-family:Inter,sans-serif;color:#67C23A;">${net === '' ? '<span class="cell-empty">—</span>' : net}</td>
         <td>${fullCell(r.wallet)}</td>
@@ -5217,10 +5292,12 @@
     paymentSearch();
   }
   function depositExport() {
-    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','手续费','净入账','钱包地址','到账时间','哈希','类型','订单号','状态'];
+    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','加点费用','订单金额','手续费','净入账','钱包地址','到账时间','哈希','类型','订单号','状态'];
     csvDownload(headers, dState.rows.map(r => {
       const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
-      return [r.uid, r.name, r.userId, r.token, r.network, r.amount, r.fee, net,
+      const markup = depositMarkupCell(r);
+      const orderAmount = depositOrderAmountCell(r);
+      return [r.uid, r.name, r.userId, r.token, r.network, r.amount, markup === '' ? '-' : markup, orderAmount === '' ? '-' : orderAmount, r.fee, net,
               r.wallet, r.time, r.hash, r.channel || '直连', depositOrderNo(r) || '-', D_STATUS[r.status].label];
     }), '充币记录.csv');
   }
@@ -5270,13 +5347,11 @@
       di('净入账',   net === '' ? '—' : `<span style="color:#67C23A;font-family:Inter,sans-serif">${net} ${r.token}</span>`),
       di('代币',     r.token),
     ];
-    // 异常充值来源的记录（不管当前流转到哪个状态）额外展示实际/应充值网络、异常类型
+    // 网络字段统一只展示一列，不区分实际/应充值网络；异常充值来源的记录
+    // （不管当前流转到哪个状态）额外展示异常类型
+    items.push(di('网络', r.network));
     if (r.exceptionType) {
-      items.push(di('实际充值网络', r.network));
-      items.push(di('应充值网络',  r.expectedNetwork || '—'));
-      items.push(di('异常类型',    `<span class="badge ${DE_TYPE[r.exceptionType].cls}">${DE_TYPE[r.exceptionType].label}</span>`));
-    } else {
-      items.push(di('网络', r.network));
+      items.push(di('异常类型', `<span class="badge ${DE_TYPE[r.exceptionType].cls}">${DE_TYPE[r.exceptionType].label}</span>`));
     }
     items.push(di('类型',     r.channel || '直连'));
     items.push(di('到账时间', r.time));
@@ -5289,9 +5364,6 @@
         <span class="detail-label">订单号</span>
         ${fullCell(depositOrderNo(r))}
       </div>`);
-    }
-    if (r.exceptionType) {
-      items.push(di('异常说明', r.note || '—', true));
     }
     // 退款专属字段：退款手续费、退款金额（充值手续费已在上面的「手续费」里展示）
     if (r.status === 'refunded') {
@@ -5439,9 +5511,9 @@
   // 终态历史，只在「充币记录」查看，不在本页展示
   function deIsAuditRecord(r) { return r.status === 'manual_review' || r.status === 'pending'; }
   // 类型标签：异常充值来源的记录用它自己的异常类型（不管流转到哪个状态都保留）；
-  // 没有异常类型、纯粹是自动匹配失败的待匹配订单，标成「待匹配订单」
+  // 没有异常类型、纯粹是自动匹配失败的待匹配订单，标成「自动匹配失败」
   function deRowTypeKey(r) { return r.exceptionType || (r.status === 'pending' ? 'pending_match' : null); }
-  const DE_MATCH_TAG = { label:'待匹配订单', cls:'badge-red' };
+  const DE_MATCH_TAG = { label:'自动匹配失败', cls:'badge-red' };
   function deTypeTag(r) {
     const key = deRowTypeKey(r);
     return key === 'pending_match' ? DE_MATCH_TAG : DE_TYPE[key];
@@ -5462,20 +5534,17 @@
         ? `<span class="action-icon" title="审核" onclick="openDeReview(${idx})">${_D_PEN_SVG}</span>`
         : `<span class="action-icon" title="关联订单" onclick="openDepositMatch(${idx})" style="color:#409EFF;">${_MATCH_SVG}</span>
            <span class="action-icon" title="编辑" onclick="openDepositEdit(${idx})">${_D_PEN_SVG}</span>`;
-      const expected = r.exceptionType ? r.expectedNetwork : r.network;
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
         <td>${r.name}</td>
         <td style="font-family:Inter,sans-serif">${r.userId}</td>
         <td>${r.token}</td><td>${r.network}</td>
-        <td>${expected}</td>
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
         <td style="font-family:Inter,sans-serif">${r.fee === '' ? '<span class="cell-empty">—</span>' : r.fee}</td>
         <td>${fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
         <td>${fullCell(r.hash)}</td>
         <td><span class="badge ${tp.cls}">${tp.label}</span></td>
-        <td>${(r.exceptionType && r.note) ? r.note : '<span class="cell-empty">—</span>'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td><div class="action-cell">${viewBtn}${actionBtns}</div></td>
       </tr>`;
@@ -5536,11 +5605,11 @@
     deState.page = 1; depositExceptionRender();
   }
   function depositExceptionExport() {
-    const headers = ['商户 ID','商户名称','用户 ID','代币','实际充值网络','应充值网络','到账金额','充值手续费','钱包地址','到账时间','哈希','异常类型','异常说明','状态'];
+    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','充值手续费','钱包地址','到账时间','哈希','异常类型','状态'];
     csvDownload(headers, deState.rows.map(r => [
-      r.uid, r.name, r.userId, r.token, r.network, r.exceptionType ? r.expectedNetwork : r.network,
+      r.uid, r.name, r.userId, r.token, r.network,
       r.amount, r.fee || '-', r.wallet, r.time, r.hash,
-      deTypeTag(r).label, (r.exceptionType && r.note) || '-', D_STATUS[r.status].label,
+      deTypeTag(r).label, D_STATUS[r.status].label,
     ]), '充币审核.csv');
   }
   function openDeExportModal() {
@@ -5568,6 +5637,9 @@
   function openDeReview(idx) {
     deManageIdx = idx;
     const r = DEPOSIT_ALL[idx];
+    // 审核通过只对「商户/用户已冻结」开放——账户冻结不影响手续费计算，fee 到账时
+    // 就已确定，不需要补录；「代币/网络不可用」只能退款，处理方式下拉不出现这个选项
+    const canApprove = r.exceptionType === 'account_frozen';
     document.getElementById('de-manage-title').textContent = '异常充值审核';
     document.getElementById('de-manage-body').innerHTML = _dItems(r) +
       `<div class="detail-item" style="grid-column:1/-1">
@@ -5575,22 +5647,11 @@
         <div class="select-wrap" style="width:100%;">
           <select class="field-select" id="de-action-select" onchange="deToggleActionFields()" style="width:100%;">
             <option value="">请选择</option>
-            <option value="pending">审核通过</option>
+            ${canApprove ? '<option value="pending">审核通过</option>' : ''}
             <option value="refunded">退款</option>
           </select>
           <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
         </div>
-      </div>
-      <div class="detail-item" id="de-approve-fee-field" style="grid-column:1/-1;display:none;">
-        <span class="detail-label">充值手续费</span>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <input class="field-input" type="number" step="0.0001" min="0" id="de-approve-fee" value="${r.fee || ''}" placeholder="请输入充值手续费" style="font-family:'Inter',sans-serif;flex:1;" oninput="deToggleActionFields();deRecalcApproveNet()">
-          <span style="font-size:13px;color:#909399;">${r.token}</span>
-        </div>
-      </div>
-      <div class="detail-item" id="de-approve-net-field" style="grid-column:1/-1;display:none;">
-        <span class="detail-label">净入账</span>
-        <span class="detail-value" id="de-approve-net" style="font-family:'Inter',sans-serif;"></span>
       </div>
       <div id="de-refund-fields" style="display:none;">
         <div class="detail-item" style="grid-column:1/-1">
@@ -5632,15 +5693,11 @@
     const wrap = document.getElementById('de-refund-fields');
     wrap.style.display = val === 'refunded' ? 'contents' : 'none';
     if (val === 'refunded') deRecalcRefundAmount();
-    // 审核通过时充值手续费始终可编辑——一旦流转到待匹配订单，后面的关联订单/编辑都不会再问这个字段，
-    // 这里是唯一能补录/修正手续费的入口。已有手续费的记录默认带出原值，未定的记录留空待填。
-    document.getElementById('de-approve-fee-field').style.display = val === 'pending' ? '' : 'none';
-    document.getElementById('de-approve-net-field').style.display = val === 'pending' ? '' : 'none';
-    if (val === 'pending') deRecalcApproveNet();
     const btn = document.getElementById('de-submit-btn');
     if (val === 'pending') {
-      const approveFeeVal = document.getElementById('de-approve-fee').value.trim();
-      btn.disabled = !(approveFeeVal !== '' && parseFloat(approveFeeVal) >= 0);
+      // 审核通过只对「商户/用户已冻结」开放，账户冻结不影响手续费计算，fee 到账时
+      // 已经确定，这里不需要再补录，直接可提交
+      btn.disabled = false;
       btn.className = 'btn btn-primary btn-sm';
       btn.textContent = '审核通过';
       btn.onclick = () => confirmDeAction('pending');
@@ -5676,25 +5733,6 @@
     const r = DEPOSIT_ALL[deManageIdx];
     const val = _deRefundAmountValue();
     document.getElementById('de-refund-amount').textContent = val ? `${val} ${r.token}` : '';
-  }
-
-  function _deApproveNetValue() {
-    if (deManageIdx < 0) return '';
-    const r = DEPOSIT_ALL[deManageIdx];
-    const feeStr = document.getElementById('de-approve-fee').value.trim();
-    if (!feeStr) return '';
-    const amount = parseFloat(r.amount) || 0;
-    const fee = parseFloat(feeStr) || 0;
-    const dotIdx = String(r.amount).indexOf('.');
-    const decimals = dotIdx === -1 ? 2 : String(r.amount).length - dotIdx - 1;
-    return (amount - fee).toFixed(decimals);
-  }
-
-  function deRecalcApproveNet() {
-    if (deManageIdx < 0) return;
-    const r = DEPOSIT_ALL[deManageIdx];
-    const val = _deApproveNetValue();
-    document.getElementById('de-approve-net').textContent = val ? `${val} ${r.token}` : '';
   }
 
   const DE_CONFIRM_CFG = {
@@ -5753,9 +5791,8 @@
         `状态由${beforeLabel}变更为已退款，充值手续费 ${r.fee || '—'} ${r.token}，退款手续费 ${r.refundFee || '—'} ${r.token}，退款金额 ${r.refundAmount || '—'} ${r.token}`,
         'high');
     } else if (newStatus === 'pending') {
-      r.fee = (document.getElementById('de-approve-fee')?.value || '').trim();
       logDepositExceptionAction(r, '审批',
-        `状态由${beforeLabel}审核通过，变更为待匹配订单${r.fee ? '，充值手续费 ' + r.fee + ' ' + r.token : ''}`,
+        `状态由${beforeLabel}审核通过，变更为待匹配订单`,
         'high');
     }
     r.status = newStatus;
@@ -8319,46 +8356,53 @@
 
   // 每个商户的流水按时间顺序滚存余额，末笔 balanceAfter 与 MERCHANT_ALL 对应商户的
   // 当前 balance 字段保持一致——人工调账通过审核后会在此基础上继续追加新的一笔
+  // 变动后余额按「商户 + 代币 + 网络」三个维度各自独立滚存，不同代币/网络组合互不合并
   const LEDGER_ALL = [
-    { merchantId:'635102950', merchantName:'kara',  type:'deposit', amount:'+500.00',  balanceAfter:'500.00',   relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
-    { merchantId:'635102950', merchantName:'kara',  type:'fee',     amount:'-0.50',    balanceAfter:'499.50',   relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
-    { merchantId:'635102950', merchantName:'kara',  type:'deposit', amount:'+800.00',  balanceAfter:'1299.50',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
-    { merchantId:'635102950', merchantName:'kara',  type:'fee',     amount:'-0.80',    balanceAfter:'1298.70',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
-    { merchantId:'635102950', merchantName:'kara',  type:'withdraw',amount:'-50.00',   balanceAfter:'1248.70',  relatedNo:'LG20260822111', remark:'', time:'2026-08-22 11:10:00' },
-    { merchantId:'635102950', merchantName:'kara',  type:'adjust',  amount:'+116.85',  balanceAfter:'1365.55',  relatedNo:'ADJ20260823001', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', time:'2026-08-23 16:45:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'deposit', amount:'+500.00',  balanceAfter:'500.00',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'fee',     amount:'-0.50',    balanceAfter:'499.50',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'deposit', amount:'+800.00',  balanceAfter:'800.00',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'fee',     amount:'-0.80',    balanceAfter:'799.20',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDT', network:'TRON',     type:'withdraw',amount:'-50.00',   balanceAfter:'449.50',  relatedNo:'LG20260822111', remark:'', time:'2026-08-22 11:10:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'', token:'USDT', network:'TRON',     type:'adjust',  amount:'+116.85',  balanceAfter:'566.35',  relatedNo:'ADJ20260823001', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', time:'2026-08-23 16:45:00' },
 
-    { merchantId:'884590488', merchantName:'kara2', type:'deposit', amount:'+1000.00', balanceAfter:'1000.00',  relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
-    { merchantId:'884590488', merchantName:'kara2', type:'fee',     amount:'-1.00',    balanceAfter:'999.00',   relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
-    { merchantId:'884590488', merchantName:'kara2', type:'deposit', amount:'+530.00',  balanceAfter:'1529.00',  relatedNo:'LG20260819093', remark:'', time:'2026-08-19 09:30:00' },
-    { merchantId:'884590488', merchantName:'kara2', type:'fee',     amount:'-0.53',    balanceAfter:'1528.47',  relatedNo:'LG20260819093', remark:'', time:'2026-08-19 09:30:00' },
-    { merchantId:'884590488', merchantName:'kara2', type:'withdraw',amount:'-25.00',   balanceAfter:'1503.47',  relatedNo:'LG20260820131', remark:'', time:'2026-08-20 13:15:00' },
-    { merchantId:'884590488', merchantName:'kara2', type:'adjust',  amount:'-2.41',    balanceAfter:'1501.06',  relatedNo:'ADJ20260824001', remark:'短款：对账发现系统余额高于实际到账，经核实后调减', time:'2026-08-24 17:00:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDT', network:'TRON', type:'deposit', amount:'+1000.00', balanceAfter:'1000.00', relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDT', network:'TRON', type:'fee',     amount:'-1.00',    balanceAfter:'999.00',  relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDC', network:'BSC',  type:'deposit', amount:'+530.00',  balanceAfter:'530.00',  relatedNo:'LG20260819093', remark:'', time:'2026-08-19 09:30:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDC', network:'BSC',  type:'fee',     amount:'-0.53',    balanceAfter:'529.47',  relatedNo:'LG20260819093', remark:'', time:'2026-08-19 09:30:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20099887', token:'USDT', network:'TRON', type:'withdraw',amount:'-25.00',   balanceAfter:'974.00',  relatedNo:'LG20260820131', remark:'', time:'2026-08-20 13:15:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'', token:'USDT', network:'TRON', type:'adjust',  amount:'-2.41',    balanceAfter:'971.59',  relatedNo:'ADJ20260824001', remark:'短款：对账发现系统余额高于实际到账，经核实后调减', time:'2026-08-24 17:00:00' },
 
-    { merchantId:'460466234', merchantName:'kara3', type:'deposit', amount:'+600.00',  balanceAfter:'600.00',   relatedNo:'LG20260815090', remark:'', time:'2026-08-15 09:00:00' },
-    { merchantId:'460466234', merchantName:'kara3', type:'fee',     amount:'-0.60',    balanceAfter:'599.40',   relatedNo:'LG20260815090', remark:'', time:'2026-08-15 09:00:00' },
-    { merchantId:'460466234', merchantName:'kara3', type:'deposit', amount:'+475.00',  balanceAfter:'1074.40',  relatedNo:'LG20260816103', remark:'', time:'2026-08-16 10:30:00' },
-    { merchantId:'460466234', merchantName:'kara3', type:'fee',     amount:'-0.48',    balanceAfter:'1073.92',  relatedNo:'LG20260816103', remark:'', time:'2026-08-16 10:30:00' },
-    { merchantId:'460466234', merchantName:'kara3', type:'withdraw',amount:'-10.00',   balanceAfter:'1063.92',  relatedNo:'LG20260817140', remark:'', time:'2026-08-17 14:00:00' },
-    { merchantId:'460466234', merchantName:'kara3', type:'adjust',  amount:'+6.22',    balanceAfter:'1070.14',  relatedNo:'ADJ20260818001', remark:'人工调账：客户误退回款项补记', time:'2026-08-18 10:00:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON',    type:'deposit', amount:'+600.00',  balanceAfter:'600.00',  relatedNo:'LG20260815090', remark:'', time:'2026-08-15 09:00:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON',    type:'fee',     amount:'-0.60',    balanceAfter:'599.40',  relatedNo:'LG20260815090', remark:'', time:'2026-08-15 09:00:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDC', network:'Polygon', type:'deposit', amount:'+475.00',  balanceAfter:'475.00',  relatedNo:'LG20260816103', remark:'', time:'2026-08-16 10:30:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDC', network:'Polygon', type:'fee',     amount:'-0.48',    balanceAfter:'474.52',  relatedNo:'LG20260816103', remark:'', time:'2026-08-16 10:30:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON',    type:'withdraw',amount:'-10.00',   balanceAfter:'589.40',  relatedNo:'LG20260817140', remark:'', time:'2026-08-17 14:00:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'', token:'USDT', network:'TRON',    type:'adjust',  amount:'+6.22',    balanceAfter:'595.62',  relatedNo:'ADJ20260818001', remark:'人工调账：客户误退回款项补记', time:'2026-08-18 10:00:00' },
 
-    { merchantId:'291654802', merchantName:'kara4', type:'deposit', amount:'+300.00',  balanceAfter:'300.00',   relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
-    { merchantId:'291654802', merchantName:'kara4', type:'fee',     amount:'-0.30',    balanceAfter:'299.70',   relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
-    { merchantId:'291654802', merchantName:'kara4', type:'deposit', amount:'+650.00',  balanceAfter:'949.70',   relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
-    { merchantId:'291654802', merchantName:'kara4', type:'fee',     amount:'-0.65',    balanceAfter:'949.05',   relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
-    { merchantId:'291654802', merchantName:'kara4', type:'withdraw',amount:'-30.00',   balanceAfter:'919.05',   relatedNo:'LG20260814120', remark:'', time:'2026-08-14 12:00:00' },
-    { merchantId:'291654802', merchantName:'kara4', type:'adjust',  amount:'+1.87',    balanceAfter:'920.92',   relatedNo:'ADJ20260815001', remark:'长款：链上余额核对后调增', time:'2026-08-15 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'deposit', amount:'+300.00',  balanceAfter:'300.00',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'fee',     amount:'-0.30',    balanceAfter:'299.70',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDC', network:'Solana', type:'deposit', amount:'+650.00',  balanceAfter:'650.00',  relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDC', network:'Solana', type:'fee',     amount:'-0.65',    balanceAfter:'649.35',  relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'TRON',   type:'withdraw',amount:'-30.00',   balanceAfter:'269.70',  relatedNo:'LG20260814120', remark:'', time:'2026-08-14 12:00:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'adjust',  amount:'+1.87',    balanceAfter:'271.57',  relatedNo:'ADJ20260815001', remark:'长款：链上余额核对后调增', time:'2026-08-15 08:30:00' },
   ];
 
   const alState = { rows: [...LEDGER_ALL].sort((a,b) => b.time.localeCompare(a.time)), page: 1, size: 10 };
 
   function alFilteredRows() {
     const merchant = document.getElementById('al-merchant').value.trim().toLowerCase();
+    const userId   = document.getElementById('al-userid').value.trim().toLowerCase();
+    const token    = document.getElementById('al-token').value;
+    const network  = document.getElementById('al-network').value;
     const type     = document.getElementById('al-type').value;
     const related  = document.getElementById('al-related').value.trim().toLowerCase();
     const ds       = document.getElementById('al-date-start').value;
     const de       = document.getElementById('al-date-end').value;
     return [...LEDGER_ALL].sort((a,b) => b.time.localeCompare(a.time)).filter(r => {
       if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
+      if (userId   && !(r.userId || '').toLowerCase().includes(userId)) return false;
+      if (token    && r.token !== token) return false;
+      if (network  && r.network !== network) return false;
       if (type     && r.type !== type) return false;
       if (related  && !r.relatedNo.toLowerCase().includes(related)) return false;
       if (ds       && r.time.split(' ')[0] < ds) return false;
@@ -8377,7 +8421,10 @@
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
         <td>${r.merchantName}</td>
+        <td style="font-family:Inter,sans-serif">${r.userId || '<span class="cell-empty">—</span>'}</td>
         <td><span class="badge ${tp.cls}">${tp.label}</span></td>
+        <td>${r.token}</td>
+        <td>${r.network}</td>
         <td style="font-family:Inter,sans-serif;color:${positive ? '#67C23A' : '#F56C6C'};">${r.amount}</td>
         <td style="font-family:Inter,sans-serif">${r.balanceAfter}</td>
         <td>${fullCell(r.relatedNo)}</td>
@@ -8412,14 +8459,14 @@
     alState.page = 1; alRender();
   }
   function alReset() {
-    ['al-merchant','al-type','al-related','al-date-start','al-date-end'].forEach(id => { document.getElementById(id).value = ''; });
+    ['al-merchant','al-userid','al-token','al-network','al-type','al-related','al-date-start','al-date-end'].forEach(id => { document.getElementById(id).value = ''; });
     alState.rows = alFilteredRows();
     alState.page = 1; alRender();
   }
   function alExport() {
-    const headers = ['商户 ID','商户名称','类型','金额','变动后余额','关联单号','备注','创建时间'];
+    const headers = ['商户 ID','商户名称','用户 ID','类型','代币','网络','金额','变动后余额','关联单号','备注','创建时间'];
     csvDownload(headers, alState.rows.map(r => [
-      r.merchantId, r.merchantName, LG_TYPE[r.type].label, r.amount, r.balanceAfter, r.relatedNo, r.remark || '-', r.time,
+      r.merchantId, r.merchantName, r.userId || '-', LG_TYPE[r.type].label, r.token, r.network, r.amount, r.balanceAfter, r.relatedNo, r.remark || '-', r.time,
     ]), '账户明细.csv');
   }
 
@@ -8454,13 +8501,13 @@
   // 发起（申请）和审核都在本页完成，全部历史保留不移出——已通过的申请会同步在
   // LEDGER_ALL 生成一笔「人工调账」流水并滚存商户余额，已驳回的只留痕在本页
   const ADJUST_ALL = [
-    { id:'ADJ20260823001', merchantId:'635102950', merchantName:'kara',      direction:'increase', amount:'116.85', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', applicant:'admin', applyTime:'2026-08-23 16:40:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-23 16:45:00', reviewRemark:'已核实，同意调增' },
-    { id:'ADJ20260824001', merchantId:'884590488', merchantName:'kara2',     direction:'decrease', amount:'2.41',   remark:'短款：对账发现系统余额高于实际到账，经核实后调减', applicant:'admin', applyTime:'2026-08-24 16:55:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-24 17:00:00', reviewRemark:'已核实，同意调减' },
-    { id:'ADJ20260818001', merchantId:'460466234', merchantName:'kara3',     direction:'increase', amount:'6.22',   remark:'人工调账：客户误退回款项补记', applicant:'admin', applyTime:'2026-08-18 09:50:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-18 10:00:00', reviewRemark:'已核实，同意调增' },
-    { id:'ADJ20260815001', merchantId:'291654802', merchantName:'kara4',     direction:'increase', amount:'1.87',   remark:'长款：链上余额核对后调增', applicant:'admin', applyTime:'2026-08-15 08:20:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-15 08:30:00', reviewRemark:'已核实，同意调增' },
-    { id:'ADJ20260822002', merchantId:'884590488', merchantName:'kara2',     direction:'increase', amount:'8.00',   remark:'怀疑遗漏充值，申请调增', applicant:'admin', applyTime:'2026-08-22 09:00:00', status:'rejected', reviewer:'admin', reviewTime:'2026-08-22 09:20:00', reviewRemark:'核实后为重复上报，驳回' },
-    { id:'ADJ20260825001', merchantId:'635102950', merchantName:'kara',      direction:'decrease', amount:'5.00',   remark:'短款：本周对账发现待核实差额，申请调减', applicant:'admin', applyTime:'2026-08-25 10:00:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
-    { id:'ADJ20260825002', merchantId:'304857192', merchantName:'gamma-fx',  direction:'increase', amount:'20.00',  remark:'客户反馈到账延迟，核实后补记', applicant:'admin', applyTime:'2026-08-25 15:30:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
+    { id:'ADJ20260823001', merchantId:'635102950', merchantName:'kara',      token:'USDT', network:'TRON', direction:'increase', amount:'116.85', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', applicant:'admin', applyTime:'2026-08-23 16:40:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-23 16:45:00', reviewRemark:'已核实，同意调增' },
+    { id:'ADJ20260824001', merchantId:'884590488', merchantName:'kara2',     token:'USDT', network:'TRON', direction:'decrease', amount:'2.41',   remark:'短款：对账发现系统余额高于实际到账，经核实后调减', applicant:'admin', applyTime:'2026-08-24 16:55:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-24 17:00:00', reviewRemark:'已核实，同意调减' },
+    { id:'ADJ20260818001', merchantId:'460466234', merchantName:'kara3',     token:'USDT', network:'TRON', direction:'increase', amount:'6.22',   remark:'人工调账：客户误退回款项补记', applicant:'admin', applyTime:'2026-08-18 09:50:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-18 10:00:00', reviewRemark:'已核实，同意调增' },
+    { id:'ADJ20260815001', merchantId:'291654802', merchantName:'kara4',     token:'USDT', network:'TRON', direction:'increase', amount:'1.87',   remark:'长款：链上余额核对后调增', applicant:'admin', applyTime:'2026-08-15 08:20:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-15 08:30:00', reviewRemark:'已核实，同意调增' },
+    { id:'ADJ20260822002', merchantId:'884590488', merchantName:'kara2',     token:'USDC', network:'BSC',  direction:'increase', amount:'8.00',   remark:'怀疑遗漏充值，申请调增', applicant:'admin', applyTime:'2026-08-22 09:00:00', status:'rejected', reviewer:'admin', reviewTime:'2026-08-22 09:20:00', reviewRemark:'核实后为重复上报，驳回' },
+    { id:'ADJ20260825001', merchantId:'635102950', merchantName:'kara',      token:'USDT', network:'TRON', direction:'decrease', amount:'5.00',   remark:'短款：本周对账发现待核实差额，申请调减', applicant:'admin', applyTime:'2026-08-25 10:00:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
+    { id:'ADJ20260825002', merchantId:'304857192', merchantName:'gamma-fx',  token:'USDT', network:'TRON', direction:'increase', amount:'20.00',  remark:'客户反馈到账延迟，核实后补记', applicant:'admin', applyTime:'2026-08-25 15:30:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
   ];
 
   const arState = { rows: [...ADJUST_ALL].sort((a,b) => b.applyTime.localeCompare(a.applyTime)), page: 1, size: 10 };
@@ -8498,6 +8545,8 @@
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
         <td>${r.merchantName}</td>
+        <td>${r.token}</td>
+        <td>${r.network}</td>
         <td>${dirTag}</td>
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
         <td>${htmlSafe(r.remark)}</td>
@@ -8541,9 +8590,9 @@
     arState.page = 1; arRender();
   }
   function arExport() {
-    const headers = ['商户 ID','商户名称','方向','金额','备注','申请人','申请时间','审核人','审核时间','状态'];
+    const headers = ['商户 ID','商户名称','代币','网络','方向','金额','备注','申请人','申请时间','审核人','审核时间','状态'];
     csvDownload(headers, arState.rows.map(r => [
-      r.merchantId, r.merchantName, r.direction === 'increase' ? '增加' : '减少', r.amount, r.remark,
+      r.merchantId, r.merchantName, r.token, r.network, r.direction === 'increase' ? '增加' : '减少', r.amount, r.remark,
       r.applicant, r.applyTime, r.reviewer || '-', r.reviewTime || '-', AR_STATUS[r.status].label,
     ]), '调账审核.csv');
   }
@@ -8578,6 +8627,8 @@
 
   function openArApply() {
     document.getElementById('ar-apply-merchant').value = '';
+    document.getElementById('ar-apply-token').value = 'USDT';
+    document.getElementById('ar-apply-network').value = 'TRON';
     document.getElementById('ar-apply-direction').value = 'increase';
     document.getElementById('ar-apply-amount').value = '';
     document.getElementById('ar-apply-remark').value = '';
@@ -8614,6 +8665,8 @@
 
   function submitArApply() {
     if (!arApplySelected) { showToast('请从下拉列表选择商户'); return; }
+    const token     = document.getElementById('ar-apply-token').value;
+    const network   = document.getElementById('ar-apply-network').value;
     const direction = document.getElementById('ar-apply-direction').value;
     const amountStr = document.getElementById('ar-apply-amount').value.trim();
     const remark    = document.getElementById('ar-apply-remark').value.trim();
@@ -8624,7 +8677,7 @@
     const row = {
       id: 'ADJ' + applyTime.replace(/\D/g, ''),
       merchantId: arApplySelected.id, merchantName: arApplySelected.name,
-      direction, amount: amount.toFixed(2), remark,
+      token, network, direction, amount: amount.toFixed(2), remark,
       applicant: 'admin', applyTime,
       status: 'pending', reviewer: '', reviewTime: '', reviewRemark: '',
     };
@@ -8644,6 +8697,8 @@
     return `
       <div class="detail-item"><span class="detail-label">商户 ID</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.merchantId}</span></div>
       <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.merchantName}</span></div>
+      <div class="detail-item"><span class="detail-label">代币</span><span class="detail-value">${r.token}</span></div>
+      <div class="detail-item"><span class="detail-label">网络</span><span class="detail-value">${r.network}</span></div>
       <div class="detail-item"><span class="detail-label">方向</span><span class="detail-value">${dirLabel}</span></div>
       <div class="detail-item"><span class="detail-label">金额</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.amount}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">调账原因</span><span class="detail-value">${htmlSafe(r.remark)}</span></div>
@@ -8725,6 +8780,13 @@
     });
   }
 
+  // 变动后余额按「商户 + 代币 + 网络」独立滚存，取该组合最近一笔流水的余额作为基数
+  function alLastBalance(merchantId, token, network) {
+    const rows = LEDGER_ALL.filter(x => x.merchantId === merchantId && x.token === token && x.network === network);
+    if (!rows.length) return 0;
+    return parseFloat(rows.reduce((a, b) => a.time > b.time ? a : b).balanceAfter) || 0;
+  }
+
   function arAction(newStatus) {
     if (arManageIdx < 0) return;
     const r = ADJUST_ALL[arManageIdx];
@@ -8735,17 +8797,17 @@
     r.reviewTime = now;
     r.reviewRemark = reviewRemark;
     if (newStatus === 'approved') {
-      const m = MERCHANT_ALL.find(x => x.id === r.merchantId);
-      const before = m ? (parseFloat(m.balance) || 0) : 0;
+      const before = alLastBalance(r.merchantId, r.token, r.network);
       const delta  = r.direction === 'increase' ? parseFloat(r.amount) : -parseFloat(r.amount);
       const after  = (before + delta).toFixed(2);
-      if (m) m.balance = after;
+      const m = MERCHANT_ALL.find(x => x.id === r.merchantId);
+      if (m) m.balance = ((parseFloat(m.balance) || 0) + delta).toFixed(2);
       LEDGER_ALL.push({
-        merchantId: r.merchantId, merchantName: r.merchantName, type: 'adjust',
+        merchantId: r.merchantId, merchantName: r.merchantName, userId: '', token: r.token, network: r.network, type: 'adjust',
         amount: (delta >= 0 ? '+' : '') + delta.toFixed(2),
         balanceAfter: after, relatedNo: r.id, remark: r.remark, time: now,
       });
-      logAdjustAction(r, '审批', `审核通过，${r.direction === 'increase' ? '调增' : '调减'} ${r.amount}，商户余额由 ${before.toFixed(2)} 变更为 ${after}`, 'high');
+      logAdjustAction(r, '审批', `审核通过，${r.direction === 'increase' ? '调增' : '调减'} ${r.amount} ${r.token}（${r.network}），该代币/网络余额由 ${before.toFixed(2)} 变更为 ${after}`, 'high');
     } else {
       logAdjustAction(r, '审批', `驳回调账申请：${r.direction === 'increase' ? '调增' : '调减'} ${r.amount}`, 'high');
     }
@@ -10083,7 +10145,10 @@
     DEPOSIT_ALL.push({
       uid: r.brokerId, name: r.brokerName, userId: r.userId,
       token: r.cryptoCurrency, network: r.network,
-      amount: r.cryptoAmount, fee: r.paypazFee || '0',
+      // 到账金额取链上实际到账（实际收到代币），订单金额取用户实际想入金的代币数量，
+      // 加点费用 = 到账金额 − 订单金额，即 PayPaz 加点净收益
+      amount: r.grossCryptoAmount, fee: r.paypazFee || '0',
+      orderAmount: r.cryptoAmount, markupFee: rampInMarkupFee(r).toFixed(2),
       wallet: r.walletAddress, time: r.completedAt, hash: r.txHash,
       channel: 'On Ramp', status: 'arrived',
     });

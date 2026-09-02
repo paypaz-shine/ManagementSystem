@@ -1142,7 +1142,7 @@
           </div>
           <div class="nav-item nav-sub-item" data-page="adjust-review">
             <i data-lucide="scale" class="nav-icon" style="width:14px;height:14px;"></i>
-            <span class="nav-label">调账审核</span>
+            <span class="nav-label">账户调账</span>
           </div>
         </div>
       </div>
@@ -1595,7 +1595,7 @@
               </div>
             </div>
             <div class="filter-item">
-              <span class="filter-label-el">创建时间</span>
+              <span class="filter-label-el">时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="al-date-start">
@@ -1618,7 +1618,6 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
-            <span id="al-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="alExport()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
@@ -1635,7 +1634,14 @@
               <thead>
                 <tr>
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>代币</th><th>网络</th><th>金额</th>
-                  <th>变动后余额</th><th>关联单号</th><th>备注</th><th>创建时间</th>
+                  <th>变动后余额</th>
+                  <th>
+                    <span class="me-info-wrap" onmouseenter="showTip(event,'充值到账：充币订单号\n充值退款：对应的充币订单号\n手续费（随充值）：对应的充币订单号\n提现：提现订单号\n手续费（随提现）：对应的提现订单号\n人工调账：调账申请单号')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
+                      关联单号
+                      <span class="me-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                    </span>
+                  </th>
+                  <th>备注</th><th>时间</th>
                 </tr>
               </thead>
               <tbody id="al-tbody"></tbody>
@@ -1676,6 +1682,12 @@
         <div class="filter-card">
           <div class="filter-grid">
             <div class="filter-item">
+              <span class="filter-label-el">调账订单号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入调账订单号" id="ar-order-no">
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">商户</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
@@ -1713,12 +1725,34 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">申请人</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入申请人" id="ar-applicant">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">审核人</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入审核人" id="ar-reviewer">
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">申请时间</span>
               <div class="filter-control">
                 <div class="date-range-el">
                   <input class="date-input-el" type="date" id="ar-date-start">
                   <span class="range-sep-el">—</span>
                   <input class="date-input-el" type="date" id="ar-date-end">
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">审核时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="ar-review-date-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="ar-review-date-end">
                 </div>
               </div>
             </div>
@@ -1736,7 +1770,6 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
-            <span id="ar-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
             <div class="summary-spacer"></div>
             <button class="btn btn-primary" style="height:32px;" onclick="openArApply()">
               <i data-lucide="plus" style="width:13px;height:13px;"></i>发起调账
@@ -1746,16 +1779,16 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1860px;">
+            <table style="min-width:2010px;">
               <colgroup>
-                <col style="width:95px"><col style="width:145px"><col style="width:70px"><col style="width:90px"><col style="width:70px">
+                <col style="width:150px"><col style="width:95px"><col style="width:145px"><col style="width:70px"><col style="width:90px"><col style="width:70px">
                 <col style="width:110px"><col style="width:220px"><col style="width:90px">
                 <col style="width:152px"><col style="width:90px"><col style="width:152px">
                 <col style="width:80px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>代币</th><th>网络</th><th>方向</th><th>金额</th><th>备注</th>
+                  <th>调账订单号</th><th>商户 ID</th><th>商户名称</th><th>代币</th><th>网络</th><th>方向</th><th>金额</th><th>备注</th>
                   <th>申请人</th><th>申请时间</th><th>审核人</th><th>审核时间</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -1912,7 +1945,14 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
-            <span id="d-summary-count" style="font-size:13px;color:#606266;line-height:32px;"></span>
+            <div class="summary-stats">
+              <span id="d-summary-count"></span>
+              <span>到账金额（合计）：<b id="d-stat-amt">0.00</b></span>
+              <span>加点费用（合计）：<b id="d-stat-markup">0.00</b></span>
+              <span>订单金额（合计）：<b id="d-stat-order">0.00</b></span>
+              <span>手续费（合计）：<b id="d-stat-fee">0.00</b></span>
+              <span>净入账（合计）：<b id="d-stat-net">0.00</b></span>
+            </div>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="openDExportModal()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
@@ -4796,7 +4836,7 @@
     home:     { label: '首页',      icon: 'house' },
     'platform-assets': { label: '资产余额', icon: 'wallet', parent: '平台资产' },
     'account-ledger':  { label: '账户明细', icon: 'receipt', parent: '平台资产' },
-    'adjust-review':   { label: '调账审核', icon: 'scale', parent: '平台资产' },
+    'adjust-review':   { label: '账户调账', icon: 'scale', parent: '平台资产' },
     merchant: { label: '商户管理',  icon: 'users' },
     'merchant-detail': { label: '商户详情', icon: 'layout-grid' },
     withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
@@ -5225,6 +5265,17 @@
         <td><div class="action-cell">${viewBtn}</div></td>
       </tr>`;
     }).join('');
+    const sumIf = (val) => val === '' ? 0 : parseFloat(val);
+    const dSumAmt    = dState.rows.reduce((s, r) => s + sumIf(r.amount), 0);
+    const dSumMarkup = dState.rows.reduce((s, r) => s + sumIf(depositMarkupCell(r)), 0);
+    const dSumOrder  = dState.rows.reduce((s, r) => s + sumIf(depositOrderAmountCell(r)), 0);
+    const dSumFee    = dState.rows.reduce((s, r) => s + sumIf(depositFeeCell(r)), 0);
+    const dSumNet    = dState.rows.reduce((s, r) => s + sumIf(depositNetCell(r)), 0);
+    document.getElementById('d-stat-amt').textContent    = dSumAmt.toFixed(2);
+    document.getElementById('d-stat-markup').textContent = dSumMarkup.toFixed(2);
+    document.getElementById('d-stat-order').textContent  = dSumOrder.toFixed(2);
+    document.getElementById('d-stat-fee').textContent    = dSumFee.toFixed(2);
+    document.getElementById('d-stat-net').textContent    = dSumNet.toFixed(2);
     document.getElementById('d-page-total').textContent = `共 ${dState.rows.length} 条`;
     const sc = document.getElementById('d-summary-count');
     if (sc) sc.textContent = `条数: ${dState.rows.length}`;
@@ -8217,7 +8268,7 @@
   (function () {
     const el = document.createElement('div');
     el.id = 'g-tip';
-    el.style.cssText = 'display:none;position:fixed;background:#303133;color:#fff;font-size:12px;font-family:Inter,sans-serif;padding:6px 10px;border-radius:4px;z-index:9999;max-width:480px;word-break:break-all;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.2);line-height:1.6;white-space:normal;';
+    el.style.cssText = 'display:none;position:fixed;background:#303133;color:#fff;font-size:12px;font-family:Inter,sans-serif;padding:6px 10px;border-radius:4px;z-index:9999;max-width:480px;word-break:break-all;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.2);line-height:1.6;white-space:pre-line;';
     document.body.appendChild(el);
     window.showTip = (e, t) => { el.textContent = t; el.style.display = 'block'; moveTip(e); };
     window.moveTip = (e) => { el.style.left = e.clientX + 'px'; el.style.top = (e.clientY - 48) + 'px'; };
@@ -8433,8 +8484,6 @@
       </tr>`;
     }).join('');
     document.getElementById('al-page-total').textContent = `共 ${alState.rows.length} 条`;
-    const sc = document.getElementById('al-summary-count');
-    if (sc) sc.textContent = `条数: ${alState.rows.length}`;
     const total = Math.max(1, Math.ceil(alState.rows.length / alState.size));
     document.getElementById('al-btn-prev').disabled = alState.page <= 1;
     document.getElementById('al-btn-next').disabled = alState.page >= total;
@@ -8464,7 +8513,7 @@
     alState.page = 1; alRender();
   }
   function alExport() {
-    const headers = ['商户 ID','商户名称','用户 ID','类型','代币','网络','金额','变动后余额','关联单号','备注','创建时间'];
+    const headers = ['商户 ID','商户名称','用户 ID','类型','代币','网络','金额','变动后余额','关联单号','备注','时间'];
     csvDownload(headers, alState.rows.map(r => [
       r.merchantId, r.merchantName, r.userId || '-', LG_TYPE[r.type].label, r.token, r.network, r.amount, r.balanceAfter, r.relatedNo, r.remark || '-', r.time,
     ]), '账户明细.csv');
@@ -8516,14 +8565,24 @@
     const merchant  = document.getElementById('ar-merchant').value.trim().toLowerCase();
     const direction = document.getElementById('ar-direction').value;
     const status    = document.getElementById('ar-status').value;
+    const orderNo   = document.getElementById('ar-order-no').value.trim().toLowerCase();
+    const applicant = document.getElementById('ar-applicant').value.trim().toLowerCase();
+    const reviewer  = document.getElementById('ar-reviewer').value.trim().toLowerCase();
     const ds        = document.getElementById('ar-date-start').value;
     const de        = document.getElementById('ar-date-end').value;
+    const rds       = document.getElementById('ar-review-date-start').value;
+    const rde       = document.getElementById('ar-review-date-end').value;
     return [...ADJUST_ALL].sort((a,b) => b.applyTime.localeCompare(a.applyTime)).filter(r => {
       if (merchant  && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
       if (direction && r.direction !== direction) return false;
       if (status    && r.status !== status) return false;
+      if (orderNo   && !r.id.toLowerCase().includes(orderNo)) return false;
+      if (applicant && !r.applicant.toLowerCase().includes(applicant)) return false;
+      if (reviewer  && !(r.reviewer || '').toLowerCase().includes(reviewer)) return false;
       if (ds        && r.applyTime.split(' ')[0] < ds) return false;
       if (de        && r.applyTime.split(' ')[0] > de) return false;
+      if (rds       && (!r.reviewTime || r.reviewTime.split(' ')[0] < rds)) return false;
+      if (rde       && (!r.reviewTime || r.reviewTime.split(' ')[0] > rde)) return false;
       return true;
     });
   }
@@ -8539,16 +8598,18 @@
       const dirTag = r.direction === 'increase'
         ? `<span class="type-tag type-tag-in">${dirLabel}</span>`
         : `<span class="type-tag type-tag-out">${dirLabel}</span>`;
+      const signedAmount = (r.direction === 'increase' ? '+' : '-') + r.amount;
       const viewBtn = `<span class="action-icon" title="详情" onclick="openArView(${idx})">${_D_EYE_SVG}</span>`;
       const reviewBtn = r.status === 'pending'
         ? `<span class="action-icon" title="审核" onclick="openArReview(${idx})">${_D_PEN_SVG}</span>` : '';
       return `<tr>
+        <td>${fullCell(r.id)}</td>
         <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
         <td>${r.merchantName}</td>
         <td>${r.token}</td>
         <td>${r.network}</td>
         <td>${dirTag}</td>
-        <td style="font-family:Inter,sans-serif">${r.amount}</td>
+        <td style="font-family:Inter,sans-serif;color:${r.direction === 'increase' ? '#67C23A' : '#F56C6C'};">${signedAmount}</td>
         <td>${htmlSafe(r.remark)}</td>
         <td>${r.applicant}</td>
         <td style="font-family:Inter,sans-serif">${r.applyTime}</td>
@@ -8559,8 +8620,6 @@
       </tr>`;
     }).join('');
     document.getElementById('ar-page-total').textContent = `共 ${arState.rows.length} 条`;
-    const sc = document.getElementById('ar-summary-count');
-    if (sc) sc.textContent = `条数: ${arState.rows.length}`;
     const total = Math.max(1, Math.ceil(arState.rows.length / arState.size));
     document.getElementById('ar-btn-prev').disabled = arState.page <= 1;
     document.getElementById('ar-btn-next').disabled = arState.page >= total;
@@ -8585,16 +8644,16 @@
     arState.page = 1; arRender();
   }
   function arReset() {
-    ['ar-merchant','ar-direction','ar-status','ar-date-start','ar-date-end'].forEach(id => { document.getElementById(id).value = ''; });
+    ['ar-merchant','ar-direction','ar-status','ar-order-no','ar-applicant','ar-reviewer','ar-date-start','ar-date-end','ar-review-date-start','ar-review-date-end'].forEach(id => { document.getElementById(id).value = ''; });
     arState.rows = arFilteredRows();
     arState.page = 1; arRender();
   }
   function arExport() {
-    const headers = ['商户 ID','商户名称','代币','网络','方向','金额','备注','申请人','申请时间','审核人','审核时间','状态'];
+    const headers = ['调账订单号','商户 ID','商户名称','代币','网络','方向','金额','备注','申请人','申请时间','审核人','审核时间','状态'];
     csvDownload(headers, arState.rows.map(r => [
-      r.merchantId, r.merchantName, r.token, r.network, r.direction === 'increase' ? '增加' : '减少', r.amount, r.remark,
+      r.id, r.merchantId, r.merchantName, r.token, r.network, r.direction === 'increase' ? '增加' : '减少', r.amount, r.remark,
       r.applicant, r.applyTime, r.reviewer || '-', r.reviewTime || '-', AR_STATUS[r.status].label,
-    ]), '调账审核.csv');
+    ]), '账户调账.csv');
   }
 
   function arMerchantInput() {
@@ -8695,12 +8754,13 @@
   function _arItems(r) {
     const dirLabel = r.direction === 'increase' ? '增加' : '减少';
     return `
+      <div class="detail-item"><span class="detail-label">调账订单号</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.id}</span></div>
       <div class="detail-item"><span class="detail-label">商户 ID</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.merchantId}</span></div>
       <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.merchantName}</span></div>
       <div class="detail-item"><span class="detail-label">代币</span><span class="detail-value">${r.token}</span></div>
       <div class="detail-item"><span class="detail-label">网络</span><span class="detail-value">${r.network}</span></div>
       <div class="detail-item"><span class="detail-label">方向</span><span class="detail-value">${dirLabel}</span></div>
-      <div class="detail-item"><span class="detail-label">金额</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.amount}</span></div>
+      <div class="detail-item"><span class="detail-label">金额</span><span class="detail-value" style="font-family:'Inter',sans-serif;color:${r.direction === 'increase' ? '#67C23A' : '#F56C6C'};">${(r.direction === 'increase' ? '+' : '-') + r.amount}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">调账原因</span><span class="detail-value">${htmlSafe(r.remark)}</span></div>
       <div class="detail-item"><span class="detail-label">申请人</span><span class="detail-value">${r.applicant}</span></div>
       <div class="detail-item"><span class="detail-label">申请时间</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.applyTime}</span></div>
@@ -8728,7 +8788,7 @@
       `<div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">审核备注</span>
         <div class="wm-remark-wrap">
-          <textarea class="wm-remark" id="ar-review-remark" placeholder="选填，填写审核说明..." maxlength="200" oninput="document.getElementById('ar-review-remark-count').textContent=this.value.length"></textarea>
+          <textarea class="wm-remark" id="ar-review-remark" placeholder="通过时选填，驳回时必填，填写审核说明..." maxlength="200" oninput="document.getElementById('ar-review-remark-count').textContent=this.value.length"></textarea>
           <span class="wm-remark-count"><span id="ar-review-remark-count">0</span>/200</span>
         </div>
       </div>`;
@@ -8752,6 +8812,10 @@
   };
 
   function confirmArAction(action) {
+    if (action === 'rejected' && !(document.getElementById('ar-review-remark')?.value || '').trim()) {
+      showToast('驳回必须填写审核备注');
+      return;
+    }
     const cfg = AR_CONFIRM_CFG[action];
     document.getElementById('ar-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
@@ -8774,7 +8838,7 @@
     const time = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
     OPERLOG_ALL.unshift({
       id: 'ol-ar-' + (Date.now() % 100000),
-      time, operator: 'admin', module: '调账审核', type,
+      time, operator: 'admin', module: '账户调账', type,
       target: `${r.merchantName}（${r.merchantId}） · ${r.id}`,
       content, result: 'success', ip: '127.0.0.1', level,
     });
@@ -8830,8 +8894,8 @@
       { id:'platform_asset_balance', label:'资产余额' },
       { id:'platform_account_ledger', label:'账户明细' },
       { id:'platform_adjust_apply', label:'发起调账' },
-      { id:'platform_adjust_review', label:'调账审核（通过/驳回）' },
-      { id:'platform_account_export', label:'账户明细/调账审核导出' },
+      { id:'platform_adjust_review', label:'账户调账（通过/驳回）' },
+      { id:'platform_account_export', label:'账户明细/账户调账导出' },
     ] },
     { id:'merchant_mgmt', label:'商户管理', children:[
       { id:'merchant_company_delete', label:'企业账户删除' },

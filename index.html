@@ -1,4 +1,4 @@
-
+  
 
 
 <!DOCTYPE html>
@@ -230,6 +230,55 @@
       font-family: Inter, sans-serif;
       color: #909399;
     }
+    /* 商户多选筛选：可搜索输入 + tag 展示，复用 p-merch-dropdown 做选项列表定位 */
+    .ms-select-box {
+      width: 100%; min-width: 0; height: 32px; border: 1px solid #DCDFE6; border-radius: 4px;
+      background: #fff; display: flex; align-items: center; padding: 0 26px 0 4px;
+      position: relative; gap: 4px; cursor: text; transition: border-color 0.2s;
+    }
+    .ms-select-box:hover { border-color: #C0C4CC; }
+    .ms-select-box:focus-within { border-color: #409EFF; }
+    .ms-tags { display: flex; align-items: center; gap: 4px; flex-shrink: 0; overflow: hidden; max-width: 60%; }
+    .ms-tag {
+      display: inline-flex; align-items: center; height: 22px; max-width: 92px;
+      padding: 0 4px 0 7px; background: #f0f2f5; border-radius: 4px; font-size: 12px; color: #606266; flex-shrink: 0;
+    }
+    .ms-tag-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ms-tag-x {
+      margin-left: 3px; width: 14px; height: 14px; flex-shrink: 0; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center; color: #909399; font-size: 12px; line-height: 1;
+    }
+    .ms-tag-x:hover { background: #C0C4CC; color: #fff; }
+    .ms-tag-more {
+      flex-shrink: 0; height: 22px; padding: 0 6px; background: #f0f2f5; border-radius: 4px;
+      font-size: 12px; color: #606266; display: inline-flex; align-items: center;
+    }
+    .ms-select-input {
+      flex: 1; min-width: 30px; height: 30px; border: none; outline: none; background: transparent;
+      font-size: 13px; color: #303133; font-family: 'Noto Sans SC', sans-serif;
+    }
+    .ms-select-input::placeholder { color: #C0C4CC; }
+    .ms-caret { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #C0C4CC; }
+    .ms-option {
+      padding: 0 12px; height: 34px; display: flex; align-items: center; gap: 8px; cursor: pointer;
+    }
+    .ms-option:hover { background: #F5F7FA; }
+    .ms-option.selected .ms-option-text { color: #409EFF; }
+    .ms-option-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: #303133; }
+    .ms-option-check { width: 14px; height: 14px; flex-shrink: 0; color: #409EFF; display: inline-flex; align-items: center; justify-content: center; visibility: hidden; }
+    .ms-option.selected .ms-option-check { visibility: visible; }
+    .ms-empty { padding: 16px 12px; text-align: center; color: #909399; font-size: 13px; }
+    /* 轻量勾选下拉触发器（代币/网络/状态等固定选项，无需模糊搜索） */
+    .ms-lite {
+      width: 100%; height: 32px; border: 1px solid #DCDFE6; border-radius: 4px; background: #fff;
+      display: flex; align-items: center; padding: 0 28px 0 10px; position: relative; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .ms-lite:hover { border-color: #C0C4CC; }
+    .ms-lite.active { border-color: #409EFF; }
+    .ms-lite-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: #303133; }
+    .ms-lite-text.placeholder { color: #C0C4CC; }
+    .ms-lite .ms-caret { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #C0C4CC; }
     .filter-item.col-span-2 { grid-column: span 2; }
 
     /* label：固定宽度 + 右对齐，与 Element UI label-width 一致 */
@@ -618,6 +667,11 @@
     .form-row { display:grid; grid-template-columns:70px 1fr; align-items:center; gap:8px; margin-bottom:16px; }
     .form-row:last-child { margin-bottom:0; }
     .form-label { font-size:13px; color:#606266; text-align:right; white-space:nowrap; }
+    /* ── 账户调账：提币退回子类型 ─────────────────── */
+    .ar-wd-hint { font-size:12px; margin-top:4px; line-height:1.4; }
+    .ar-wd-hint.ok  { color:#67C23A; }
+    .ar-wd-hint.err { color:#F56C6C; }
+    .ar-wd-net, .ar-wd-readout { font-size:13px; color:#303133; font-family:'Inter',sans-serif; }
     /* ── API Keys 标签页 ──────────────────────────── */
     .apikey-toolbar { display:flex; justify-content:flex-end; align-items:center; padding:12px 16px; flex-shrink:0; background:#fff; border-bottom:1px solid #EBEEF5; }
     .perm-tag { display:inline-flex; align-items:center; height:22px; padding:0 8px; border:1px solid #b3d8ff; background:#EBF5FF; color:#409EFF; border-radius:4px; font-size:12px; white-space:nowrap; }
@@ -1138,11 +1192,11 @@
           </div>
           <div class="nav-item nav-sub-item" data-page="account-ledger">
             <i data-lucide="receipt" class="nav-icon" style="width:14px;height:14px;"></i>
-            <span class="nav-label">账户明细</span>
+            <span class="nav-label">商户账户明细</span>
           </div>
           <div class="nav-item nav-sub-item" data-page="adjust-review">
             <i data-lucide="scale" class="nav-icon" style="width:14px;height:14px;"></i>
-            <span class="nav-label">账户调账</span>
+            <span class="nav-label">商户账户调账</span>
           </div>
         </div>
       </div>
@@ -1434,33 +1488,24 @@
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="pa-token">
-                    <option value="">全部</option>
-                    <option value="USDT">USDT</option>
-                    <option value="USDC">USDC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="pa-token-lite" tabindex="0"
+                     onclick="msLiteToggle('pa-token')" onblur="setTimeout(function(){msLiteClose('pa-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="pa-token-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="pa-token-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">网络</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="pa-network">
-                    <option value="">全部</option>
-                    <option value="TRON">TRON</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="BSC">BSC</option>
-                    <option value="Polygon">Polygon</option>
-                    <option value="Solana">Solana</option>
-                    <option value="Arbitrum">Arbitrum</option>
-                    <option value="Base">Base</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="pa-network-lite" tabindex="0"
+                     onclick="msLiteToggle('pa-network')" onblur="setTimeout(function(){msLiteClose('pa-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="pa-network-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="pa-network-dropdown" style="display:none;"></div>
             </div>
           </div>
           <div class="filter-actions">
@@ -1579,10 +1624,10 @@
                 <div class="select-wrap">
                   <select class="field-select" id="al-type">
                     <option value="">全部</option>
-                    <option value="deposit">充值到账</option>
+                    <option value="deposit">充币</option>
                     <option value="withdraw">提现</option>
                     <option value="fee">手续费</option>
-                    <option value="adjust">人工调账</option>
+                    <option value="adjust">调账</option>
                   </select>
                   <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
                 </div>
@@ -1618,6 +1663,14 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
+            <div class="summary-stats">
+              <span id="al-summary-count"></span>
+              <span>充币（合计）：<b id="al-stat-deposit">0.00</b></span>
+              <span>提现（合计）：<b class="neg" id="al-stat-withdraw">0.00</b></span>
+              <span>手续费（合计）：<b class="neg" id="al-stat-fee">0.00</b></span>
+              <span>调账（增加）（合计）：<b id="al-stat-adjust-inc">0.00</b></span>
+              <span>调账（减少）（合计）：<b class="neg" id="al-stat-adjust-dec">0.00</b></span>
+            </div>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="alExport()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
@@ -1636,7 +1689,7 @@
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>代币</th><th>网络</th><th>金额</th>
                   <th>变动后余额</th>
                   <th>
-                    <span class="me-info-wrap" onmouseenter="showTip(event,'充值到账：充币订单号\n充值退款：对应的充币订单号\n手续费（随充值）：对应的充币订单号\n提现：提现订单号\n手续费（随提现）：对应的提现订单号\n人工调账：调账申请单号')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
+                    <span class="me-info-wrap" onmouseenter="showTip(event,'充币：充币订单号\n手续费（随充值）：对应的充币订单号\n提现：提现订单号\n手续费（随提现）：对应的提现订单号\n调账：调账申请单号')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
                       关联单号
                       <span class="me-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
                     </span>
@@ -1696,6 +1749,19 @@
                        onblur="setTimeout(arHideMerchantDrop, 150)">
               </div>
               <div class="p-merch-dropdown" id="ar-merch-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">调账类型</span>
+              <div class="filter-control">
+                <div class="select-wrap">
+                  <select class="field-select" id="ar-adjust-type">
+                    <option value="">全部</option>
+                    <option value="normal">通用调账</option>
+                    <option value="withdraw_return">提币退回</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">方向</span>
@@ -1779,16 +1845,16 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2010px;">
+            <table style="min-width:2100px;">
               <colgroup>
-                <col style="width:150px"><col style="width:95px"><col style="width:145px"><col style="width:70px"><col style="width:90px"><col style="width:70px">
+                <col style="width:150px"><col style="width:90px"><col style="width:95px"><col style="width:145px"><col style="width:70px"><col style="width:90px"><col style="width:70px">
                 <col style="width:110px"><col style="width:220px"><col style="width:90px">
                 <col style="width:152px"><col style="width:90px"><col style="width:152px">
                 <col style="width:80px"><col style="width:70px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>调账订单号</th><th>商户 ID</th><th>商户名称</th><th>代币</th><th>网络</th><th>方向</th><th>金额</th><th>备注</th>
+                  <th>调账订单号</th><th>调账类型</th><th>商户 ID</th><th>商户名称</th><th>代币</th><th>网络</th><th>方向</th><th>金额</th><th>备注</th>
                   <th>申请人</th><th>申请时间</th><th>审核人</th><th>审核时间</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -1832,10 +1898,14 @@
             <div class="filter-item">
               <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
-                       id="d-uid" autocomplete="off"
-                       oninput="dMerchantInput()" onfocus="dMerchantInput()"
-                       onblur="setTimeout(dHideMerchantDrop, 150)">
+                <div class="ms-select-box" id="d-ms-box" onclick="dMsBoxClick()">
+                  <div class="ms-tags" id="d-ms-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="d-uid" autocomplete="off"
+                         oninput="dMerchantInput()" onfocus="dMerchantInput()"
+                         onblur="setTimeout(dHideMerchantDrop, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
               </div>
               <div class="p-merch-dropdown" id="d-merch-dropdown" style="display:none;"></div>
             </div>
@@ -1854,60 +1924,47 @@
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="d-token">
-                    <option value="">请选择</option>
-                    <option value="USDT">USDT</option>
-                    <option value="USDC">USDC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="d-token-lite" tabindex="0"
+                     onclick="msLiteToggle('d-token')" onblur="setTimeout(function(){msLiteClose('d-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="d-token-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="d-token-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">网络</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="d-network">
-                    <option value="">请选择</option>
-                    <option value="TRON">TRON</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="BSC">BSC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="d-network-lite" tabindex="0"
+                     onclick="msLiteToggle('d-network')" onblur="setTimeout(function(){msLiteClose('d-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="d-network-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="d-network-dropdown" style="display:none;"></div>
             </div>
             <!-- Row 2 -->
             <div class="filter-item">
               <span class="filter-label-el">状态</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="d-status">
-                    <option value="">状态</option>
-                    <option value="manual_review">待人工审核</option>
-                    <option value="arrived">已到账</option>
-                    <option value="pending">待匹配订单</option>
-                    <option value="invalid">无效充值</option>
-                    <option value="refunded">已退款</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="d-status-lite" tabindex="0"
+                     onclick="msLiteToggle('d-status')" onblur="setTimeout(function(){msLiteClose('d-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="d-status-text">状态</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="d-status-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">类型</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="d-channel">
-                    <option value="">全部</option>
-                    <option value="direct">直连</option>
-                    <option value="Meta Trader">Meta Trader</option>
-                    <option value="On Ramp">On Ramp</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="d-channel-lite" tabindex="0"
+                     onclick="msLiteToggle('d-channel')" onblur="setTimeout(function(){msLiteClose('d-channel')}, 150)">
+                  <span class="ms-lite-text placeholder" id="d-channel-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="d-channel-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">哈希</span>
@@ -2188,10 +2245,14 @@
             <div class="filter-item">
               <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
-                       id="w-merchant" autocomplete="off"
-                       oninput="wMerchantInput()" onfocus="wMerchantInput()"
-                       onblur="setTimeout(wHideMerchantDrop, 150)">
+                <div class="ms-select-box" id="w-ms-box" onclick="wMsBoxClick()">
+                  <div class="ms-tags" id="w-ms-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="w-merchant" autocomplete="off"
+                         oninput="wMerchantInput()" onfocus="wMerchantInput()"
+                         onblur="setTimeout(wHideMerchantDrop, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
               </div>
               <div class="p-merch-dropdown" id="w-merch-dropdown" style="display:none;"></div>
             </div>
@@ -2204,29 +2265,24 @@
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="w-token">
-                    <option value="">请选择</option>
-                    <option value="USDT">USDT</option>
-                    <option value="BTC">BTC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="w-token-lite" tabindex="0"
+                     onclick="msLiteToggle('w-token')" onblur="setTimeout(function(){msLiteClose('w-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="w-token-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="w-token-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">网络</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="w-network">
-                    <option value="">请选择</option>
-                    <option value="TRON">TRON</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="BSC">BSC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="w-network-lite" tabindex="0"
+                     onclick="msLiteToggle('w-network')" onblur="setTimeout(function(){msLiteClose('w-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="w-network-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="w-network-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">地址</span>
@@ -2237,44 +2293,35 @@
             <div class="filter-item">
               <span class="filter-label-el">状态</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="w-status">
-                    <option value="">请选择</option>
-                    <option value="risk_pending">风控待处理</option>
-                    <option value="withdrawing">提币中</option>
-                    <option value="completed">已到账</option>
-                    <option value="failed">提币失败</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="w-status-lite" tabindex="0"
+                     onclick="msLiteToggle('w-status')" onblur="setTimeout(function(){msLiteClose('w-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="w-status-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="w-status-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">渠道</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="w-channel">
-                    <option value="">请选择</option>
-                    <option value="Cobo">Cobo</option>
-                    <option value="Payme">Payme</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="w-channel-lite" tabindex="0"
+                     onclick="msLiteToggle('w-channel')" onblur="setTimeout(function(){msLiteClose('w-channel')}, 150)">
+                  <span class="ms-lite-text placeholder" id="w-channel-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="w-channel-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">提币方式</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="w-method">
-                    <option value="">请选择</option>
-                    <option value="API">API</option>
-                    <option value="Excel">Excel</option>
-                    <option value="单笔">单笔</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="w-method-lite" tabindex="0"
+                     onclick="msLiteToggle('w-method')" onblur="setTimeout(function(){msLiteClose('w-method')}, 150)">
+                  <span class="ms-lite-text placeholder" id="w-method-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="w-method-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">哈希</span>
@@ -2412,10 +2459,14 @@
             <div class="filter-item">
               <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
-                       id="wa-merchant" autocomplete="off"
-                       oninput="waMerchantInput()" onfocus="waMerchantInput()"
-                       onblur="setTimeout(waHideMerchantDrop, 150)">
+                <div class="ms-select-box" id="wa-ms-box" onclick="waMsBoxClick()">
+                  <div class="ms-tags" id="wa-ms-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="wa-merchant" autocomplete="off"
+                         oninput="waMerchantInput()" onfocus="waMerchantInput()"
+                         onblur="setTimeout(waHideMerchantDrop, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
               </div>
               <div class="p-merch-dropdown" id="wa-merch-dropdown" style="display:none;"></div>
             </div>
@@ -2428,29 +2479,24 @@
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="wa-token">
-                    <option value="">请选择</option>
-                    <option value="USDT">USDT</option>
-                    <option value="BTC">BTC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="wa-token-lite" tabindex="0"
+                     onclick="msLiteToggle('wa-token')" onblur="setTimeout(function(){msLiteClose('wa-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="wa-token-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="wa-token-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">网络</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="wa-network">
-                    <option value="">请选择</option>
-                    <option value="TRON">TRON</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="BSC">BSC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="wa-network-lite" tabindex="0"
+                     onclick="msLiteToggle('wa-network')" onblur="setTimeout(function(){msLiteClose('wa-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="wa-network-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="wa-network-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">地址</span>
@@ -2474,29 +2520,24 @@
             <div class="filter-item">
               <span class="filter-label-el">渠道</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="wa-channel">
-                    <option value="">请选择</option>
-                    <option value="Cobo">Cobo</option>
-                    <option value="Payme">Payme</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="wa-channel-lite" tabindex="0"
+                     onclick="msLiteToggle('wa-channel')" onblur="setTimeout(function(){msLiteClose('wa-channel')}, 150)">
+                  <span class="ms-lite-text placeholder" id="wa-channel-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="wa-channel-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">提币方式</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="wa-method">
-                    <option value="">请选择</option>
-                    <option value="API">API</option>
-                    <option value="Excel">Excel</option>
-                    <option value="单笔">单笔</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="wa-method-lite" tabindex="0"
+                     onclick="msLiteToggle('wa-method')" onblur="setTimeout(function(){msLiteClose('wa-method')}, 150)">
+                  <span class="ms-lite-text placeholder" id="wa-method-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="wa-method-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">批次号</span>
@@ -2618,10 +2659,14 @@
             <div class="filter-item">
               <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="商户 ID / 商户名称"
-                       id="p-merchant" autocomplete="off"
-                       oninput="pMerchantInput()" onfocus="pMerchantInput()"
-                       onblur="setTimeout(pHideMerchantDrop, 150)">
+                <div class="ms-select-box" id="p-ms-box" onclick="pMsBoxClick()">
+                  <div class="ms-tags" id="p-ms-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="p-merchant" autocomplete="off"
+                         oninput="pMerchantInput()" onfocus="pMerchantInput()"
+                         onblur="setTimeout(pHideMerchantDrop, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
               </div>
               <div class="p-merch-dropdown" id="p-merch-dropdown" style="display:none;"></div>
             </div>
@@ -2633,58 +2678,48 @@
             </div>
             <!-- Row 2 -->
             <div class="filter-item">
-              <span class="filter-label-el">合作伙伴</span>
+              <span class="filter-label-el">类型</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="p-channel">
-                    <option value="">全部</option>
-                    <option value="direct">直连</option>
-                    <option value="Meta Trader">Meta Trader</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="p-channel-lite" tabindex="0"
+                     onclick="msLiteToggle('p-channel')" onblur="setTimeout(function(){msLiteClose('p-channel')}, 150)">
+                  <span class="ms-lite-text placeholder" id="p-channel-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="p-channel-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">状态</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="p-status">
-                    <option value="">请选择</option>
-                    <option value="processing">处理中</option>
-                    <option value="completed">已完成</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="p-status-lite" tabindex="0"
+                     onclick="msLiteToggle('p-status')" onblur="setTimeout(function(){msLiteClose('p-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="p-status-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="p-status-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="p-token">
-                    <option value="">请选择</option>
-                    <option value="USDT">USDT</option>
-                    <option value="BTC">BTC</option>
-                    <option value="Ethereum">Ethereum</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="p-token-lite" tabindex="0"
+                     onclick="msLiteToggle('p-token')" onblur="setTimeout(function(){msLiteClose('p-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="p-token-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="p-token-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">网络</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="p-network">
-                    <option value="">请选择</option>
-                    <option value="TRON">TRON</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="BSC">BSC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="p-network-lite" tabindex="0"
+                     onclick="msLiteToggle('p-network')" onblur="setTimeout(function(){msLiteClose('p-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="p-network-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="p-network-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">充值地址</span>
@@ -2795,9 +2830,13 @@
             <div class="filter-item">
               <span class="filter-label-el">商户</span>
               <div class="filter-control">
-                <input class="field-input" type="text" placeholder="商户 ID / 商户名称" id="ramp-in-f-merchant"
-                       autocomplete="off" oninput="rampInMerchantInput()" onfocus="rampInMerchantInput()"
-                       onblur="setTimeout(rampInHideMerchantDrop, 150)">
+                <div class="ms-select-box" id="ramp-in-ms-box" onclick="rampInMsBoxClick()">
+                  <div class="ms-tags" id="ramp-in-ms-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称" id="ramp-in-f-merchant"
+                         autocomplete="off" oninput="rampInMerchantInput()" onfocus="rampInMerchantInput()"
+                         onblur="setTimeout(rampInHideMerchantDrop, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
               </div>
               <div class="p-merch-dropdown" id="ramp-in-merch-dropdown" style="display:none;"></div>
             </div>
@@ -2816,14 +2855,13 @@
             <div class="filter-item">
               <span class="filter-label-el">渠道</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ramp-in-f-provider">
-                    <option value="">全部</option>
-                    <option value="Legend">Legend</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ramp-in-f-provider-lite" tabindex="0"
+                     onclick="msLiteToggle('ramp-in-f-provider')" onblur="setTimeout(function(){msLiteClose('ramp-in-f-provider')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ramp-in-f-provider-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ramp-in-f-provider-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">渠道订单</span>
@@ -2834,43 +2872,35 @@
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ramp-in-f-token">
-                    <option value="">全部</option>
-                    <option value="USDT">USDT</option>
-                    <option value="USDC">USDC</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ramp-in-f-token-lite" tabindex="0"
+                     onclick="msLiteToggle('ramp-in-f-token')" onblur="setTimeout(function(){msLiteClose('ramp-in-f-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ramp-in-f-token-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ramp-in-f-token-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">法币币种</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ramp-in-f-fiat">
-                    <option value="">全部</option>
-                    <option value="JPY">JPY</option>
-                    <option value="USD">USD</option>
-                    <option value="KRW">KRW</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ramp-in-f-fiat-lite" tabindex="0"
+                     onclick="msLiteToggle('ramp-in-f-fiat')" onblur="setTimeout(function(){msLiteClose('ramp-in-f-fiat')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ramp-in-f-fiat-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ramp-in-f-fiat-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">网络</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ramp-in-f-network">
-                    <option value="">全部</option>
-                    <option value="TRON">TRON</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="BNB Smart Chain">BNB Smart Chain</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ramp-in-f-network-lite" tabindex="0"
+                     onclick="msLiteToggle('ramp-in-f-network')" onblur="setTimeout(function(){msLiteClose('ramp-in-f-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ramp-in-f-network-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ramp-in-f-network-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">地址</span>
@@ -2887,23 +2917,13 @@
             <div class="filter-item">
               <span class="filter-label-el">状态</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ramp-in-f-status">
-                    <option value="">全部</option>
-                    <option value="CREATED">已创建</option>
-                    <option value="AWAITING_PAYMENT">待支付</option>
-                    <option value="PAYMENT_PROCESSING">支付处理中</option>
-                    <option value="PENDING_VERIFICATION">待补充验证</option>
-                    <option value="CRYPTO_TRANSFERRING">链上划转中</option>
-                    <option value="SETTLEMENT_DELAYED">结算延迟待人工核查</option>
-                    <option value="COMPLETED">已完成</option>
-                    <option value="FAILED">失败</option>
-                    <option value="EXPIRED">已过期</option>
-                    <option value="CHARGEBACK_FLAGGED">拒付待核查</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ramp-in-f-status-lite" tabindex="0"
+                     onclick="msLiteToggle('ramp-in-f-status')" onblur="setTimeout(function(){msLiteClose('ramp-in-f-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ramp-in-f-status-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ramp-in-f-status-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">创建时间</span>
@@ -3681,12 +3701,13 @@
             <div class="filter-item">
               <span class="filter-label-el">操作模块</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <input class="field-input" type="text" placeholder="全部" autocomplete="off"
-                         style="padding-right:28px;" id="ol-module"
+                <div class="ms-select-box" id="ol-ms-box" onclick="olMsBoxClick()">
+                  <div class="ms-tags" id="ol-ms-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="全部" autocomplete="off"
+                         id="ol-module"
                          oninput="olModuleInput()" onfocus="olModuleInput()"
                          onblur="setTimeout(olHideModuleDrop, 150)">
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
               <div class="p-merch-dropdown" id="ol-module-dropdown" style="display:none;"></div>
@@ -3694,27 +3715,24 @@
             <div class="filter-item">
               <span class="filter-label-el">操作类型</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ol-type">
-                    <option value="">全部</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ol-type-lite" tabindex="0"
+                     onclick="msLiteToggle('ol-type')" onblur="setTimeout(function(){msLiteClose('ol-type')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ol-type-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ol-type-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">敏感等级</span>
               <div class="filter-control">
-                <div class="select-wrap">
-                  <select class="field-select" id="ol-sensitive">
-                    <option value="">全部</option>
-                    <option value="high">高敏感</option>
-                    <option value="medium">中敏感</option>
-                    <option value="normal">普通</option>
-                  </select>
-                  <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                <div class="ms-lite" id="ol-sensitive-lite" tabindex="0"
+                     onclick="msLiteToggle('ol-sensitive')" onblur="setTimeout(function(){msLiteClose('ol-sensitive')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ol-sensitive-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
                 </div>
               </div>
+              <div class="p-merch-dropdown" id="ol-sensitive-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">操作时间</span>
@@ -4224,59 +4242,153 @@
         </span>
       </div>
       <div class="modal-body" style="display:block;padding:24px 24px 8px;">
-        <div class="form-row">
-          <label class="form-label"><span class="ak-req">*</span>商户：</label>
-          <div style="position:relative;flex:1;">
-            <input class="field-input" type="text" id="ar-apply-merchant" style="width:100%;" placeholder="商户 ID / 商户名称"
-                   autocomplete="off" oninput="arApplyMerchantInput()" onfocus="arApplyMerchantInput()"
-                   onblur="setTimeout(arApplyHideMerchantDrop, 150)">
-            <div class="p-merch-dropdown" id="ar-apply-merch-dropdown" style="display:none;left:0;"></div>
-          </div>
-        </div>
-        <div class="form-row">
-          <label class="form-label"><span class="ak-req">*</span>代币：</label>
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>调账类型</span>
           <div class="select-wrap" style="width:100%;">
-            <select class="field-select" id="ar-apply-token" style="width:100%;">
-              <option value="USDT">USDT</option>
-              <option value="USDC">USDC</option>
+            <select class="field-select" id="ar-apply-type" style="width:100%;" onchange="arApplyTypeChange()">
+              <option value="withdraw_return">提币退回</option>
+              <option value="normal">通用调账</option>
             </select>
             <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
           </div>
         </div>
-        <div class="form-row">
-          <label class="form-label"><span class="ak-req">*</span>网络：</label>
-          <div class="select-wrap" style="width:100%;">
-            <select class="field-select" id="ar-apply-network" style="width:100%;">
-              <option value="TRON">TRON</option>
-              <option value="Ethereum">Ethereum</option>
-              <option value="BSC">BSC</option>
-              <option value="Polygon">Polygon</option>
-              <option value="Solana">Solana</option>
-              <option value="Arbitrum">Arbitrum</option>
-              <option value="Base">Base</option>
-            </select>
-            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+        <!-- 通用调账字段 -->
+        <div id="ar-apply-normal-fields">
+          <div class="ak-form-row">
+            <span class="ak-label"><span class="ak-req">*</span>商户</span>
+            <div style="position:relative;flex:1;">
+              <input class="field-input" type="text" id="ar-apply-merchant" style="width:100%;" placeholder="商户 ID / 商户名称"
+                     autocomplete="off" oninput="arApplyMerchantInput()" onfocus="arApplyMerchantInput()"
+                     onblur="setTimeout(arApplyHideMerchantDrop, 150)">
+              <div class="p-merch-dropdown" id="ar-apply-merch-dropdown" style="display:none;left:0;"></div>
+              <div class="ar-wd-hint" id="ar-apply-merchant-err"></div>
+            </div>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label"><span class="ak-req">*</span>代币</span>
+            <div class="select-wrap" style="width:100%;">
+              <select class="field-select" id="ar-apply-token" style="width:100%;">
+                <option value="USDT">USDT</option>
+                <option value="USDC">USDC</option>
+              </select>
+              <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+            </div>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label"><span class="ak-req">*</span>网络</span>
+            <div class="select-wrap" style="width:100%;">
+              <select class="field-select" id="ar-apply-network" style="width:100%;">
+                <option value="TRON">TRON</option>
+                <option value="Ethereum">Ethereum</option>
+                <option value="BSC">BSC</option>
+                <option value="Polygon">Polygon</option>
+                <option value="Solana">Solana</option>
+                <option value="Arbitrum">Arbitrum</option>
+                <option value="Base">Base</option>
+              </select>
+              <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+            </div>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label"><span class="ak-req">*</span>方向</span>
+            <div class="select-wrap" style="width:100%;">
+              <select class="field-select" id="ar-apply-direction" style="width:100%;">
+                <option value="increase">增加</option>
+                <option value="decrease">减少</option>
+              </select>
+              <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+            </div>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label"><span class="ak-req">*</span>金额</span>
+            <div style="flex:1;">
+              <input class="field-input" type="number" step="0.0001" min="0" id="ar-apply-amount" style="width:100%;font-family:'Inter',sans-serif;" placeholder="请输入调账金额" oninput="document.getElementById('ar-apply-amount-err').textContent=''">
+              <div class="ar-wd-hint" id="ar-apply-amount-err"></div>
+            </div>
+          </div>
+          <div class="ak-form-row top">
+            <span class="ak-label" style="padding-top:8px;"><span class="ak-req">*</span>备注</span>
+            <div class="wm-remark-wrap" style="flex:1;">
+              <textarea class="wm-remark" id="ar-apply-remark" placeholder="请填写调账原因（如长款/短款核实结果、对账依据等）" maxlength="200" oninput="document.getElementById('ar-apply-remark-count').textContent=this.value.length;document.getElementById('ar-apply-remark-err').textContent=''"></textarea>
+              <span class="wm-remark-count"><span id="ar-apply-remark-count">0</span>/200</span>
+              <div class="ar-wd-hint" id="ar-apply-remark-err"></div>
+            </div>
           </div>
         </div>
-        <div class="form-row">
-          <label class="form-label"><span class="ak-req">*</span>方向：</label>
-          <div class="select-wrap" style="width:100%;">
-            <select class="field-select" id="ar-apply-direction" style="width:100%;">
-              <option value="increase">增加</option>
-              <option value="decrease">减少</option>
-            </select>
-            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+
+        <!-- 提币退回字段 -->
+        <div id="ar-apply-wd-fields" style="display:none;">
+          <div class="ak-form-row top">
+            <span class="ak-label" style="padding-top:8px;"><span class="ak-req">*</span>提现订单</span>
+            <div style="flex:1;">
+              <input class="field-input" type="text" id="ar-apply-wd-order" style="width:100%;font-family:'Inter',sans-serif;"
+                     placeholder="请输入商户提币订单号" autocomplete="off"
+                     oninput="arApplyWdOrderInput()">
+              <div class="ar-wd-hint" id="ar-apply-wd-order-hint"></div>
+            </div>
           </div>
-        </div>
-        <div class="form-row">
-          <label class="form-label"><span class="ak-req">*</span>金额：</label>
-          <input class="field-input" type="number" step="0.0001" min="0" id="ar-apply-amount" style="width:100%;font-family:'Inter',sans-serif;" placeholder="请输入调账金额">
-        </div>
-        <div class="form-row" style="align-items:flex-start;">
-          <label class="form-label" style="padding-top:8px;"><span class="ak-req">*</span>备注：</label>
-          <div class="wm-remark-wrap" style="flex:1;">
-            <textarea class="wm-remark" id="ar-apply-remark" placeholder="请填写调账原因（如长款/短款核实结果、对账依据等）" maxlength="200" oninput="document.getElementById('ar-apply-remark-count').textContent=this.value.length"></textarea>
-            <span class="wm-remark-count"><span id="ar-apply-remark-count">0</span>/200</span>
+          <div class="ak-form-row">
+            <span class="ak-label">商户</span>
+            <span class="ar-wd-readout" id="ar-apply-wd-merchant">—</span>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">用户 ID</span>
+            <span class="ar-wd-readout" id="ar-apply-wd-userid">—</span>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">代币</span>
+            <span class="ar-wd-readout" id="ar-apply-wd-token">—</span>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">网络</span>
+            <span class="ar-wd-readout" id="ar-apply-wd-network">—</span>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">金额</span>
+            <span class="ar-wd-readout" id="ar-apply-wd-origin-amount">—</span>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label"><span class="ak-req">*</span>到账金额</span>
+            <div style="flex:1;">
+              <input class="field-input" type="number" step="0.0001" min="0" id="ar-apply-wd-amount" style="width:100%;font-family:'Inter',sans-serif;" placeholder="请输入链上实际退回的到账金额" oninput="arApplyWdCalc();document.getElementById('ar-apply-wd-amount-err').textContent=''">
+              <div class="ar-wd-hint" id="ar-apply-wd-amount-err"></div>
+            </div>
+          </div>
+          <div class="ak-form-row top">
+            <span class="ak-label" style="padding-top:8px;">手续费</span>
+            <div style="flex:1;">
+              <label class="ak-radio-item" style="margin-bottom:10px;">
+                <input type="radio" name="ar-apply-wd-fee-mode" value="auto" id="ar-apply-wd-fee-mode-auto" checked onchange="arApplyWdFeeModeChange()"><span class="ak-dot"></span><span id="ar-apply-wd-fee-auto-label">按充币费率自动计算</span>
+              </label>
+              <label class="ak-radio-item" style="margin-bottom:10px;">
+                <input type="radio" name="ar-apply-wd-fee-mode" value="zero" id="ar-apply-wd-fee-mode-zero" onchange="arApplyWdFeeModeChange()"><span class="ak-dot"></span>不收（0）
+              </label>
+              <label class="ak-radio-item">
+                <input type="radio" name="ar-apply-wd-fee-mode" value="custom" id="ar-apply-wd-fee-mode-custom" onchange="arApplyWdFeeModeChange()"><span class="ak-dot"></span>自定义
+                <input class="field-input" type="number" step="0.0001" min="0" id="ar-apply-wd-fee" style="width:140px;margin-left:8px;font-family:'Inter',sans-serif;" placeholder="请输入手续费" disabled oninput="arApplyWdCalc();document.getElementById('ar-apply-wd-fee-err').textContent=''">
+              </label>
+              <div class="ar-wd-hint" id="ar-apply-wd-fee-err"></div>
+            </div>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">净入账</span>
+            <span class="ar-wd-net" id="ar-apply-wd-net">0.00</span>
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">退回地址</span>
+            <input class="field-input" type="text" id="ar-apply-wd-address" style="width:100%;font-family:'Inter',sans-serif;" placeholder="选填">
+          </div>
+          <div class="ak-form-row">
+            <span class="ak-label">退回哈希</span>
+            <input class="field-input" type="text" id="ar-apply-wd-hash" style="width:100%;font-family:'Inter',sans-serif;" placeholder="选填">
+          </div>
+          <div class="ak-form-row top">
+            <span class="ak-label" style="padding-top:8px;"><span class="ak-req">*</span>调账原因</span>
+            <div class="wm-remark-wrap" style="flex:1;">
+              <textarea class="wm-remark" id="ar-apply-wd-remark" placeholder="请填写调账原因（如：客户提现成功后原路退回，核实链上到账后补记充值）" maxlength="200" oninput="document.getElementById('ar-apply-wd-remark-count').textContent=this.value.length;document.getElementById('ar-apply-wd-remark-err').textContent=''"></textarea>
+              <span class="wm-remark-count"><span id="ar-apply-wd-remark-count">0</span>/200</span>
+              <div class="ar-wd-hint" id="ar-apply-wd-remark-err"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -4824,6 +4936,73 @@
 
   <script>
   // ══════════════════════════════════════════════════════
+  //  轻量勾选下拉（Lightweight Multi-Select）—— 通用组件
+  //  用于「代币/网络/状态」等选项固定、无需模糊搜索的筛选下拉，多选。
+  //  触发器复用 tabindex + onblur + setTimeout 的既有交互约定（与 p-merch-dropdown
+  //  一致），不引入全局 document click 监听；下拉列表复用 .p-merch-dropdown 定位。
+  // ══════════════════════════════════════════════════════
+  const MS_CHECK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+  const MS_LITE = {}; // id -> { options:[{value,label}], selected:Set, placeholder }
+
+  function msLiteInit(id, options, placeholder) {
+    MS_LITE[id] = { options, selected: new Set(), placeholder: placeholder || '全部' };
+    msLiteRenderTrigger(id);
+  }
+  function msLiteToggle(id) {
+    const dd = document.getElementById(id + '-dropdown');
+    if (dd.style.display === 'none') msLiteOpen(id); else msLiteClose(id);
+  }
+  function msLiteOpen(id) {
+    msLiteRenderOptions(id);
+    document.getElementById(id + '-dropdown').style.display = '';
+    const trigger = document.getElementById(id + '-lite');
+    if (trigger) trigger.classList.add('active');
+  }
+  function msLiteClose(id) {
+    const dd = document.getElementById(id + '-dropdown');
+    if (dd) dd.style.display = 'none';
+    const trigger = document.getElementById(id + '-lite');
+    if (trigger) trigger.classList.remove('active');
+  }
+  function msLiteRenderOptions(id) {
+    const cfg = MS_LITE[id];
+    const dd = document.getElementById(id + '-dropdown');
+    dd.innerHTML = cfg.options.map(o => {
+      const sel = cfg.selected.has(o.value);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();msLiteToggleOption('${id}','${o.value}')">
+        <span class="ms-option-text">${o.label}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('');
+  }
+  function msLiteToggleOption(id, value) {
+    const cfg = MS_LITE[id];
+    if (cfg.selected.has(value)) cfg.selected.delete(value); else cfg.selected.add(value);
+    msLiteRenderOptions(id);
+    msLiteRenderTrigger(id);
+  }
+  function msLiteRenderTrigger(id) {
+    const cfg = MS_LITE[id];
+    const text = document.getElementById(id + '-text');
+    if (!cfg.selected.size) {
+      text.textContent = cfg.placeholder;
+      text.classList.add('placeholder');
+    } else {
+      const labels = cfg.options.filter(o => cfg.selected.has(o.value)).map(o => o.label);
+      text.textContent = labels.join('、');
+      text.classList.remove('placeholder');
+    }
+  }
+  function msLiteGet(id) { return MS_LITE[id] ? Array.from(MS_LITE[id].selected) : []; }
+  function msLiteReset(id) { if (MS_LITE[id]) { MS_LITE[id].selected.clear(); msLiteRenderTrigger(id); } }
+  // 供其他页面（如首页统计卡片跳转）以编程方式设置单个选中值
+  function msLiteSetSingle(id, value) {
+    if (!MS_LITE[id]) return;
+    MS_LITE[id].selected.clear();
+    if (value) MS_LITE[id].selected.add(value);
+    msLiteRenderTrigger(id);
+  }
+
+  // ══════════════════════════════════════════════════════
   //  Tab / Nav routing
   // ══════════════════════════════════════════════════════
   const PAGE_META = {
@@ -4835,8 +5014,8 @@
     'ramp-detail': { label: '出入金详情', icon: 'file-search' },
     home:     { label: '首页',      icon: 'house' },
     'platform-assets': { label: '资产余额', icon: 'wallet', parent: '平台资产' },
-    'account-ledger':  { label: '账户明细', icon: 'receipt', parent: '平台资产' },
-    'adjust-review':   { label: '账户调账', icon: 'scale', parent: '平台资产' },
+    'account-ledger':  { label: '商户账户明细', icon: 'receipt', parent: '平台资产' },
+    'adjust-review':   { label: '商户账户调账', icon: 'scale', parent: '平台资产' },
     merchant: { label: '商户管理',  icon: 'users' },
     'merchant-detail': { label: '商户详情', icon: 'layout-grid' },
     withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
@@ -5025,7 +5204,7 @@
   // 但只能在「提币审核」处理，因此按 reviewType 跳转到 withdraw-audit 页筛选
   function homeGoWithdraw(status) {
     navigateTo('withdraw');
-    document.getElementById('w-status').value = status;
+    msLiteSetSingle('w-status', status);
     withdrawSearch();
   }
   function homeGoWithdrawAudit(reviewType) {
@@ -5123,21 +5302,44 @@
     { id:'253024631', name:'benny@bdy.tech'  },
   ];
 
+  let dSelectedMerchants = [];
+
+  function dMsBoxClick() { document.getElementById('d-uid').focus(); }
+
   function dMerchantInput() {
     const val = document.getElementById('d-uid').value.trim().toLowerCase();
     const dd  = document.getElementById('d-merch-dropdown');
     const list = val ? D_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : D_MERCHANTS;
-    if (!list.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = list.map(m =>
-      `<div class="p-merch-opt" onmousedown="dSelectMerchant('${m.name}')">
-        ${m.name}<span class="p-merch-id">${m.id}</span>
-      </div>`
-    ).join('');
+    dd.innerHTML = list.length ? list.map(m => {
+      const sel = dSelectedMerchants.includes(m.id);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();dToggleMerchant('${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('') : `<div class="ms-empty">无匹配商户</div>`;
     dd.style.display = '';
   }
-  function dSelectMerchant(name) {
-    document.getElementById('d-uid').value = name;
-    document.getElementById('d-merch-dropdown').style.display = 'none';
+  function dToggleMerchant(id) {
+    const i = dSelectedMerchants.indexOf(id);
+    if (i > -1) dSelectedMerchants.splice(i, 1); else dSelectedMerchants.push(id);
+    dRenderMerchantTags();
+    dMerchantInput();
+  }
+  function dRemoveMerchant(id) {
+    dSelectedMerchants = dSelectedMerchants.filter(x => x !== id);
+    dRenderMerchantTags();
+    dMerchantInput();
+  }
+  function dRenderMerchantTags() {
+    const box = document.getElementById('d-ms-tags');
+    const input = document.getElementById('d-uid');
+    const items = dSelectedMerchants.map(id => D_MERCHANTS.find(m => m.id === id)).filter(Boolean);
+    const MAX_VISIBLE = 1;
+    let html = items.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m.name}</span><span class="ms-tag-x" onmousedown="event.preventDefault();dRemoveMerchant('${m.id}')">×</span></span>`
+    ).join('');
+    if (items.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${items.length - MAX_VISIBLE}</span>`;
+    box.innerHTML = html;
+    input.placeholder = items.length ? '' : '商户 ID / 商户名称';
   }
   function dHideMerchantDrop() {
     const dd = document.getElementById('d-merch-dropdown');
@@ -5162,6 +5364,8 @@
   };
 
   const DEPOSIT_ALL = [
+    { uid:'291654802', name:'kara4', userId:'U60022002', token:'USDT', network:'TRON', amount:'7.31', fee:'0.05', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-08-26 10:40:00', hash:'a17c3f9e2b6d4c81f0a5e9d3c7b2f4a8e6d1c9b3f7a2e5d8c0b4f6a9e3d7c1b5', channel:'', status:'arrived',
+      remark:'由商户账户调账 - 提币退回生成，关联调账申请 ADJ20260826103000，关联提现单 Shine0000000000003' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', channel:'Meta Trader', status:'arrived' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:45', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', channel:'',           status:'arrived' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'BSC',  amount:'0.3',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:14', hash:'0f73e34a01bc063a7d8e5f2c9b4a1d6e8f3c7b2a5d9e0f4c8b3a7d6e2f1c5b4', channel:'',           status:'pending' },
@@ -5256,9 +5460,9 @@
         <td style="font-family:Inter,sans-serif">${orderAmount === '' ? '<span class="cell-empty">—</span>' : orderAmount}</td>
         <td style="font-family:Inter,sans-serif">${fee === '' ? '<span class="cell-empty">—</span>' : fee}</td>
         <td style="font-family:Inter,sans-serif;color:#67C23A;">${net === '' ? '<span class="cell-empty">—</span>' : net}</td>
-        <td>${fullCell(r.wallet)}</td>
+        <td>${r.wallet === '-' ? '-' : fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
-        <td>${fullCell(r.hash)}</td>
+        <td>${r.hash === '-' ? '-' : fullCell(r.hash)}</td>
         <td>${r.channel || '直连'}</td>
         <td>${orderNo ? fullCell(orderNo) : '<span class="cell-empty">-</span>'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
@@ -5298,27 +5502,40 @@
     dState.size = +document.getElementById('d-page-size').value;
     dState.page = 1; depositRender();
   }
+  function depositFiltersInit() {
+    msLiteInit('d-token', [
+      { value:'USDT', label:'USDT' }, { value:'USDC', label:'USDC' },
+    ], '请选择');
+    msLiteInit('d-network', [
+      { value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }, { value:'BSC', label:'BSC' },
+    ], '请选择');
+    msLiteInit('d-status', [
+      { value:'manual_review', label:'待人工审核' }, { value:'arrived', label:'已到账' },
+      { value:'pending', label:'待匹配订单' }, { value:'invalid', label:'无效充值' }, { value:'refunded', label:'已退款' },
+    ], '状态');
+    msLiteInit('d-channel', [
+      { value:'direct', label:'直连' }, { value:'Meta Trader', label:'Meta Trader' }, { value:'On Ramp', label:'On Ramp' },
+    ], '全部');
+  }
   function depositSearch() {
-    const uid     = document.getElementById('d-uid').value.trim().toLowerCase();
     const userId  = document.getElementById('d-userid').value.trim().toLowerCase();
     const wallet  = document.getElementById('d-wallet').value.trim().toLowerCase();
-    const token   = document.getElementById('d-token').value;
-    const net     = document.getElementById('d-network').value;
-    const st      = document.getElementById('d-status').value;
-    const channel = document.getElementById('d-channel').value;
+    const tokens   = msLiteGet('d-token');
+    const nets     = msLiteGet('d-network');
+    const sts      = msLiteGet('d-status');
+    const channels = msLiteGet('d-channel');
     const hash    = document.getElementById('d-hash').value.trim().toLowerCase();
     const order   = document.getElementById('d-order').value.trim().toLowerCase();
     const ds      = document.getElementById('d-date-start').value;
     const de      = document.getElementById('d-date-end').value;
     dState.rows = DEPOSIT_ALL.filter(r => {
-      if (uid    && !r.uid.toLowerCase().includes(uid) && !r.name.toLowerCase().includes(uid)) return false;
+      if (dSelectedMerchants.length && !dSelectedMerchants.includes(r.uid)) return false;
       if (userId && !r.userId.toLowerCase().includes(userId)) return false;
       if (wallet && !r.wallet.toLowerCase().includes(wallet)) return false;
-      if (token   && r.token   !== token)                      return false;
-      if (net     && r.network !== net)                        return false;
-      if (st      && r.status  !== st)                         return false;
-      if (channel === 'direct' && r.channel !== '')            return false;
-      if (channel && channel !== 'direct' && r.channel !== channel) return false;
+      if (tokens.length   && !tokens.includes(r.token))        return false;
+      if (nets.length     && !nets.includes(r.network))        return false;
+      if (sts.length      && !sts.includes(r.status))          return false;
+      if (channels.length && !channels.some(c => c === 'direct' ? r.channel === '' : r.channel === c)) return false;
       if (hash    && !r.hash.toLowerCase().includes(hash))    return false;
       if (order   && !depositOrderNo(r).toLowerCase().includes(order)) return false;
       if (ds      && r.time.split(' ')[0] < ds)               return false;
@@ -5328,16 +5545,22 @@
     dState.page = 1; depositRender();
   }
   function depositReset() {
-    ['d-uid','d-userid','d-wallet','d-token','d-network','d-status','d-channel','d-hash','d-order','d-date-start','d-date-end']
+    ['d-uid','d-userid','d-wallet','d-hash','d-order','d-date-start','d-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
+    ['d-token','d-network','d-status','d-channel'].forEach(msLiteReset);
+    dSelectedMerchants = [];
+    dRenderMerchantTags();
     dState.rows = [...DEPOSIT_ALL];
     dState.page = 1; depositRender();
   }
   function openDepositMatch(idx) {
     const r = DEPOSIT_ALL[idx];
     document.getElementById('p-uid').value = r.userId;
-    document.getElementById('p-status').value = 'processing';
-    ['p-order','p-merchant','p-channel','p-addr','p-hash','p-date-start','p-date-end']
+    msLiteSetSingle('p-status', 'processing');
+    msLiteReset('p-channel');
+    pSelectedMerchants = [];
+    pRenderMerchantTags();
+    ['p-order','p-merchant','p-addr','p-hash','p-date-start','p-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
     navigateTo('payment');
     paymentSearch();
@@ -5353,8 +5576,8 @@
     }), '充币记录.csv');
   }
   function openDExportModal() {
-    const stVal = document.getElementById('d-status').value;
-    document.getElementById('d-export-status').textContent = stVal ? D_STATUS[stVal].label : '全部';
+    const stVals = msLiteGet('d-status');
+    document.getElementById('d-export-status').textContent = stVals.length ? stVals.map(v => D_STATUS[v].label).join('、') : '全部';
     document.getElementById('d-export-count').textContent = dState.rows.length;
     document.querySelector('#d-export-modal input[name="d-export-format"][value="csv"]').checked = true;
     document.getElementById('d-export-modal').classList.add('show');
@@ -5592,9 +5815,9 @@
         <td>${r.token}</td><td>${r.network}</td>
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
         <td style="font-family:Inter,sans-serif">${r.fee === '' ? '<span class="cell-empty">—</span>' : r.fee}</td>
-        <td>${fullCell(r.wallet)}</td>
+        <td>${r.wallet === '-' ? '-' : fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
-        <td>${fullCell(r.hash)}</td>
+        <td>${r.hash === '-' ? '-' : fullCell(r.hash)}</td>
         <td><span class="badge ${tp.cls}">${tp.label}</span></td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td><div class="action-cell">${viewBtn}${actionBtns}</div></td>
@@ -6027,35 +6250,75 @@
     wState.size = +document.getElementById('w-page-size').value;
     wState.page = 1; withdrawRender();
   }
+  let wSelectedMerchants = [];
+
+  function wMsBoxClick() { document.getElementById('w-merchant').focus(); }
+
   function wMerchantInput() {
     const val = document.getElementById('w-merchant').value.trim().toLowerCase();
     const dd  = document.getElementById('w-merch-dropdown');
     const list = val ? W_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : W_MERCHANTS;
-    if (!list.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = list.map(m =>
-      `<div class="p-merch-opt" onmousedown="wSelectMerchant('${m.name}')">
-        ${m.name}<span class="p-merch-id">${m.id}</span>
-      </div>`
-    ).join('');
+    dd.innerHTML = list.length ? list.map(m => {
+      const sel = wSelectedMerchants.includes(m.id);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();wToggleMerchant('${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('') : `<div class="ms-empty">无匹配商户</div>`;
     dd.style.display = '';
   }
-  function wSelectMerchant(name) {
-    document.getElementById('w-merchant').value = name;
-    document.getElementById('w-merch-dropdown').style.display = 'none';
+  function wToggleMerchant(id) {
+    const i = wSelectedMerchants.indexOf(id);
+    if (i > -1) wSelectedMerchants.splice(i, 1); else wSelectedMerchants.push(id);
+    wRenderMerchantTags();
+    wMerchantInput();
+  }
+  function wRemoveMerchant(id) {
+    wSelectedMerchants = wSelectedMerchants.filter(x => x !== id);
+    wRenderMerchantTags();
+    wMerchantInput();
+  }
+  function wRenderMerchantTags() {
+    const box = document.getElementById('w-ms-tags');
+    const input = document.getElementById('w-merchant');
+    const items = wSelectedMerchants.map(id => W_MERCHANTS.find(m => m.id === id)).filter(Boolean);
+    const MAX_VISIBLE = 1;
+    let html = items.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m.name}</span><span class="ms-tag-x" onmousedown="event.preventDefault();wRemoveMerchant('${m.id}')">×</span></span>`
+    ).join('');
+    if (items.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${items.length - MAX_VISIBLE}</span>`;
+    box.innerHTML = html;
+    input.placeholder = items.length ? '' : '商户 ID / 商户名称';
   }
   function wHideMerchantDrop() {
     const dd = document.getElementById('w-merch-dropdown');
     if (dd) dd.style.display = 'none';
   }
+  function withdrawFiltersInit() {
+    msLiteInit('w-token', [
+      { value:'USDT', label:'USDT' }, { value:'BTC', label:'BTC' },
+    ], '请选择');
+    msLiteInit('w-network', [
+      { value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }, { value:'BSC', label:'BSC' },
+    ], '请选择');
+    msLiteInit('w-status', [
+      { value:'risk_pending', label:'风控待处理' }, { value:'withdrawing', label:'提币中' },
+      { value:'completed', label:'已到账' }, { value:'failed', label:'提币失败' },
+    ], '请选择');
+    msLiteInit('w-channel', [
+      { value:'Cobo', label:'Cobo' }, { value:'Payme', label:'Payme' },
+    ], '请选择');
+    msLiteInit('w-method', [
+      { value:'API', label:'API' }, { value:'Excel', label:'Excel' }, { value:'单笔', label:'单笔' },
+    ], '请选择');
+  }
   function withdrawSearch() {
-    const merchant = document.getElementById('w-merchant').value.trim().toLowerCase();
     const userId   = document.getElementById('w-userid').value.trim().toLowerCase();
-    const token    = document.getElementById('w-token').value;
-    const net      = document.getElementById('w-network').value;
+    const tokens   = msLiteGet('w-token');
+    const nets     = msLiteGet('w-network');
     const wallet   = document.getElementById('w-wallet').value.trim().toLowerCase();
-    const st       = document.getElementById('w-status').value;
-    const channel  = document.getElementById('w-channel').value;
-    const method   = document.getElementById('w-method').value;
+    const sts      = msLiteGet('w-status');
+    const channels = msLiteGet('w-channel');
+    const methods  = msLiteGet('w-method');
     const hash     = document.getElementById('w-hash').value.trim().toLowerCase();
     const batch    = document.getElementById('w-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('w-paypazid').value.trim().toLowerCase();
@@ -6067,14 +6330,14 @@
     const de       = document.getElementById('w-date-end').value;
     wState.rows = WITHDRAW_ALL.filter(r => {
       if (wIsAuditRecord(r)) return false;
-      if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
+      if (wSelectedMerchants.length && !wSelectedMerchants.includes(r.merchantId)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
-      if (token    && r.token !== token)                               return false;
-      if (net      && r.network !== net)                               return false;
+      if (tokens.length   && !tokens.includes(r.token))                return false;
+      if (nets.length     && !nets.includes(r.network))                return false;
       if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
-      if (st       && r.status !== st)                                 return false;
-      if (channel  && r.channel !== channel)                           return false;
-      if (method   && r.method !== method)                             return false;
+      if (sts.length       && !sts.includes(r.status))                 return false;
+      if (channels.length  && !channels.includes(r.channel))           return false;
+      if (methods.length   && !methods.includes(r.method))             return false;
       if (hash     && !r.hash.toLowerCase().includes(hash))           return false;
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
@@ -6089,8 +6352,11 @@
     wState.page = 1; withdrawRender();
   }
   function withdrawReset() {
-    ['w-merchant','w-userid','w-token','w-network','w-wallet','w-status','w-channel','w-method','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
+    ['w-merchant','w-userid','w-wallet','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
+    ['w-token','w-network','w-status','w-channel','w-method'].forEach(msLiteReset);
+    wSelectedMerchants = [];
+    wRenderMerchantTags();
     wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditRecord(r)); wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
@@ -6101,8 +6367,8 @@
     ]), '提币记录.csv');
   }
   function openWdExportModal() {
-    const stVal = document.getElementById('w-status').value;
-    document.getElementById('w-export-status').textContent = stVal ? W_STATUS[stVal].label : '全部';
+    const stVals = msLiteGet('w-status');
+    document.getElementById('w-export-status').textContent = stVals.length ? stVals.map(v => W_STATUS[v].label).join('、') : '全部';
     document.getElementById('w-export-count').textContent = wState.rows.length;
     document.querySelector('#w-export-modal input[name="w-export-format"][value="csv"]').checked = true;
     document.getElementById('w-export-modal').classList.add('show');
@@ -6402,49 +6668,85 @@
     waState.size = +document.getElementById('wa-page-size').value;
     waState.page = 1; withdrawAuditRender();
   }
+  let waSelectedMerchants = [];
+
+  function waMsBoxClick() { document.getElementById('wa-merchant').focus(); }
+
   function waMerchantInput() {
     const val = document.getElementById('wa-merchant').value.trim().toLowerCase();
     const dd  = document.getElementById('wa-merch-dropdown');
     const list = val ? W_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : W_MERCHANTS;
-    if (!list.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = list.map(m =>
-      `<div class="p-merch-opt" onmousedown="waSelectMerchant('${m.name}')">
-        ${m.name}<span class="p-merch-id">${m.id}</span>
-      </div>`
-    ).join('');
+    dd.innerHTML = list.length ? list.map(m => {
+      const sel = waSelectedMerchants.includes(m.id);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();waToggleMerchant('${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('') : `<div class="ms-empty">无匹配商户</div>`;
     dd.style.display = '';
   }
-  function waSelectMerchant(name) {
-    document.getElementById('wa-merchant').value = name;
-    document.getElementById('wa-merch-dropdown').style.display = 'none';
+  function waToggleMerchant(id) {
+    const i = waSelectedMerchants.indexOf(id);
+    if (i > -1) waSelectedMerchants.splice(i, 1); else waSelectedMerchants.push(id);
+    waRenderMerchantTags();
+    waMerchantInput();
+  }
+  function waRemoveMerchant(id) {
+    waSelectedMerchants = waSelectedMerchants.filter(x => x !== id);
+    waRenderMerchantTags();
+    waMerchantInput();
+  }
+  function waRenderMerchantTags() {
+    const box = document.getElementById('wa-ms-tags');
+    const input = document.getElementById('wa-merchant');
+    const items = waSelectedMerchants.map(id => W_MERCHANTS.find(m => m.id === id)).filter(Boolean);
+    const MAX_VISIBLE = 1;
+    let html = items.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m.name}</span><span class="ms-tag-x" onmousedown="event.preventDefault();waRemoveMerchant('${m.id}')">×</span></span>`
+    ).join('');
+    if (items.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${items.length - MAX_VISIBLE}</span>`;
+    box.innerHTML = html;
+    input.placeholder = items.length ? '' : '商户 ID / 商户名称';
   }
   function waHideMerchantDrop() {
     const dd = document.getElementById('wa-merch-dropdown');
     if (dd) dd.style.display = 'none';
   }
+  function withdrawAuditFiltersInit() {
+    msLiteInit('wa-token', [
+      { value:'USDT', label:'USDT' }, { value:'BTC', label:'BTC' },
+    ], '请选择');
+    msLiteInit('wa-network', [
+      { value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }, { value:'BSC', label:'BSC' },
+    ], '请选择');
+    msLiteInit('wa-channel', [
+      { value:'Cobo', label:'Cobo' }, { value:'Payme', label:'Payme' },
+    ], '请选择');
+    msLiteInit('wa-method', [
+      { value:'API', label:'API' }, { value:'Excel', label:'Excel' }, { value:'单笔', label:'单笔' },
+    ], '请选择');
+  }
   function withdrawAuditSearch() {
-    const merchant = document.getElementById('wa-merchant').value.trim().toLowerCase();
     const userId   = document.getElementById('wa-userid').value.trim().toLowerCase();
-    const token    = document.getElementById('wa-token').value;
-    const net      = document.getElementById('wa-network').value;
+    const tokens   = msLiteGet('wa-token');
+    const nets     = msLiteGet('wa-network');
     const wallet   = document.getElementById('wa-wallet').value.trim().toLowerCase();
     const reviewType = document.getElementById('wa-status').value;
-    const channel  = document.getElementById('wa-channel').value;
-    const method   = document.getElementById('wa-method').value;
+    const channels = msLiteGet('wa-channel');
+    const methods  = msLiteGet('wa-method');
     const batch    = document.getElementById('wa-batch').value.trim().toLowerCase();
     const paypaz   = document.getElementById('wa-paypazid').value.trim().toLowerCase();
     const wds      = document.getElementById('wa-wdtime-start').value;
     const wde      = document.getElementById('wa-wdtime-end').value;
     waState.rows = WITHDRAW_ALL.filter(r => {
       if (!wIsAuditRecord(r)) return false;
-      if (merchant && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
+      if (waSelectedMerchants.length && !waSelectedMerchants.includes(r.merchantId)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
-      if (token    && r.token !== token)                               return false;
-      if (net      && r.network !== net)                               return false;
+      if (tokens.length   && !tokens.includes(r.token))                return false;
+      if (nets.length     && !nets.includes(r.network))                return false;
       if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
       if (reviewType && r.reviewType !== reviewType)                   return false;
-      if (channel  && r.channel !== channel)                           return false;
-      if (method   && r.method !== method)                             return false;
+      if (channels.length  && !channels.includes(r.channel))           return false;
+      if (methods.length   && !methods.includes(r.method))             return false;
       if (batch    && !r.batch.toLowerCase().includes(batch))         return false;
       if (paypaz   && !r.paypazId.toLowerCase().includes(paypaz))     return false;
       if (wds      && r.wdTime !== '-' && r.wdTime.split(' ')[0] < wds) return false;
@@ -6455,8 +6757,11 @@
     waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditReset() {
-    ['wa-merchant','wa-userid','wa-token','wa-network','wa-wallet','wa-status','wa-channel','wa-method','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
+    ['wa-merchant','wa-userid','wa-wallet','wa-status','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
       .forEach(id => { document.getElementById(id).value = ''; });
+    ['wa-token','wa-network','wa-channel','wa-method'].forEach(msLiteReset);
+    waSelectedMerchants = [];
+    waRenderMerchantTags();
     waState.rows = WITHDRAW_ALL.filter(wIsAuditRecord); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditExport() {
@@ -6944,14 +7249,31 @@
     pState.size = +document.getElementById('p-page-size').value;
     pState.page = 1; paymentRender();
   }
+  let pSelectedMerchants = [];
+
+  function pMsBoxClick() { document.getElementById('p-merchant').focus(); }
+
+  function paymentFiltersInit() {
+    msLiteInit('p-channel', [
+      { value:'direct', label:'直连' }, { value:'Meta Trader', label:'Meta Trader' },
+    ], '全部');
+    msLiteInit('p-status', [
+      { value:'processing', label:'处理中' }, { value:'completed', label:'已完成' },
+    ], '请选择');
+    msLiteInit('p-token', [
+      { value:'USDT', label:'USDT' }, { value:'BTC', label:'BTC' }, { value:'Ethereum', label:'Ethereum' },
+    ], '请选择');
+    msLiteInit('p-network', [
+      { value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }, { value:'BSC', label:'BSC' },
+    ], '请选择');
+  }
   function paymentSearch() {
     const order   = document.getElementById('p-order').value.trim().toLowerCase();
-    const merch   = document.getElementById('p-merchant').value.trim().toLowerCase();
     const uid     = document.getElementById('p-uid').value.trim().toLowerCase();
-    const channel = document.getElementById('p-channel').value;
-    const st      = document.getElementById('p-status').value;
-    const token   = document.getElementById('p-token').value;
-    const network = document.getElementById('p-network').value;
+    const channels = msLiteGet('p-channel');
+    const sts       = msLiteGet('p-status');
+    const tokens    = msLiteGet('p-token');
+    const networks  = msLiteGet('p-network');
     const addr    = document.getElementById('p-addr').value.trim().toLowerCase();
     const hash    = document.getElementById('p-hash').value.trim().toLowerCase();
     const ds      = document.getElementById('p-date-start').value;
@@ -6960,13 +7282,12 @@
     const dde     = document.getElementById('p-done-end').value;
     pState.rows = PAYMENT_ALL.filter(r => {
       if (order  && !r.order.toLowerCase().includes(order))                                                return false;
-      if (merch  && !r.merchantId.toLowerCase().includes(merch) && !r.merchantName.toLowerCase().includes(merch)) return false;
+      if (pSelectedMerchants.length && !pSelectedMerchants.includes(r.merchantId))                          return false;
       if (uid    && !r.userId.toLowerCase().includes(uid))                                                return false;
-      if (channel === 'direct' && r.channel !== '')                                                       return false;
-      if (channel && channel !== 'direct' && r.channel !== channel)                                       return false;
-      if (st     && r.status !== st)                                                                      return false;
-      if (token  && r.token !== token)                                                                    return false;
-      if (network && r.network !== network)                                                               return false;
+      if (channels.length && !channels.some(c => c === 'direct' ? r.channel === '' : r.channel === c))     return false;
+      if (sts.length      && !sts.includes(r.status))                                                      return false;
+      if (tokens.length   && !tokens.includes(r.token))                                                    return false;
+      if (networks.length && !networks.includes(r.network))                                                return false;
       if (addr   && !r.addr.toLowerCase().includes(addr))                                                 return false;
       if (ds     && r.time.split(' ')[0] < ds)                                                            return false;
       if (de     && r.time.split(' ')[0] > de)                                                            return false;
@@ -6977,25 +7298,47 @@
     pState.page = 1; paymentRender();
   }
   function paymentReset() {
-    ['p-order','p-merchant','p-uid','p-channel','p-status','p-token','p-network','p-addr','p-hash','p-date-start','p-date-end','p-done-start','p-done-end']
+    ['p-order','p-merchant','p-uid','p-addr','p-hash','p-date-start','p-date-end','p-done-start','p-done-end']
       .forEach(id => { document.getElementById(id).value = ''; });
+    ['p-channel','p-status','p-token','p-network'].forEach(msLiteReset);
+    pSelectedMerchants = [];
+    pRenderMerchantTags();
     pState.rows = [...PAYMENT_ALL]; pState.page = 1; paymentRender();
   }
   function pMerchantInput() {
     const val = document.getElementById('p-merchant').value.trim().toLowerCase();
     const dd  = document.getElementById('p-merch-dropdown');
     const list = val ? P_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.toLowerCase().includes(val)) : P_MERCHANTS;
-    if (!list.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = list.map(m =>
-      `<div class="p-merch-opt" onmousedown="pSelectMerchant('${m.name}')">
-        ${m.name}<span class="p-merch-id">${m.id}</span>
-      </div>`
-    ).join('');
+    dd.innerHTML = list.length ? list.map(m => {
+      const sel = pSelectedMerchants.includes(m.id);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();pToggleMerchant('${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('') : `<div class="ms-empty">无匹配商户</div>`;
     dd.style.display = '';
   }
-  function pSelectMerchant(name) {
-    document.getElementById('p-merchant').value = name;
-    document.getElementById('p-merch-dropdown').style.display = 'none';
+  function pToggleMerchant(id) {
+    const i = pSelectedMerchants.indexOf(id);
+    if (i > -1) pSelectedMerchants.splice(i, 1); else pSelectedMerchants.push(id);
+    pRenderMerchantTags();
+    pMerchantInput();
+  }
+  function pRemoveMerchant(id) {
+    pSelectedMerchants = pSelectedMerchants.filter(x => x !== id);
+    pRenderMerchantTags();
+    pMerchantInput();
+  }
+  function pRenderMerchantTags() {
+    const box = document.getElementById('p-ms-tags');
+    const input = document.getElementById('p-merchant');
+    const items = pSelectedMerchants.map(id => P_MERCHANTS.find(m => m.id === id)).filter(Boolean);
+    const MAX_VISIBLE = 1;
+    let html = items.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m.name}</span><span class="ms-tag-x" onmousedown="event.preventDefault();pRemoveMerchant('${m.id}')">×</span></span>`
+    ).join('');
+    if (items.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${items.length - MAX_VISIBLE}</span>`;
+    box.innerHTML = html;
+    input.placeholder = items.length ? '' : '商户 ID / 商户名称';
   }
   function pHideMerchantDrop() {
     const dd = document.getElementById('p-merch-dropdown');
@@ -8341,10 +8684,20 @@
   const paState = { rows: [...PLATFORM_ASSET_ALL], page: 1, size: 20 };
 
   function paSummary() {
-    const token = document.getElementById('pa-token').value;
+    const tokens = msLiteGet('pa-token');
     const total = paState.rows.reduce((sum, r) => sum + parseFloat(r.balance), 0);
     document.getElementById('pa-total-balance').textContent = total.toFixed(2);
-    document.getElementById('pa-total-unit').textContent = token || 'USD';
+    document.getElementById('pa-total-unit').textContent = tokens.length === 1 ? tokens[0] : 'USD';
+  }
+  function paFiltersInit() {
+    msLiteInit('pa-token', [
+      { value:'USDT', label:'USDT' }, { value:'USDC', label:'USDC' },
+    ], '全部');
+    msLiteInit('pa-network', [
+      { value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }, { value:'BSC', label:'BSC' },
+      { value:'Polygon', label:'Polygon' }, { value:'Solana', label:'Solana' },
+      { value:'Arbitrum', label:'Arbitrum' }, { value:'Base', label:'Base' },
+    ], '全部');
   }
 
   function paRender() {
@@ -8379,30 +8732,30 @@
     paState.page = 1; paRender();
   }
   function paSearch() {
-    const token = document.getElementById('pa-token').value;
-    const network = document.getElementById('pa-network').value;
+    const tokens = msLiteGet('pa-token');
+    const networks = msLiteGet('pa-network');
     paState.rows = PLATFORM_ASSET_ALL.filter(r => {
-      if (token && r.token !== token) return false;
-      if (network && r.chainName !== network) return false;
+      if (tokens.length && !tokens.includes(r.token)) return false;
+      if (networks.length && !networks.includes(r.chainName)) return false;
       return true;
     });
     paState.page = 1; paRender();
   }
   function paReset() {
-    document.getElementById('pa-token').value = '';
-    document.getElementById('pa-network').value = '';
+    msLiteReset('pa-token');
+    msLiteReset('pa-network');
     paState.rows = [...PLATFORM_ASSET_ALL];
     paState.page = 1; paRender();
   }
 
   // ══════════════════════════════════════════════════════
-  //  平台资产：账户明细 data & logic
+  //  平台资产：商户账户明细 data & logic
   // ══════════════════════════════════════════════════════
   const LG_TYPE = {
-    deposit:  { label:'充值到账', cls:'badge-green'  },
-    withdraw: { label:'提现',     cls:'badge-blue'   },
-    fee:      { label:'手续费',   cls:'badge-gray'   },
-    adjust:   { label:'人工调账', cls:'badge-purple' },
+    deposit:  { label:'充币',   cls:'badge-green'  },
+    withdraw: { label:'提现',   cls:'badge-blue'   },
+    fee:      { label:'手续费', cls:'badge-gray'   },
+    adjust:   { label:'调账',   cls:'badge-purple' },
   };
 
   // 每个商户的流水按时间顺序滚存余额，末笔 balanceAfter 与 MERCHANT_ALL 对应商户的
@@ -8483,6 +8836,16 @@
         <td style="font-family:Inter,sans-serif">${r.time}</td>
       </tr>`;
     }).join('');
+    const sumType = (t) => alState.rows.filter(r => r.type === t).reduce((s, r) => s + parseFloat(r.amount), 0);
+    const sumAdjust = (positive) => alState.rows
+      .filter(r => r.type === 'adjust' && (parseFloat(r.amount) >= 0) === positive)
+      .reduce((s, r) => s + parseFloat(r.amount), 0);
+    document.getElementById('al-stat-deposit').textContent    = sumType('deposit').toFixed(2);
+    document.getElementById('al-stat-withdraw').textContent   = sumType('withdraw').toFixed(2);
+    document.getElementById('al-stat-fee').textContent        = sumType('fee').toFixed(2);
+    document.getElementById('al-stat-adjust-inc').textContent = sumAdjust(true).toFixed(2);
+    document.getElementById('al-stat-adjust-dec').textContent = sumAdjust(false).toFixed(2);
+    document.getElementById('al-summary-count').textContent = `笔数: ${alState.rows.length}`;
     document.getElementById('al-page-total').textContent = `共 ${alState.rows.length} 条`;
     const total = Math.max(1, Math.ceil(alState.rows.length / alState.size));
     document.getElementById('al-btn-prev').disabled = alState.page <= 1;
@@ -8516,7 +8879,13 @@
     const headers = ['商户 ID','商户名称','用户 ID','类型','代币','网络','金额','变动后余额','关联单号','备注','时间'];
     csvDownload(headers, alState.rows.map(r => [
       r.merchantId, r.merchantName, r.userId || '-', LG_TYPE[r.type].label, r.token, r.network, r.amount, r.balanceAfter, r.relatedNo, r.remark || '-', r.time,
-    ]), '账户明细.csv');
+    ]), '商户账户明细.csv');
+    const merchantFilter = document.getElementById('al-merchant').value.trim() || '全部';
+    OPERLOG_ALL.unshift({
+      id: 'ol-' + Date.now(), time: _arNowStr(), operator: 'admin', module: '商户账户明细', type: '导出',
+      target: merchantFilter, content: `导出商户账户明细 CSV，共 ${alState.rows.length} 条`,
+      result: 'success', ip: '127.0.0.1', level: 'medium',
+    });
   }
 
   function alMerchantInput() {
@@ -8548,41 +8917,54 @@
   };
 
   // 发起（申请）和审核都在本页完成，全部历史保留不移出——已通过的申请会同步在
-  // LEDGER_ALL 生成一笔「人工调账」流水并滚存商户余额，已驳回的只留痕在本页
+  // LEDGER_ALL 生成流水并滚存商户余额，已驳回的只留痕在本页
+  // adjustType：normal（通用调账，生成「调账」流水）/ withdraw_return（提币退回，生成「充币」+「手续费」流水，
+  // 关联原提现单号但不改动提现记录本身状态）
   const ADJUST_ALL = [
-    { id:'ADJ20260823001', merchantId:'635102950', merchantName:'kara',      token:'USDT', network:'TRON', direction:'increase', amount:'116.85', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', applicant:'admin', applyTime:'2026-08-23 16:40:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-23 16:45:00', reviewRemark:'已核实，同意调增' },
-    { id:'ADJ20260824001', merchantId:'884590488', merchantName:'kara2',     token:'USDT', network:'TRON', direction:'decrease', amount:'2.41',   remark:'短款：对账发现系统余额高于实际到账，经核实后调减', applicant:'admin', applyTime:'2026-08-24 16:55:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-24 17:00:00', reviewRemark:'已核实，同意调减' },
-    { id:'ADJ20260818001', merchantId:'460466234', merchantName:'kara3',     token:'USDT', network:'TRON', direction:'increase', amount:'6.22',   remark:'人工调账：客户误退回款项补记', applicant:'admin', applyTime:'2026-08-18 09:50:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-18 10:00:00', reviewRemark:'已核实，同意调增' },
-    { id:'ADJ20260815001', merchantId:'291654802', merchantName:'kara4',     token:'USDT', network:'TRON', direction:'increase', amount:'1.87',   remark:'长款：链上余额核对后调增', applicant:'admin', applyTime:'2026-08-15 08:20:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-15 08:30:00', reviewRemark:'已核实，同意调增' },
-    { id:'ADJ20260822002', merchantId:'884590488', merchantName:'kara2',     token:'USDC', network:'BSC',  direction:'increase', amount:'8.00',   remark:'怀疑遗漏充值，申请调增', applicant:'admin', applyTime:'2026-08-22 09:00:00', status:'rejected', reviewer:'admin', reviewTime:'2026-08-22 09:20:00', reviewRemark:'核实后为重复上报，驳回' },
-    { id:'ADJ20260825001', merchantId:'635102950', merchantName:'kara',      token:'USDT', network:'TRON', direction:'decrease', amount:'5.00',   remark:'短款：本周对账发现待核实差额，申请调减', applicant:'admin', applyTime:'2026-08-25 10:00:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
-    { id:'ADJ20260825002', merchantId:'304857192', merchantName:'gamma-fx',  token:'USDT', network:'TRON', direction:'increase', amount:'20.00',  remark:'客户反馈到账延迟，核实后补记', applicant:'admin', applyTime:'2026-08-25 15:30:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
+    { id:'ADJ20260823001', adjustType:'normal', merchantId:'635102950', merchantName:'kara',      token:'USDT', network:'TRON', direction:'increase', amount:'116.85', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', applicant:'admin', applyTime:'2026-08-23 16:40:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-23 16:45:00', reviewRemark:'已核实，同意调增' },
+    { id:'ADJ20260824001', adjustType:'normal', merchantId:'884590488', merchantName:'kara2',     token:'USDT', network:'TRON', direction:'decrease', amount:'2.41',   remark:'短款：对账发现系统余额高于实际到账，经核实后调减', applicant:'admin', applyTime:'2026-08-24 16:55:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-24 17:00:00', reviewRemark:'已核实，同意调减' },
+    { id:'ADJ20260818001', adjustType:'normal', merchantId:'460466234', merchantName:'kara3',     token:'USDT', network:'TRON', direction:'increase', amount:'6.22',   remark:'人工调账：客户误退回款项补记', applicant:'admin', applyTime:'2026-08-18 09:50:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-18 10:00:00', reviewRemark:'已核实，同意调增' },
+    { id:'ADJ20260815001', adjustType:'normal', merchantId:'291654802', merchantName:'kara4',     token:'USDT', network:'TRON', direction:'increase', amount:'1.87',   remark:'长款：链上余额核对后调增', applicant:'admin', applyTime:'2026-08-15 08:20:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-15 08:30:00', reviewRemark:'已核实，同意调增' },
+    { id:'ADJ20260822002', adjustType:'normal', merchantId:'884590488', merchantName:'kara2',     token:'USDC', network:'BSC',  direction:'increase', amount:'8.00',   remark:'怀疑遗漏充值，申请调增', applicant:'admin', applyTime:'2026-08-22 09:00:00', status:'rejected', reviewer:'admin', reviewTime:'2026-08-22 09:20:00', reviewRemark:'核实后为重复上报，驳回' },
+    { id:'ADJ20260825001', adjustType:'normal', merchantId:'635102950', merchantName:'kara',      token:'USDT', network:'TRON', direction:'decrease', amount:'5.00',   remark:'短款：本周对账发现待核实差额，申请调减', applicant:'admin', applyTime:'2026-08-25 10:00:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
+    { id:'ADJ20260825002', adjustType:'normal', merchantId:'304857192', merchantName:'gamma-fx',  token:'USDT', network:'TRON', direction:'increase', amount:'20.00',  remark:'客户反馈到账延迟，核实后补记', applicant:'admin', applyTime:'2026-08-25 15:30:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
+    { id:'ADJ20260827001', adjustType:'withdraw_return', merchantId:'291654802', merchantName:'kara4', token:'USDT', network:'TRON', direction:'increase', amount:'73.51',
+      relatedWithdrawId:'Shine0000000000004', depositAmount:'74.01', depositFee:'0.50', depositHash:'c29cb98d8b987df7dc0f13d4da65a23ec3c1e8010064ecada1e005b0d934729e', depositAddress:'TWVeLk6pnhsdgy2nJMywXd8hHTrW6JiPxT',
+      remark:'客户提现成功后原路退回，Cobo 已确认入账，核实链上到账后补记充值', applicant:'admin', applyTime:'2026-08-27 11:20:00', status:'pending', reviewer:'', reviewTime:'', reviewRemark:'' },
+    { id:'ADJ20260826103000', adjustType:'withdraw_return', merchantId:'291654802', merchantName:'kara4', token:'USDT', network:'TRON', direction:'increase', amount:'7.26',
+      relatedWithdrawId:'Shine0000000000003', depositAmount:'7.31', depositFee:'0.05', depositHash:'a17c3f9e2b6d4c81f0a5e9d3c7b2f4a8e6d1c9b3f7a2e5d8c0b4f6a9e3d7c1b5', depositAddress:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3',
+      remark:'客户提现成功后原路退回，Cobo 已确认入账，核实链上到账后补记充值', applicant:'admin', applyTime:'2026-08-26 10:30:00', status:'approved', reviewer:'admin', reviewTime:'2026-08-26 10:40:00', reviewRemark:'已核实链上到账，同意补记' },
+    { id:'ADJ20260821093000', adjustType:'withdraw_return', merchantId:'291654802', merchantName:'kara4', token:'USDT', network:'TRON', direction:'increase', amount:'6.81',
+      relatedWithdrawId:'00b0bb0b-1d8a-4d50-8032-514f3c9e7a21', depositAmount:'6.81', depositFee:'0.00', depositHash:'', depositAddress:'',
+      remark:'客户反馈提现未到账，申请补记，待核实链上是否存在退回', applicant:'admin', applyTime:'2026-08-21 09:30:00', status:'rejected', reviewer:'admin', reviewTime:'2026-08-21 09:45:00', reviewRemark:'核实链上未发生退回交易，原提现已成功到账，驳回' },
   ];
 
   const arState = { rows: [...ADJUST_ALL].sort((a,b) => b.applyTime.localeCompare(a.applyTime)), page: 1, size: 10 };
 
   function arFilteredRows() {
-    const merchant  = document.getElementById('ar-merchant').value.trim().toLowerCase();
-    const direction = document.getElementById('ar-direction').value;
-    const status    = document.getElementById('ar-status').value;
-    const orderNo   = document.getElementById('ar-order-no').value.trim().toLowerCase();
-    const applicant = document.getElementById('ar-applicant').value.trim().toLowerCase();
-    const reviewer  = document.getElementById('ar-reviewer').value.trim().toLowerCase();
-    const ds        = document.getElementById('ar-date-start').value;
-    const de        = document.getElementById('ar-date-end').value;
-    const rds       = document.getElementById('ar-review-date-start').value;
-    const rde       = document.getElementById('ar-review-date-end').value;
+    const merchant   = document.getElementById('ar-merchant').value.trim().toLowerCase();
+    const adjustType = document.getElementById('ar-adjust-type').value;
+    const direction  = document.getElementById('ar-direction').value;
+    const status     = document.getElementById('ar-status').value;
+    const orderNo    = document.getElementById('ar-order-no').value.trim().toLowerCase();
+    const applicant  = document.getElementById('ar-applicant').value.trim().toLowerCase();
+    const reviewer   = document.getElementById('ar-reviewer').value.trim().toLowerCase();
+    const ds         = document.getElementById('ar-date-start').value;
+    const de         = document.getElementById('ar-date-end').value;
+    const rds        = document.getElementById('ar-review-date-start').value;
+    const rde        = document.getElementById('ar-review-date-end').value;
     return [...ADJUST_ALL].sort((a,b) => b.applyTime.localeCompare(a.applyTime)).filter(r => {
-      if (merchant  && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
-      if (direction && r.direction !== direction) return false;
-      if (status    && r.status !== status) return false;
-      if (orderNo   && !r.id.toLowerCase().includes(orderNo)) return false;
-      if (applicant && !r.applicant.toLowerCase().includes(applicant)) return false;
-      if (reviewer  && !(r.reviewer || '').toLowerCase().includes(reviewer)) return false;
-      if (ds        && r.applyTime.split(' ')[0] < ds) return false;
-      if (de        && r.applyTime.split(' ')[0] > de) return false;
-      if (rds       && (!r.reviewTime || r.reviewTime.split(' ')[0] < rds)) return false;
-      if (rde       && (!r.reviewTime || r.reviewTime.split(' ')[0] > rde)) return false;
+      if (merchant   && !r.merchantId.toLowerCase().includes(merchant) && !r.merchantName.toLowerCase().includes(merchant)) return false;
+      if (adjustType && r.adjustType !== adjustType) return false;
+      if (direction  && r.direction !== direction) return false;
+      if (status     && r.status !== status) return false;
+      if (orderNo    && !r.id.toLowerCase().includes(orderNo)) return false;
+      if (applicant  && !r.applicant.toLowerCase().includes(applicant)) return false;
+      if (reviewer   && !(r.reviewer || '').toLowerCase().includes(reviewer)) return false;
+      if (ds         && r.applyTime.split(' ')[0] < ds) return false;
+      if (de         && r.applyTime.split(' ')[0] > de) return false;
+      if (rds        && (!r.reviewTime || r.reviewTime.split(' ')[0] < rds)) return false;
+      if (rde        && (!r.reviewTime || r.reviewTime.split(' ')[0] > rde)) return false;
       return true;
     });
   }
@@ -8602,8 +8984,11 @@
       const viewBtn = `<span class="action-icon" title="详情" onclick="openArView(${idx})">${_D_EYE_SVG}</span>`;
       const reviewBtn = r.status === 'pending'
         ? `<span class="action-icon" title="审核" onclick="openArReview(${idx})">${_D_PEN_SVG}</span>` : '';
+      const typeTag = r.adjustType === 'withdraw_return'
+        ? `<span class="badge badge-blue">提币退回</span>` : `<span class="badge badge-gray">通用调账</span>`;
       return `<tr>
         <td>${fullCell(r.id)}</td>
+        <td>${typeTag}</td>
         <td style="font-family:Inter,sans-serif">${r.merchantId}</td>
         <td>${r.merchantName}</td>
         <td>${r.token}</td>
@@ -8644,16 +9029,23 @@
     arState.page = 1; arRender();
   }
   function arReset() {
-    ['ar-merchant','ar-direction','ar-status','ar-order-no','ar-applicant','ar-reviewer','ar-date-start','ar-date-end','ar-review-date-start','ar-review-date-end'].forEach(id => { document.getElementById(id).value = ''; });
+    ['ar-merchant','ar-adjust-type','ar-direction','ar-status','ar-order-no','ar-applicant','ar-reviewer','ar-date-start','ar-date-end','ar-review-date-start','ar-review-date-end'].forEach(id => { document.getElementById(id).value = ''; });
     arState.rows = arFilteredRows();
     arState.page = 1; arRender();
   }
   function arExport() {
-    const headers = ['调账订单号','商户 ID','商户名称','代币','网络','方向','金额','备注','申请人','申请时间','审核人','审核时间','状态'];
+    const headers = ['调账订单号','调账类型','商户 ID','商户名称','关联提现单号','代币','网络','方向','金额','备注','申请人','申请时间','审核人','审核时间','状态'];
     csvDownload(headers, arState.rows.map(r => [
-      r.id, r.merchantId, r.merchantName, r.token, r.network, r.direction === 'increase' ? '增加' : '减少', r.amount, r.remark,
+      r.id, r.adjustType === 'withdraw_return' ? '提币退回' : '通用调账', r.merchantId, r.merchantName, r.relatedWithdrawId || '-',
+      r.token, r.network, r.direction === 'increase' ? '增加' : '减少', r.amount, r.remark,
       r.applicant, r.applyTime, r.reviewer || '-', r.reviewTime || '-', AR_STATUS[r.status].label,
-    ]), '账户调账.csv');
+    ]), '商户账户调账.csv');
+    const merchantFilter = document.getElementById('ar-merchant').value.trim() || '全部';
+    OPERLOG_ALL.unshift({
+      id: 'ol-' + Date.now(), time: _arNowStr(), operator: 'admin', module: '商户账户调账', type: '导出',
+      target: merchantFilter, content: `导出商户账户调账 CSV，共 ${arState.rows.length} 条`,
+      result: 'success', ip: '127.0.0.1', level: 'medium',
+    });
   }
 
   function arMerchantInput() {
@@ -8683,8 +9075,11 @@
 
   // ── 发起调账 Modal ────────────────────────────────────
   let arApplySelected = null;
+  let arApplyWdMatched = null;
 
   function openArApply() {
+    arApplyClearErrs();
+    document.getElementById('ar-apply-type').value = 'withdraw_return';
     document.getElementById('ar-apply-merchant').value = '';
     document.getElementById('ar-apply-token').value = 'USDT';
     document.getElementById('ar-apply-network').value = 'TRON';
@@ -8692,12 +9087,121 @@
     document.getElementById('ar-apply-amount').value = '';
     document.getElementById('ar-apply-remark').value = '';
     document.getElementById('ar-apply-remark-count').textContent = '0';
+    document.getElementById('ar-apply-wd-order').value = '';
+    document.getElementById('ar-apply-wd-order-hint').textContent = '';
+    document.getElementById('ar-apply-wd-order-hint').className = 'ar-wd-hint';
+    document.getElementById('ar-apply-wd-merchant').textContent = '—';
+    document.getElementById('ar-apply-wd-userid').textContent = '—';
+    document.getElementById('ar-apply-wd-token').textContent = '—';
+    document.getElementById('ar-apply-wd-network').textContent = '—';
+    document.getElementById('ar-apply-wd-origin-amount').textContent = '—';
+    document.getElementById('ar-apply-wd-amount').value = '';
+    document.getElementById('ar-apply-wd-fee-mode-auto').checked = true;
+    document.getElementById('ar-apply-wd-fee').value = '';
+    document.getElementById('ar-apply-wd-fee').disabled = true;
+    document.getElementById('ar-apply-wd-fee-auto-label').textContent = '按充币费率自动计算';
+    document.getElementById('ar-apply-wd-net').textContent = '0.00';
+    document.getElementById('ar-apply-wd-net').style.color = '';
+    document.getElementById('ar-apply-wd-hash').value = '';
+    document.getElementById('ar-apply-wd-address').value = '';
+    document.getElementById('ar-apply-wd-remark').value = '';
+    document.getElementById('ar-apply-wd-remark-count').textContent = '0';
     arApplySelected = null;
+    arApplyWdMatched = null;
+    arApplyTypeChange();
     document.getElementById('ar-apply-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
   }
   function closeArApply() {
     document.getElementById('ar-apply-modal').classList.remove('show');
+  }
+  function arApplyTypeChange() {
+    const isWd = document.getElementById('ar-apply-type').value === 'withdraw_return';
+    document.getElementById('ar-apply-normal-fields').style.display = isWd ? 'none' : '';
+    document.getElementById('ar-apply-wd-fields').style.display = isWd ? '' : 'none';
+    // 两种类型下「商户」的来源不同（手动选择 / 提现单号反显），切换类型时清空，避免带着另一种类型选中的商户
+    arApplySelected = null;
+    document.getElementById('ar-apply-merchant').value = '';
+    document.getElementById('ar-apply-wd-order').value = '';
+    arApplyWdOrderInput();
+    arApplyClearErrs();
+  }
+  function arApplyWdOrderInput() {
+    const val = document.getElementById('ar-apply-wd-order').value.trim();
+    const hintEl = document.getElementById('ar-apply-wd-order-hint');
+    arApplyWdMatched = null;
+    arApplySelected = null;
+    document.getElementById('ar-apply-wd-merchant').textContent = '—';
+    document.getElementById('ar-apply-wd-userid').textContent = '—';
+    document.getElementById('ar-apply-wd-token').textContent = '—';
+    document.getElementById('ar-apply-wd-network').textContent = '—';
+    document.getElementById('ar-apply-wd-origin-amount').textContent = '—';
+    if (!val) { hintEl.textContent = ''; hintEl.className = 'ar-wd-hint'; arApplyWdCalc(); return; }
+    // 提现单号全局唯一，不要求先选商户——匹配到后直接反显商户
+    const wAny = WITHDRAW_ALL.find(x => x.paypazId === val);
+    if (!wAny) {
+      hintEl.textContent = '未找到该提币订单号'; hintEl.className = 'ar-wd-hint err'; arApplyWdCalc(); return;
+    }
+    if (wAny.status !== 'completed') {
+      hintEl.textContent = `该提币订单当前状态为「${wdStatusView(wAny).label}」，仅已到账的提币订单可发起退回调账`;
+      hintEl.className = 'ar-wd-hint err'; arApplyWdCalc(); return;
+    }
+    const dup = ADJUST_ALL.find(x => x.adjustType === 'withdraw_return' && x.relatedWithdrawId === val && x.status !== 'rejected');
+    if (dup) {
+      hintEl.textContent = `该提币订单已存在提币退回调账申请（${AR_STATUS[dup.status].label}），请勿重复发起`;
+      hintEl.className = 'ar-wd-hint err'; arApplyWdCalc(); return;
+    }
+    const w = wAny;
+    arApplyWdMatched = w;
+    hintEl.textContent = '已匹配到提现单'; hintEl.className = 'ar-wd-hint ok';
+    const m = MERCHANT_ALL.find(x => x.id === w.merchantId);
+    if (m) {
+      arApplySelected = m;
+      document.getElementById('ar-apply-wd-merchant').textContent = `${m.name}（${m.id}）`;
+    }
+    document.getElementById('ar-apply-wd-userid').textContent = w.userId || '—';
+    document.getElementById('ar-apply-wd-token').textContent = w.token;
+    document.getElementById('ar-apply-wd-network').textContent = w.network;
+    document.getElementById('ar-apply-wd-origin-amount').textContent = Math.abs(parseFloat(w.net)).toFixed(2);
+    arApplyWdCalc();
+  }
+  // 商户充币手续费配置（费率 % + 最低手续费），取自该代币/网络的直连充币配置
+  function arApplyWdFeeConfig(token, network) {
+    const row = TOKEN_ROWS.find(r => r.token === token && r.network === network);
+    const cfg = row ? row.depositByPartner.direct : { feeRate: '0.01', feeMin: '0.01' };
+    return { rate: parseFloat(cfg.feeRate) || 0, min: parseFloat(cfg.feeMin) || 0 };
+  }
+  function arApplyWdAutoFeeAmount(amount) {
+    if (!arApplyWdMatched || amount <= 0) return 0;
+    const { rate, min } = arApplyWdFeeConfig(arApplyWdMatched.token, arApplyWdMatched.network);
+    return Math.min(Math.max(amount * rate / 100, min), amount);
+  }
+  function arApplyWdFeeModeChange() {
+    const mode = document.querySelector('input[name="ar-apply-wd-fee-mode"]:checked')?.value || 'zero';
+    const feeInput = document.getElementById('ar-apply-wd-fee');
+    feeInput.disabled = mode !== 'custom';
+    if (mode !== 'custom') feeInput.value = '';
+    arApplyWdCalc();
+  }
+  function arApplyWdCalc() {
+    const amount = parseFloat(document.getElementById('ar-apply-wd-amount').value) || 0;
+    const mode = document.querySelector('input[name="ar-apply-wd-fee-mode"]:checked')?.value || 'zero';
+    let fee = 0;
+    if (mode === 'auto') fee = arApplyWdAutoFeeAmount(amount);
+    else if (mode === 'custom') fee = parseFloat(document.getElementById('ar-apply-wd-fee').value) || 0;
+    const labelEl = document.getElementById('ar-apply-wd-fee-auto-label');
+    if (arApplyWdMatched) {
+      const { rate } = arApplyWdFeeConfig(arApplyWdMatched.token, arApplyWdMatched.network);
+      labelEl.textContent = amount > 0
+        ? `按充币费率：${rate.toFixed(2)}%，收取：${arApplyWdAutoFeeAmount(amount).toFixed(2)}`
+        : `按充币费率自动计算（费率 ${rate.toFixed(2)}%）`;
+    } else {
+      labelEl.textContent = '按充币费率自动计算';
+    }
+    const netEl = document.getElementById('ar-apply-wd-net');
+    const net = amount - fee;
+    netEl.textContent = net.toFixed(2);
+    netEl.style.color = net < 0 ? '#F56C6C' : '';
   }
   function arApplyMerchantInput() {
     const val = document.getElementById('ar-apply-merchant').value.trim().toLowerCase();
@@ -8716,32 +9220,84 @@
     arApplySelected = m;
     document.getElementById('ar-apply-merchant').value = `${m.name}（${m.id}）`;
     document.getElementById('ar-apply-merch-dropdown').style.display = 'none';
+    document.getElementById('ar-apply-merchant-err').textContent = '';
   }
   function arApplyHideMerchantDrop() {
     const dd = document.getElementById('ar-apply-merch-dropdown');
     if (dd) dd.style.display = 'none';
   }
 
+  function arApplySetErr(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'ar-wd-hint err';
+  }
+  function arApplyClearErrs() {
+    ['ar-apply-merchant-err', 'ar-apply-amount-err', 'ar-apply-remark-err',
+     'ar-apply-wd-amount-err', 'ar-apply-wd-fee-err', 'ar-apply-wd-remark-err'].forEach(id => {
+      document.getElementById(id).textContent = '';
+    });
+  }
   function submitArApply() {
-    if (!arApplySelected) { showToast('请从下拉列表选择商户'); return; }
-    const token     = document.getElementById('ar-apply-token').value;
-    const network   = document.getElementById('ar-apply-network').value;
-    const direction = document.getElementById('ar-apply-direction').value;
-    const amountStr = document.getElementById('ar-apply-amount').value.trim();
-    const remark    = document.getElementById('ar-apply-remark').value.trim();
-    const amount    = parseFloat(amountStr);
-    if (!amountStr || isNaN(amount) || amount <= 0) { showToast('请输入正确的调账金额'); return; }
-    if (!remark) { showToast('请填写调账原因'); return; }
+    arApplyClearErrs();
     const applyTime = _arNowStr();
-    const row = {
-      id: 'ADJ' + applyTime.replace(/\D/g, ''),
-      merchantId: arApplySelected.id, merchantName: arApplySelected.name,
-      token, network, direction, amount: amount.toFixed(2), remark,
-      applicant: 'admin', applyTime,
-      status: 'pending', reviewer: '', reviewTime: '', reviewRemark: '',
-    };
+    const isWd = document.getElementById('ar-apply-type').value === 'withdraw_return';
+    let row;
+
+    if (isWd) {
+      if (!arApplyWdMatched) { arApplySetErr('ar-apply-wd-order-hint', '请输入并校验商户提币订单号'); return; }
+      if (!arApplySelected) { arApplySetErr('ar-apply-wd-order-hint', '未能匹配到该提币订单对应的商户，请重新核对提现单号'); return; }
+      const amountStr = document.getElementById('ar-apply-wd-amount').value.trim();
+      const feeMode   = document.querySelector('input[name="ar-apply-wd-fee-mode"]:checked')?.value || 'zero';
+      const feeStr    = document.getElementById('ar-apply-wd-fee').value.trim();
+      const hash      = document.getElementById('ar-apply-wd-hash').value.trim();
+      const address   = document.getElementById('ar-apply-wd-address').value.trim();
+      const remark    = document.getElementById('ar-apply-wd-remark').value.trim();
+      const amount    = parseFloat(amountStr);
+      if (!amountStr || isNaN(amount) || amount <= 0) { arApplySetErr('ar-apply-wd-amount-err', '请输入正确的到账金额'); return; }
+      let fee;
+      if (feeMode === 'auto') {
+        fee = arApplyWdAutoFeeAmount(amount);
+      } else if (feeMode === 'custom') {
+        fee = feeStr ? parseFloat(feeStr) : 0;
+        if (feeStr && (isNaN(fee) || fee < 0)) { arApplySetErr('ar-apply-wd-fee-err', '请输入正确的手续费'); return; }
+      } else {
+        fee = 0;
+      }
+      if (fee > amount) { arApplySetErr('ar-apply-wd-fee-err', '手续费不能超过到账金额，净入账不能为负'); return; }
+      if (!remark) { arApplySetErr('ar-apply-wd-remark-err', '请填写调账原因'); return; }
+      row = {
+        id: 'ADJ' + applyTime.replace(/\D/g, ''), adjustType: 'withdraw_return',
+        merchantId: arApplySelected.id, merchantName: arApplySelected.name,
+        token: arApplyWdMatched.token, network: arApplyWdMatched.network,
+        direction: 'increase', amount: (amount - fee).toFixed(2), remark,
+        relatedWithdrawId: arApplyWdMatched.paypazId,
+        depositAmount: amount.toFixed(2), depositFee: fee.toFixed(2), depositHash: hash, depositAddress: address,
+        applicant: 'admin', applyTime,
+        status: 'pending', reviewer: '', reviewTime: '', reviewRemark: '',
+      };
+      logAdjustAction(row, '新增', `发起提币退回调账申请：关联提现单 ${arApplyWdMatched.paypazId}，到账 ${amount.toFixed(2)} ${row.token}，手续费 ${fee.toFixed(2)}`, 'medium');
+    } else {
+      if (!arApplySelected) { arApplySetErr('ar-apply-merchant-err', '请从下拉列表选择商户'); return; }
+      const token     = document.getElementById('ar-apply-token').value;
+      const network   = document.getElementById('ar-apply-network').value;
+      const direction = document.getElementById('ar-apply-direction').value;
+      const amountStr = document.getElementById('ar-apply-amount').value.trim();
+      const remark    = document.getElementById('ar-apply-remark').value.trim();
+      const amount    = parseFloat(amountStr);
+      if (!amountStr || isNaN(amount) || amount <= 0) { arApplySetErr('ar-apply-amount-err', '请输入正确的调账金额'); return; }
+      if (!remark) { arApplySetErr('ar-apply-remark-err', '请填写调账原因'); return; }
+      row = {
+        id: 'ADJ' + applyTime.replace(/\D/g, ''), adjustType: 'normal',
+        merchantId: arApplySelected.id, merchantName: arApplySelected.name,
+        token, network, direction, amount: amount.toFixed(2), remark,
+        applicant: 'admin', applyTime,
+        status: 'pending', reviewer: '', reviewTime: '', reviewRemark: '',
+      };
+      logAdjustAction(row, '新增', `发起调账申请：${direction === 'increase' ? '增加' : '减少'} ${amount.toFixed(2)}`, 'medium');
+    }
+
     ADJUST_ALL.unshift(row);
-    logAdjustAction(row, '新增', `发起人工调账申请：${direction === 'increase' ? '增加' : '减少'} ${amount.toFixed(2)}`, 'medium');
     closeArApply();
     arState.rows = arFilteredRows();
     arState.page = 1; arRender();
@@ -8753,14 +9309,26 @@
 
   function _arItems(r) {
     const dirLabel = r.direction === 'increase' ? '增加' : '减少';
+    const isWd = r.adjustType === 'withdraw_return';
+    const wdUser = isWd ? WITHDRAW_ALL.find(x => x.paypazId === r.relatedWithdrawId && x.merchantId === r.merchantId) : null;
+    const wdItems = isWd ? `
+      <div class="detail-item"><span class="detail-label">调账类型</span><span class="detail-value">提币退回</span></div>
+      <div class="detail-item"><span class="detail-label">关联提现单号</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.relatedWithdrawId}</span></div>
+      <div class="detail-item"><span class="detail-label">用户 ID</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${wdUser && wdUser.userId ? wdUser.userId : '—'}</span></div>
+      <div class="detail-item"><span class="detail-label">到账金额</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.depositAmount}</span></div>
+      <div class="detail-item"><span class="detail-label">手续费</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.depositFee}</span></div>
+      <div class="detail-item"><span class="detail-label">退回地址</span>${r.depositAddress ? truncCell(r.depositAddress) : '<span class="detail-value">—</span>'}</div>
+      <div class="detail-item"><span class="detail-label">退回哈希</span>${r.depositHash ? truncCell(r.depositHash) : '<span class="detail-value">—</span>'}</div>
+    ` : `<div class="detail-item"><span class="detail-label">调账类型</span><span class="detail-value">通用调账</span></div>`;
     return `
       <div class="detail-item"><span class="detail-label">调账订单号</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.id}</span></div>
+      ${wdItems}
       <div class="detail-item"><span class="detail-label">商户 ID</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.merchantId}</span></div>
       <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.merchantName}</span></div>
       <div class="detail-item"><span class="detail-label">代币</span><span class="detail-value">${r.token}</span></div>
       <div class="detail-item"><span class="detail-label">网络</span><span class="detail-value">${r.network}</span></div>
       <div class="detail-item"><span class="detail-label">方向</span><span class="detail-value">${dirLabel}</span></div>
-      <div class="detail-item"><span class="detail-label">金额</span><span class="detail-value" style="font-family:'Inter',sans-serif;color:${r.direction === 'increase' ? '#67C23A' : '#F56C6C'};">${(r.direction === 'increase' ? '+' : '-') + r.amount}</span></div>
+      <div class="detail-item"><span class="detail-label">${isWd ? '净入账' : '金额'}</span><span class="detail-value" style="font-family:'Inter',sans-serif;color:${r.direction === 'increase' ? '#67C23A' : '#F56C6C'};">${(r.direction === 'increase' ? '+' : '-') + r.amount}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">调账原因</span><span class="detail-value">${htmlSafe(r.remark)}</span></div>
       <div class="detail-item"><span class="detail-label">申请人</span><span class="detail-value">${r.applicant}</span></div>
       <div class="detail-item"><span class="detail-label">申请时间</span><span class="detail-value" style="font-family:'Inter',sans-serif;">${r.applyTime}</span></div>
@@ -8788,8 +9356,9 @@
       `<div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">审核备注</span>
         <div class="wm-remark-wrap">
-          <textarea class="wm-remark" id="ar-review-remark" placeholder="通过时选填，驳回时必填，填写审核说明..." maxlength="200" oninput="document.getElementById('ar-review-remark-count').textContent=this.value.length"></textarea>
+          <textarea class="wm-remark" id="ar-review-remark" placeholder="通过时选填，驳回时必填，填写审核说明..." maxlength="200" oninput="document.getElementById('ar-review-remark-count').textContent=this.value.length;document.getElementById('ar-review-remark-err').textContent=''"></textarea>
           <span class="wm-remark-count"><span id="ar-review-remark-count">0</span>/200</span>
+          <div class="ar-wd-hint" id="ar-review-remark-err"></div>
         </div>
       </div>`;
     document.getElementById('ar-manage-footer').innerHTML = `
@@ -8807,20 +9376,25 @@
   }
 
   const AR_CONFIRM_CFG = {
-    approved: { icon:'check-circle', iconColor:'#67C23A', title:'审核通过', msg:'审核通过后，将生成一条账户明细流水并更新商户余额，且无法撤销。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认通过' },
+    approved: { icon:'check-circle', iconColor:'#67C23A', title:'审核通过', msg:'审核通过后，将生成商户账户明细流水并更新商户余额，且无法撤销。确认继续吗？', btnCls:'btn-primary', btnTxt:'确认通过' },
     rejected: { icon:'alert-circle', iconColor:'#F56C6C', title:'驳回申请', msg:'驳回后，该调账申请状态将变为「已驳回」，不影响商户账户余额。确认继续吗？', btnCls:'btn-danger', btnTxt:'确认驳回' },
   };
 
   function confirmArAction(action) {
     if (action === 'rejected' && !(document.getElementById('ar-review-remark')?.value || '').trim()) {
-      showToast('驳回必须填写审核备注');
+      const el = document.getElementById('ar-review-remark-err');
+      el.textContent = '驳回必须填写审核备注';
+      el.className = 'ar-wd-hint err';
       return;
     }
     const cfg = AR_CONFIRM_CFG[action];
+    const isWd = action === 'approved' && arManageIdx >= 0 && ADJUST_ALL[arManageIdx].adjustType === 'withdraw_return';
     document.getElementById('ar-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
     document.getElementById('ar-confirm-title').textContent = cfg.title;
-    document.getElementById('ar-confirm-msg').textContent = cfg.msg;
+    document.getElementById('ar-confirm-msg').textContent = isWd
+      ? '审核通过后，将同步生成商户账户明细流水和充值记录并更新商户余额，且无法撤销。确认继续吗？'
+      : cfg.msg;
     const okBtn = document.getElementById('ar-confirm-ok');
     okBtn.className   = `btn ${cfg.btnCls} btn-sm`;
     okBtn.textContent = cfg.btnTxt;
@@ -8838,7 +9412,7 @@
     const time = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
     OPERLOG_ALL.unshift({
       id: 'ol-ar-' + (Date.now() % 100000),
-      time, operator: 'admin', module: '账户调账', type,
+      time, operator: 'admin', module: '商户账户调账', type,
       target: `${r.merchantName}（${r.merchantId}） · ${r.id}`,
       content, result: 'success', ip: '127.0.0.1', level,
     });
@@ -8860,7 +9434,36 @@
     r.reviewer = 'admin';
     r.reviewTime = now;
     r.reviewRemark = reviewRemark;
-    if (newStatus === 'approved') {
+    if (newStatus === 'approved' && r.adjustType === 'withdraw_return') {
+      const before = alLastBalance(r.merchantId, r.token, r.network);
+      const gross  = parseFloat(r.depositAmount);
+      const fee    = parseFloat(r.depositFee) || 0;
+      let after    = before + gross;
+      LEDGER_ALL.push({
+        merchantId: r.merchantId, merchantName: r.merchantName, userId: '', token: r.token, network: r.network, type: 'deposit',
+        amount: '+' + gross.toFixed(2), balanceAfter: after.toFixed(2), relatedNo: r.id, remark: r.remark, time: now,
+      });
+      if (fee > 0) {
+        after -= fee;
+        LEDGER_ALL.push({
+          merchantId: r.merchantId, merchantName: r.merchantName, userId: '', token: r.token, network: r.network, type: 'fee',
+          amount: '-' + fee.toFixed(2), balanceAfter: after.toFixed(2), relatedNo: r.id, remark: '', time: now,
+        });
+      }
+      const m = MERCHANT_ALL.find(x => x.id === r.merchantId);
+      if (m) m.balance = ((parseFloat(m.balance) || 0) + (gross - fee)).toFixed(2);
+      // 提币退回审核通过后，充值记录同步增加一条对应记录（客户 ID 沿用原提现单的用户，
+      // 状态直接为「已到账」，不进「充币审核」；备注注明来源，方便追溯到调账申请/原提现单）
+      const wOrigin = WITHDRAW_ALL.find(x => x.paypazId === r.relatedWithdrawId && x.merchantId === r.merchantId);
+      DEPOSIT_ALL.unshift({
+        uid: r.merchantId, name: r.merchantName, userId: wOrigin ? wOrigin.userId : '',
+        token: r.token, network: r.network, amount: gross.toFixed(2), fee: fee.toFixed(2),
+        wallet: r.depositAddress || '-', time: now, hash: r.depositHash || '-', channel: '', status: 'arrived',
+        remark: `由商户账户调账 - 提币退回生成，关联调账申请 ${r.id}，关联提现单 ${r.relatedWithdrawId}`,
+      });
+      if (typeof depositSearch === 'function') depositSearch();
+      logAdjustAction(r, '审批', `审核通过（提币退回，关联提现单 ${r.relatedWithdrawId}），充币到账 ${gross.toFixed(2)} ${r.token}（${r.network}），扣除手续费 ${fee.toFixed(2)} 后净入账 ${(gross - fee).toFixed(2)}，该代币/网络余额由 ${before.toFixed(2)} 变更为 ${after.toFixed(2)}，同步生成充值记录`, 'high');
+    } else if (newStatus === 'approved') {
       const before = alLastBalance(r.merchantId, r.token, r.network);
       const delta  = r.direction === 'increase' ? parseFloat(r.amount) : -parseFloat(r.amount);
       const after  = (before + delta).toFixed(2);
@@ -8882,7 +9485,9 @@
     alState.rows = alFilteredRows();
     alRender();
     if (typeof merchantRender === 'function') merchantRender();
-    showToast(newStatus === 'approved' ? '审核通过，已生成账户明细流水' : '已驳回');
+    showToast(newStatus === 'approved'
+      ? (r.adjustType === 'withdraw_return' ? '审核通过，已生成商户账户明细流水和充值记录' : '审核通过，已生成商户账户明细流水')
+      : '已驳回');
   }
 
   // ══════════════════════════════════════════════════════
@@ -8892,10 +9497,10 @@
     { id:'dashboard_view', label:'Dashboard查看' },
     { id:'platform_asset', label:'平台资产', children:[
       { id:'platform_asset_balance', label:'资产余额' },
-      { id:'platform_account_ledger', label:'账户明细' },
+      { id:'platform_account_ledger', label:'商户账户明细' },
       { id:'platform_adjust_apply', label:'发起调账' },
-      { id:'platform_adjust_review', label:'账户调账（通过/驳回）' },
-      { id:'platform_account_export', label:'账户明细/账户调账导出' },
+      { id:'platform_adjust_review', label:'商户账户调账（通过/驳回）' },
+      { id:'platform_account_export', label:'商户账户明细/商户账户调账导出' },
     ] },
     { id:'merchant_mgmt', label:'商户管理', children:[
       { id:'merchant_company_delete', label:'企业账户删除' },
@@ -10338,39 +10943,82 @@
     { id:'693157480', name:'IG Japan' },
   ];
 
+  let rampInSelectedMerchants = [];
+
+  function rampInMsBoxClick() { document.getElementById('ramp-in-f-merchant').focus(); }
+
   function rampInMerchantInput() {
     const val = document.getElementById('ramp-in-f-merchant').value.trim().toLowerCase();
     const dd  = document.getElementById('ramp-in-merch-dropdown');
     const list = val ? RAMP_IN_MERCHANTS.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : RAMP_IN_MERCHANTS;
-    if (!list.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = list.map(m =>
-      `<div class="p-merch-opt" onmousedown="rampInSelectMerchant('${m.name}')">
-        ${m.name}<span class="p-merch-id">${m.id}</span>
-      </div>`
-    ).join('');
+    dd.innerHTML = list.length ? list.map(m => {
+      const sel = rampInSelectedMerchants.includes(m.id);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();rampInToggleMerchant('${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('') : `<div class="ms-empty">无匹配商户</div>`;
     dd.style.display = '';
   }
-  function rampInSelectMerchant(name) {
-    document.getElementById('ramp-in-f-merchant').value = name;
-    document.getElementById('ramp-in-merch-dropdown').style.display = 'none';
+  function rampInToggleMerchant(id) {
+    const i = rampInSelectedMerchants.indexOf(id);
+    if (i > -1) rampInSelectedMerchants.splice(i, 1); else rampInSelectedMerchants.push(id);
+    rampInRenderMerchantTags();
+    rampInMerchantInput();
+  }
+  function rampInRemoveMerchant(id) {
+    rampInSelectedMerchants = rampInSelectedMerchants.filter(x => x !== id);
+    rampInRenderMerchantTags();
+    rampInMerchantInput();
+  }
+  function rampInRenderMerchantTags() {
+    const box = document.getElementById('ramp-in-ms-tags');
+    const input = document.getElementById('ramp-in-f-merchant');
+    const items = rampInSelectedMerchants.map(id => RAMP_IN_MERCHANTS.find(m => m.id === id)).filter(Boolean);
+    const MAX_VISIBLE = 1;
+    let html = items.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m.name}</span><span class="ms-tag-x" onmousedown="event.preventDefault();rampInRemoveMerchant('${m.id}')">×</span></span>`
+    ).join('');
+    if (items.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${items.length - MAX_VISIBLE}</span>`;
+    box.innerHTML = html;
+    input.placeholder = items.length ? '' : '商户 ID / 商户名称';
   }
   function rampInHideMerchantDrop() {
     const dd = document.getElementById('ramp-in-merch-dropdown');
     if (dd) dd.style.display = 'none';
+  }
+  function rampInFiltersInit() {
+    msLiteInit('ramp-in-f-provider', [
+      { value:'Legend', label:'Legend' },
+    ], '全部');
+    msLiteInit('ramp-in-f-token', [
+      { value:'USDT', label:'USDT' }, { value:'USDC', label:'USDC' },
+    ], '全部');
+    msLiteInit('ramp-in-f-fiat', [
+      { value:'JPY', label:'JPY' }, { value:'USD', label:'USD' }, { value:'KRW', label:'KRW' },
+    ], '全部');
+    msLiteInit('ramp-in-f-network', [
+      { value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }, { value:'BNB Smart Chain', label:'BNB Smart Chain' },
+    ], '全部');
+    msLiteInit('ramp-in-f-status', [
+      { value:'CREATED', label:'已创建' }, { value:'AWAITING_PAYMENT', label:'待支付' },
+      { value:'PAYMENT_PROCESSING', label:'支付处理中' }, { value:'PENDING_VERIFICATION', label:'待补充验证' },
+      { value:'CRYPTO_TRANSFERRING', label:'链上划转中' }, { value:'SETTLEMENT_DELAYED', label:'结算延迟待人工核查' },
+      { value:'COMPLETED', label:'已完成' }, { value:'FAILED', label:'失败' },
+      { value:'EXPIRED', label:'已过期' }, { value:'CHARGEBACK_FLAGGED', label:'拒付待核查' },
+    ], '全部');
   }
 
   function rampInSearch() {
     const pid       = document.getElementById('ramp-in-f-pid').value.trim().toLowerCase();
     const cfd       = document.getElementById('ramp-in-f-cfd').value.trim().toLowerCase();
     const legend    = document.getElementById('ramp-in-f-legend').value.trim().toLowerCase();
-    const merch     = document.getElementById('ramp-in-f-merchant').value.trim().toLowerCase();
-    const provider  = document.getElementById('ramp-in-f-provider').value;
-    const token     = document.getElementById('ramp-in-f-token').value;
-    const fiat      = document.getElementById('ramp-in-f-fiat').value;
-    const network   = document.getElementById('ramp-in-f-network').value;
+    const providers = msLiteGet('ramp-in-f-provider');
+    const tokens    = msLiteGet('ramp-in-f-token');
+    const fiats     = msLiteGet('ramp-in-f-fiat');
+    const networks  = msLiteGet('ramp-in-f-network');
     const address   = document.getElementById('ramp-in-f-address').value.trim().toLowerCase();
     const hash      = document.getElementById('ramp-in-f-hash').value.trim().toLowerCase();
-    const status    = document.getElementById('ramp-in-f-status').value;
+    const statuses  = msLiteGet('ramp-in-f-status');
     const dateFrom  = document.getElementById('ramp-in-f-date-from').value;
     const dateTo    = document.getElementById('ramp-in-f-date-to').value;
     const compFrom  = document.getElementById('ramp-in-f-completed-from').value;
@@ -10379,14 +11027,14 @@
       if (pid      && !r.paypazOrderId.toLowerCase().includes(pid))                          return false;
       if (cfd      && !r.brokerOrderRef.toLowerCase().includes(cfd))                         return false;
       if (legend   && !r.legendOrderId.toLowerCase().includes(legend))                       return false;
-      if (merch    && !r.brokerName.toLowerCase().includes(merch) && !r.brokerId.includes(merch)) return false;
-      if (provider && r.provider !== provider)                                              return false;
-      if (token    && r.cryptoCurrency !== token)                                            return false;
-      if (fiat     && r.fiatCurrency !== fiat)                                               return false;
-      if (network  && r.network !== network)                                                return false;
+      if (rampInSelectedMerchants.length && !rampInSelectedMerchants.includes(r.brokerId))   return false;
+      if (providers.length && !providers.includes(r.provider))                               return false;
+      if (tokens.length    && !tokens.includes(r.cryptoCurrency))                             return false;
+      if (fiats.length     && !fiats.includes(r.fiatCurrency))                                return false;
+      if (networks.length  && !networks.includes(r.network))                                 return false;
       if (address  && !r.walletAddress.toLowerCase().includes(address))                      return false;
       if (hash     && !(r.txHash && r.txHash.toLowerCase().includes(hash)))                  return false;
-      if (status   && r.status !== status)                                                   return false;
+      if (statuses.length  && !statuses.includes(r.status))                                   return false;
       if (dateFrom && r.createdAt.slice(0,10) < dateFrom) return false;
       if (dateTo   && r.createdAt.slice(0,10) > dateTo)   return false;
       if (compFrom && (r.completedAt === '—' || r.completedAt.slice(0,10) < compFrom)) return false;
@@ -10402,9 +11050,9 @@
      'ramp-in-f-date-from','ramp-in-f-date-to','ramp-in-f-completed-from','ramp-in-f-completed-to'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
-    ['ramp-in-f-fiat','ramp-in-f-token','ramp-in-f-provider','ramp-in-f-network','ramp-in-f-status'].forEach(id => {
-      const el = document.getElementById(id); if (el) el.value = '';
-    });
+    ['ramp-in-f-fiat','ramp-in-f-token','ramp-in-f-provider','ramp-in-f-network','ramp-in-f-status'].forEach(msLiteReset);
+    rampInSelectedMerchants = [];
+    rampInRenderMerchantTags();
     rampInState.rows = [...RAMP_IN_ORDERS];
     rampInState.page = 1;
     rampInRender();
@@ -10572,8 +11220,8 @@
     ]), 'On Ramp 订单.csv');
   }
   function openRampInExportModal() {
-    const stVal = document.getElementById('ramp-in-f-status').value;
-    document.getElementById('ramp-in-export-status').textContent = stVal ? RAMP_IN_STATUS_MAP[stVal].label : '全部';
+    const stVals = msLiteGet('ramp-in-f-status');
+    document.getElementById('ramp-in-export-status').textContent = stVals.length ? stVals.map(v => RAMP_IN_STATUS_MAP[v].label).join('、') : '全部';
     document.getElementById('ramp-in-export-count').textContent = rampInState.rows.length;
     document.querySelector('#ramp-in-export-modal input[name="ramp-in-export-format"][value="csv"]').checked = true;
     document.getElementById('ramp-in-export-modal').classList.add('show');
@@ -10735,7 +11383,8 @@
   // ══════════════════════════════════════════════════════
   const OPERLOG_MODULES = ['用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
     '客户端管理','对象存储配置','个人信息','登录日志','操作日志','在线用户',
-    '商户管理','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核'];
+    '商户管理','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核',
+    '商户账户明细','商户账户调账'];
 
   const OPERLOG_TYPES = ['新增','修改','删除','状态变更','审批','授权','强退','导出'];
 
@@ -10805,33 +11454,54 @@
     return `<span style="cursor:default" onmouseenter="showTip(event,'${esc}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${short}</span>`;
   }
 
+  let olSelectedModules = [];
+
+  function olMsBoxClick() { document.getElementById('ol-module').focus(); }
+
   function operlogPopulateFilters() {
-    const typeSel = document.getElementById('ol-type');
-    if (typeSel) OPERLOG_TYPES.forEach(t => typeSel.insertAdjacentHTML('beforeend', `<option value="${t}">${t}</option>`));
+    msLiteInit('ol-type', OPERLOG_TYPES.map(t => ({ value: t, label: t })), '全部');
+    msLiteInit('ol-sensitive', [
+      { value:'high', label:'高敏感' }, { value:'medium', label:'中敏感' }, { value:'normal', label:'普通' },
+    ], '全部');
   }
 
   function olModuleInput() {
-    const input = document.getElementById('ol-module');
+    const val = document.getElementById('ol-module').value.trim().toLowerCase();
     const dd = document.getElementById('ol-module-dropdown');
-    const q = input.value.trim().toLowerCase();
-    const items = ['全部', ...OPERLOG_MODULES];
-    const list = q ? items.filter(m => m.toLowerCase().includes(q)) : items;
-    if (!list.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = list.map(m =>
-      `<div class="p-merch-opt" onmousedown="olSelectModule('${m === '全部' ? '' : m}')">${m}</div>`
-    ).join('');
+    const list = val ? OPERLOG_MODULES.filter(m => m.toLowerCase().includes(val)) : OPERLOG_MODULES;
+    dd.innerHTML = list.length ? list.map(m => {
+      const sel = olSelectedModules.includes(m);
+      return `<div class="ms-option${sel ? ' selected' : ''}" onmousedown="event.preventDefault();olToggleModule('${m}')">
+        <span class="ms-option-text">${m}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`;
+    }).join('') : `<div class="ms-empty">无匹配模块</div>`;
     dd.style.display = '';
   }
-  function olSelectModule(value) {
-    document.getElementById('ol-module').value = value;
-    document.getElementById('ol-module-dropdown').style.display = 'none';
+  function olToggleModule(m) {
+    const i = olSelectedModules.indexOf(m);
+    if (i > -1) olSelectedModules.splice(i, 1); else olSelectedModules.push(m);
+    olRenderModuleTags();
+    olModuleInput();
+  }
+  function olRemoveModule(m) {
+    olSelectedModules = olSelectedModules.filter(x => x !== m);
+    olRenderModuleTags();
+    olModuleInput();
+  }
+  function olRenderModuleTags() {
+    const box = document.getElementById('ol-ms-tags');
+    const input = document.getElementById('ol-module');
+    const MAX_VISIBLE = 1;
+    let html = olSelectedModules.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m}</span><span class="ms-tag-x" onmousedown="event.preventDefault();olRemoveModule('${m}')">×</span></span>`
+    ).join('');
+    if (olSelectedModules.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${olSelectedModules.length - MAX_VISIBLE}</span>`;
+    box.innerHTML = html;
+    input.placeholder = olSelectedModules.length ? '' : '全部';
   }
   function olHideModuleDrop() {
     const dd = document.getElementById('ol-module-dropdown');
     if (dd) dd.style.display = 'none';
-    const input = document.getElementById('ol-module');
-    const val = input.value.trim();
-    if (val && !OPERLOG_MODULES.includes(val)) input.value = '';
   }
 
   const _OL_EYE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
@@ -10888,16 +11558,15 @@
   }
   function operlogSearch() {
     const operator  = document.getElementById('ol-operator').value.trim().toLowerCase();
-    const module    = document.getElementById('ol-module').value;
-    const type      = document.getElementById('ol-type').value;
-    const sensitive = document.getElementById('ol-sensitive').value;
+    const types      = msLiteGet('ol-type');
+    const sensitives = msLiteGet('ol-sensitive');
     const ds        = document.getElementById('ol-date-start').value;
     const de        = document.getElementById('ol-date-end').value;
     olState.rows = OPERLOG_ALL.filter(r => {
       if (operator  && !r.operator.toLowerCase().includes(operator))    return false;
-      if (module    && r.module !== module)                            return false;
-      if (type      && r.type !== type)                                return false;
-      if (sensitive && r.level !== sensitive)                          return false;
+      if (olSelectedModules.length && !olSelectedModules.includes(r.module)) return false;
+      if (types.length      && !types.includes(r.type))                return false;
+      if (sensitives.length && !sensitives.includes(r.level))          return false;
       if (ds        && r.time.split(' ')[0] < ds)                      return false;
       if (de        && r.time.split(' ')[0] > de)                      return false;
       return true;
@@ -10905,8 +11574,11 @@
     olState.page = 1; operlogRender();
   }
   function operlogReset() {
-    ['ol-operator','ol-module','ol-type','ol-sensitive','ol-date-start','ol-date-end']
+    ['ol-operator','ol-module','ol-date-start','ol-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
+    ['ol-type','ol-sensitive'].forEach(msLiteReset);
+    olSelectedModules = [];
+    olRenderModuleTags();
     olState.rows = [...OPERLOG_ALL];
     olState.page = 1; operlogRender();
   }
@@ -10939,13 +11611,19 @@
     renderTabs();
     homeMerchantRender();
     homeChartsRender();
+    depositFiltersInit();
     depositRender();
     depositExceptionRender();
+    withdrawFiltersInit();
     withdrawRender();
+    withdrawAuditFiltersInit();
     withdrawAuditRender();
+    paymentFiltersInit();
     paymentRender();
+    rampInFiltersInit();
     rampInRender();
     rampOutRender();
+    paFiltersInit();
     paRender();
     alRender();
     arRender();

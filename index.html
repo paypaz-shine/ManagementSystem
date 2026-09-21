@@ -1904,6 +1904,17 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">账户类型</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="d-accttype-lite" tabindex="0"
+                     onclick="msLiteToggle('d-accttype')" onblur="setTimeout(function(){msLiteClose('d-accttype')}, 150)">
+                  <span class="ms-lite-text placeholder" id="d-accttype-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="d-accttype-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">钱包地址</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="d-wallet">
@@ -2004,9 +2015,9 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2560px;">
+            <table style="min-width:2650px;">
               <colgroup>
-                <col style="width:95px"><col style="width:145px"><col style="width:95px">
+                <col style="width:95px"><col style="width:145px"><col style="width:190px">
                 <col style="width:70px"><col style="width:80px"><col style="width:80px">
                 <col style="width:90px"><col style="width:90px">
                 <col style="width:72px"><col style="width:70px"><col style="width:380px">
@@ -5306,6 +5317,13 @@
     invalid:  { label:'无效充值',  cls:'badge-gray' },
     refunded: { label:'已退款',    cls:'badge-gray' },
   };
+  // 账户类型：区分这笔充值是商户自己充的（main，无终端用户 ID），还是商户的
+  // 终端客户充的（sub，有用户 ID）。由后端明确返回，不用用户 ID 是否为空推断。
+  // 沿用商户后台提币/充值记录已有的“主账号”徽标约定：只标主账号，子账号不打标
+  const D_ACCOUNT_TYPE = {
+    main: { label:'主账号', cls:'badge-blue' },
+    sub:  { label:'子账号', cls:'badge-gray' },
+  };
   // 异常类型：只对来自异常充值的记录有值（不管当前流转到哪个状态都保留，
   // 用于「充币审核」的类型筛选/展示），正常充值产生的记录没有这个字段。
   // 只有两种：unavailable（代币/网络不可用，只能退款）、account_frozen（商户/用户
@@ -5317,7 +5335,7 @@
   };
 
   const DEPOSIT_ALL = [
-    { uid:'291654802', name:'kara4', userId:'U60022002', token:'USDT', network:'TRON', amount:'7.31', fee:'0.05', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-08-26 10:40:00', hash:'a17c3f9e2b6d4c81f0a5e9d3c7b2f4a8e6d1c9b3f7a2e5d8c0b4f6a9e3d7c1b5', channel:'', status:'arrived',
+    { uid:'291654802', name:'kara4', userId:'291654802', accountType:'main', token:'USDT', network:'TRON', amount:'7.31', fee:'0.05', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', time:'2026-08-26 10:40:00', hash:'a17c3f9e2b6d4c81f0a5e9d3c7b2f4a8e6d1c9b3f7a2e5d8c0b4f6a9e3d7c1b5', channel:'', status:'arrived',
       remark:'由商户账户调账 - 提币退回生成，关联调账申请 ADJ20260826103000，关联提现单 Shine0000000000003' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 17:14:09', hash:'2a11553be5dc148d0b3e1a82cc35eca46de66f9352e0c763667c4d0b8d126919', channel:'Meta Trader', status:'arrived' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDT', network:'TRON', amount:'0.4',  fee:'0.01', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-08 11:46:45', hash:'613e517de794200d4f2a8e3b7c91d5f638a0b2e4169c7d8f3021a5b9e4c7d83f', channel:'',           status:'arrived' },
@@ -5329,7 +5347,7 @@
     { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON', amount:'0.09', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk', time:'2026-01-07 16:34:31', hash:'74fd43877809e3ff5c2a8d6e1b4f7c9a3d5e8c2f6b1a4d7e3c8f5b9a2d6e4c1d', channel:'',           status:'arrived' },
     { uid:'253024631', name:'benny@bdy.tech',  userId:'U40091057', token:'USDT', network:'TRON', amount:'4.5',  fee:'0.05', wallet:'TR7pXZ6qkL4nM9vF8wKsBe2dYaC1jGhUmn', time:'2026-01-06 13:38:05', hash:'d7e7bffe3823af573e6c1a9d4f8b2e5c7a4f3b9d6e1c8f2b5a7d4e9c3f6b1a8e', channel:'',           status:'arrived' },
     { uid:'635102950', name:'kara',            userId:'U10023841', token:'USDC', network:'TRON',     amount:'150.00', fee:'0.15', wallet:'TVTLsL9PsC9HPL8imuJQV41HrrRqck2wcz', time:'2026-06-09 09:20:31', hash:'8b4d1e9c6f3a7b2e5d8c1f4a9e6b3d7c2f8a5e1b6d9c3f7a2e5b8d1c4f9a6e3b', channel:'',           status:'arrived' },
-    { uid:'884590488', name:'kara2',           userId:'U20048762', token:'USDC', network:'Ethereum', amount:'25.50',  fee:'0.03', wallet:'0x6c3f9a1d8e5b2c7f4a9d6e3b1c8f5a2d7e4b9c6f', time:'2026-06-10 08:12:47', hash:'0x9e4c7f2b5a8d1e6c3f9b4a7d2e5c8f1b6a3d9e7c4f2b8a5d1e6c9f3b7a4d2e8c', channel:'', status:'arrived' },
+    { uid:'884590488', name:'kara2',           userId:'884590488', accountType:'main', token:'USDC', network:'Ethereum', amount:'25.50',  fee:'0.03', wallet:'0x6c3f9a1d8e5b2c7f4a9d6e3b1c8f5a2d7e4b9c6f', time:'2026-06-10 08:12:47', hash:'0x9e4c7f2b5a8d1e6c3f9b4a7d2e5c8f1b6a3d9e7c4f2b8a5d1e6c9f3b7a4d2e8c', channel:'', status:'arrived' },
     // 异常充值：并入同一张表、同一套状态机；不再是独立镜像数据；exceptionType/note
     // 只在这些行上有值。unavailable（代币/网络不可用）只能走 待人工审核 → 已退款，
     // fee 因为配置缺失系统算不出来，manual_review 阶段固定为空，退款时在弹窗里补录；
@@ -5403,10 +5421,12 @@
       const idx = DEPOSIT_ALL.indexOf(r);
       const viewBtn = `<span class="action-icon" title="详情" onclick="openDepositView(${idx})">${_D_EYE_SVG}</span>`;
       const orderNo = depositOrderNo(r);
+      const userIdCell = (r.userId || '-') + (r.accountType === 'main'
+        ? `&nbsp;<span class="badge badge-blue" style="font-size:11px;padding:2px 6px">主账号</span>` : '');
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.uid}</td>
         <td>${r.name}</td>
-        <td style="font-family:Inter,sans-serif">${r.userId}</td>
+        <td style="font-family:Inter,sans-serif">${userIdCell}</td>
         <td>${r.token}</td><td>${r.network}</td>
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
         <td style="font-family:Inter,sans-serif">${markup === '' ? '<span class="cell-empty">—</span>' : markup}</td>
@@ -5469,6 +5489,9 @@
     msLiteInit('d-channel', [
       { value:'direct', label:'直连' }, { value:'Meta Trader', label:'Meta Trader' }, { value:'On Ramp', label:'On Ramp' },
     ], '全部');
+    msLiteInit('d-accttype', [
+      { value:'main', label:'主账号' }, { value:'sub', label:'子账号' },
+    ], '全部');
   }
   function depositSearch() {
     const userId  = document.getElementById('d-userid').value.trim().toLowerCase();
@@ -5477,6 +5500,7 @@
     const nets     = msLiteGet('d-network');
     const sts      = msLiteGet('d-status');
     const channels = msLiteGet('d-channel');
+    const acctTypes = msLiteGet('d-accttype');
     const hash    = document.getElementById('d-hash').value.trim().toLowerCase();
     const order   = document.getElementById('d-order').value.trim().toLowerCase();
     const ds      = document.getElementById('d-date-start').value;
@@ -5489,6 +5513,7 @@
       if (nets.length     && !nets.includes(r.network))        return false;
       if (sts.length      && !sts.includes(r.status))          return false;
       if (channels.length && !channels.some(c => c === 'direct' ? r.channel === '' : r.channel === c)) return false;
+      if (acctTypes.length && !acctTypes.includes(r.accountType || 'sub')) return false;
       if (hash    && !r.hash.toLowerCase().includes(hash))    return false;
       if (order   && !depositOrderNo(r).toLowerCase().includes(order)) return false;
       if (ds      && r.time.split(' ')[0] < ds)               return false;
@@ -5500,7 +5525,7 @@
   function depositReset() {
     ['d-uid','d-userid','d-wallet','d-hash','d-order','d-date-start','d-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    ['d-token','d-network','d-status','d-channel'].forEach(msLiteReset);
+    ['d-token','d-network','d-status','d-channel','d-accttype'].forEach(msLiteReset);
     dSelectedMerchants = [];
     dRenderMerchantTags();
     dState.rows = [...DEPOSIT_ALL];
@@ -5519,12 +5544,12 @@
     paymentSearch();
   }
   function depositExport() {
-    const headers = ['商户 ID','商户名称','用户 ID','代币','网络','到账金额','加点费用','订单金额','手续费','净入账','钱包地址','到账时间','哈希','类型','订单号','状态'];
+    const headers = ['商户 ID','商户名称','用户 ID','账户类型','代币','网络','到账金额','加点费用','订单金额','手续费','净入账','钱包地址','到账时间','哈希','类型','订单号','状态'];
     csvDownload(headers, dState.rows.map(r => {
       const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
       const markup = depositMarkupCell(r);
       const orderAmount = depositOrderAmountCell(r);
-      return [r.uid, r.name, r.userId, r.token, r.network, r.amount, markup === '' ? '-' : markup, orderAmount === '' ? '-' : orderAmount, r.fee, net,
+      return [r.uid, r.name, r.userId || '-', D_ACCOUNT_TYPE[r.accountType || 'sub'].label, r.token, r.network, r.amount, markup === '' ? '-' : markup, orderAmount === '' ? '-' : orderAmount, r.fee, net,
               r.wallet, r.time, r.hash, r.channel || '直连', depositOrderNo(r) || '-', D_STATUS[r.status].label];
     }), '充币记录.csv');
   }
@@ -5567,7 +5592,8 @@
     const items = [
       di('商户 ID',   r.uid),
       di('商户名称',  r.name),
-      di('用户 ID',   r.userId),
+      di('用户 ID',   (r.userId || '-') + (r.accountType === 'main'
+        ? `&nbsp;<span class="badge badge-blue" style="font-size:11px;padding:2px 6px">主账号</span>` : '')),
       di('状态',     `<span class="badge ${st.cls}">${st.label}</span>`),
       di('到账金额', `<span style="color:#67C23A;font-family:Inter,sans-serif">${r.amount} ${r.token}</span>`),
       di('手续费',   fee === '' ? '—' : `${fee} ${r.token}`),

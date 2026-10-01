@@ -1153,6 +1153,78 @@
 
     .home-merchant-table th:nth-child(1) { width:22%; }
     .home-merchant-table th:nth-child(7) { width:10%; }
+
+    .th-hint { position:relative; display:inline-block; vertical-align:-2px; cursor:help; }
+    .th-hint-pop {
+      display:none; position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%);
+      background:#303133; color:#FFFFFF; font-size:12px; font-weight:400; line-height:1.2;
+      white-space:nowrap; padding:10px; border-radius:4px; z-index:2000;
+    }
+    .th-hint:hover .th-hint-pop { display:block; }
+
+    /* ── 开户申请 ──────────────────────────────────────── */
+    .badge-lblue { background:#ECF5FF; color:#409EFF; }
+    .ob-co-cell { display:flex; align-items:center; min-width:0; }
+    .ob-co-nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+    .ob-risk { flex-shrink:0;  display:inline-flex; align-items:center; margin-left:6px; padding:2px 6px; font-size:12px; line-height:1.2; color:#F56C6C; background:#FEF0F0; border:1px solid #fbc4c4; border-radius:3px; white-space:nowrap; }
+    .ob-dt-bar { display:flex; align-items:center; gap:10px; padding:16px 20px 0; flex-shrink:0; flex-wrap:wrap; }
+    .ob-dt-title { font-size:14px; font-weight:600; color:#303133; font-family:'Inter',sans-serif; }
+    .ob-dt-company { font-size:14px; color:#606266; }
+    .ob-dt-actions { margin-left:auto; display:flex; gap:8px; }
+    .ob-dt-actions .btn { margin:0; }
+    .ob-dt-body { display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:16px; padding:16px 20px 24px; overflow-y:auto; flex:1; align-items:start; }
+    .ob-col { display:flex; flex-direction:column; gap:16px; min-width:0; }
+    .ob-banner { grid-column:1/-1; padding:10px 14px; border-radius:4px; font-size:13px; line-height:1.7; border:1px solid; }
+    .ob-banner b { font-weight:600; }
+    .ob-banner-warn    { background:#fdf6ec; border-color:#faecd8; color:#b88230; }
+    .ob-banner-danger  { background:#FEF0F0; border-color:#fde2e2; color:#F56C6C; }
+    .ob-banner-success { background:#f0f9eb; border-color:#e1f3d8; color:#5daf34; }
+    .ob-banner-info    { background:#F4F4F5; border-color:#E9E9EB; color:#909399; }
+    .ob-sec-hd { display:flex; align-items:center; justify-content:space-between; }
+    .ob-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+    .ob-grid.one { grid-template-columns:minmax(0,1fr); }
+    .ob-kv { padding:10px 20px; border-bottom:1px solid #F2F6FC; min-width:0; }
+    .ob-kv.full { grid-column:1/-1; }
+    .ob-k { font-size:12px; color:#909399; margin-bottom:3px; }
+    .ob-v { font-size:13px; color:#303133; word-break:break-all; line-height:1.6; }
+    .ob-empty { padding:24px 20px; text-align:center; color:#C0C4CC; font-size:13px; }
+    .ob-person + .ob-person { border-top:4px solid #F5F7FA; }
+    .ob-person-hd { display:flex; align-items:center; gap:6px; padding:12px 20px 2px; font-size:13px; font-weight:600; color:#303133; }
+    .ob-file-group { padding:8px 20px 0; font-size:12px; font-weight:600; color:#909399; }
+    .ob-file-row { display:grid; grid-template-columns:240px minmax(0,1fr); gap:12px; padding:9px 20px; border-bottom:1px solid #F2F6FC; font-size:13px; }
+    .ob-file-type { color:#606266; }
+    .ob-req { color:#F56C6C; margin-left:2px; }
+    .ob-files { display:flex; flex-direction:column; gap:4px; min-width:0; }
+    .ob-file { display:flex; align-items:center; gap:10px; color:#303133; min-width:0; }
+    .ob-file-nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ob-link { color:#409EFF; cursor:pointer; font-size:12px; flex-shrink:0; }
+    .ob-link:hover { text-decoration:underline; }
+    .ob-sign { height:90px; border:1px dashed #DCDFE6; border-radius:4px; background:#FAFAFA; display:flex; align-items:center; justify-content:center; }
+    .ob-note-wrap { padding:12px 20px 14px; }
+    .ob-note-box { position:relative; }
+    .ob-note-box .wm-remark { display:block; padding-bottom:24px; }
+    .ob-note-count { position:absolute; right:20px; bottom:6px; font-size:12px; color:#909399; font-family:'Inter',sans-serif; line-height:1; pointer-events:none; }
+    .ob-note-ft { display:flex; align-items:center; justify-content:flex-end; margin-top:8px; }
+    .ob-form { padding:20px 24px 8px; }
+    .ob-fi { margin-bottom:16px; }
+    .ob-fl { font-size:13px; color:#606266; margin-bottom:6px; }
+    .ob-fl .req { color:#F56C6C; margin-right:2px; }
+    .ob-err { font-size:12px; color:#F56C6C; margin-top:4px; display:none; }
+    .ob-fi.has-err .field-input, .ob-fi.has-err .wm-remark { border-color:#F56C6C; }
+    .ob-fi.has-err .ob-err { display:block; }
+    .ob-count-wrap { position:relative; }
+    .ob-count { font-size:12px; color:#909399; font-family:'Inter',sans-serif; line-height:1; }
+    .ob-count-in { position:absolute; right:10px; top:50%; transform:translateY(-50%); }
+    .ob-count.over { color:#F56C6C; }
+    .ob-review-info { display:flex; align-items:center; gap:8px; padding:8px 12px; margin-bottom:16px; background:#F5F7FA; border-radius:4px; font-size:13px; color:#303133; }
+    .ob-review-info .ob-risk { margin-left:0; }
+    .ob-hint { font-size:12px; color:#909399; line-height:1.6; margin-top:6px; }
+
+    /* 反馈收集 */
+    .fb-msg-cell { display:flex; align-items:center; gap:6px; min-width:0; }
+    .fb-msg-cell .fb-msg { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ob-msg { font-size:14px; color:#606266; line-height:1.75; }
+    .ob-chk-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
   </style>
 </head>
 <body>
@@ -1200,9 +1272,26 @@
           </div>
         </div>
       </div>
-      <div class="nav-item" data-page="merchant">
-        <i data-lucide="users" class="nav-icon" style="width:16px;height:16px;"></i>
-        <span class="nav-label">商户管理</span>
+      <div class="nav-group">
+        <div class="nav-group-hd" id="nav-ghd-merchant" onclick="toggleNavGroup('merchant')">
+          <i data-lucide="users" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">商户管理</span>
+          <i data-lucide="chevron-up" id="nav-caret-merchant" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-merchant">
+          <div class="nav-item nav-sub-item" data-page="onboard">
+            <i data-lucide="file-check" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">开户申请</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="merchant">
+            <i data-lucide="building-2" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">企业商户</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="merchant-receiving">
+            <i data-lucide="credit-card" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">收款商户</span>
+          </div>
+        </div>
       </div>
       <div class="nav-group">
         <div class="nav-group-hd group-active" id="nav-ghd-deposit" onclick="toggleNavGroup('deposit')">
@@ -1654,14 +1743,6 @@
         <!-- Table Card -->
         <div class="table-card">
           <div class="summary-bar">
-            <div class="summary-stats">
-              <span id="al-summary-count"></span>
-              <span>充币（合计）：<b id="al-stat-deposit">0.00</b></span>
-              <span>提现（合计）：<b class="neg" id="al-stat-withdraw">0.00</b></span>
-              <span>手续费（合计）：<b class="neg" id="al-stat-fee">0.00</b></span>
-              <span>调账（增加）（合计）：<b id="al-stat-adjust-inc">0.00</b></span>
-              <span>调账（减少）（合计）：<b class="neg" id="al-stat-adjust-dec">0.00</b></span>
-            </div>
             <div class="summary-spacer"></div>
             <button class="export-btn" onclick="alExport()">
               <i data-lucide="download" style="width:13px;height:13px;"></i>导出
@@ -2015,19 +2096,21 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2650px;">
+            <table style="min-width:2732px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:190px">
                 <col style="width:70px"><col style="width:80px"><col style="width:80px">
                 <col style="width:90px"><col style="width:90px">
-                <col style="width:72px"><col style="width:70px"><col style="width:380px">
+                <col style="width:190px"><col style="width:70px"><col style="width:380px">
                 <col style="width:152px"><col style="width:600px"><col style="width:110px">
                 <col style="width:220px"><col style="width:100px"><col style="width:55px">
               </colgroup>
               <thead>
                 <tr>
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>代币</th><th>网络</th>
-                  <th>到账金额</th><th>加点费用</th><th>订单金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
+                  <th>到账金额</th><th>加点费用</th><th>订单金额</th>
+                  <th style="white-space:nowrap;overflow:visible;">手续费&nbsp;<span class="th-hint"><i data-lucide="info" style="width:12px;height:12px;color:#909399;"></i><span class="th-hint-pop">On Ramp 充值：手续费 = 网络费（PayPaz）+ 手续费（PayPaz）</span></span></th>
+                  <th>净入账</th><th>钱包地址</th>
                   <th>到账时间</th><th>哈希</th><th>类型</th><th>订单号</th><th>状态</th><th>操作</th>
                 </tr>
               </thead>
@@ -2949,11 +3032,12 @@
               <span>笔数：<b id="ramp-in-stat-count">0</b></span>
               <span>支付法币金额（合计）：<b id="ramp-in-stat-fiat">0.00</b></span>
               <span>网络费（合计）：<b id="ramp-in-stat-networkfee">0.00</b> / <b id="ramp-in-stat-networkfee-crypto">0.00</b></span>
-              <span>渠道处理费（合计）：<b id="ramp-in-stat-processingfee">0.00</b> / <b id="ramp-in-stat-processingfee-crypto">0.00</b></span>
+              <span>手续费（渠道）（合计）：<b id="ramp-in-stat-processingfee">0.00</b> / <b id="ramp-in-stat-processingfee-crypto">0.00</b></span>
               <span>入金代币数量（合计）：<b id="ramp-in-stat-crypto">0.00</b></span>
               <span>实际收到代币（合计）：<b id="ramp-in-stat-gross">0.00</b></span>
               <span>加点费用（合计）：<b id="ramp-in-stat-markup">0.00</b></span>
-              <span>On Ramp 手续费（合计）：<b id="ramp-in-stat-fee">0.00</b></span>
+              <span>手续费（PayPaz）（合计）：<b id="ramp-in-stat-fee">0.00</b></span>
+              <span>网络费（PayPaz）（合计）：<b id="ramp-in-stat-networkfee-paypaz">0.00</b></span>
               <span>净入账（合计）：<b id="ramp-in-stat-net">0.00</b></span>
             </div>
             <div class="summary-spacer"></div>
@@ -2972,16 +3056,17 @@
                   <th>渠道</th>
                   <th>渠道订单</th>
                   <th>支付法币金额</th>
-                  <th>网络费</th>
-                  <th>渠道处理费</th>
                   <th>入金代币数量</th>
                   <th>实际收到代币</th>
-                  <th>渠道汇率</th>
-                  <th>加点</th>
-                  <th>客户汇率</th>
+                  <th>网络费（渠道）</th>
+                  <th>网络费（PayPaz）</th>
+                  <th>手续费（渠道）</th>
+                  <th>手续费（PayPaz）</th>
+                  <th>汇率（渠道）</th>
+                  <th>加点（PayPaz）</th>
+                  <th>汇率（PayPaz）</th>
                   <th>加点费用</th>
-                  <th>On Ramp 手续费</th>
-                  <th>净入账</th>
+                  <th style="white-space:nowrap;overflow:visible;">净入账&nbsp;<span class="th-hint"><i data-lucide="info" style="width:12px;height:12px;color:#909399;"></i><span class="th-hint-pop">净入账 = 入金代币数量 − 网络费（PayPaz）− 手续费（PayPaz）</span></span></th>
                   <th>网络</th>
                   <th>地址</th>
                   <th>哈希</th>
@@ -3203,6 +3288,253 @@
     </div><!-- /page-ramp-detail -->
 
     <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 开户申请                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-onboard">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">编号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入编号" id="ob-f-id">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">企业名称</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入企业名称" id="ob-f-company">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">邮箱</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入邮箱" id="ob-f-email">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="ob-status-lite" tabindex="0"
+                     onclick="msLiteToggle('ob-status')" onblur="setTimeout(function(){msLiteClose('ob-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="ob-status-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="ob-status-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">创建时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="ob-f-cre-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="ob-f-cre-end">
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">提交时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="ob-f-sub-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="ob-f-sub-end">
+                </div>
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">最近更新</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="ob-f-date-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="ob-f-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="obReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="obSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-spacer"></div>
+            <button class="btn btn-primary" onclick="openObSend()">
+              <i data-lucide="plus" style="width:13px;height:13px;"></i>邀请开户
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1180px;">
+              <colgroup>
+                <col style="width:124px"><col><col>
+                <col style="width:96px">
+                <col style="width:170px"><col style="width:170px"><col style="width:170px">
+                <col style="width:56px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>编号</th><th>企业名称</th><th>邮箱</th><th>状态</th>
+                  <th>创建时间</th><th>提交时间</th><th>最近更新</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="ob-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="ob-page-total">共 0 条</span>
+            <select class="page-size-select" id="ob-page-size" onchange="obPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+              <option value="200">200条/页</option>
+            </select>
+            <button class="page-btn" id="ob-btn-prev" onclick="obPage(obState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="obPage(1)">1</button>
+            <button class="page-btn" onclick="obPage(2)">2</button>
+            <button class="page-btn" onclick="obPage(3)">3</button>
+            <button class="page-btn" id="ob-btn-next" onclick="obPage(obState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')obPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-onboard -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 开户申请详情                              -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-onboard-detail">
+      <div class="md-top-bar" id="ob-dt-bar" style="gap:10px;">
+        <!-- populated by JS -->
+      </div>
+      <div class="ob-dt-body" id="ob-dt-body">
+        <!-- populated by JS -->
+      </div>
+    </div><!-- /page-onboard-detail -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 反馈收集                                  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-feedback">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">邮箱</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入邮箱" id="fb-f-email">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">手机号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入手机号" id="fb-f-phone">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="fb-status-lite" tabindex="0"
+                     onclick="msLiteToggle('fb-status')" onblur="setTimeout(function(){msLiteClose('fb-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="fb-status-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="fb-status-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">邀请编号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入邀请编号" id="fb-f-invite">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">时间范围</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="fb-f-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="fb-f-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="fbReset()">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="fbSearch()">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="table-wrap">
+            <table style="min-width:1400px;">
+              <colgroup>
+                <col style="width:150px"><col style="width:130px"><col style="width:200px">
+                <col style="width:150px"><col><col style="width:170px">
+                <col style="width:96px"><col style="width:124px"><col style="width:56px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>公司名称</th><th>联系人</th><th>邮箱</th><th>手机号</th>
+                  <th>备注</th><th>创建时间</th><th>状态</th><th>邀请编号</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="fb-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="fb-page-total">共 0 条</span>
+            <select class="page-size-select" id="fb-page-size" onchange="fbPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20" selected>20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+              <option value="200">200条/页</option>
+            </select>
+            <button class="page-btn" id="fb-btn-prev" onclick="fbPage(fbState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="fbPage(1)">1</button>
+            <button class="page-btn" onclick="fbPage(2)">2</button>
+            <button class="page-btn" onclick="fbPage(3)">3</button>
+            <button class="page-btn" id="fb-btn-next" onclick="fbPage(fbState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')fbPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-feedback -->
+
+    <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 商户管理                                  -->
     <!-- ════════════════════════════════════════════════ -->
     <div class="page" id="page-merchant">
@@ -3421,6 +3753,7 @@
                     <th style="white-space:nowrap;">加点</th>
                     <th style="white-space:nowrap;">用户汇率</th>
                     <th style="white-space:nowrap;">On Ramp 手续费率</th>
+                    <th style="white-space:nowrap;">网络费</th>
                     <th style="white-space:nowrap;">最小入金数量</th>
                     <th style="white-space:nowrap;">支持网络</th>
                     <th>操作</th>
@@ -3480,6 +3813,56 @@
         </div>
       </div>
     </div><!-- /page-merchant-detail -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 收款商户（卡商）                            -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-merchant-receiving">
+      <div class="content-area">
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-spacer"></div>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1040px;">
+              <colgroup>
+                <col><col style="width:130px">
+                <col style="width:200px">
+                <col style="width:90px">
+                <col style="width:130px"><col style="width:130px">
+                <col style="width:170px"><col style="width:120px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>名称</th><th>ID</th><th>邮箱</th>
+                  <th>状态</th><th>保证金换算比例</th><th>对商户结算加点</th><th>创建时间</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="rm-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="rm-page-total">共 7 条</span>
+            <select class="page-size-select" id="rm-page-size" onchange="receivingMerchantPageSize()">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+            </select>
+            <button class="page-btn" id="rm-btn-prev" onclick="receivingMerchantPage(rmState.page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" id="rm-p-1" onclick="receivingMerchantPage(1)">1</button>
+            <button class="page-btn" id="rm-btn-next" onclick="receivingMerchantPage(rmState.page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')receivingMerchantPage(+this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-merchant-receiving -->
 
     <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 角色管理                                  -->
@@ -4427,6 +4810,37 @@
     </div>
   </div>
 
+  <!-- ── Invite Card Provider Modal（收款商户/卡商）──── -->
+  <div class="modal-overlay" id="rm-invite-modal" onclick="if(event.target===this)closeRmInviteModal()">
+    <div class="modal" style="width:460px;">
+      <div class="modal-header">
+        <span class="modal-title">邀请卡商</span>
+        <span class="modal-close" onclick="closeRmInviteModal()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" style="display:block;padding:24px 24px 8px;">
+        <div class="form-row">
+          <span class="form-label">卡商名称</span>
+          <input class="field-input" type="text" id="rm-inv-name" placeholder="请输入卡商名称" style="width:100%;">
+        </div>
+        <div class="form-row">
+          <span class="form-label">邮箱</span>
+          <input class="field-input" type="email" id="rm-inv-email" placeholder="请输入邮箱地址" style="width:100%;">
+        </div>
+        <div class="form-row">
+          <span class="form-label">备注</span>
+          <input class="field-input" type="text" id="rm-inv-remark" placeholder="选填" style="width:100%;">
+        </div>
+        <div style="font-size:12px;color:#909399;line-height:1.6;margin:4px 2px 4px;">邀请邮件将发送至上方邮箱，链接有效期 30 分钟；卡商需在有效期内点击链接设置密码完成激活。</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeRmInviteModal()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="submitRmInvite()" style="margin-left:8px;">确认邀请</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Create Observer Modal ────────────────────────── -->
   <div class="modal-overlay" id="obs-modal" onclick="if(event.target===this)closeCreateObserverModal()">
     <div class="modal" style="width:500px;">
@@ -4576,6 +4990,21 @@
             <span class="tk-addon">%</span>
           </div>
         </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>网络费</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="rp-on-networkFeeMode" value="actual" onchange="rpToggleNetworkFeeMode()"><span class="ak-dot"></span>渠道实际值</label>
+            <label class="ak-radio-item"><input type="radio" name="rp-on-networkFeeMode" value="fixed" onchange="rpToggleNetworkFeeMode()"><span class="ak-dot"></span>固定金额</label>
+          </div>
+        </div>
+        <div class="tk-row" id="rp-on-networkFeeFixed-row" style="margin-bottom:20px;display:none;">
+          <span class="ak-label"></span>
+          <div class="tk-addon-wrap">
+            <input type="number" class="field-input" id="rp-on-networkFeeFixed" min="0" step="0.01" placeholder="请输入">
+            <span class="tk-addon" id="rp-on-networkFeeFixed-unit"></span>
+          </div>
+        </div>
+
         <div class="tk-row" style="margin-bottom:4px;">
           <span class="ak-label"><span class="ak-req">*</span>最小入金数量</span>
           <div class="tk-addon-wrap">
@@ -4892,6 +5321,78 @@
     </div>
   </div>
 
+  <!-- ── 开户申请：邀请开户 Modal ─────────────────── -->
+  <div class="modal-overlay" id="ob-send-modal" onclick="if(event.target===this)closeObSend()">
+    <div class="modal" style="width:480px;">
+      <div class="modal-header">
+        <span class="modal-title">邀请开户</span>
+        <span class="modal-close" onclick="closeObSend()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="ob-form">
+        <div class="ob-fi" id="ob-send-company-fi">
+          <div class="ob-fl"><span class="req">*</span>企业名称</div>
+          <div class="ob-count-wrap">
+            <input class="field-input" type="text" id="ob-send-company" placeholder="请输入企业名称" style="width:100%;padding-right:64px;" oninput="obCountCheck('company')">
+            <span class="ob-count ob-count-in" id="ob-send-company-count">0/200</span>
+          </div>
+          <div class="ob-err" id="ob-send-company-err"></div>
+        </div>
+        <div class="ob-fi" id="ob-send-email-fi">
+          <div class="ob-fl"><span class="req">*</span>邮箱</div>
+          <input class="field-input" type="text" id="ob-send-email" placeholder="请输入邮箱" style="width:100%;">
+          <div class="ob-err" id="ob-send-email-err"></div>
+        </div>
+        <div class="ob-fi" id="ob-send-remark-fi">
+          <div class="ob-fl">备注</div>
+          <textarea class="wm-remark" id="ob-send-remark" placeholder="请输入备注" oninput="obCountCheck('remark')"></textarea>
+          <span class="ob-count" id="ob-send-remark-count" style="display:block;text-align:right;margin-top:4px;">0/500</span>
+          <div class="ob-err" id="ob-send-remark-err"></div>
+          <div class="ob-hint">将向客户发送邀请邮件，链接 30 天内有效。</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeObSend()">取消</button>
+        <button class="btn btn-primary btn-sm" id="ob-send-ok" onclick="submitObSend()" style="margin-left:8px;">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 开户申请：通用操作 Modal（通过/拒绝/补件/重发/改邮箱/删除/业务关系结束日期）── -->
+  <div class="modal-overlay" id="ob-act-modal" onclick="if(event.target===this)closeObAct()">
+    <div class="modal" id="ob-act-box" style="width:480px;">
+      <div class="modal-header">
+        <span class="modal-title" id="ob-act-title"></span>
+        <span class="modal-close" onclick="closeObAct()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="ob-form" id="ob-act-body"></div>
+      <div class="modal-footer" id="ob-act-footer"></div>
+    </div>
+  </div>
+
+  <!-- ── 开户申请：确认框（沿用提币 / 充币审核确认框样式）── -->
+  <div class="modal-overlay" id="ob-confirm-modal" style="z-index:1100;" onclick="if(event.target===this)closeObConfirm()">
+    <div class="modal" style="width:380px;">
+      <div class="wd-confirm-box">
+        <button class="wd-confirm-close" onclick="closeObConfirm()">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <div class="wd-confirm-hd">
+          <span id="ob-confirm-icon"></span>
+          <span class="wd-confirm-title" id="ob-confirm-title"></span>
+        </div>
+        <div class="wd-confirm-msg" id="ob-confirm-msg"></div>
+        <div class="wd-confirm-actions">
+          <button class="btn btn-default btn-sm" onclick="closeObConfirm()">取消</button>
+          <button class="btn btn-sm" id="ob-confirm-ok"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div class="toast" id="toast">
     <i data-lucide="check-circle" class="toast-icon" style="width:16px;height:16px;"></i>
@@ -4980,8 +5481,11 @@
     'platform-assets': { label: '资产余额', icon: 'wallet', parent: '平台资产' },
     'account-ledger':  { label: '商户账户明细', icon: 'receipt', parent: '平台资产' },
     'adjust-review':   { label: '商户账户调账', icon: 'scale', parent: '平台资产' },
-    merchant: { label: '商户管理',  icon: 'users' },
+    onboard:  { label: '开户申请',  icon: 'file-check', parent: '商户管理' },
+    'onboard-detail': { label: '开户申请详情', icon: 'file-search' },
+    merchant: { label: '企业商户',  icon: 'building-2', parent: '商户管理' },
     'merchant-detail': { label: '商户详情', icon: 'layout-grid' },
+    'merchant-receiving': { label: '收款商户', icon: 'credit-card', parent: '商户管理' },
     withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
     'withdraw-audit': { label: '提币审核', icon: 'shield-check' },
     currency: { label: '币种管理',  icon: 'circle-dollar-sign' },
@@ -4997,7 +5501,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'merchant', 'merchant-detail', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review']);
+  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -5038,6 +5542,16 @@
       </button>`;
       bar.appendChild(invBtn);
     }
+
+    // Receiving-merchant (卡商) page: show invite button on right side of tab bar
+    if (activePage === 'merchant-receiving') {
+      const rmInvBtn = document.createElement('div');
+      rmInvBtn.style.cssText = 'flex:1;display:flex;justify-content:flex-end;align-items:center;padding-right:16px;flex-shrink:0;';
+      rmInvBtn.innerHTML = `<button class="btn btn-primary" style="height:28px;padding:0 12px;font-size:13px;gap:4px;" onclick="openRmInviteModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>邀请卡商
+      </button>`;
+      bar.appendChild(rmInvBtn);
+    }
   }
 
   function toggleNavGroup(id) {
@@ -5052,7 +5566,7 @@
     activePage = pid;
 
     // update sidebar
-    const navPid = pid === 'sys-role-users' ? 'sys-role' : pid;
+    const navPid = pid === 'sys-role-users' ? 'sys-role' : pid === 'onboard-detail' ? 'onboard' : pid;
     document.querySelectorAll('.nav-item').forEach(n => {
       n.classList.toggle('active', n.dataset.page === navPid);
     });
@@ -5067,6 +5581,12 @@
     const withdrawGhd = document.getElementById('nav-ghd-withdraw');
     if (withdrawGhd) {
       withdrawGhd.classList.toggle('group-active', pid === 'withdraw' || pid === 'withdraw-audit');
+    }
+
+    // update merchant group header active state
+    const merchantGhd = document.getElementById('nav-ghd-merchant');
+    if (merchantGhd) {
+      merchantGhd.classList.toggle('group-active', pid === 'onboard' || pid === 'onboard-detail' || pid === 'merchant' || pid === 'merchant-detail' || pid === 'merchant-receiving');
     }
 
     // update platform group header active state
@@ -5394,9 +5914,23 @@
   // 到账时手续费尚未确定的记录（部分待人工审核的异常充值）r.fee 为空，
   // 手续费/净入账两列显示「—」，不参与计算
   function depositFeeCell(r) { return r.fee !== '' ? r.fee : ''; }
+  // On Ramp 来源的充值记录，手续费列展示为「总手续费（网络费（PayPaz） + 手续费（PayPaz））」，如 8.00（3.00 + 5.00）
+  function depositFeeDisplayCell(r, fee) {
+    if (r.channel === 'On Ramp' && r.feeNetworkPaypaz != null && r.feeServicePaypaz != null) {
+      return `${fee}（${r.feeNetworkPaypaz} + ${r.feeServicePaypaz}）`;
+    }
+    return fee;
+  }
+  // On Ramp 来源的记录：净入账 = 订单金额（入金代币数量，不含加点）− 手续费，跟 On Ramp 订单列表口径一致；
+  // 其他渠道仍按到账金额 − 手续费计算
   function depositNetCell(r) {
     const fee = depositFeeCell(r);
-    return fee === '' ? '' : (parseFloat(r.amount) - parseFloat(fee)).toFixed(2);
+    if (fee === '') return '';
+    if (r.channel === 'On Ramp') {
+      const orderAmount = depositOrderAmountCell(r);
+      return orderAmount === '' ? '' : (parseFloat(orderAmount) - parseFloat(fee)).toFixed(2);
+    }
+    return (parseFloat(r.amount) - parseFloat(fee)).toFixed(2);
   }
   // 加点费用只有 On Ramp 充币产生的记录才有值，其他类型充值为空。
   // 订单金额：On Ramp 充值取入金代币数量；其他类型充值取匹配到的订单的应付金额，
@@ -5431,7 +5965,7 @@
         <td style="font-family:Inter,sans-serif">${r.amount}</td>
         <td style="font-family:Inter,sans-serif">${markup === '' ? '<span class="cell-empty">—</span>' : markup}</td>
         <td style="font-family:Inter,sans-serif">${orderAmount === '' ? '<span class="cell-empty">—</span>' : orderAmount}</td>
-        <td style="font-family:Inter,sans-serif">${fee === '' ? '<span class="cell-empty">—</span>' : fee}</td>
+        <td style="font-family:Inter,sans-serif">${fee === '' ? '<span class="cell-empty">—</span>' : depositFeeDisplayCell(r, fee)}</td>
         <td style="font-family:Inter,sans-serif;color:#67C23A;">${net === '' ? '<span class="cell-empty">—</span>' : net}</td>
         <td>${r.wallet === '-' ? '-' : fullCell(r.wallet)}</td>
         <td style="font-family:Inter,sans-serif">${r.time}</td>
@@ -5546,10 +6080,10 @@
   function depositExport() {
     const headers = ['商户 ID','商户名称','用户 ID','账户类型','代币','网络','到账金额','加点费用','订单金额','手续费','净入账','钱包地址','到账时间','哈希','类型','订单号','状态'];
     csvDownload(headers, dState.rows.map(r => {
-      const net = (parseFloat(r.amount) - parseFloat(r.fee)).toFixed(2);
+      const net = depositNetCell(r);
       const markup = depositMarkupCell(r);
       const orderAmount = depositOrderAmountCell(r);
-      return [r.uid, r.name, r.userId || '-', D_ACCOUNT_TYPE[r.accountType || 'sub'].label, r.token, r.network, r.amount, markup === '' ? '-' : markup, orderAmount === '' ? '-' : orderAmount, r.fee, net,
+      return [r.uid, r.name, r.userId || '-', D_ACCOUNT_TYPE[r.accountType || 'sub'].label, r.token, r.network, r.amount, markup === '' ? '-' : markup, orderAmount === '' ? '-' : orderAmount, r.fee, net === '' ? '-' : net,
               r.wallet, r.time, r.hash, r.channel || '直连', depositOrderNo(r) || '-', D_STATUS[r.status].label];
     }), '充币记录.csv');
   }
@@ -7646,7 +8180,7 @@
     { id:'236751146', name:'rogan-v1',    email:'rogan-v1@bdy.tech',      status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-05-29 13:46:01' },
     { id:'848473309', name:'rogantest',   email:'rogantest@bdy.tech',     status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:115, wallets:0,  balance:'156.928888',   created:'2026-05-06 15:34:16' },
     { id:'884590488', name:'kara2',       email:'kara2@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:10,   matchLower:90,  matchUpper:110, wallets:9,  balance:'1501.06',      created:'2026-04-13 17:40:36' },
-    { id:'635102950', name:'kara',        email:'kara@bdy.tech',          status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:5,    matchLower:90,  matchUpper:110, wallets:10, balance:'1365.55',      created:'2026-04-13 16:00:01' },
+    { id:'635102950', name:'kara',        email:'kara@bdy.tech',          status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:5,    matchLower:90,  matchUpper:110, wallets:10, balance:'1342.23',      created:'2026-04-13 16:00:01' },
     { id:'512847362', name:'alpha-pay',   email:'admin@alpha-pay.com',    status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:3,  balance:'580.00',       created:'2026-04-10 09:15:22' },
     { id:'731924856', name:'betacorp',    email:'admin@betacorp.com',     status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:1,  balance:'0',            created:'2026-04-08 14:30:00' },
     { id:'304857192', name:'gamma-fx',    email:'ops@gamma-fx.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:6,  balance:'2410.75',      created:'2026-04-05 11:22:47' },
@@ -8257,30 +8791,32 @@
     showToast('保存成功');
   }
 
+  // Network Fee 由商户账户余额支付：networkFeeMode 'actual'（跟随 Legend 渠道实际值）或 'fixed'（固定金额，
+  // 币种为 crypto，networkFeeFixed 仅在 'fixed' 模式下生效）
   const RAMP_PAIRS = [
     {
       crypto:'USDT', fiat:'JPY', networks:['TRON'],
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20', networkFeeMode:'fixed', networkFeeFixed:'3.00' },
     },
     {
       crypto:'USDT', fiat:'USD', networks:['TRON'],
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20', networkFeeMode:'actual', networkFeeFixed:'0.00' },
     },
     {
       crypto:'USDT', fiat:'KRW', networks:['TRON'],
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20', networkFeeMode:'actual', networkFeeFixed:'0.00' },
     },
     {
       crypto:'USDC', fiat:'JPY', networks:['Ethereum'],
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'150.07', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20', networkFeeMode:'actual', networkFeeFixed:'0.00' },
     },
     {
       crypto:'USDC', fiat:'USD', networks:['Ethereum'],
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1.0015', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20', networkFeeMode:'actual', networkFeeFixed:'0.00' },
     },
     {
       crypto:'USDC', fiat:'KRW', networks:['Ethereum'],
-      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20' },
+      onRamp: { enabled:true,  provider:'Legend', providerRate:'1380.00', markupValue:'3.50', feeRate:'0.00', minAmount:'20', channelMinAmount:'20', networkFeeMode:'actual', networkFeeFixed:'0.00' },
     },
   ];
 
@@ -8318,6 +8854,13 @@
     return `<span style="font-family:'Inter',sans-serif;">${minAmount}<span style="color:#909399;font-size:11px;"> ${crypto}</span></span>`;
   }
 
+  function rpNetworkFeeCell(on, crypto) {
+    if (on.networkFeeMode === 'fixed') {
+      return `<span style="font-family:'Inter',sans-serif;">固定 ${on.networkFeeFixed}<span style="color:#909399;font-size:11px;"> ${crypto}</span></span>`;
+    }
+    return `<span style="color:#606266;">跟随实际</span>`;
+  }
+
   function mdRenderRampTokenTable() {
     const tbody = document.getElementById('md-ramp-token-tbody');
     if (!tbody) return;
@@ -8332,6 +8875,7 @@
         <td>${rpMarkupCell(on.markupValue)}</td>
         <td>${rpRateCell(onUR)}</td>
         <td>${rpFeeRateCell(on.feeRate)}</td>
+        <td>${rpNetworkFeeCell(on, r.crypto)}</td>
         <td>${rpMinAmountCell(on.minAmount, r.crypto)}</td>
         <td>${rpNetChips(r.networks)}</td>
         <td><span class="action-icon" onclick="openRampPairEdit(${i})" title="编辑">${_EDIT_SVG}</span></td>
@@ -8634,6 +9178,182 @@
     showToast('邀请已发送');
   }
 
+  // ── 收款商户（卡商）────────────────────────────────────
+  const MERCHANT_RECEIVING_ALL = [
+    { id:'910234567', name:'sunrise-settle',  email:'ops@sunrise-settle.com',   status:'enabled',  marginRatio:95, markup:0.5, created:'2026-08-12 10:20:31' },
+    { id:'820193456', name:'goldpay-cn',      email:'admin@goldpay-cn.com',     status:'enabled',  marginRatio:92, markup:0.8, created:'2026-08-05 14:05:12' },
+    { id:'730182345', name:'unioncard-fin',   email:'ops@unioncard-fin.io',     status:'inactive', marginRatio:95, markup:0.5, created:'2026-09-18 09:11:45' },
+    { id:'640171234', name:'rapidsettle',     email:'support@rapidsettle.com',  status:'enabled',  marginRatio:90, markup:1.0, created:'2026-07-28 16:40:02' },
+    { id:'550160123', name:'trustcard-pay',   email:'admin@trustcard-pay.com',  status:'disabled', marginRatio:95, markup:0.5, created:'2026-06-15 11:22:37' },
+    { id:'460159012', name:'novapay-cn',      email:'ops@novapay-cn.com',       status:'inactive', marginRatio:95, markup:0.5, created:'2026-09-20 15:33:09' },
+    { id:'370148901', name:'silverlink-fin',  email:'admin@silverlink-fin.io',  status:'enabled',  marginRatio:93, markup:0.6, created:'2026-05-20 08:55:18' },
+  ];
+
+  const RM_STATUS = {
+    inactive: { label:'未激活', cls:'badge badge-gray' },
+    enabled:  { label:'启用中', cls:'badge-enabled' },
+    disabled: { label:'已禁用', cls:'badge-disabled' },
+  };
+
+  const rmState = { rows: [...MERCHANT_RECEIVING_ALL], page: 1, size: 10 };
+
+  const _MAIL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`;
+
+  function receivingMerchantRender() {
+    const tbody = document.getElementById('rm-tbody');
+    if (!tbody) return;
+    const start = (rmState.page - 1) * rmState.size;
+    const slice = rmState.rows.slice(start, start + rmState.size);
+
+    tbody.innerHTML = slice.map(r => {
+      const absIdx = MERCHANT_RECEIVING_ALL.indexOf(r);
+      const st = RM_STATUS[r.status];
+      let actions;
+      if (r.status === 'inactive') {
+        actions = `<span class="action-icon" onclick="openRmResendInvite(${absIdx})" title="发送邀请邮件">${_MAIL_SVG}</span>`;
+      } else {
+        const lockEl = r.status === 'enabled'
+          ? `<span class="action-icon" style="color:#909399" onclick="rmToggleLock(${absIdx})" title="禁用">${_LOCK_SVG}</span>`
+          : `<span class="action-icon" style="color:#67C23A" onclick="rmToggleLock(${absIdx})" title="启用">${_UNLOCK_SVG}</span>`;
+        actions = `<span class="action-icon" onclick="openRmEdit(${absIdx})" title="编辑">${_EDIT_SVG}</span>${lockEl}`;
+      }
+      return `<tr>
+        <td>${r.name}</td>
+        <td style="font-family:Inter,sans-serif;color:#606266">${r.id}</td>
+        <td style="font-family:Inter,sans-serif;color:#606266">${r.email || ''}</td>
+        <td><span class="${st.cls}">${st.label}</span></td>
+        <td style="font-family:Inter,sans-serif">${r.marginRatio}%</td>
+        <td style="font-family:Inter,sans-serif">+${r.markup}%</td>
+        <td style="font-family:Inter,sans-serif">${r.created}</td>
+        <td><div class="action-cell">${actions}</div></td>
+      </tr>`;
+    }).join('');
+
+    const total = rmState.rows.length;
+    document.getElementById('rm-page-total').textContent = `共 ${total} 条`;
+    document.getElementById('rm-btn-prev').disabled = rmState.page <= 1;
+    document.getElementById('rm-btn-next').disabled = start + rmState.size >= total;
+  }
+
+  function receivingMerchantPage(p) {
+    const maxPage = Math.max(1, Math.ceil(rmState.rows.length / rmState.size));
+    rmState.page = Math.min(Math.max(1, p), maxPage);
+    receivingMerchantRender();
+  }
+
+  function receivingMerchantPageSize() {
+    rmState.size = parseInt(document.getElementById('rm-page-size').value, 10);
+    rmState.page = 1;
+    receivingMerchantRender();
+  }
+
+  function rmToggleLock(absIdx) {
+    const r = MERCHANT_RECEIVING_ALL[absIdx];
+    r.status = r.status === 'enabled' ? 'disabled' : 'enabled';
+    receivingMerchantRender();
+    showToast(r.name + (r.status === 'disabled' ? ' 已禁用' : ' 已启用'));
+  }
+
+  function openRmResendInvite(absIdx) {
+    const r = MERCHANT_RECEIVING_ALL[absIdx];
+    showToast('邀请邮件已重新发送至 ' + r.email + '，30 分钟内有效');
+  }
+
+  function openRmEdit(absIdx) {
+    const r = MERCHANT_RECEIVING_ALL[absIdx];
+    document.querySelector('#detail-modal .modal-title').textContent = '编辑卡商';
+    document.querySelector('#detail-modal .modal').style.width = '520px';
+    document.getElementById('modal-body').className = 'modal-body me-body';
+
+    document.getElementById('modal-body').innerHTML = `
+      <div class="me-section">
+        <div class="me-section-title">基本信息</div>
+        <div class="me-row">
+          <div class="me-label">卡商 ID</div>
+          <input class="me-input" readonly value="${r.id}">
+        </div>
+        <div class="me-row">
+          <div class="me-label">卡商名称<span>*</span></div>
+          <input class="me-input" id="rme-name" value="${r.name}" placeholder="请输入卡商名称">
+        </div>
+        <div class="me-row">
+          <div class="me-label">邮箱</div>
+          <input class="me-input" id="rme-email" value="${r.email || ''}" placeholder="请输入邮箱">
+        </div>
+        <div class="me-row">
+          <div class="me-label">状态</div>
+          <div class="me-radio-group">
+            <label class="me-radio"><input type="radio" name="rme-status" value="enabled" ${r.status==='enabled'?'checked':''}><span class="me-dot"></span> 启用</label>
+            <label class="me-radio"><input type="radio" name="rme-status" value="disabled" ${r.status==='disabled'?'checked':''}><span class="me-dot"></span> 禁用</label>
+          </div>
+        </div>
+      </div>
+      <div class="me-section">
+        <div class="me-section-title">结算参数</div>
+        <div class="me-row">
+          <div class="me-label">保证金换算比例<span>*</span></div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input class="me-input" id="rme-margin-ratio" type="number" min="0" max="100" step="0.1" value="${r.marginRatio}" style="width:120px;">
+            <span style="color:#606266;font-size:13px;">%</span>
+          </div>
+        </div>
+        <div class="me-row">
+          <div class="me-label">对商户结算加点<span>*</span></div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input class="me-input" id="rme-markup" type="number" min="0" step="0.1" value="${r.markup}" style="width:120px;">
+            <span style="color:#606266;font-size:13px;">%</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#909399;line-height:1.6;">法币保证金余额 = USDT 保证金 × 换算比例；对商户结算汇率 = 卡商挂牌结算汇率 + 加点，加点差额留存为 Paypaz 收入。</div>
+      </div>
+    `;
+
+    document.querySelector('#detail-modal .modal-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="saveRmEdit(${absIdx})">确定</button>
+    `;
+
+    document.getElementById('detail-modal').classList.add('show');
+  }
+
+  function saveRmEdit(absIdx) {
+    const r = MERCHANT_RECEIVING_ALL[absIdx];
+    const nameEl = document.getElementById('rme-name');
+    const emailEl = document.getElementById('rme-email');
+    const statusEl = document.querySelector('input[name="rme-status"]:checked');
+    const marginRatioEl = document.getElementById('rme-margin-ratio');
+    const markupEl = document.getElementById('rme-markup');
+
+    if (!nameEl.value.trim()) { showToast('请输入卡商名称'); return; }
+    if (marginRatioEl.value === '') { showToast('请输入保证金换算比例'); return; }
+    if (markupEl.value === '') { showToast('请输入对商户结算加点'); return; }
+
+    r.name = nameEl.value.trim();
+    r.email = emailEl.value.trim();
+    if (statusEl) r.status = statusEl.value;
+    r.marginRatio = parseFloat(marginRatioEl.value);
+    r.markup = parseFloat(markupEl.value);
+
+    closeModal();
+    receivingMerchantRender();
+    showToast('卡商信息已更新');
+  }
+
+  function openRmInviteModal() {
+    document.getElementById('rm-invite-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeRmInviteModal() {
+    document.getElementById('rm-invite-modal').classList.remove('show');
+  }
+  function submitRmInvite() {
+    const name = document.getElementById('rm-inv-name').value.trim();
+    if (!name) { showToast('请输入卡商名称'); return; }
+    closeRmInviteModal();
+    ['rm-inv-name','rm-inv-email','rm-inv-remark'].forEach(id => { document.getElementById(id).value = ''; });
+    showToast('邀请邮件已发送，卡商可在 30 分钟内通过邮件中的链接设置密码完成激活');
+  }
+
   // ── Shared Utils ──────────────────────────────────────
   function copyText(text) {
     navigator.clipboard.writeText(text).then(() => showToast('复制成功'));
@@ -8784,22 +9504,31 @@
   //  平台资产：商户账户明细 data & logic
   // ══════════════════════════════════════════════════════
   const LG_TYPE = {
-    deposit:  { label:'充币',   cls:'badge-green'  },
-    withdraw: { label:'提现',   cls:'badge-blue'   },
-    fee:      { label:'手续费', cls:'badge-gray'   },
-    adjust:   { label:'调账',   cls:'badge-purple' },
+    deposit:    { label:'充币',   cls:'badge-green'  },
+    withdraw:   { label:'提现',   cls:'badge-blue'   },
+    fee:        { label:'手续费', cls:'badge-gray'   },
+    networkfee: { label:'网络费', cls:'badge-orange' },
+    adjust:     { label:'调账',   cls:'badge-purple' },
   };
 
   // 每个商户的流水按时间顺序滚存余额，末笔 balanceAfter 与 MERCHANT_ALL 对应商户的
   // 当前 balance 字段保持一致——人工调账通过审核后会在此基础上继续追加新的一笔
   // 变动后余额按「商户 + 代币 + 网络」三个维度各自独立滚存，不同代币/网络组合互不合并
   const LEDGER_ALL = [
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'deposit', amount:'+500.00',  balanceAfter:'500.00',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'fee',     amount:'-0.50',    balanceAfter:'499.50',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'deposit', amount:'+800.00',  balanceAfter:'800.00',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'fee',     amount:'-0.80',    balanceAfter:'799.20',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDT', network:'TRON',     type:'withdraw',amount:'-50.00',   balanceAfter:'449.50',  relatedNo:'LG20260822111', remark:'', time:'2026-08-22 11:10:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'', token:'USDT', network:'TRON',     type:'adjust',  amount:'+116.85',  balanceAfter:'566.35',  relatedNo:'ADJ20260823001', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', time:'2026-08-23 16:45:00' },
+    // On Ramp 入金完成后，网络费（PayPaz）和 On Ramp 手续费分开记录为两笔独立流水，不再合并，
+    // 关联单号为对应的 On Ramp 订单号（见「On Ramp 入金」页 RAMP_IN_ORDERS）
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'networkfee', amount:'-3.00',    balanceAfter:'-3.00',   relatedNo:'RAMP-20260805-0001', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-05 09:28:45' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'fee',     amount:'-5.00',    balanceAfter:'-8.00',   relatedNo:'RAMP-20260805-0001', remark:'On Ramp 手续费扣除', time:'2026-08-05 09:28:45' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'networkfee', amount:'-3.69',    balanceAfter:'-11.69',  relatedNo:'RAMP-20260809-0010', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-09 15:22:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'fee',     amount:'-6.00',    balanceAfter:'-17.69',  relatedNo:'RAMP-20260809-0010', remark:'On Ramp 手续费扣除', time:'2026-08-09 15:22:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'deposit', amount:'+500.00',  balanceAfter:'482.31',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'fee',     amount:'-0.50',    balanceAfter:'481.81',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'networkfee', amount:'-2.13',    balanceAfter:'-2.13',   relatedNo:'RAMP-20260811-0011', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-11 10:24:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'fee',     amount:'-3.50',    balanceAfter:'-5.63',   relatedNo:'RAMP-20260811-0011', remark:'On Ramp 手续费扣除', time:'2026-08-11 10:24:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'deposit', amount:'+800.00',  balanceAfter:'794.37',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'fee',     amount:'-0.80',    balanceAfter:'793.57',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDT', network:'TRON',     type:'withdraw',amount:'-50.00',   balanceAfter:'431.81',  relatedNo:'LG20260822111', remark:'', time:'2026-08-22 11:10:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'', token:'USDT', network:'TRON',     type:'adjust',  amount:'+116.85',  balanceAfter:'548.66',  relatedNo:'ADJ20260823001', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', time:'2026-08-23 16:45:00' },
 
     { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDT', network:'TRON', type:'deposit', amount:'+1000.00', balanceAfter:'1000.00', relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
     { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDT', network:'TRON', type:'fee',     amount:'-1.00',    balanceAfter:'999.00',  relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
@@ -8815,12 +9544,14 @@
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON',    type:'withdraw',amount:'-10.00',   balanceAfter:'589.40',  relatedNo:'LG20260817140', remark:'', time:'2026-08-17 14:00:00' },
     { merchantId:'460466234', merchantName:'kara3', userId:'', token:'USDT', network:'TRON',    type:'adjust',  amount:'+6.22',    balanceAfter:'595.62',  relatedNo:'ADJ20260818001', remark:'人工调账：客户误退回款项补记', time:'2026-08-18 10:00:00' },
 
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'deposit', amount:'+300.00',  balanceAfter:'300.00',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'fee',     amount:'-0.30',    balanceAfter:'299.70',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'networkfee', amount:'-3.00',    balanceAfter:'-3.00',   relatedNo:'RAMP-20260801-0009', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-01 10:35:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'fee',     amount:'-3.00',    balanceAfter:'-6.00',   relatedNo:'RAMP-20260801-0009', remark:'On Ramp 手续费扣除', time:'2026-08-01 10:35:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'deposit', amount:'+300.00',  balanceAfter:'294.00',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'fee',     amount:'-0.30',    balanceAfter:'293.70',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDC', network:'Solana', type:'deposit', amount:'+650.00',  balanceAfter:'650.00',  relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDC', network:'Solana', type:'fee',     amount:'-0.65',    balanceAfter:'649.35',  relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'TRON',   type:'withdraw',amount:'-30.00',   balanceAfter:'269.70',  relatedNo:'LG20260814120', remark:'', time:'2026-08-14 12:00:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'adjust',  amount:'+1.87',    balanceAfter:'271.57',  relatedNo:'ADJ20260815001', remark:'长款：链上余额核对后调增', time:'2026-08-15 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'TRON',   type:'withdraw',amount:'-30.00',   balanceAfter:'263.70',  relatedNo:'LG20260814120', remark:'', time:'2026-08-14 12:00:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'adjust',  amount:'+1.87',    balanceAfter:'265.57',  relatedNo:'ADJ20260815001', remark:'长款：链上余额核对后调增', time:'2026-08-15 08:30:00' },
   ];
 
   const alState = { rows: [...LEDGER_ALL].sort((a,b) => b.time.localeCompare(a.time)), page: 1, size: 10 };
@@ -8840,7 +9571,7 @@
     ], '全部');
     msLiteInit('al-type', [
       { value:'deposit', label:'充币' }, { value:'withdraw', label:'提现' },
-      { value:'fee', label:'手续费' }, { value:'adjust', label:'调账' },
+      { value:'fee', label:'手续费' }, { value:'networkfee', label:'网络费' }, { value:'adjust', label:'调账' },
     ], '全部');
   }
   function alFilteredRows() {
@@ -8885,16 +9616,6 @@
         <td style="font-family:Inter,sans-serif">${r.time}</td>
       </tr>`;
     }).join('');
-    const sumType = (t) => alState.rows.filter(r => r.type === t).reduce((s, r) => s + parseFloat(r.amount), 0);
-    const sumAdjust = (positive) => alState.rows
-      .filter(r => r.type === 'adjust' && (parseFloat(r.amount) >= 0) === positive)
-      .reduce((s, r) => s + parseFloat(r.amount), 0);
-    document.getElementById('al-stat-deposit').textContent    = sumType('deposit').toFixed(2);
-    document.getElementById('al-stat-withdraw').textContent   = sumType('withdraw').toFixed(2);
-    document.getElementById('al-stat-fee').textContent        = sumType('fee').toFixed(2);
-    document.getElementById('al-stat-adjust-inc').textContent = sumAdjust(true).toFixed(2);
-    document.getElementById('al-stat-adjust-dec').textContent = sumAdjust(false).toFixed(2);
-    document.getElementById('al-summary-count').textContent = `笔数: ${alState.rows.length}`;
     document.getElementById('al-page-total').textContent = `共 ${alState.rows.length} 条`;
     const total = Math.max(1, Math.ceil(alState.rows.length / alState.size));
     document.getElementById('al-btn-prev').disabled = alState.page <= 1;
@@ -9618,6 +10339,17 @@
       { id:'platform_account_export', label:'商户账户明细/商户账户调账导出' },
     ] },
     { id:'merchant_mgmt', label:'商户管理', children:[
+      { id:'onboard_mgmt', label:'开户申请', children:[
+        { id:'onboard_list', label:'开户申请列表' },
+        { id:'onboard_detail', label:'详情' },
+        { id:'onboard_file', label:'文件预览 / 下载' },
+        { id:'onboard_invite', label:'邀请开户' },
+        { id:'onboard_review', label:'审核（通过 / 要求补件 / 拒绝）' },
+        { id:'onboard_resend', label:'重新邀请' },
+        { id:'onboard_email', label:'修改邮箱' },
+        { id:'onboard_copy_link', label:'复制邀请链接' },
+        { id:'onboard_note', label:'备注' },
+      ] },
       { id:'merchant_company_delete', label:'企业账户删除' },
       { id:'merchant_token_detail', label:'获取Token详情配置' },
       { id:'merchant_company_create', label:'企业账户创建' },
@@ -10344,7 +11076,7 @@
     {
       paypaz_order_id: 'RAMP-20260625-8847', cfd_order_ref: 'CFD-TKS-20260625-5521',
       provider_order_id: 'BNX-8847263901', provider: 'Banxa',
-      merchant: 'GMTM', user_id: 'USR-78324901',
+      merchant: 'kara', user_id: 'USR-78324901',
       direction: 'in', fiat_amount: '150,000', fiat_currency: 'JPY',
       crypto_amount: '999.50', crypto_currency: 'USDT', crypto_network: 'Tron',
       exchange_rate: '150.07', fee: '1,500', provider_fee: '1,050', profit: '450',
@@ -10367,7 +11099,7 @@
     {
       paypaz_order_id: 'RAMP-20260625-8902', cfd_order_ref: 'CFD-TKS-20260625-5587',
       provider_order_id: 'BNX-8902417633', provider: 'Banxa',
-      merchant: 'XM Japan', user_id: 'USR-44129807',
+      merchant: 'kara4', user_id: 'USR-44129807',
       direction: 'in', fiat_amount: '80,000', fiat_currency: 'JPY',
       crypto_amount: '533.12', crypto_currency: 'USDC', crypto_network: 'Ethereum',
       exchange_rate: '150.07', fee: '800', provider_fee: '560', profit: '240',
@@ -10389,7 +11121,7 @@
     {
       paypaz_order_id: 'RAMP-20260625-8988', cfd_order_ref: 'CFD-TKS-20260625-5601',
       provider_order_id: 'BNX-8988241703', provider: 'Banxa',
-      merchant: 'GMTM', user_id: 'USR-22038514',
+      merchant: 'kara', user_id: 'USR-22038514',
       direction: 'in', fiat_amount: '50,000', fiat_currency: 'JPY',
       crypto_amount: '333.00', crypto_currency: 'USDT', crypto_network: 'Tron',
       exchange_rate: '150.15', fee: '500', provider_fee: '350', profit: '150',
@@ -10411,7 +11143,7 @@
     {
       paypaz_order_id: 'RAMP-20260625-9011', cfd_order_ref: 'CFD-TKS-20260625-5631',
       provider_order_id: 'BNX-9011834720', provider: 'Banxa',
-      merchant: 'GMTM', user_id: 'USR-55671023',
+      merchant: 'kara', user_id: 'USR-55671023',
       direction: 'out', fiat_amount: '200,000', fiat_currency: 'JPY',
       crypto_amount: '1,333.00', crypto_currency: 'USDT', crypto_network: 'Tron',
       exchange_rate: '150.04', fee: '13.33', provider_fee: '9.33', profit: '4.00',
@@ -10432,7 +11164,7 @@
     {
       paypaz_order_id: 'RAMP-20260624-7721', cfd_order_ref: 'CFD-TKS-20260624-5423',
       provider_order_id: 'BNX-7721938450', provider: 'Banxa',
-      merchant: 'XM Japan', user_id: 'USR-90124836',
+      merchant: 'kara4', user_id: 'USR-90124836',
       direction: 'in', fiat_amount: '1,000.00', fiat_currency: 'USD',
       crypto_amount: '998.50', crypto_currency: 'USDT', crypto_network: 'Ethereum',
       exchange_rate: '1.0015', fee: '10.00', provider_fee: '7.00', profit: '3.00',
@@ -10456,7 +11188,7 @@
     {
       paypaz_order_id: 'RAMP-20260624-7633', cfd_order_ref: 'CFD-TKS-20260624-5394',
       provider_order_id: 'BNX-7633129047', provider: 'Banxa',
-      merchant: 'GMTM', user_id: 'USR-33817640',
+      merchant: 'kara', user_id: 'USR-33817640',
       direction: 'in', fiat_amount: '200.00', fiat_currency: 'AUD',
       crypto_amount: '132.18', crypto_currency: 'USDT', crypto_network: 'Tron',
       exchange_rate: '1.5129', fee: '2.00', provider_fee: '1.40', profit: '0.60',
@@ -10631,7 +11363,7 @@
   const RAMP_IN_ORDERS = [
     {
       paypazOrderId:'RAMP-20260805-0001', brokerOrderRef:'CFD-TKS-20260805-1001', legendOrderId:'ordr_7f3a9c2e81b4',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-78324901',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-78324901',
       status:'COMPLETED', fiatAmount:'154,570', fiatCurrency:'JPY', networkFee:'450', processingFee:'150',
       cryptoAmount:'1000.00', grossCryptoAmount:'1029.99', cryptoCurrency:'USDT', markupRate:'4.50',
       provider:'Legend', channelRate:'150.07', customerRate:'154.57',
@@ -10649,7 +11381,7 @@
     },
     {
       paypazOrderId:'RAMP-20260806-0002', brokerOrderRef:'CFD-TKS-20260806-1042', legendOrderId:'ordr_1e6b8d4f2a9c',
-      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-44129807',
+      brokerName:'kara4', brokerId:'291654802', userId:'USR-44129807',
       status:'CRYPTO_TRANSFERRING', fiatAmount:'515.75', fiatCurrency:'USD', networkFee:'1.50', processingFee:'0.50',
       cryptoAmount:'500.00', grossCryptoAmount:'514.98', cryptoCurrency:'USDT', markupRate:'0.03',
       provider:'Legend', channelRate:'1.0015', customerRate:'1.0315',
@@ -10667,7 +11399,7 @@
     },
     {
       paypazOrderId:'RAMP-20260807-0003', brokerOrderRef:'CFD-TKS-20260807-1088', legendOrderId:'ordr_5c2f7a9e3d1b',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-22038514',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-22038514',
       status:'PAYMENT_PROCESSING', fiatAmount:'426,420', fiatCurrency:'KRW', networkFee:'1,280', processingFee:'430',
       cryptoAmount:'300.00', grossCryptoAmount:'309.00', cryptoCurrency:'USDT', markupRate:'41.40',
       provider:'Legend', channelRate:'1380.00', customerRate:'1421.40',
@@ -10702,7 +11434,7 @@
     },
     {
       paypazOrderId:'RAMP-20260808-0005', brokerOrderRef:'CFD-TKS-20260808-1130', legendOrderId:'ordr_3b8e5f1a9c7d',
-      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-90124836',
+      brokerName:'kara4', brokerId:'291654802', userId:'USR-90124836',
       status:'AWAITING_PAYMENT', fiatAmount:'825.20', fiatCurrency:'USD', networkFee:'2.50', processingFee:'0.80',
       cryptoAmount:'800.00', grossCryptoAmount:'823.96', cryptoCurrency:'USDT', markupRate:'0.03',
       provider:'Legend', channelRate:'1.0015', customerRate:'1.0315',
@@ -10718,7 +11450,7 @@
     },
     {
       paypazOrderId:'RAMP-20260810-0006', brokerOrderRef:'CFD-TKS-20260810-1201', legendOrderId:'ordr_2d9f4a7b1e8c',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-33817640',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-33817640',
       status:'CREATED', fiatAmount:'213,210', fiatCurrency:'KRW', networkFee:'640', processingFee:'210',
       cryptoAmount:'150.00', grossCryptoAmount:'154.50', cryptoCurrency:'USDT', markupRate:'41.40',
       provider:'Legend', channelRate:'1380.00', customerRate:'1421.40',
@@ -10733,7 +11465,7 @@
     },
     {
       paypazOrderId:'RAMP-20260803-0007', brokerOrderRef:'CFD-TKS-20260803-0855', legendOrderId:'ordr_6f1a8c3d9b5e',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-55671023',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-55671023',
       status:'FAILED', fiatAmount:'61,828', fiatCurrency:'JPY', networkFee:'185', processingFee:'60',
       cryptoAmount:'400.00', grossCryptoAmount:'411.99', cryptoCurrency:'USDT', markupRate:'4.50',
       provider:'Legend', channelRate:'150.07', customerRate:'154.57',
@@ -10766,7 +11498,7 @@
     },
     {
       paypazOrderId:'RAMP-20260801-0009', brokerOrderRef:'CFD-TKS-20260801-0602', legendOrderId:'ordr_4a9d2f6c8b3e',
-      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-84512096',
+      brokerName:'kara4', brokerId:'291654802', userId:'USR-84512096',
       status:'CHARGEBACK_FLAGGED', fiatAmount:'92,742', fiatCurrency:'JPY', networkFee:'280', processingFee:'90',
       cryptoAmount:'600.00', grossCryptoAmount:'617.99', cryptoCurrency:'USDT', markupRate:'4.50',
       provider:'Legend', channelRate:'150.07', customerRate:'154.57',
@@ -10785,7 +11517,7 @@
     },
     {
       paypazOrderId:'RAMP-20260809-0010', brokerOrderRef:'CFD-TKS-20260809-1177', legendOrderId:'ordr_0b7e3c9a5f2d',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-78324901',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-78324901',
       status:'COMPLETED', fiatAmount:'1,237.80', fiatCurrency:'USD', networkFee:'3.70', processingFee:'1.20',
       cryptoAmount:'1200.00', grossCryptoAmount:'1235.95', cryptoCurrency:'USDT', markupRate:'0.03',
       provider:'Legend', channelRate:'1.0015', customerRate:'1.0315',
@@ -10803,7 +11535,7 @@
     },
     {
       paypazOrderId:'RAMP-20260811-0011', brokerOrderRef:'CFD-TKS-20260811-1305', legendOrderId:'ordr_3f9c6a2e8d1b',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-51204873',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-51204873',
       status:'COMPLETED', fiatAmount:'108,199', fiatCurrency:'JPY', networkFee:'320', processingFee:'110',
       cryptoAmount:'700.00', grossCryptoAmount:'720.99', cryptoCurrency:'USDC', markupRate:'4.50',
       provider:'Legend', channelRate:'150.07', customerRate:'154.57',
@@ -10821,7 +11553,7 @@
     },
     {
       paypazOrderId:'RAMP-20260812-0012', brokerOrderRef:'CFD-TKS-20260812-1410', legendOrderId:'ordr_7d2a8f4c1b9e',
-      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-62047318',
+      brokerName:'kara4', brokerId:'291654802', userId:'USR-62047318',
       status:'CRYPTO_TRANSFERRING', fiatAmount:'412.60', fiatCurrency:'USD', networkFee:'1.20', processingFee:'0.40',
       cryptoAmount:'400.00', grossCryptoAmount:'411.98', cryptoCurrency:'USDC', markupRate:'0.03',
       provider:'Legend', channelRate:'1.0015', customerRate:'1.0315',
@@ -10839,7 +11571,7 @@
     },
     {
       paypazOrderId:'RAMP-20260813-0013', brokerOrderRef:'CFD-TKS-20260813-1522', legendOrderId:'ordr_9b3e7c1a5f2d',
-      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-70318452',
+      brokerName:'kara4', brokerId:'291654802', userId:'USR-70318452',
       status:'SETTLEMENT_DELAYED', fiatAmount:'103,140', fiatCurrency:'JPY', networkFee:'310', processingFee:'100',
       cryptoAmount:'680.00', grossCryptoAmount:'700.36', cryptoCurrency:'USDT', markupRate:'0.03',
       provider:'Legend', channelRate:'150.07', customerRate:'154.57',
@@ -10875,7 +11607,7 @@
     },
     {
       paypazOrderId:'RAMP-20260815-0015', brokerOrderRef:'CFD-TKS-20260815-1744', legendOrderId:'ordr_6a3d9f2c8b5e',
-      brokerName:'GMTM', brokerId:'710294856', userId:'USR-52681039',
+      brokerName:'kara', brokerId:'635102950', userId:'USR-52681039',
       status:'FAILED', fiatAmount:'75,350', fiatCurrency:'JPY', networkFee:'220', processingFee:'75',
       cryptoAmount:'500.00', grossCryptoAmount:'514.99', cryptoCurrency:'USDT', markupRate:'4.50',
       provider:'Legend', channelRate:'150.07', customerRate:'154.57',
@@ -10893,7 +11625,7 @@
     },
     {
       paypazOrderId:'RAMP-20260816-0016', brokerOrderRef:'CFD-TKS-20260816-1855', legendOrderId:'ordr_9e2c7a4f1b8d',
-      brokerName:'XM Japan', brokerId:'824611937', userId:'USR-40197582',
+      brokerName:'kara4', brokerId:'291654802', userId:'USR-40197582',
       status:'FAILED', fiatAmount:'690,700', fiatCurrency:'KRW', networkFee:'2,070', processingFee:'690',
       cryptoAmount:'480.00', grossCryptoAmount:'493.20', cryptoCurrency:'USDT', markupRate:'41.40',
       provider:'Legend', channelRate:'1380.00', customerRate:'1421.40',
@@ -10932,12 +11664,15 @@
   // On Ramp 到账后同步生成充币记录：只要代币已上链发出（有 txHash）即视为到账，
   // 不受订单当前状态影响（如 CHARGEBACK_FLAGGED 是到账之后才发生的拒付争议）
   RAMP_IN_ORDERS.filter(r => r.txHash).forEach(r => {
+    const feeNetworkPaypaz = r.paypazFee ? parseFloat(rampInNetworkFeeInfo(r).amount).toFixed(2) : '0.00';
+    const feeServicePaypaz = r.paypazFee ? parseFloat(r.paypazFee).toFixed(2) : '0.00';
     DEPOSIT_ALL.push({
       uid: r.brokerId, name: r.brokerName, userId: r.userId,
       token: r.cryptoCurrency, network: r.network,
       // 到账金额取链上实际到账（实际收到代币），订单金额取用户实际想入金的代币数量，
       // 加点费用 = 到账金额 − 订单金额，即 PayPaz 加点净收益
-      amount: r.grossCryptoAmount, fee: r.paypazFee || '0',
+      amount: r.grossCryptoAmount, fee: r.paypazFee ? (parseFloat(feeNetworkPaypaz) + parseFloat(feeServicePaypaz)).toFixed(2) : '0',
+      feeNetworkPaypaz, feeServicePaypaz,
       orderAmount: r.cryptoAmount, markupFee: rampInMarkupFee(r).toFixed(2),
       wallet: r.walletAddress, time: r.completedAt, hash: r.txHash,
       channel: 'On Ramp', status: 'arrived',
@@ -10964,6 +11699,24 @@
     return (fee / rate).toFixed(2);
   }
 
+  // Network Fee 实际扣商户账户余额的金额，按订单币对匹配 On Ramp 配置的 networkFeeMode 决定
+  // 是跟随 Legend 渠道实际值，还是使用配置里的固定金额
+  function rampInNetworkFeeInfo(r) {
+    const pair = RAMP_PAIRS.find(p => p.crypto === r.cryptoCurrency && p.fiat === r.fiatCurrency);
+    if (pair && pair.onRamp.networkFeeMode === 'fixed') {
+      return { sourceLabel:'固定金额', amount: pair.onRamp.networkFeeFixed };
+    }
+    return { sourceLabel:'渠道实际值', amount: rampInFeeCryptoAmount(r.networkFee, r.channelRate) };
+  }
+
+  // 净入账 = 入金代币数量 − 实扣 Network Fee（按配置，见 rampInNetworkFeeInfo）− On Ramp 手续费，
+  // 两者都从商户账户余额扣除；未完成订单（paypazFee 未出）不计算，返回 null
+  function rampInNetAmount(r) {
+    if (!r.paypazFee) return null;
+    const networkFeeCrypto = parseFloat(rampInNetworkFeeInfo(r).amount) || 0;
+    return parseFloat(r.cryptoAmount) - networkFeeCrypto - parseFloat(r.paypazFee);
+  }
+
   function rampInMarkupPercent(r) {
     const markup = parseFloat(r.markupRate) || 0;
     const rate = parseFloat(r.channelRate) || 0;
@@ -10972,7 +11725,7 @@
   }
 
   function rampInStatsUpdate() {
-    let fiat = 0, crypto = 0, markupFee = 0, fee = 0, net = 0, networkFee = 0, processingFee = 0, gross = 0, networkFeeCrypto = 0, processingFeeCrypto = 0;
+    let fiat = 0, crypto = 0, markupFee = 0, fee = 0, net = 0, networkFee = 0, processingFee = 0, gross = 0, networkFeeCrypto = 0, processingFeeCrypto = 0, networkFeePaypaz = 0;
     rampInState.rows.forEach(r => {
       fiat += parseFloat(String(r.fiatAmount).replace(/,/g, '')) || 0;
       crypto += parseFloat(r.cryptoAmount) || 0;
@@ -10982,7 +11735,7 @@
       networkFeeCrypto += parseFloat(rampInFeeCryptoAmount(r.networkFee, r.channelRate)) || 0;
       processingFeeCrypto += parseFloat(rampInFeeCryptoAmount(r.processingFee, r.channelRate)) || 0;
       gross += parseFloat(r.grossCryptoAmount) || 0;
-      if (r.paypazFee) { fee += parseFloat(r.paypazFee); net += parseFloat(r.cryptoAmount) - parseFloat(r.paypazFee); }
+      if (r.paypazFee) { fee += parseFloat(r.paypazFee); networkFeePaypaz += parseFloat(rampInNetworkFeeInfo(r).amount) || 0; net += rampInNetAmount(r); }
     });
     const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     document.getElementById('ramp-in-stat-count').textContent = rampInState.rows.length;
@@ -10995,6 +11748,7 @@
     document.getElementById('ramp-in-stat-gross').textContent = fmt(gross);
     document.getElementById('ramp-in-stat-markup').textContent = fmt(markupFee);
     document.getElementById('ramp-in-stat-fee').textContent = fmt(fee);
+    document.getElementById('ramp-in-stat-networkfee-paypaz').textContent = fmt(networkFeePaypaz);
     document.getElementById('ramp-in-stat-net').textContent = fmt(net);
   }
 
@@ -11014,16 +11768,17 @@
         <td>${r.provider}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#909399;">${r.legendOrderId}</td>
         <td style="font-family:'Inter',sans-serif;">${r.fiatAmount}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiatCurrency}</span></td>
-        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.networkFee}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:11px;">/ ${rampInFeeCryptoAmount(r.networkFee, r.channelRate)}&nbsp;${r.cryptoCurrency}</span></td>
-        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.processingFee}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:11px;">/ ${rampInFeeCryptoAmount(r.processingFee, r.channelRate)}&nbsp;${r.cryptoCurrency}</span></td>
         <td style="font-family:'Inter',sans-serif;">${r.cryptoAmount}&nbsp;<span style="color:#909399;font-size:11px;">${r.cryptoCurrency}</span></td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.grossCryptoAmount}&nbsp;<span style="color:#909399;font-size:11px;">${r.cryptoCurrency}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.networkFee}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:11px;">/ ${rampInFeeCryptoAmount(r.networkFee, r.channelRate)}&nbsp;${r.cryptoCurrency}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.paypazFee ? rampInNetworkFeeInfo(r).amount + '&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.processingFee}&nbsp;<span style="color:#909399;font-size:11px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:11px;">/ ${rampInFeeCryptoAmount(r.processingFee, r.channelRate)}&nbsp;${r.cryptoCurrency}</span></td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazFee ? r.paypazFee + '&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.channelRate}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.markupRate} <span style="color:#909399;font-size:11px;">/ ${rampInMarkupPercent(r)}</span></td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.customerRate}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${rampInMarkupFee(r).toFixed(2)}&nbsp;${r.cryptoCurrency}</td>
-        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazFee ? r.paypazFee + '&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
-        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazFee ? '<span style="color:#67C23A;">+' + (parseFloat(r.cryptoAmount) - parseFloat(r.paypazFee)).toFixed(2) + '</span>&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazFee ? '<span style="color:#67C23A;">+' + rampInNetAmount(r).toFixed(2) + '</span>&nbsp;' + r.cryptoCurrency : '<span style="color:#C0C4CC;">—</span>'}</td>
         <td>${r.network}</td>
         <td>${fullCell(r.walletAddress)}</td>
         <td>${fullCell(r.txHash)}</td>
@@ -11059,8 +11814,8 @@
   }
 
   const RAMP_IN_MERCHANTS = [
-    { id:'710294856', name:'GMTM' },
-    { id:'824611937', name:'XM Japan' },
+    { id:'635102950', name:'kara' },
+    { id:'291654802', name:'kara4' },
     { id:'693157480', name:'IG Japan' },
   ];
 
@@ -11183,7 +11938,7 @@
     const r = RAMP_IN_ORDERS[idx];
     if (!r) return;
     const netVal = r.paypazFee
-      ? '<span style="color:#67C23A;">+' + (parseFloat(r.cryptoAmount) - parseFloat(r.paypazFee)).toFixed(2) + '</span> ' + r.cryptoCurrency
+      ? '<span style="color:#67C23A;">+' + rampInNetAmount(r).toFixed(2) + '</span> ' + r.cryptoCurrency
       : '—';
     document.querySelector('#detail-modal .modal-title').textContent = 'On Ramp 订单详情';
     document.getElementById('modal-body').innerHTML = `
@@ -11194,15 +11949,15 @@
       <div class="detail-item"><span class="detail-label">渠道</span><span class="detail-value">${r.provider}</span></div>
       <div class="detail-item"><span class="detail-label">渠道订单</span><span class="detail-value">${r.legendOrderId}</span></div>
       <div class="detail-item"><span class="detail-label">支付法币金额</span><span class="detail-value">${r.fiatAmount} <span style="color:#909399;font-size:12px;">${r.fiatCurrency}</span></span></div>
-      <div class="detail-item"><span class="detail-label">网络费</span><span class="detail-value">${r.networkFee} <span style="color:#909399;font-size:12px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:12px;">/ ${rampInFeeCryptoAmount(r.networkFee, r.channelRate)} ${r.cryptoCurrency}</span></span></div>
-      <div class="detail-item"><span class="detail-label">渠道处理费</span><span class="detail-value">${r.processingFee} <span style="color:#909399;font-size:12px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:12px;">/ ${rampInFeeCryptoAmount(r.processingFee, r.channelRate)} ${r.cryptoCurrency}</span></span></div>
       <div class="detail-item"><span class="detail-label">入金代币数量</span><span class="detail-value">${r.cryptoAmount} <span style="color:#909399;font-size:12px;">${r.cryptoCurrency}</span></span></div>
       <div class="detail-item"><span class="detail-label">实际收到代币</span><span class="detail-value">${r.grossCryptoAmount} <span style="color:#909399;font-size:12px;">${r.cryptoCurrency}</span></span></div>
-      <div class="detail-item"><span class="detail-label">渠道汇率</span><span class="detail-value">${r.channelRate}</span></div>
-      <div class="detail-item"><span class="detail-label">加点</span><span class="detail-value">${r.markupRate} <span style="color:#909399;font-size:12px;">/ ${rampInMarkupPercent(r)}</span></span></div>
-      <div class="detail-item"><span class="detail-label">客户汇率</span><span class="detail-value">${r.customerRate}</span></div>
+      <div class="detail-item"><span class="detail-label">网络费（渠道）</span><span class="detail-value">${r.networkFee} <span style="color:#909399;font-size:12px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:12px;">/ ${rampInFeeCryptoAmount(r.networkFee, r.channelRate)} ${r.cryptoCurrency}</span></span></div>
+      <div class="detail-item"><span class="detail-label">手续费（渠道）</span><span class="detail-value">${r.processingFee} <span style="color:#909399;font-size:12px;">${r.fiatCurrency}</span> <span style="color:#909399;font-size:12px;">/ ${rampInFeeCryptoAmount(r.processingFee, r.channelRate)} ${r.cryptoCurrency}</span></span></div>
+      <div class="detail-item"><span class="detail-label">手续费（PayPaz）</span><span class="detail-value">${r.paypazFee ? r.paypazFee + ' ' + r.cryptoCurrency : '—'}</span></div>
+      <div class="detail-item"><span class="detail-label">汇率（渠道）</span><span class="detail-value">${r.channelRate}</span></div>
+      <div class="detail-item"><span class="detail-label">加点（PayPaz）</span><span class="detail-value">${r.markupRate} <span style="color:#909399;font-size:12px;">/ ${rampInMarkupPercent(r)}</span></span></div>
+      <div class="detail-item"><span class="detail-label">汇率（PayPaz）</span><span class="detail-value">${r.customerRate}</span></div>
       <div class="detail-item"><span class="detail-label">加点费用</span><span class="detail-value">${rampInMarkupFee(r).toFixed(2)} ${r.cryptoCurrency}</span></div>
-      <div class="detail-item"><span class="detail-label">On Ramp 手续费</span><span class="detail-value">${r.paypazFee ? r.paypazFee + ' ' + r.cryptoCurrency : '—'}</span></div>
       <div class="detail-item"><span class="detail-label">净入账</span><span class="detail-value">${netVal}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">地址</span><span class="detail-value" style="word-break:break-all;">${r.walletAddress}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">哈希</span><span class="detail-value" style="word-break:break-all;">${r.txHash}</span></div>
@@ -11238,6 +11993,10 @@
     document.getElementById('rp-on-markupValue').value = r.onRamp.markupValue;
     rpUpdateUserRate();
     document.getElementById('rp-on-feeRate').value = r.onRamp.feeRate;
+    document.querySelectorAll('input[name="rp-on-networkFeeMode"]').forEach(el => { el.checked = el.value === (r.onRamp.networkFeeMode || 'actual'); });
+    document.getElementById('rp-on-networkFeeFixed').value = r.onRamp.networkFeeFixed;
+    document.getElementById('rp-on-networkFeeFixed-unit').textContent = r.crypto;
+    rpToggleNetworkFeeMode();
     document.getElementById('rp-on-minAmount').value = r.onRamp.minAmount;
     document.getElementById('rp-on-minAmount-unit').textContent = r.crypto;
     rpValidateMinAmount();
@@ -11252,6 +12011,11 @@
 
   function closeRampPairEdit() {
     document.getElementById('ramp-token-edit-modal').classList.remove('show');
+  }
+
+  function rpToggleNetworkFeeMode() {
+    const checked = document.querySelector('input[name="rp-on-networkFeeMode"]:checked');
+    document.getElementById('rp-on-networkFeeFixed-row').style.display = checked && checked.value === 'fixed' ? '' : 'none';
   }
 
   function rpValidateMinAmount() {
@@ -11272,7 +12036,7 @@
   function saveRampPairEdit() {
     if (_rpIdx < 0) return;
     const r = RAMP_PAIRS[_rpIdx];
-    const before = { enabled: r.onRamp.enabled, markupValue: r.onRamp.markupValue, feeRate: r.onRamp.feeRate, minAmount: r.onRamp.minAmount, networks: (r.networks || []).slice() };
+    const before = { enabled: r.onRamp.enabled, markupValue: r.onRamp.markupValue, feeRate: r.onRamp.feeRate, minAmount: r.onRamp.minAmount, networks: (r.networks || []).slice(), networkFeeMode: r.onRamp.networkFeeMode, networkFeeFixed: r.onRamp.networkFeeFixed };
 
     const onStatus = document.querySelector('input[name="rp-on-status"]:checked');
     const onMarkupVal = parseFloat(document.getElementById('rp-on-markupValue').value) || 0;
@@ -11281,6 +12045,16 @@
     r.onRamp.provider = document.getElementById('rp-on-provider').value;
     r.onRamp.markupValue = onMarkupVal.toFixed(2);
     r.onRamp.feeRate = onFeeRateVal.toFixed(2);
+
+    // Network Fee：固定金额模式下必须填写非负数值
+    const nfModeEl = document.querySelector('input[name="rp-on-networkFeeMode"]:checked');
+    const nfMode = nfModeEl ? nfModeEl.value : 'actual';
+    if (nfMode === 'fixed') {
+      const nfFixedVal = parseFloat(document.getElementById('rp-on-networkFeeFixed').value);
+      if (isNaN(nfFixedVal) || nfFixedVal < 0) { showToast('请输入网络费固定金额'); return; }
+      r.onRamp.networkFeeFixed = nfFixedVal.toFixed(2);
+    }
+    r.onRamp.networkFeeMode = nfMode;
 
     // 最小入金数量：不可低于渠道最小限额
     const onMinAmountVal = parseFloat(document.getElementById('rp-on-minAmount').value);
@@ -11303,11 +12077,15 @@
   // Every save on the On Ramp config tab is written to 系统管理 → 操作日志, diffing
   // against the pre-edit snapshot so the log shows what actually changed.
   function logRampPairChange(r, before) {
-    const after = { enabled: r.onRamp.enabled, markupValue: r.onRamp.markupValue, feeRate: r.onRamp.feeRate, minAmount: r.onRamp.minAmount, networks: r.networks || [] };
+    const after = { enabled: r.onRamp.enabled, markupValue: r.onRamp.markupValue, feeRate: r.onRamp.feeRate, minAmount: r.onRamp.minAmount, networks: r.networks || [], networkFeeMode: r.onRamp.networkFeeMode, networkFeeFixed: r.onRamp.networkFeeFixed };
+    const nfLabel = (mode, fixed) => mode === 'fixed' ? `固定 ${fixed} ${r.crypto}` : '渠道实际值';
     const diffs = [];
     if (before.enabled !== after.enabled) diffs.push(`启用状态：${before.enabled ? '启用' : '停用'} → ${after.enabled ? '启用' : '停用'}`);
     if (before.markupValue !== after.markupValue) diffs.push(`加点比例：${before.markupValue}% → ${after.markupValue}%`);
     if (before.feeRate !== after.feeRate) diffs.push(`On Ramp 手续费率：${before.feeRate}% → ${after.feeRate}%`);
+    if (before.networkFeeMode !== after.networkFeeMode || before.networkFeeFixed !== after.networkFeeFixed) {
+      diffs.push(`Network Fee：${nfLabel(before.networkFeeMode, before.networkFeeFixed)} → ${nfLabel(after.networkFeeMode, after.networkFeeFixed)}`);
+    }
     if (before.minAmount !== after.minAmount) diffs.push(`最小入金数量：${before.minAmount} → ${after.minAmount} ${r.crypto}`);
     if (before.networks.join(',') !== after.networks.join(',')) diffs.push(`网络：${before.networks.join('/') || '—'} → ${after.networks.join('/') || '—'}`);
 
@@ -11330,13 +12108,16 @@
   }
 
   function rampInExport() {
-    const headers = ['商户名称','用户ID','Paypaz订单','商户订单','渠道','渠道订单','支付法币金额','法币币种','网络费','渠道处理费','入金代币数量','代币币种','实际收到代币',
-      '渠道汇率','加点','客户汇率','加点费用','On Ramp手续费','净入账','网络','地址','哈希','状态','创建时间','完成时间'];
+    const headers = ['商户名称','用户ID','Paypaz订单','商户订单','渠道','渠道订单','支付法币金额','法币币种','入金代币数量','代币币种','实际收到代币',
+      '网络费（渠道）','网络费（PayPaz）','手续费（渠道）','手续费（PayPaz）','汇率（渠道）','加点','汇率（PayPaz）','加点费用','净入账','网络','地址','哈希','状态','创建时间','完成时间'];
     csvDownload(headers, rampInState.rows.map(r => [
       r.brokerName, r.userId, r.paypazOrderId, r.brokerOrderRef, r.provider, r.legendOrderId,
-      r.fiatAmount, r.fiatCurrency, r.networkFee, r.processingFee, r.cryptoAmount, r.cryptoCurrency, r.grossCryptoAmount,
-      r.channelRate, r.markupRate, r.customerRate, rampInMarkupFee(r).toFixed(2), r.paypazFee || '-',
-      r.paypazFee ? (parseFloat(r.cryptoAmount) - parseFloat(r.paypazFee)).toFixed(2) : '-',
+      r.fiatAmount, r.fiatCurrency, r.cryptoAmount, r.cryptoCurrency, r.grossCryptoAmount,
+      r.networkFee,
+      r.paypazFee ? rampInNetworkFeeInfo(r).amount : '-',
+      r.processingFee, r.paypazFee || '-',
+      r.channelRate, r.markupRate, r.customerRate, rampInMarkupFee(r).toFixed(2),
+      r.paypazFee ? rampInNetAmount(r).toFixed(2) : '-',
       r.network, r.walletAddress, r.txHash || '-', RAMP_IN_STATUS_MAP[r.status].label, r.createdAt, r.completedAt
     ]), 'On Ramp 订单.csv');
   }
@@ -11522,7 +12303,7 @@
   // ══════════════════════════════════════════════════════
   const OPERLOG_MODULES = ['用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
     '客户端管理','对象存储配置','个人信息','登录日志','操作日志','在线用户',
-    '商户管理','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核',
+    '商户管理','开户申请','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核',
     '商户账户明细','商户账户调账'];
 
   const OPERLOG_TYPES = ['新增','修改','删除','状态变更','审批','授权','强退','导出'];
@@ -11536,6 +12317,35 @@
   };
 
   const OPERLOG_ALL = [
+    { id:'ol-kyb-29', time:'2026-09-29 10:15:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Stellar Wave Capital Ltd（KYB-2026-0013）', content:'邀请开户，邮箱：onboarding@stellarwave.io，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-28', time:'2026-09-28 11:30:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Orion Global Brokers（KYB-2026-0007）', content:'邀请开户，邮箱：legal@orion-gb.con，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-27', time:'2026-09-27 14:30:18', operator:'grace.compliance', module:'开户申请', type:'修改', target:'Helix Prime Trading Pty Ltd（KYB-2026-0011）', content:'更新备注：EDD：已向客户索取 UBO Reza Karimi 的资金来源说明，等待回复', result:'success', ip:'61.148.22.44', level:'normal' },
+    { id:'ol-kyb-26', time:'2026-09-27 14:05:12', operator:'grace.compliance', module:'开户申请', type:'导出', target:'Helix Prime Trading Pty Ltd（KYB-2026-0011）', content:'打包下载全部文件 KYB-2026-0011.zip', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-25', time:'2026-09-26 10:21:45', operator:'kelly.bd', module:'开户申请', type:'导出', target:'Bluewave Markets LLC（KYB-2026-0008）', content:'复制邀请链接，链接有效期至 2026-10-22 15:10:00', result:'success', ip:'103.45.13.20', level:'high' },
+    { id:'ol-kyb-24', time:'2026-09-25 16:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Summit Invest Partners（KYB-2026-0006）', content:'邀请开户，邮箱：ops@summit-ip.com，邀请邮件发送失败', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-23', time:'2026-09-24 11:18:02', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Meridian Securities SA（KYB-2026-0009）', content:'审核结果：要求补件，补件部分：④（含 ⑤ 人员文件）、⑤；链接有效期重新计算至 2026-10-24 11:18:02', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-22', time:'2026-09-24 11:02:37', operator:'grace.compliance', module:'开户申请', type:'导出', target:'Meridian Securities SA（KYB-2026-0009）', content:'下载文件 Passport_Marc.pdf', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-21', time:'2026-09-22 15:10:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Bluewave Markets LLC（KYB-2026-0008）', content:'邀请开户，邮箱：admin@bluewave-mkts.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-20', time:'2026-09-20 15:40:00', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Crestline Trading Co., Ltd.（KYB-2026-0005）', content:'审核结果：通过', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-19', time:'2026-09-20 15:31:26', operator:'grace.compliance', module:'开户申请', type:'导出', target:'Crestline Trading Co., Ltd.（KYB-2026-0005）', content:'打包下载全部文件 KYB-2026-0005.zip', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-18', time:'2026-09-19 10:05:31', operator:'kara', module:'开户申请', type:'审批', target:'Aurora FX Group Limited（KYB-2026-0010）', content:'审核通过', result:'fail', errorMsg:'状态已变更，操作未生效', ip:'103.45.12.188', level:'high' },
+    { id:'ol-kyb-17', time:'2026-09-19 10:05:00', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Aurora FX Group Limited（KYB-2026-0010）', content:'审核结果：要求补件，补件部分：①、⑤；链接有效期重新计算至 2026-10-19 10:05:00', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-16', time:'2026-09-15 10:02:11', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Northstar Capital Markets Ltd（KYB-2026-0012）', content:'邀请开户，邮箱：ops@northstar-cm.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-15', time:'2026-09-10 14:20:00', operator:'kelly.bd', module:'开户申请', type:'修改', target:'Helix Prime Trading Pty Ltd（KYB-2026-0011）', content:'重新邀请，新链接已发送至 compliance@helixprime.com.au，旧链接失效，链接有效期至 2026-10-10 14:20:00；状态：已过期 → 已邀请', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-14', time:'2026-09-05 09:40:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Meridian Securities SA（KYB-2026-0009）', content:'邀请开户，邮箱：onboarding@meridian-sec.ch，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-13', time:'2026-09-03 16:13:05', operator:'kelly.bd', module:'开户申请', type:'修改', target:'Aurora FX Group Limited（KYB-2026-0010）', content:'重新邀请，新链接已发送至 kyc@aurorafx.io，旧链接失效，链接有效期至 2026-10-03 16:13:05', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-12', time:'2026-09-03 16:12:40', operator:'kelly.bd', module:'开户申请', type:'修改', target:'Aurora FX Group Limited（KYB-2026-0010）', content:'修改邮箱：kyc@aurora-fx.io → kyc@aurorafx.io', result:'success', ip:'103.45.13.20', level:'high' },
+    { id:'ol-kyb-11', time:'2026-09-01 11:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Aurora FX Group Limited（KYB-2026-0010）', content:'邀请开户，邮箱：kyc@aurora-fx.io，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-10', time:'2026-08-20 10:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Crestline Trading Co., Ltd.（KYB-2026-0005）', content:'邀请开户，邮箱：finance@crestline.hk，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-09', time:'2026-08-01 10:30:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Helix Prime Trading Pty Ltd（KYB-2026-0011）', content:'邀请开户，邮箱：compliance@helixprime.com.au，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-08', time:'2026-07-20 10:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Lumen Brokerage Inc.（KYB-2026-0002）', content:'邀请开户，邮箱：hello@lumenbrokerage.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-07', time:'2026-07-12 09:50:00', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Pinnacle CFD Ltd（KYB-2026-0003）', content:'审核结果：拒绝，拒绝原因：UBO 与受制裁地区存在关联，且无法提供资金来源说明，不符合准入要求。', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-06', time:'2026-07-12 09:31:05', operator:'grace.compliance', module:'开户申请', type:'导出', target:'Pinnacle CFD Ltd（KYB-2026-0003）', content:'下载文件 Certificate_of_Incorporation.pdf', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-05', time:'2026-07-06 16:30:00', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Tidal Markets Ltd（KYB-2026-0001）', content:'审核结果：要求补件，补件部分：①；链接有效期重新计算至 2026-08-05 16:30:00', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-04', time:'2026-07-01 10:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Pinnacle CFD Ltd（KYB-2026-0003）', content:'邀请开户，邮箱：ops@pinnaclecfd.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-03', time:'2026-06-15 10:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Tidal Markets Ltd（KYB-2026-0001）', content:'邀请开户，邮箱：kyc@tidalmarkets.io，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
+    { id:'ol-kyb-02', time:'2026-06-10 11:25:00', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Vertex Asset Management（KYB-2026-0004）', content:'审核结果：通过，审核意见：UBO 身份与持股已核实，资料齐全', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-01', time:'2026-06-02 09:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Vertex Asset Management（KYB-2026-0004）', content:'邀请开户，邮箱：kyb@vertex-am.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
     { id:'ol-046', time:'2026-07-09 16:40:12', operator:'kara',   module:'充值记录',   type:'导出',   target:'充值记录导出文件（2026-06-09~2026-07-09）', content:'导出充值记录 CSV，共 2,481 条', result:'success', ip:'103.45.12.188', level:'high' },
     { id:'ol-045', time:'2026-07-09 15:22:47', operator:'shine',  module:'提现审核',   type:'导出',   target:'提现记录导出文件（近 7 天）', content:'导出提现记录 CSV，共 316 条', result:'success', ip:'103.45.12.201', level:'high' },
     { id:'ol-044', time:'2026-07-09 14:05:33', operator:'magic',  module:'操作日志',   type:'导出',   target:'操作日志导出文件（近 90 天）', content:'导出操作日志 Excel', result:'success', ip:'61.148.22.44', level:'high' },
@@ -11582,6 +12392,8 @@
     { id:'ol-002', time:'2026-06-28 13:11:52', operator:'magic',  module:'个人信息',   type:'修改',   target:'账号 shine', content:'修改个人登录密码', result:'success', ip:'61.148.22.44', level:'medium' },
   ];
 
+  // 按时间倒序排列，保证开户申请日志与既有日志交错时顺序正确
+  OPERLOG_ALL.sort((x, y) => y.time.localeCompare(x.time));
   const olState = { rows: [...OPERLOG_ALL], page: 1, size: 10 };
 
   function olTrunc(val, len = 18) {
@@ -11745,6 +12557,952 @@
     document.getElementById('detail-modal').classList.add('show');
   }
 
+
+  // ══════════════════════════════════════════════════════
+  //  开户申请（KYB）
+  //  状态机、可执行操作、保留期规则见 PRD《商户管理：On Board》
+  // ══════════════════════════════════════════════════════
+  const OB_STATUS = {
+    invited:    { label:'已邀请',   cls:'badge-gray'   },
+    filling:    { label:'填写中',   cls:'badge-lblue'  },
+    submitted:  { label:'已提交',   cls:'badge-purple' },
+    supplement: { label:'需要补件', cls:'badge-amber'  },
+    approved:   { label:'已通过',   cls:'badge-green'  },
+    rejected:   { label:'已拒绝',   cls:'badge-red'    },
+    expired:    { label:'已过期',   cls:'badge-gray'   },
+  };
+  // 进行中的申请：同一邮箱不能重复发起
+  const OB_ACTIVE = ['invited','filling','submitted','supplement'];
+  const OB_PARTS = [
+    { k:'s1', label:'① 企业信息' },
+    { k:'s2', label:'② 公司联系方式' },
+    { k:'s3', label:'③ 授权联系人' },
+    { k:'s4', label:'④ 人员' },
+    { k:'s5', label:'⑤ 证明文件' },
+    { k:'s6', label:'⑥ 数字资产钱包授权' },
+  ];
+  const OB_PART_LABEL = { s1:'①', s2:'②', s3:'③', s4:'④', s5:'⑤', s6:'⑥' };
+  const OB_USER = 'admin';
+
+  function obPad(n) { return String(n).padStart(2, '0'); }
+  function obNow() {
+    const d = new Date();
+    return `${d.getFullYear()}-${obPad(d.getMonth()+1)}-${obPad(d.getDate())} ${obPad(d.getHours())}:${obPad(d.getMinutes())}:${obPad(d.getSeconds())}`;
+  }
+  // 链接到期时间：从当前时刻起 + days × 24 小时，精确到秒
+  function obAddDays(days) {
+    const d = new Date(Date.now() + days * 86400000);
+    return `${d.getFullYear()}-${obPad(d.getMonth()+1)}-${obPad(d.getDate())} ${obPad(d.getHours())}:${obPad(d.getMinutes())}:${obPad(d.getSeconds())}`;
+  }
+
+  function obEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  }
+  function obIsEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  // ── 样例资料 ─────────────────────────────────────────
+  const OB_COMPANY_DOCS = [
+    { t:'注册证书 / 设立文件',           req:true,  f:'Certificate_of_Incorporation.pdf' },
+    { t:'在职证明 / 存续证明（90 天内）', req:true,  f:'Certificate_of_Good_Standing.pdf' },
+    { t:'公司章程',                     req:true,  f:'Articles_of_Association.pdf' },
+    { t:'股东名册 / 股权结构表',          req:true,  f:'Register_of_Shareholders.pdf' },
+    { t:'公司地址证明（3 个月内）',       req:true,  f:'Company_Utility_Bill_2026-08.pdf' },
+    { t:'组织架构图',                   req:true,  f:'Org_Chart.png' },
+    { t:'监管身份 / 金融牌照 / 法律意见书', req:false, f:'Regulatory_License.pdf' },
+    { t:'董事会决议 / 授权委托书',        req:false, f:'Board_Resolution.pdf' },
+    { t:'银行账户证明',                  req:false, f:'' },
+    { t:'近 1–2 年财务报表',             req:false, f:'Financial_Statements_2025.pdf' },
+    { t:'反洗钱 / 反恐融资政策摘要',       req:false, f:'' },
+  ];
+
+  function obMkForm(o) {
+    const dom = o.email.split('@')[1];
+    return {
+      s1: [
+        ['企业法定全称', o.company], ['注册商号 / 品牌', o.brand || '—'],
+        ['法律形式 / 企业类型', o.legal], ['注册号', o.regNo],
+        ['成立日期', o.founded], ['注册国家/地区', o.country],
+        ['注册地址', o.addr, 'full'], ['实际经营地址', o.physAddr || '与注册地址相同', 'full'],
+        ['LEI', o.lei || '—'], ['税号 TIN', o.tin || '—'],
+        ['业务性质', o.nature], ['业务用途', o.purpose || '处理客户出入金'],
+        ['预计月交易量（美元）', o.volume], ['预计使用的币种 / 数字资产', o.currencies || 'USDT、USDC'],
+        ['目标市场', o.markets],
+        ['是否涉及受制裁国家 / 人员', o.sanction ? `是。${o.sanctionDesc}` : '否', 'full'],
+        ['集团 / 母公司名称', o.parent || '—'],
+      ],
+      s2: [
+        ['官网 / 域名', 'https://www.' + dom], ['公司邮箱', 'info@' + dom],
+        ['联系电话', o.phone], ['其他联系方式', '—'],
+      ],
+      s3: [
+        ['姓名', o.persons[0].name], ['邮箱', o.email],
+        ['联系电话', o.phone], ['其他联系方式', 'Telegram: @' + o.persons[0].name.split(' ')[0].toLowerCase()],
+      ],
+      s4: o.persons,
+      s5: OB_COMPANY_DOCS,
+      s6: [
+        ['法定全称', o.company], ['证件类型及号码', '公司注册号 ' + o.regNo],
+        ['User ID', '—'], ['邮箱', o.email],
+        ['钱包地址', o.wallet, 'full'], ['区块链 / 网络', o.network],
+        ['钱包用途', '两者（充值 / 提现）'], ['所有权声明', '已勾选确认'], ['风险确认', '已勾选确认'],
+        ['所有权证明', { proofs: o.proofs || [ { type:'钱包服务商 / 交易所截图', files:['Wallet_Ownership_Proof.png'] } ] }, 'full'],
+      ],
+      s7: { name:o.persons[0].name, title:'董事', signedAt:o.signedAt, ip:o.ip },
+    };
+  }
+  function obPerson(name, roles, extra) {
+    return Object.assign({
+      name, roles, dob:'1981-04-12', nat:'英国', res:'英国',
+      addr:'22 Kensington Court, London W8 5DL, United Kingdom',
+      passport:'5329' + Math.abs(name.length * 7919 % 100000), pCountry:'英国', pExp:'2031-06-30',
+      share: roles.includes('UBO') ? '60' : '—', vote: roles.includes('UBO') ? '60' : '—',
+      pep:'否', email:'', phone:'+44 20 7946 0000',
+    }, extra || {});
+  }
+  function obL(t, label, desc, by, fail) { return { t, label, desc:desc || '', by:by || '系统', fail:!!fail }; }
+
+  const OB_ALL = [
+    {
+      id:'KYB-2026-0013', company:'Stellar Wave Capital Ltd', email:'onboarding@stellarwave.io', note:'BD Kelly 跟进，客户预计本周内填写',
+      status:'invited', sanction:false, createdAt:'2026-09-29 10:15:00', sentAt:'2026-09-29 10:15:00', expireAt:'2026-10-29 10:15:00',
+      submittedAt:'', updatedAt:'2026-09-29 10:15:00', filled:0, form:null,
+      logs:[ obL('2026-09-29 10:15:00','邀请开户','英文邀请邮件已发送至 onboarding@stellarwave.io','kelly.bd') ],
+    },
+    {
+      id:'KYB-2026-0012', company:'Northstar Capital Markets Ltd', email:'ops@northstar-cm.com', note:'BD Kelly 引荐',
+      status:'submitted', sanction:false, createdAt:'2026-09-15 10:02:11', sentAt:'2026-09-15 10:02:11', expireAt:'2026-10-15 10:02:11',
+      submittedAt:'2026-09-28 16:42:08', updatedAt:'2026-09-28 16:42:08', filled:7,
+      form: obMkForm({ company:'Northstar Capital Markets Ltd', email:'ops@northstar-cm.com', brand:'Northstar CM', legal:'私人股份有限公司', regNo:'C-204811', founded:'2018-03-21', country:'塞浦路斯', addr:'12 Arch. Makariou III Ave, 3030 Limassol, Cyprus', physAddr:'Office 502, 5th Floor, Nicosia Tower Centre, 36 Vyronos Ave, 1096 Nicosia, Cyprus', lei:'2138004N5KQ7XWJ0T812', tin:'CY10204811M', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'欧洲、中东（主要国家：塞浦路斯、阿联酋）', phone:'+357 25 000 111', wallet:'TQ5N1gJ8h8Vd3kXq2sL9mZ7cB4rW6yP0aE', network:'TRON', proofs:[ { type:'钱包服务商 / 交易所截图', files:['Wallet_Ownership_Proof.png'] }, { type:'区块浏览器截图 + 控制权证明', files:['Tronscan_Address.png'], control:{ method:'签名消息', content:'Northstar Capital Markets Ltd confirms ownership of TQ5N1gJ8h8Vd3kXq2sL9mZ7cB4rW6yP0aE · 2026-09-28' } } ], signedAt:'2026-09-28 16:41:55', ip:'85.10.52.18',
+        persons:[ obPerson('James Whitmore', ['董事','UBO','授权签字人'], { email:'j.whitmore@northstar-cm.com' }), obPerson('Elena Petrou', ['董事','股东'], { nat:'塞浦路斯', res:'塞浦路斯', dob:'1986-09-02', email:'e.petrou@northstar-cm.com' }) ] }),
+      logs:[ obL('2026-09-15 10:02:11','邀请开户','开户邮件已发送至 ops@northstar-cm.com','kelly.bd'), obL('2026-09-16 09:12:40','客户开始填写','','客户'), obL('2026-09-28 16:42:08','客户提交','签署 IP 85.10.52.18','客户') ],
+    },
+    {
+      id:'KYB-2026-0011', company:'Helix Prime Trading Pty Ltd', email:'compliance@helixprime.com.au',
+      status:'submitted', sanction:true, sanctionDesc:'涉及国家 / 地区：伊朗；业务性质：部分终端客户居住地为伊朗；预计交易量：每月约 2 万美元。',
+      note:'EDD：已向客户索取 UBO Reza Karimi 的资金来源说明，等待回复',
+      createdAt:'2026-08-01 10:30:00', sentAt:'2026-09-10 14:20:00', expireAt:'2026-10-10 14:20:00', submittedAt:'2026-09-26 10:15:33', updatedAt:'2026-09-26 10:15:33', filled:7,
+      form: obMkForm({ company:'Helix Prime Trading Pty Ltd', email:'compliance@helixprime.com.au', legal:'私人股份有限公司', regNo:'ACN 612 448 190', founded:'2016-07-11', country:'澳大利亚', addr:'Level 9, 60 Margaret St, Sydney NSW 2000, Australia', tin:'ABN 43 612 448 190', nature:'外汇与金融市场交易', purpose:'接受客户加密货币付款、处理客户出入金', currencies:'USD、USDT、USDC', volume:'500,000 以上（预计 800,000）', markets:'亚太、中东（主要国家：新加坡、阿联酋）', phone:'+61 2 9000 1234', wallet:'0x7a3F9c2E81b4D6e5A1c8B0f2E9d4C7a6B5e3F1d2', network:'Ethereum', signedAt:'2026-09-26 10:15:20', ip:'203.12.8.77', sanction:true, sanctionDesc:'涉及国家 / 地区：伊朗；业务性质：部分终端客户居住地为伊朗；预计交易量：每月约 2 万美元。',
+        persons:[ obPerson('Daniel Hughes', ['董事','授权签字人'], { nat:'澳大利亚', res:'澳大利亚', email:'d.hughes@helixprime.com.au' }), obPerson('Reza Karimi', ['UBO'], { nat:'阿联酋', res:'阿联酋', share:'75', vote:'75', pep:{ type:'relative', relation:'配偶', pepName:'Leila Karimi', pepTitle:'某国中央银行顾问（2015–2019）' }, email:'reza@helixprime.com.au' }) ] }),
+      logs:[ obL('2026-08-01 10:30:00','邀请开户','英文邀请邮件已发送至 compliance@helixprime.com.au','kelly.bd'), obL('2026-08-31 10:30:00','链接过期','有效期内未提交'),
+        obL('2026-09-10 14:20:00','重新邀请','新链接已发送至 compliance@helixprime.com.au，旧链接已失效','kelly.bd'), obL('2026-09-11 08:30:02','客户开始填写','','客户'),
+        obL('2026-09-26 10:15:33','客户提交','签署 IP 203.12.8.77','客户'), obL('2026-09-27 14:30:18','更新备注','EDD：已向客户索取 UBO Reza Karimi 的资金来源说明，等待回复','grace.compliance') ],
+    },
+    {
+      id:'KYB-2026-0010', company:'Aurora FX Group Limited', email:'kyc@aurorafx.io',
+      status:'submitted', sanction:false, createdAt:'2026-09-01 11:00:00', sentAt:'2026-09-03 16:13:05', expireAt:'2026-10-19 10:05:00',
+      submittedAt:'2026-09-27 09:30:12', updatedAt:'2026-09-27 09:30:12', filled:7,
+      reviewer:'grace.compliance', reviewedAt:'2026-09-19 10:05:00',
+      form: obMkForm({ company:'Aurora FX Group Limited', email:'kyc@aurorafx.io', brand:'AuroraFX', legal:'国际商业公司（IBC）', regNo:'2029384', founded:'2019-11-05', country:'塞舌尔', addr:'Suite 3, Global Village, Jivan’s Complex, Mont Fleuri, Mahé, Seychelles', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'亚太（主要国家：新加坡、马来西亚）', phone:'+248 4 380 000', wallet:'TMx8P2vQ7rK1nB5cD9eF3gH6jL0aS4wZyU', network:'TRON', signedAt:'2026-09-27 09:30:01', ip:'119.8.24.105',
+        persons:[ obPerson('Wei Ling Tan', ['董事','UBO','授权签字人'], { nat:'新加坡', res:'新加坡', dob:'1984-02-18', email:'weiling@aurorafx.io' }) ] }),
+      logs:[ obL('2026-09-01 11:00:00','邀请开户','英文邀请邮件已发送至 kyc@aurora-fx.io','kelly.bd'), obL('2026-09-03 16:12:40','修改邮箱','kyc@aurora-fx.io → kyc@aurorafx.io','kelly.bd'),
+        obL('2026-09-03 16:13:05','重新邀请','新链接已发送至 kyc@aurorafx.io，旧链接已失效','kelly.bd'), obL('2026-09-12 15:22:40','客户提交','签署 IP 119.8.24.105','客户'),
+        obL('2026-09-19 10:05:00','要求补件','补件部分：①、⑤；说明：公司地址证明超过 3 个月，请补充近 3 个月内的水电费账单；请补充 LEI（如有）。有效期重新计算至 2026-10-19 10:05:00', 'grace.compliance'),
+        obL('2026-09-27 09:30:12','补件后再提交','签署 IP 119.8.24.105','客户') ],
+    },
+    {
+      id:'KYB-2026-0009', company:'Meridian Securities SA', email:'onboarding@meridian-sec.ch',
+      status:'supplement', sanction:false, createdAt:'2026-09-05 09:40:00', sentAt:'2026-09-05 09:40:00', expireAt:'2026-10-24 11:18:02',
+      submittedAt:'2026-09-20 17:05:44', updatedAt:'2026-09-24 11:18:02', filled:7,
+      supp:{ parts:['s4','s5'], msg:'UBO Marc Keller 的护照复印件不清晰，请重新上传彩色清晰件；请补充 Marc Keller 近 3 个月内的地址证明。', at:'2026-09-24 11:18:02' },
+      reviewer:'grace.compliance', reviewedAt:'2026-09-24 11:18:02',
+      form: obMkForm({ company:'Meridian Securities SA', email:'onboarding@meridian-sec.ch', legal:'股份公司（SA）', regNo:'CHE-409.228.113', founded:'2012-05-30', country:'瑞士', addr:'Rue du Rhône 80, 1204 Genève, Switzerland', lei:'5067009KQ5V2X8H1R339', nature:'证券与投资交易', volume:'500,000 以上（预计 1,200,000）', markets:'欧洲、英国', parent:'Meridian Holding AG', phone:'+41 22 000 4455', wallet:'0x3b8E5f1A9c7D2e4F6a0B1c3D5e7F9a2B4c6D8e0F', network:'Ethereum', signedAt:'2026-09-20 17:05:30', ip:'178.197.2.61',
+        persons:[ obPerson('Marc Keller', ['董事','UBO','授权签字人'], { nat:'瑞士', res:'瑞士', email:'m.keller@meridian-sec.ch' }) ] }),
+      logs:[ obL('2026-09-05 09:40:00','邀请开户','开户邮件已发送至 onboarding@meridian-sec.ch','kelly.bd'), obL('2026-09-20 17:05:44','客户提交','签署 IP 178.197.2.61','客户'),
+        obL('2026-09-24 11:18:02','要求补件','补件部分：④（含 ⑤ 人员文件）、⑤；说明：UBO Marc Keller 的护照复印件不清晰，请重新上传彩色清晰件；请补充 Marc Keller 近 3 个月内的地址证明。有效期重新计算至 2026-10-24 11:18:02','grace.compliance') ],
+    },
+    {
+      id:'KYB-2026-0008', company:'Bluewave Markets LLC', email:'admin@bluewave-mkts.com', note:'迪拜展会线索',
+      status:'filling', sanction:false, createdAt:'2026-09-22 15:10:00', sentAt:'2026-09-22 15:10:00', expireAt:'2026-10-22 15:10:00',
+      submittedAt:'', updatedAt:'2026-09-27 20:41:19', filled:3,
+      form: obMkForm({ company:'Bluewave Markets LLC', email:'admin@bluewave-mkts.com', legal:'有限责任公司（LLC）', regNo:'DMCC-194552', founded:'2021-01-14', country:'阿联酋', addr:'Unit 1203, Jumeirah Bay X2, JLT, Dubai, UAE', nature:'CFD 交易', volume:'50,000 以下', markets:'中东、其他：非洲（主要国家：阿联酋、尼日利亚）', phone:'+971 4 000 7788', wallet:'', network:'', signedAt:'', ip:'',
+        persons:[ obPerson('Omar Haddad', ['董事','UBO'], { nat:'约旦', res:'阿联酋' }) ] }),
+      logs:[ obL('2026-09-22 15:10:00','邀请开户','开户邮件已发送至 admin@bluewave-mkts.com','kelly.bd'), obL('2026-09-23 10:02:51','客户开始填写','','客户'),
+        obL('2026-09-26 10:21:45','复制邀请链接','链接有效期至 2026-10-22 15:10:00','kelly.bd') ],
+    },
+    {
+      id:'KYB-2026-0007', company:'Orion Global Brokers', email:'legal@orion-gb.con',
+      status:'invited', sanction:false, createdAt:'2026-09-28 11:30:00', sentAt:'2026-09-28 11:30:00', expireAt:'2026-10-28 11:30:00',
+      // 退信场景：邮件已成功发出，4 分钟后收到收件方服务器退信，异步回写
+      mailFailed:{ kind:'bounce', at:'2026-09-28 11:34:12', reason:'收件域名 orion-gb.con 不存在（550 5.1.2 Host unknown）' },
+      submittedAt:'', updatedAt:'2026-09-28 11:30:00', filled:0, form:null,
+      logs:[ obL('2026-09-28 11:30:00','邀请开户','英文邀请邮件已发送至 legal@orion-gb.con','kelly.bd'),
+             obL('2026-09-28 11:34:12','邀请邮件发送失败','退信：收件域名 orion-gb.con 不存在（550 5.1.2 Host unknown）','系统',true) ],
+    },
+    {
+      id:'KYB-2026-0006', company:'Summit Invest Partners', email:'ops@summit-ip.com',
+      status:'invited', sanction:false, createdAt:'2026-09-25 16:00:00', sentAt:'2026-09-25 16:00:00', expireAt:'2026-10-25 16:00:00',
+      // 发送时失败场景：邮件服务当场返回失败，申请照常创建
+      mailFailed:{ kind:'send', at:'2026-09-25 16:00:01', reason:'邮件服务返回失败（SMTP 连接超时）' },
+      submittedAt:'', updatedAt:'2026-09-25 16:00:00', filled:0, form:null,
+      logs:[ obL('2026-09-25 16:00:00','邀请开户','申请已创建','kelly.bd'),
+             obL('2026-09-25 16:00:01','邀请邮件发送失败','邮件服务返回失败（SMTP 连接超时）','系统',true) ],
+    },
+    {
+      id:'KYB-2026-0005', company:'Crestline Trading Co., Ltd.', email:'finance@crestline.hk',
+      status:'approved', sanction:false, createdAt:'2026-08-20 10:00:00', sentAt:'2026-08-20 10:00:00', expireAt:'2026-09-19 10:00:00',
+      submittedAt:'2026-09-02 13:22:10', updatedAt:'2026-09-20 15:40:00', filled:7,
+      reviewer:'grace.compliance', reviewedAt:'2026-09-20 15:40:00',
+      form: obMkForm({ company:'Crestline Trading Co., Ltd.', email:'finance@crestline.hk', legal:'私人股份有限公司', regNo:'3120558', founded:'2017-08-08', country:'中国香港', addr:'Room 2101, 21/F, Lippo Centre Tower 2, 89 Queensway, Admiralty, Hong Kong', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'亚太（主要国家：中国香港、新加坡）', phone:'+852 3000 6611', wallet:'TFb3eD7nR2kP9qX4wZ1cV8mL5sA6gH0jTy', network:'TRON', signedAt:'2026-09-02 13:22:01', ip:'43.252.8.19',
+        persons:[ obPerson('Kwok Ming Chan', ['董事','UBO','授权签字人'], { nat:'中国香港', res:'中国香港' }) ] }),
+      logs:[ obL('2026-08-20 10:00:00','邀请开户','开户邮件已发送至 finance@crestline.hk','kelly.bd'), obL('2026-09-02 13:22:10','客户提交','签署 IP 43.252.8.19','客户'), obL('2026-09-20 15:40:00','审核通过','已发送审核通过邮件；已人工通知技术开户','grace.compliance') ],
+    },
+    {
+      id:'KYB-2026-0004', company:'Vertex Asset Management', email:'kyb@vertex-am.com',
+      status:'approved', sanction:false, createdAt:'2026-06-02 09:00:00', sentAt:'2026-06-02 09:00:00', expireAt:'2026-07-02 09:00:00',
+      submittedAt:'2026-06-08 18:10:45', updatedAt:'2026-06-10 11:25:00', filled:7,
+      reviewer:'grace.compliance', reviewedAt:'2026-06-10 11:25:00',
+      reviewMailFailed:{ mail:'approved', at:'2026-06-10 11:25:03', reason:'邮件服务返回失败（SMTP 连接超时）' },
+      form: obMkForm({ company:'Vertex Asset Management', email:'kyb@vertex-am.com', legal:'有限合伙（LP）', regNo:'LP-88213', founded:'2015-02-10', country:'开曼群岛', addr:'PO Box 309, Ugland House, Grand Cayman, KY1-1104, Cayman Islands', nature:'证券与投资交易', volume:'100,001 – 500,000', markets:'北美、欧洲', phone:'+1 345 000 2200', wallet:'0x9e2C7a4F1b8D3e6A0c5B9f2E4d7C1a8B6e3F0d9C', network:'Ethereum', signedAt:'2026-06-08 18:10:30', ip:'64.23.155.4',
+        persons:[ obPerson('Laura Bennett', ['董事','UBO','授权签字人'], { nat:'美国', res:'美国' }) ] }),
+      logs:[ obL('2026-06-02 09:00:00','邀请开户','开户邮件已发送至 kyb@vertex-am.com','kelly.bd'), obL('2026-06-08 18:10:45','客户提交','签署 IP 64.23.155.4','客户'), obL('2026-06-10 11:25:00','审核通过','已发送审核通过邮件；审核意见：UBO 身份与持股已核实，资料齐全','grace.compliance'), obL('2026-06-10 11:25:03','审核通过邮件发送失败','邮件服务返回失败（SMTP 连接超时）','系统',true) ],
+    },
+    {
+      id:'KYB-2026-0003', company:'Pinnacle CFD Ltd', email:'ops@pinnaclecfd.com',
+      status:'rejected', sanction:true, sanctionDesc:'涉及国家 / 地区：朝鲜；业务性质：未说明；预计交易量：未说明。',
+      createdAt:'2026-07-01 10:00:00', sentAt:'2026-07-01 10:00:00', expireAt:'2026-07-31 10:00:00', submittedAt:'2026-07-09 22:14:03', updatedAt:'2026-07-12 09:50:00', filled:7,
+      reviewer:'grace.compliance', reviewedAt:'2026-07-12 09:50:00', rejectReason:'UBO 与受制裁地区存在关联，且无法提供资金来源说明，不符合准入要求。',
+      form: obMkForm({ company:'Pinnacle CFD Ltd', email:'ops@pinnaclecfd.com', legal:'国际商业公司（IBC）', regNo:'IBC-77120', founded:'2023-10-01', country:'圣文森特和格林纳丁斯', addr:'First Floor, First St. Vincent Bank Ltd Building, James Street, Kingstown', nature:'CFD 交易', volume:'500,000 以上（预计 2,000,000）', markets:'欧洲、北美、拉美、英国、中东、亚太', phone:'+1 784 000 0099', wallet:'TJk2L9mN4pQ7rS1tU5vW8xY0zA3bC6dE9f', network:'TRON', signedAt:'2026-07-09 22:13:50', ip:'91.132.147.9', sanction:true, sanctionDesc:'涉及国家 / 地区：朝鲜；业务性质：未说明；预计交易量：未说明。',
+        persons:[ obPerson('Viktor Sokolov', ['董事','UBO','授权签字人'], { nat:'俄罗斯', res:'阿联酋' }) ] }),
+      logs:[ obL('2026-07-01 10:00:00','邀请开户','开户邮件已发送至 ops@pinnaclecfd.com','kelly.bd'), obL('2026-07-09 22:14:03','客户提交','签署 IP 91.132.147.9','客户'), obL('2026-07-12 09:50:00','审核拒绝','拒绝原因：UBO 与受制裁地区存在关联，且无法提供资金来源说明，不符合准入要求。已发送审核拒绝邮件','grace.compliance', true) ],
+    },
+    {
+      id:'KYB-2026-0002', company:'Lumen Brokerage Inc.', email:'hello@lumenbrokerage.com',
+      status:'expired', prevStatus:'filling', sanction:false, createdAt:'2026-07-20 10:00:00', sentAt:'2026-07-20 10:00:00', expireAt:'2026-08-19 10:00:00',
+      submittedAt:'', updatedAt:'2026-08-19 10:00:00', filled:2,
+      form: obMkForm({ company:'Lumen Brokerage Inc.', email:'hello@lumenbrokerage.com', legal:'股份有限公司（Inc.）', regNo:'BC1288431', founded:'2020-06-17', country:'加拿大', addr:'1055 W Georgia St, Vancouver, BC V6E 3P3, Canada', nature:'外汇与金融市场交易', volume:'50,000 以下', markets:'北美', phone:'+1 604 000 3322', wallet:'', network:'', signedAt:'', ip:'',
+        persons:[ obPerson('Noah Tremblay', ['董事','UBO'], { nat:'加拿大', res:'加拿大' }) ] }),
+      logs:[ obL('2026-07-20 10:00:00','邀请开户','开户邮件已发送至 hello@lumenbrokerage.com','kelly.bd'), obL('2026-07-22 14:00:10','客户开始填写','','客户'), obL('2026-08-19 10:00:00','链接过期','有效期内未提交') ],
+    },
+    {
+      id:'KYB-2026-0001', company:'Tidal Markets Ltd', email:'kyc@tidalmarkets.io',
+      status:'expired', prevStatus:'supplement', sanction:false, createdAt:'2026-06-15 10:00:00', sentAt:'2026-06-15 10:00:00', expireAt:'2026-08-05 16:30:00',
+      submittedAt:'2026-06-28 12:00:00', updatedAt:'2026-08-05 16:30:00', filled:7,
+      supp:{ parts:['s1'], msg:'请补充集团 / 母公司名称，并更正注册地址（与注册证书不一致）。', at:'2026-07-06 16:30:00' },
+      reviewer:'grace.compliance', reviewedAt:'2026-07-06 16:30:00',
+      form: obMkForm({ company:'Tidal Markets Ltd', email:'kyc@tidalmarkets.io', legal:'私人股份有限公司', regNo:'MU-C179902', founded:'2022-04-19', country:'毛里求斯', addr:'Level 3, Tower 1, NeXTeracom, Ebène, Mauritius', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'亚太、其他：非洲（主要国家：毛里求斯、南非）', phone:'+230 400 1188', wallet:'TRx4Z7aB1cD5eF8gH2jK6mN9pQ3rS0tUvW', network:'TRON', signedAt:'2026-06-28 11:59:40', ip:'102.115.3.72',
+        persons:[ obPerson('Priya Ramdin', ['董事','UBO','授权签字人'], { nat:'毛里求斯', res:'毛里求斯' }) ] }),
+      logs:[ obL('2026-06-15 10:00:00','邀请开户','开户邮件已发送至 kyc@tidalmarkets.io','kelly.bd'), obL('2026-06-28 12:00:00','客户提交','签署 IP 102.115.3.72','客户'),
+        obL('2026-07-06 16:30:00','要求补件','补件部分：①；说明：请补充集团 / 母公司名称，并更正注册地址（与注册证书不一致）。有效期重新计算至 2026-08-05 16:30:00','grace.compliance'), obL('2026-08-05 16:30:00','链接过期','补件期间有效期内未提交') ],
+    },
+  ];
+
+  const obState = { rows:[], page:1, size:10 };
+  let obCurId = null;
+
+  // 默认排序：按最近更新降序
+  function obSort(rows) {
+    return rows.slice().sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  }
+  function obFiltered() {
+    const id  = document.getElementById('ob-f-id').value.trim().toLowerCase();
+    const co  = document.getElementById('ob-f-company').value.trim().toLowerCase();
+    const em  = document.getElementById('ob-f-email').value.trim().toLowerCase();
+    const sts = msLiteGet('ob-status');
+    const cs  = document.getElementById('ob-f-cre-start').value;
+    const ce  = document.getElementById('ob-f-cre-end').value;
+    const ss  = document.getElementById('ob-f-sub-start').value;
+    const se  = document.getElementById('ob-f-sub-end').value;
+    const ds  = document.getElementById('ob-f-date-start').value;
+    const de  = document.getElementById('ob-f-date-end').value;
+    return OB_ALL.filter(r => {
+      if (id && !r.id.toLowerCase().includes(id)) return false;
+      if (co && !r.company.toLowerCase().includes(co)) return false;
+      if (em && !r.email.toLowerCase().includes(em)) return false;
+      if (sts.length && !sts.includes(r.status)) return false;
+      const cd = r.createdAt.split(' ')[0];
+      if (cs && cd < cs) return false;
+      if (ce && cd > ce) return false;
+      const sd = r.submittedAt ? r.submittedAt.split(' ')[0] : '';
+      if ((ss || se) && !sd) return false;
+      if (ss && sd < ss) return false;
+      if (se && sd > se) return false;
+      const d = r.updatedAt.split(' ')[0];
+      if (ds && d < ds) return false;
+      if (de && d > de) return false;
+      return true;
+    });
+  }
+  function obFiltersInit() {
+    msLiteInit('ob-status', Object.keys(OB_STATUS).map(k => ({ value:k, label:OB_STATUS[k].label })), '请选择');
+  }
+  function obRender() {
+    obState.rows = obSort(obFiltered());
+    const start = (obState.page - 1) * obState.size;
+    const slice = obState.rows.slice(start, start + obState.size);
+    const tbody = document.getElementById('ob-tbody');
+    tbody.innerHTML = slice.length ? slice.map(r => {
+      const st = OB_STATUS[r.status];
+      return `<tr>
+        <td style="font-family:Inter,sans-serif">${r.id}</td>
+        <td><div class="ob-co-cell"><span class="ob-co-nm" title="${obEsc(r.company)}">${obEsc(r.company)}</span>${r.sanction ? '<span class="ob-risk">制裁风险</span>' : ''}</div></td>
+        <td style="font-family:Inter,sans-serif">${obEsc(r.email)}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td style="font-family:Inter,sans-serif">${r.createdAt}</td>
+        <td style="font-family:Inter,sans-serif">${r.submittedAt || '<span class="cell-empty">—</span>'}</td>
+        <td style="font-family:Inter,sans-serif">${r.updatedAt}</td>
+        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openObDetail('${r.id}')">${_D_EYE_SVG}</span></div></td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="8" style="text-align:center;color:#909399;padding:40px 0;">暂无数据</td></tr>`;
+    document.getElementById('ob-page-total').textContent = `共 ${obState.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(obState.rows.length / obState.size));
+    document.getElementById('ob-btn-prev').disabled = obState.page <= 1;
+    document.getElementById('ob-btn-next').disabled = obState.page >= total;
+    document.querySelectorAll('#page-onboard .page-btn:not(#ob-btn-prev):not(#ob-btn-next)').forEach((btn, i) => {
+      const pg = i + 1;
+      btn.style.display = pg <= total ? '' : 'none';
+      btn.classList.toggle('active', pg === obState.page);
+    });
+  }
+  function obSearch() { obState.page = 1; obRender(); }
+  function obReset() {
+    ['ob-f-id','ob-f-company','ob-f-email','ob-f-cre-start','ob-f-cre-end','ob-f-sub-start','ob-f-sub-end','ob-f-date-start','ob-f-date-end'].forEach(id => { document.getElementById(id).value = ''; });
+    msLiteReset('ob-status');
+    obState.page = 1; obRender();
+  }
+  function obPage(p) {
+    const total = Math.max(1, Math.ceil(obState.rows.length / obState.size));
+    if (p < 1 || p > total) return;
+    obState.page = p; obRender();
+  }
+  function obPageSize() {
+    obState.size = +document.getElementById('ob-page-size').value;
+    obState.page = 1; obRender();
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  反馈收集（对应生产 contactUs：官网 Contact Us 表单提交记录）
+  // ══════════════════════════════════════════════════════
+  // sendStatus：0 待发送 / 1 已发送 / 2 发送失败（通知邮件发送状态）
+  const FB_STATUS = {
+    0: { label:'待发送',   cls:'badge-gray'  },
+    1: { label:'已发送',   cls:'badge-green' },
+    2: { label:'发送失败', cls:'badge-red'   },
+  };
+  const FB_ALL = [
+    { id:40, company:'0917',          contact:'0917',         email:'0917@qq.com',          phone:'',               message:'091711131234',                         status:0, createdAt:'2026-09-17 11:13:53' },
+    { id:39, company:'shine',         contact:'shine',        email:'fdg@gmail.com',        phone:'12',             message:'dgdgadgjakjdfkj',                      status:1, createdAt:'2026-09-11 10:46:51' },
+    { id:38, company:'三司',           contact:'张三',          email:'zs@test123.com',       phone:'+8613112231333', message:'入金需求1234567',                        status:1, createdAt:'2026-09-11 10:43:18' },
+    { id:37, company:'公司1234',       contact:'测试1234',      email:'0857@qq.com',          phone:'+8613800000000', message:'请描述您的入金需求1234',                  status:2, createdAt:'2026-09-11 08:57:27' },
+    { id:36, company:'Paypaz QA',     contact:'测试de 姓名',    email:'test1@qq.com',         phone:'+8613800000000', message:'请描述您的入金需求不够十个字',              status:2, createdAt:'2026-09-11 08:55:35' },
+    { id:35, company:'test2',         contact:'test1',        email:'shine@gmail.com',      phone:'111111',         message:'shine@paypaz.tech',                    status:0, createdAt:'2026-09-10 19:06:51' },
+    { id:34, company:'paypaz',        contact:'shine',        email:'shine@gmail.com',      phone:'123456',         message:'Tell us about your deposit needs, including monthly volume and preferred networks.', status:0, createdAt:'2026-09-10 19:05:11' },
+    { id:33, company:'公司',           contact:'测试',          email:'1@qq.com',             phone:'+8613800000000', message:'*请描述您的入金需求1234',                 status:0, createdAt:'2026-09-10 18:20:29' },
+    { id:32, company:'Paypaz QA',     contact:'123',          email:'123@qq.com',           phone:'+8613800000000', message:'+8613800000000',                       status:0, createdAt:'2026-09-10 09:41:51' },
+    { id:31, company:'test company',  contact:'test name',    email:'test@1234.cc',         phone:'',               message:'test message，test message，test message，test message', status:0, createdAt:'2026-09-09 17:30:25' },
+    { id:30, company:'rogan-test',    contact:'rogan',        email:'1@qq.com',             phone:'',               message:'1111111111111111111',                  status:0, createdAt:'2026-06-10 10:28:32' },
+    { id:29, company:'rogan-test',    contact:'rogan',        email:'rogan@11.com',         phone:'',               message:'\\u003Cimg src=x onerror=\\u003Ealert(1)',  status:0, createdAt:'2026-06-10 07:36:29' },
+    { id:28, company:'rogan-test',    contact:'11',           email:'1@gg.com',             phone:'11',             message:'1111111111111111',                     status:0, createdAt:'2026-06-08 15:27:30' },
+    { id:27, company:'company001',    contact:'test',         email:'test@qq.com',          phone:'',               message:'test1234567',                          status:0, createdAt:'2026-06-08 15:11:18' },
+    { id:26, company:'company001',    contact:'test',         email:'test@qq.com',          phone:'',               message:'test20260608',                         status:0, createdAt:'2026-06-08 14:52:26' },
+    { id:25, company:'rogan-test',    contact:'111',          email:'rogan@123.com',        phone:'1',              message:'2111111111111111',                     status:0, createdAt:'2026-06-08 14:25:56' },
+    { id:24, company:'rogan-test',    contact:'rogan',        email:'rogan@bdy.tech',       phone:'',               message:'12345678910',                          status:0, createdAt:'2026-06-08 11:00:16' },
+    { id:23, company:'rogan-test',    contact:'rogan',        email:'rogan@bdy.tech',       phone:'',               message:'12345678910',                          status:0, createdAt:'2026-06-08 10:58:38' },
+    { id:22, company:'company0515',   contact:'contact0515',  email:'email0515@qq.com',     phone:'0515',           message:'message0515',                          status:1, createdAt:'2026-05-15 13:54:22' },
+    { id:21, company:'company013',    contact:'contact013',   email:'email013@qq.com',      phone:'+8618200000013', message:'message013',                           status:0, createdAt:'2026-05-14 16:17:57' },
+    { id:20, company:'company012',    contact:'contact012',   email:'email012@qq.com',      phone:'+8618200000012', message:'message012',                           status:1, createdAt:'2026-05-14 15:02:11' },
+    { id:19, company:'company011',    contact:'contact011',   email:'email011@qq.com',      phone:'+8618200000011', message:'message011',                           status:1, createdAt:'2026-05-14 14:40:36' },
+  ];
+  const fbState = { rows:[], page:1, size:20 };
+
+  function fbFiltered() {
+    const iv  = document.getElementById('fb-f-invite').value.trim().toLowerCase();
+    const em  = document.getElementById('fb-f-email').value.trim().toLowerCase();
+    const ph  = document.getElementById('fb-f-phone').value.trim();
+    const sts = msLiteGet('fb-status');
+    const s   = document.getElementById('fb-f-start').value;
+    const e   = document.getElementById('fb-f-end').value;
+    return FB_ALL.filter(r => {
+      if (iv && !(r.inviteId || '').toLowerCase().includes(iv)) return false;
+      if (em && !r.email.toLowerCase().includes(em)) return false;
+      if (ph && !r.phone.includes(ph)) return false;
+      if (sts.length && !sts.includes(String(r.status))) return false;
+      const d = r.createdAt.split(' ')[0];
+      if (s && d < s) return false;
+      if (e && d > e) return false;
+      return true;
+    });
+  }
+  function fbFiltersInit() {
+    msLiteInit('fb-status', Object.keys(FB_STATUS).map(k => ({ value:k, label:FB_STATUS[k].label })), '请选择');
+  }
+  function fbRender() {
+    fbState.rows = fbFiltered().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    const start = (fbState.page - 1) * fbState.size;
+    const slice = fbState.rows.slice(start, start + fbState.size);
+    const empty = '<span class="cell-empty">—</span>';
+    document.getElementById('fb-tbody').innerHTML = slice.length ? slice.map(r => {
+      const st = FB_STATUS[r.status];
+      return `<tr>
+        <td>${obEsc(r.company)}</td>
+        <td>${obEsc(r.contact)}</td>
+        <td style="font-family:Inter,sans-serif">${obEsc(r.email)}</td>
+        <td style="font-family:Inter,sans-serif">${r.phone ? obEsc(r.phone) : empty}</td>
+        <td><div class="fb-msg-cell"><span class="fb-msg" title="${obEsc(r.message)}">${obEsc(r.message)}</span><span class="copy-icon" title="复制" onclick="fbCopyMsg(${r.id})">${_COPY_SVG}</span></div></td>
+        <td style="font-family:Inter,sans-serif">${r.createdAt}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td>
+        <td style="font-family:Inter,sans-serif">${r.inviteId || empty}</td>
+        <td><div class="action-cell"><span class="action-icon" onclick="hideTip();fbInvite(${r.id})" onmouseenter="showTip(event,'邀请开户')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${_FB_INVITE_SVG}</span></div></td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="9" style="text-align:center;color:#909399;padding:40px 0;">暂无数据</td></tr>`;
+    document.getElementById('fb-page-total').textContent = `共 ${fbState.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(fbState.rows.length / fbState.size));
+    document.getElementById('fb-btn-prev').disabled = fbState.page <= 1;
+    document.getElementById('fb-btn-next').disabled = fbState.page >= total;
+    document.querySelectorAll('#page-feedback .page-btn:not(#fb-btn-prev):not(#fb-btn-next)').forEach((btn, i) => {
+      const pg = i + 1;
+      btn.style.display = pg <= total ? '' : 'none';
+      btn.classList.toggle('active', pg === fbState.page);
+    });
+  }
+  function fbSearch() { fbState.page = 1; fbRender(); }
+  function fbReset() {
+    ['fb-f-invite','fb-f-email','fb-f-phone','fb-f-start','fb-f-end'].forEach(id => { document.getElementById(id).value = ''; });
+    msLiteReset('fb-status');
+    fbState.page = 1; fbRender();
+  }
+  function fbPage(p) {
+    const total = Math.max(1, Math.ceil(fbState.rows.length / fbState.size));
+    if (p < 1 || p > total) return;
+    fbState.page = p; fbRender();
+  }
+  function fbPageSize() {
+    fbState.size = +document.getElementById('fb-page-size').value;
+    fbState.page = 1; fbRender();
+  }
+  function fbCopyMsg(id) { const r = FB_ALL.find(x => x.id === id); if (r) copyText(r.message); }
+  // 邀请开户：复用开户申请的邀请弹窗，自动带入企业名称、邮箱；发送后在开户申请列表生成一条「已邀请」记录
+  // 邀请编号 = 生成的开户申请编号；再次邀请（前一条已过期/拒绝后）覆盖为最新编号
+  const _FB_INVITE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>`;
+  let fbInvitingId = null;
+  function fbInvite(id) {
+    const r = FB_ALL.find(x => x.id === id);
+    if (!r) return;
+    openObSend({ company: r.company, email: r.email });
+    fbInvitingId = id;
+  }
+
+  // 系统操作日志（模块：开户申请），写法与充币审核一致；写入后刷新操作日志列表
+  function obOperLog(r, type, content, level, fail) {
+    OPERLOG_ALL.unshift({
+      id: 'ol-kyb-' + Date.now(), time: obNow(), operator: OB_USER, module: '开户申请', type,
+      target: `${r.company}（${r.id}）`, content,
+      result: fail ? 'fail' : 'success', ...(fail ? { errorMsg: fail } : {}),
+      ip: '127.0.0.1', level,
+    });
+    if (typeof operlogSearch === 'function' && document.getElementById('ol-operator')) operlogSearch();
+  }
+
+  // ── 邀请开户 ─────────────────────────────────────
+  function obSetErr(fiId, msg) {
+    const fi = document.getElementById(fiId);
+    if (!fi) return;
+    fi.classList.toggle('has-err', !!msg);
+    const err = fi.querySelector('.ob-err');
+    if (err) err.textContent = msg || '';
+  }
+  // 邮箱比对：去首尾空格、不区分大小写
+  function obNormEmail(v) { return String(v || '').trim().toLowerCase(); }
+  // 邮箱冲突：进行中的申请、已通过的申请、已是企业商户登录邮箱，均不能发起 / 改用
+  function obEmailConflict(email, exceptId) {
+    const e = obNormEmail(email);
+    const act = OB_ALL.find(r => r.id !== exceptId && OB_ACTIVE.includes(r.status) && obNormEmail(r.email) === e);
+    if (act) return `该邮箱已有进行中的申请（${act.id}，${OB_STATUS[act.status].label}），不能重复发起`;
+    const ok = OB_ALL.find(r => r.id !== exceptId && r.status === 'approved' && obNormEmail(r.email) === e);
+    if (ok) return `该邮箱已开户（${ok.id}）`;
+    const m = (typeof MERCHANT_ALL !== 'undefined' ? MERCHANT_ALL : []).find(x => obNormEmail(x.email) === e);
+    if (m) return `该邮箱已开户（企业商户：${m.name}）`;
+    return '';
+  }
+  // 开户链接 token：独立随机串，不含编号，重新邀请时重新生成
+  function obToken() {
+    const cs = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+    let t = ''; for (let i = 0; i < 24; i++) t += cs[Math.floor(Math.random() * cs.length)];
+    return t;
+  }
+  function obLinkOf(r) { if (!r.token) r.token = obToken(); return `https://onboard.paypaz.tech/kyb/${r.token}`; }
+  // 原型模拟：域名以 .con 结尾（常见拼写错误）视为邮件发送失败
+  function obMailWillFail(email) { return /\.con$/i.test(String(email).trim()); }
+  // 字符数上限：企业名称 200，备注 500（超出时实时报错，提交时拦截）
+  const OB_SEND_LIMIT = { company:{ max:200, label:'企业名称' }, remark:{ max:500, label:'备注' } };
+  function obCountCheck(k) {
+    const cfg = OB_SEND_LIMIT[k];
+    const len = document.getElementById('ob-send-' + k).value.trim().length;
+    const cnt = document.getElementById('ob-send-' + k + '-count');
+    cnt.textContent = `${len}/${cfg.max}`;
+    cnt.classList.toggle('over', len > cfg.max);
+    const err = len > cfg.max ? `${cfg.label}不能超过 ${cfg.max} 个字符` : '';
+    // 企业名称为空的必填报错只在提交时出现，输入过程中只处理超长
+    const fi = document.getElementById('ob-send-' + k + '-fi');
+    if (err || fi.querySelector('.ob-err').textContent.includes('不能超过')) obSetErr('ob-send-' + k + '-fi', err);
+    return !err;
+  }
+  // prefill：从反馈收集发起时带入 { company, email }，仍可修改
+  function openObSend(prefill) {
+    fbInvitingId = null;
+    const pf = prefill || {};
+    document.getElementById('ob-send-company').value = pf.company || '';
+    document.getElementById('ob-send-email').value   = pf.email || '';
+    document.getElementById('ob-send-remark').value  = '';
+    obSetErr('ob-send-company-fi', ''); obSetErr('ob-send-email-fi', '');
+    obSetErr('ob-send-remark-fi', '');
+    ['company','remark'].forEach(k => { const c = document.getElementById('ob-send-' + k + '-count'); c.textContent = `0/${OB_SEND_LIMIT[k].max}`; c.classList.remove('over'); });
+    obCountCheck('company');
+    const okBtn = document.getElementById('ob-send-ok'); okBtn.disabled = false; okBtn.textContent = '发送';
+    document.getElementById('ob-send-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeObSend() { document.getElementById('ob-send-modal').classList.remove('show'); }
+  function submitObSend() {
+    const company = document.getElementById('ob-send-company').value.trim();
+    const email   = document.getElementById('ob-send-email').value.trim();
+    const okBtn   = document.getElementById('ob-send-ok');
+    if (okBtn.disabled) return;
+    const remark  = document.getElementById('ob-send-remark').value.trim();
+    let ok = true;
+    if (!company) { obSetErr('ob-send-company-fi', '请输入企业名称'); ok = false; }
+    else if (!obCountCheck('company')) ok = false;
+    else obSetErr('ob-send-company-fi', '');
+    if (!obCountCheck('remark')) ok = false;
+    let emailErr = '';
+    if (!email) emailErr = '请输入邮箱';
+    else if (!obIsEmail(email)) emailErr = '请输入有效的邮箱地址';
+    else emailErr = obEmailConflict(email);
+    obSetErr('ob-send-email-fi', emailErr); if (emailErr) ok = false;
+    if (!ok) return;
+    // 提交中：按钮 loading，防止重复点击产生两条申请
+    okBtn.disabled = true; okBtn.textContent = '发送中…';
+    setTimeout(() => {
+      const year = new Date().getFullYear();
+      const nos = OB_ALL.filter(r => r.id.startsWith(`KYB-${year}-`)).map(r => +r.id.split('-')[2]);
+      const now = obNow();
+      const fail = obMailWillFail(email);
+      const logs = [ obL(now, '邀请开户', fail ? '申请已创建' : `英文邀请邮件已发送至 ${email}`, OB_USER) ];
+      if (fail) logs.push(obL(now, '邀请邮件发送失败', '邮件服务返回失败', '系统', true));
+      OB_ALL.push({
+        id:`KYB-${year}-${String((nos.length ? Math.max(...nos) : 0) + 1).padStart(4, '0')}`, company, email, note:remark,
+        status:'invited', sanction:false, mailFailed: fail ? { kind:'send', at:now, reason:'邮件服务返回失败' } : false, token:obToken(), createdAt:now, sentAt:now, expireAt:obAddDays(30),
+        submittedAt:'', updatedAt:now, filled:0, form:null, logs,
+      });
+      const fbRow = fbInvitingId != null && FB_ALL.find(x => x.id === fbInvitingId);
+      if (fbRow) { fbRow.inviteId = OB_ALL[OB_ALL.length - 1].id; fbRender(); }
+      obOperLog(OB_ALL[OB_ALL.length - 1], '新增', `邀请开户，邮箱：${email}，邀请邮件${fail ? '发送失败' : '发送成功'}`, 'medium');
+      closeObSend();
+      obState.page = 1; obRender();
+      showToast(fail ? '申请已创建，但邀请邮件发送失败' : '邀请已发送');
+    }, 600);
+  }
+
+  // ── 详情页 ──────────────────────────────────────────
+  function obGet(id) { return OB_ALL.find(r => r.id === id); }
+  function openObDetail(id) {
+    obCurId = id;
+    obRenderDetail();
+    navigateTo('onboard-detail');
+  }
+  function obKv(k, v, full) {
+    return `<div class="ob-kv${full ? ' full' : ''}"><div class="ob-k">${k}</div><div class="ob-v">${v === '' || v == null ? '<span class="cell-empty">—</span>' : v}</div></div>`;
+  }
+  function obFileHtml(name) {
+    if (!name) return '<span class="cell-empty">未上传</span>';
+    return `<div class="ob-file"><span class="ob-file-nm">${obEsc(name)}</span>
+      <span class="ob-link" onclick="showToast('预览：${obEsc(name)}')">预览</span>
+      <span class="ob-link" onclick="obDownload('${obEsc(name)}')">下载</span></div>`;
+  }
+  // 文件下载记入系统操作日志（开户申请模块），不进详情页操作记录
+  function obDownload(name) { obOperLog(obGet(obCurId), '导出', `下载文件 ${name}`, 'high'); showToast('已开始下载：' + name); }
+  function obDownloadAll() { obOperLog(obGet(obCurId), '导出', `打包下载全部文件 ${obCurId}.zip`, 'high'); showToast(`已开始打包下载：${obCurId}.zip`); }
+  function obSection(title, inner, extra) {
+    return `<div class="detail-section"><div class="detail-section-hd ob-sec-hd"><span>${title}</span>${extra || ''}</div>${inner}</div>`;
+  }
+  function obEmpty(msg) { return `<div class="ob-empty">${msg || '客户尚未填写'}</div>`; }
+  function obKvList(list) {
+    return `<div class="ob-grid">${list.map(([k, v, full]) => obKv(k, (v && v.proofs) ? obProofsHtml(v.proofs) : (v && v.file) ? obFileHtml(v.file) : obEsc(v), full === 'full')).join('')}</div>`;
+  }
+  // ⑥ 所有权证明：至少一项、可多选；区块浏览器方式需附控制权证明（签名消息或参考码）
+  function obProofsHtml(proofs) {
+    return proofs.map(pf => `<div style="margin-bottom:6px;">
+      <div style="color:#606266;">${obEsc(pf.type)}</div>
+      ${pf.files.map(f => obFileHtml(f)).join('')}
+      ${pf.control ? `<div style="font-size:12px;color:#909399;margin-top:2px;">控制权证明：${obEsc(pf.control.method)} · ${obEsc(pf.control.content)}</div>` : ''}
+      ${pf.other ? `<div style="font-size:12px;color:#909399;margin-top:2px;">说明：${obEsc(pf.other)}</div>` : ''}
+    </div>`).join('');
+  }
+  function obPepHtml(p) {
+    if (!p.pep || p.pep === '否') return '否';
+    if (p.pep.type === 'self') return `<span style="color:#F56C6C;">是（PEP 本人）</span><br>职务：${obEsc(p.pep.title)}<br>公共职能：${obEsc(p.pep.func)}`;
+    return `<span style="color:#F56C6C;">是（PEP 的家庭成员或密切关系人）</span><br>关系：${obEsc(p.pep.relation)}<br>PEP 全名：${obEsc(p.pep.pepName)}<br>PEP 职务：${obEsc(p.pep.pepTitle)}`;
+  }
+  function obSuppTag(r, k) {
+    return r.supp && r.status === 'supplement' && r.supp.parts.includes(k)
+      ? '<span class="badge badge-amber" style="font-weight:400;">待补件</span>' : '';
+  }
+
+  function obRenderDetail() {
+    const r = obGet(obCurId);
+    if (!r) return;
+    const st = OB_STATUS[r.status];
+    // ── 顶部：编号 / 企业 / 状态 / 操作按钮（按状态） ──
+    let acts = '';
+    if (r.status === 'submitted') {
+      acts = `<button class="btn btn-primary btn-sm" onclick="obOpenAct('review')">审核</button>`;
+    } else if (r.status === 'invited' || r.status === 'filling') {
+      acts = `<button class="btn btn-default btn-sm" onclick="obCopyLink()">复制邀请链接</button>
+              <button class="btn btn-default btn-sm" onclick="obOpenAct('email')">修改邮箱</button>
+              <button class="btn btn-default btn-sm" onclick="obOpenAct('resend')">重新邀请</button>`;
+    } else if (r.status === 'supplement' || r.status === 'expired') {
+      acts = `${r.status === 'supplement' ? '<button class="btn btn-default btn-sm" onclick="obCopyLink()">复制邀请链接</button>' : ''}
+              <button class="btn btn-default btn-sm" onclick="obOpenAct('email')">修改邮箱</button>
+              <button class="btn btn-default btn-sm" onclick="obOpenAct('resend')">重新邀请</button>`;
+    }
+    document.getElementById('ob-dt-bar').innerHTML = `
+      <span class="ob-dt-title">${r.id}</span>
+      <span class="ob-dt-company">${obEsc(r.company)}</span>
+      <span class="badge ${st.cls}">${st.label}</span>${r.sanction ? '<span class="ob-risk" style="margin-left:0;">制裁风险</span>' : ''}
+      <div class="ob-dt-actions">${acts}</div>`;
+
+    // ── 提示条 ──
+    let banners = '';
+    if (r.mailFailed) {
+      const mf = r.mailFailed;
+      banners += mf.kind === 'bounce'
+        ? `<div class="ob-banner ob-banner-danger"><b>邀请邮件被退回</b>（${mf.at}）：${obEsc(mf.reason)}。请核对邮箱，修改后点「重新邀请」。</div>`
+        : `<div class="ob-banner ob-banner-danger"><b>邀请邮件发送失败</b>（${mf.at}）：${obEsc(mf.reason)}。请点「重新邀请」重试，邮箱有误时先修改邮箱。</div>`;
+    }
+    if (r.reviewMailFailed) {
+      const rf = r.reviewMailFailed;
+      banners += `<div class="ob-banner ob-banner-danger"><b>${OB_REVIEW_MAIL[rf.mail]}发送失败</b>（${rf.at}）：${obEsc(rf.reason)}。${rf.mail === 'supplement' ? '请点「重新邀请」补发。' : '请线下联系客户。'}</div>`;
+    }
+    if (r.sanction) banners += `<div class="ob-banner ob-banner-danger"><b>制裁风险</b>：客户申报预计涉及受制裁国家 / 人员，请重点审核。${obEsc(r.sanctionDesc || '')}</div>`;
+    if (r.status === 'supplement' && r.supp) banners += `<div class="ob-banner ob-banner-warn"><b>已要求补件</b>（${r.supp.at}）：${r.supp.parts.map(k => OB_PARTS.find(p => p.k === k).label).join('、')}<br>补件说明：${obEsc(r.supp.msg)}<br>等待客户修改后重新签名提交，链接有效期至 ${r.expireAt}。</div>`;
+    if (r.status === 'expired') {
+      const back = r.prevStatus === 'supplement' ? '重新邀请后恢复为「需要补件」，原勾选部分和补件说明不变。' : '重新邀请后恢复为过期前的状态，已填写的草稿保留。';
+      banners += `<div class="ob-banner ob-banner-info"><b>链接已于 ${r.expireAt} 过期</b>（过期前状态：${OB_STATUS[r.prevStatus || 'invited'].label}）。${back}</div>`;
+    }
+    if (r.status === 'rejected') banners += `<div class="ob-banner ob-banner-danger"><b>已拒绝</b>（${r.reviewedAt}）：拒绝原因：${obEsc(r.rejectReason)}</div>`;
+
+    // ── 左栏：①–⑦ 资料 ──
+    const f = r.form, n = r.filled || 0;
+    const sec = (i) => f && n >= i;
+    let left = '';
+    left += obSection('① 企业信息' + obSuppTag(r, 's1'), sec(1) ? obKvList(f.s1) : obEmpty());
+    left += obSection('② 公司联系方式' + obSuppTag(r, 's2'), sec(2) ? obKvList(f.s2) : obEmpty());
+    left += obSection('③ 授权联系人' + obSuppTag(r, 's3'), sec(3) ? obKvList(f.s3) : obEmpty());
+    left += obSection('④ 人员（董事 / UBO / 股东 / 授权签字人）' + obSuppTag(r, 's4'), sec(4) ? f.s4.map(p => `
+      <div class="ob-person">
+        <div class="ob-person-hd">${obEsc(p.name)}${p.roles.map(x => `<span class="badge badge-lblue" style="font-weight:400;">${x}</span>`).join('')}</div>
+        <div class="ob-grid">
+          ${obKv('法定全名', obEsc(p.name))}${obKv('出生日期', p.dob)}
+          ${obKv('国籍', p.nat)}${obKv('居住国', p.res)}
+          ${obKv('住址', obEsc(p.addr), true)}
+          ${obKv('护照号码', p.passport)}${obKv('护照签发国', p.pCountry)}
+          ${obKv('护照到期日', p.pExp)}${obKv('是否 PEP', obPepHtml(p))}
+          ${obKv('持股比例 %', p.share)}${obKv('投票权比例 %', p.vote)}
+          ${obKv('邮箱', obEsc(p.email))}${obKv('联系电话', p.phone)}
+        </div>
+      </div>`).join('') : obEmpty());
+    const docsHtml = sec(5) ? `
+      <div class="ob-file-group">公司文件</div>
+      ${f.s5.map(d => `<div class="ob-file-row"><span class="ob-file-type">${d.t}${d.req ? '<span class="ob-req">*</span>' : ''}</span><div class="ob-files">${obFileHtml(d.f)}</div></div>`).join('')}
+      ${f.s4.map(p => {
+        const fn = p.name.split(' ')[0];
+        return `<div class="ob-file-group">人员文件 · ${obEsc(p.name)}</div>
+          <div class="ob-file-row"><span class="ob-file-type">护照（彩色清晰件）<span class="ob-req">*</span></span><div class="ob-files">${obFileHtml(`Passport_${fn}.pdf`)}</div></div>
+          <div class="ob-file-row"><span class="ob-file-type">地址证明（3 个月内）<span class="ob-req">*</span></span><div class="ob-files">${obFileHtml(`Proof_of_Address_${fn}.pdf`)}</div></div>`;
+      }).join('')}` : obEmpty();
+    left += obSection('⑤ 证明文件' + obSuppTag(r, 's5'), docsHtml,
+      sec(5) ? `<span class="ob-link" style="font-size:13px;font-weight:400;" onclick="obDownloadAll()">打包下载全部文件</span>` : '');
+    left += obSection('⑥ 数字资产钱包授权' + obSuppTag(r, 's6'), sec(6) ? obKvList(f.s6) : obEmpty());
+    left += obSection('⑦ 声明与签名', sec(7) && f.s7.signedAt ? `<div class="ob-grid">
+        ${obKv('授权代表姓名', obEsc(f.s7.name))}${obKv('职位 / 角色', f.s7.title)}
+        ${obKv('确认声明', '已勾选确认', true)}
+        <div class="ob-kv full"><div class="ob-k">手写签名</div>
+          <div class="ob-sign"><svg width="180" height="60" viewBox="0 0 180 60" fill="none" stroke="#303133" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 42c10-22 18-30 22-24s-8 26-2 24 14-26 20-22-4 20 2 20 10-14 16-14 2 12 8 12 12-18 20-18-6 18 2 18 16-10 24-12 14 6 28 2"/></svg></div>
+        </div>
+        ${obKv('签署时间', f.s7.signedAt)}${obKv('签署 IP', f.s7.ip)}
+      </div>` : obEmpty(r.status === 'filling' || r.status === 'invited' || r.status === 'expired' ? '客户尚未签名提交' : ''));
+
+    // ── 右栏：审核信息 / 备注 / 操作记录 ──
+    const linkValid = ['invited','filling','supplement'].includes(r.status) ? `至 ${r.expireAt}`
+      : r.status === 'expired' ? `<span style="color:#F56C6C;">已于 ${r.expireAt} 过期</span>` : '—';
+    let info = obKv('编号', r.id) + obKv('邮箱', obEsc(r.email))
+      + obKv('创建时间', r.createdAt) + obKv('链接有效期', linkValid) + obKv('提交时间', r.submittedAt)
+      + obKv('审核人', r.reviewer) + obKv('审核时间', r.reviewedAt);
+    if (r.status === 'rejected') info += obKv('拒绝原因', `<span style="white-space:pre-wrap;">${obEsc(r.rejectReason)}</span>`);
+    const right = obSection('审核信息', `<div class="ob-grid one">${info}</div>`)
+      + obSection('备注', `<div class="ob-note-wrap">
+          <div class="ob-note-box">
+            <textarea class="wm-remark" id="ob-note" maxlength="500" placeholder="请输入备注" oninput="document.getElementById('ob-note-count').textContent=this.value.length">${obEsc(r.note || '')}</textarea>
+            <span class="ob-note-count"><span id="ob-note-count">${(r.note || '').length}</span>/500</span>
+          </div>
+          <div class="ob-note-ft"><button class="btn btn-default btn-sm" onclick="obSaveNote()">保存</button></div>
+        </div>`)
+      + obSection('操作记录', `<div class="timeline">${r.logs.slice().reverse().map(l => `
+          <div class="tl-item"><div class="tl-dot ${l.fail ? 'fdot' : 'done'}"></div>
+            <div class="tl-content"><div class="tl-label">${l.label}</div>
+              <div class="tl-time">${l.t} · ${obEsc(l.by)}</div>
+              ${l.desc ? `<div class="tl-desc">${obEsc(l.desc)}</div>` : ''}
+            </div></div>`).join('')}</div>`);
+
+    document.getElementById('ob-dt-body').innerHTML = banners + `<div class="ob-col">${left}</div><div class="ob-col">${right}</div>`;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function obSaveNote() {
+    const r = obGet(obCurId);
+    const v = document.getElementById('ob-note').value.trim();
+    if (v === (r.note || '')) { showToast('备注未修改'); return; }
+    r.note = v;
+    r.logs.push(obL(obNow(), '更新备注', v || '（清空备注）', OB_USER));
+    obOperLog(r, '修改', `更新备注：${v || '（清空备注）'}`, 'normal');
+    obRenderDetail();
+    showToast('备注已保存');
+  }
+
+  // 复制邀请链接：仅已邀请 / 填写中 / 需要补件（链接有效期内）；记入操作记录
+  function obCopyLink() {
+    const r = obGet(obCurId);
+    if (!r || !['invited','filling','supplement'].includes(r.status)) { showToast('状态已变更，请刷新'); return; }
+    const url = obLinkOf(r);
+    const done = () => {
+      r.logs.push(obL(obNow(), '复制邀请链接', `链接有效期至 ${r.expireAt}`, OB_USER));
+      obOperLog(r, '导出', `复制邀请链接，链接有效期至 ${r.expireAt}`, 'high');
+      obRenderDetail();
+      showToast('邀请链接已复制');
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, done);
+    else {
+      const ta = document.createElement('textarea'); ta.value = url; ta.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove();
+      done();
+    }
+  }
+
+  // ── 操作弹窗 ────────────────────────────────────────
+  // 审核沿用充币 / 提币审核的交互：弹窗选「处理方式」→ 按方式显示字段 → 确认框二次确认
+  let obActKind = null;
+  function closeObAct() { document.getElementById('ob-act-modal').classList.remove('show'); obActKind = null; }
+  function closeObConfirm() { document.getElementById('ob-confirm-modal').classList.remove('show'); }
+  function obConfirmBox(cfg) {
+    document.getElementById('ob-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.color};flex-shrink:0;"></i>`;
+    document.getElementById('ob-confirm-title').textContent = cfg.title;
+    document.getElementById('ob-confirm-msg').innerHTML = cfg.msg;
+    const ok = document.getElementById('ob-confirm-ok');
+    ok.className = `btn ${cfg.btnCls} btn-sm`;
+    ok.textContent = cfg.btnTxt;
+    ok.disabled = !!cfg.okDisabled;
+    ok.onclick = cfg.onOk;
+    document.getElementById('ob-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // 通过时审核意见必填的条件：制裁风险，或 ④ 中有 PEP 为「是」的人员
+  function obApproveRisk(r) {
+    const pep = !!(r.form && r.form.s4 && r.form.s4.some(p => p.pep && p.pep !== '否'));
+    if (r.sanction && pep) return '制裁风险和 PEP 人员';
+    if (r.sanction) return '制裁风险';
+    if (pep) return 'PEP 人员';
+    return '';
+  }
+  const OB_REVIEW_MAIL = { supplement:'补件通知邮件', approved:'审核通过邮件', rejected:'审核拒绝邮件' };
+  // 审核后发邮件；原型模拟：邮箱域名以 .con 结尾视为发送失败。失败时状态照常变更，记红点操作记录并显示提示条
+  function obSendReviewMail(r, mail, now) {
+    if (!obMailWillFail(r.email)) { if (r.reviewMailFailed && r.reviewMailFailed.mail === mail) r.reviewMailFailed = null; return true; }
+    const reason = '邮件服务返回失败';
+    r.reviewMailFailed = { mail, at:now, reason };
+    r.logs.push(obL(now, OB_REVIEW_MAIL[mail] + '发送失败', reason, '系统', true));
+    return false;
+  }
+  function obOpenAct(kind) {
+    const r = obGet(obCurId);
+    if (kind === 'resend') {
+      let tail = '';
+      if (r.status === 'expired') tail = r.prevStatus === 'supplement'
+        ? '申请将恢复为「需要补件」，原勾选部分和补件说明不变。'
+        : `申请将恢复为「${OB_STATUS[r.prevStatus || 'invited'].label}」，已填写的草稿保留。`;
+      obConfirmBox({ icon:'send', color:'#409EFF', title:'重新邀请',
+        msg:`将生成新链接并发送至 ${obEsc(r.email)}，旧链接立即失效，新链接有效期 30 天。${tail}确认继续吗？`,
+        btnCls:'btn-primary', btnTxt:'确认发送', onOk:() => obDo('resend') });
+      return;
+    }
+
+    obActKind = kind;
+    const title = document.getElementById('ob-act-title');
+    const body  = document.getElementById('ob-act-body');
+    const foot  = document.getElementById('ob-act-footer');
+    const cancel = `<button class="btn btn-default btn-sm" onclick="closeObAct()">取消</button>`;
+    document.getElementById('ob-act-box').style.width = kind === 'review' ? '560px' : '480px';
+
+    if (kind === 'review') {
+      title.textContent = '审核';
+      const risk = obApproveRisk(r);
+      body.innerHTML = `<div class="ob-review-info"><span style="font-family:Inter,sans-serif;">${r.id}</span><span style="color:#C0C4CC;">·</span><span>${obEsc(r.company)}</span>${r.sanction ? '<span class="ob-risk">制裁风险</span>' : ''}</div>
+        <div class="ob-fi">
+          <div class="ob-fl"><span class="req">*</span>处理方式</div>
+          <div class="select-wrap" style="width:100%;">
+            <select class="field-select" id="ob-review-action" onchange="obReviewChange()" style="width:100%;">
+              <option value="">请选择</option>
+              <option value="approve">通过</option>
+              <option value="supp">要求补件</option>
+              <option value="reject">拒绝</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+          </div>
+        </div>
+        <div id="ob-review-approve" style="display:none;">
+          <div class="ob-fi" id="ob-approve-fi">
+            <div class="ob-fl">${risk ? '<span class="req">*</span>' : ''}审核意见</div>
+            <textarea class="wm-remark" id="ob-approve-note" maxlength="200" placeholder="请输入审核意见" oninput="document.getElementById('ob-approve-count').textContent=this.value.length;if(this.value.trim())obSetErr('ob-approve-fi','')"></textarea>
+            <span class="wm-remark-count"><span id="ob-approve-count">0</span>/200</span>
+            <div class="ob-err"></div>
+            <div class="ob-hint">通过后发送审核通过邮件。</div>
+          </div>
+        </div>
+        <div id="ob-review-supp" style="display:none;">
+          <div class="ob-fi" id="ob-supp-parts-fi">
+            <div class="ob-fl"><span class="req">*</span>需要补充的部分</div>
+            <div class="ob-chk-grid">
+              ${OB_PARTS.map(p => `<label class="ak-check-item"><input type="checkbox" class="ob-supp-ck" value="${p.k}" onchange="obSuppPartChange()"><span class="ak-box"></span>${p.label}</label>`).join('')}
+            </div>
+            <div class="ob-err"></div>
+          </div>
+          <div class="ob-fi" id="ob-supp-msg-fi">
+            <div class="ob-fl"><span class="req">*</span>补件说明</div>
+            <textarea class="wm-remark" id="ob-supp-msg" maxlength="500" placeholder="请输入补件说明（英文）" oninput="document.getElementById('ob-supp-count').textContent=this.value.length;if(this.value.trim())obSetErr('ob-supp-msg-fi','')"></textarea>
+            <span class="wm-remark-count"><span id="ob-supp-count">0</span>/500</span>
+            <div class="ob-err"></div>
+            <div class="ob-hint">沿用原邀请链接，有效期重新计算 30 天。客户只能修改勾选的部分，改完需重新签名提交。</div>
+          </div>
+        </div>
+        <div id="ob-review-reject" style="display:none;">
+          <div class="ob-fi" id="ob-reject-fi">
+            <div class="ob-fl"><span class="req">*</span>拒绝原因</div>
+            <textarea class="wm-remark" id="ob-reject-reason" maxlength="200" placeholder="请输入拒绝原因" oninput="document.getElementById('ob-reject-count').textContent=this.value.length;if(this.value.trim())obSetErr('ob-reject-fi','')"></textarea>
+            <span class="wm-remark-count"><span id="ob-reject-count">0</span>/200</span>
+            <div class="ob-err"></div>
+          </div>
+        </div>`;
+      foot.innerHTML = cancel + `<button class="btn btn-default btn-sm" id="ob-act-ok" style="margin-left:8px;" disabled>确认</button>`;
+    } else if (kind === 'email') {
+      title.textContent = '修改邮箱';
+      body.innerHTML = `<div class="ob-fi"><div class="ob-fl">当前邮箱</div><div class="ob-v" style="font-family:Inter,sans-serif;">${obEsc(r.email)}</div></div>
+        <div class="ob-fi" id="ob-email-fi">
+          <div class="ob-fl"><span class="req">*</span>新邮箱</div>
+          <input class="field-input" type="text" id="ob-email-new" placeholder="请输入新邮箱" style="width:100%;">
+          <div class="ob-err"></div>
+          <div class="ob-hint">修改后需点「重新邀请」，新链接发到新邮箱。</div>
+        </div>`;
+      foot.innerHTML = cancel + `<button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="obSubmitForm()">保存</button>`;
+    }
+    document.getElementById('ob-act-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function obSuppPartChange() {
+    if (document.querySelector('.ob-supp-ck:checked')) obSetErr('ob-supp-parts-fi', '');
+  }
+  function obReviewChange() {
+    const v = document.getElementById('ob-review-action').value;
+    ['approve','supp','reject'].forEach(k => { document.getElementById('ob-review-' + k).style.display = v === k ? '' : 'none'; });
+    const btn = document.getElementById('ob-act-ok');
+    const cfg = { approve:['btn-primary','审核通过'], supp:['btn-warning','要求补件'], reject:['btn-danger','拒绝'] }[v];
+    btn.disabled = !cfg;
+    btn.className = `btn ${cfg ? cfg[0] : 'btn-default'} btn-sm`;
+    btn.textContent = cfg ? cfg[1] : '确认';
+    btn.onclick = cfg ? obReviewSubmit : null;
+  }
+  function obReviewSubmit() {
+    const r = obGet(obCurId);
+    const v = document.getElementById('ob-review-action').value;
+    if (v === 'approve') {
+      const note = document.getElementById('ob-approve-note').value.trim();
+      const risk = obApproveRisk(r);
+      obSetErr('ob-approve-fi', risk && !note ? `该申请存在${risk}，请填写审核意见` : '');
+      if (risk && !note) return;
+      obConfirmBox({ icon:'check-circle', color:'#67C23A', title:'审核通过',
+        msg:`确认通过「${obEsc(r.company)}」的开户申请？通过后发送审核通过邮件。`,
+        btnCls:'btn-primary', btnTxt:'确认通过', onOk:() => obDo('approve', { note }) });
+    } else if (v === 'supp') {
+      const parts = Array.from(document.querySelectorAll('.ob-supp-ck:checked')).map(el => el.value);
+      const msg = document.getElementById('ob-supp-msg').value.trim();
+      obSetErr('ob-supp-parts-fi', parts.length ? '' : '请至少勾选一个需要补充的部分');
+      obSetErr('ob-supp-msg-fi', msg ? '' : '请输入补件说明');
+      if (!parts.length || !msg) return;
+      obConfirmBox({ icon:'alert-circle', color:'#E6A23C', title:'要求补件',
+        msg:`将向客户发送补件通知，链接有效期重新计算至 ${obAddDays(30)}。确认继续吗？`,
+        btnCls:'btn-warning', btnTxt:'确认发送', onOk:() => obDo('supp', { parts, msg }) });
+    } else if (v === 'reject') {
+      const reason = document.getElementById('ob-reject-reason').value.trim();
+      obSetErr('ob-reject-fi', reason ? '' : '请输入拒绝原因');
+      if (!reason) return;
+      obConfirmBox({ icon:'x-circle', color:'#F56C6C', title:'拒绝申请',
+        msg:'拒绝后为终态，不可恢复，并向客户发送审核拒绝邮件。确认继续吗？',
+        btnCls:'btn-danger', btnTxt:'确认拒绝', onOk:() => obDo('reject', { reason }) });
+    }
+  }
+  function obSubmitForm() {
+    const r = obGet(obCurId);
+    if (obActKind === 'email') {
+      const v = document.getElementById('ob-email-new').value.trim();
+      let err = '';
+      if (!v) err = '请输入新邮箱';
+      else if (!obIsEmail(v)) err = '请输入有效的邮箱地址';
+      else if (obNormEmail(v) === obNormEmail(r.email)) err = '新邮箱与当前邮箱相同';
+      else err = obEmailConflict(v, r.id);
+      obSetErr('ob-email-fi', err);
+      if (!err) obDo('email', { email:v });
+    }
+  }
+
+  // 执行操作；并发保护：多人同时处理时以先提交的为准，状态已变的操作不生效
+  function obDo(kind, pl) {
+    const r = obGet(obCurId);
+    const now = obNow();
+    const need = { approve:['submitted'], reject:['submitted'], supp:['submitted'],
+      resend:['invited','filling','supplement','expired'], email:['invited','filling','supplement','expired'] }[kind];
+    closeObConfirm();
+    if (!r || !need.includes(r.status)) {
+      if (r) obOperLog(r, { approve:'审批', reject:'审批', supp:'审批', resend:'修改', email:'修改' }[kind],
+        { approve:'审核通过', reject:'审核拒绝', supp:'要求补件', resend:'重新邀请', email:'修改邮箱' }[kind], kind === 'resend' ? 'medium' : 'high', '状态已变更，操作未生效');
+      closeObAct(); showToast('状态已变更，请刷新'); return;
+    }
+
+    if (kind === 'approve') {
+      Object.assign(r, { status:'approved', reviewer:OB_USER, reviewedAt:now, updatedAt:now });
+      r.logs.push(obL(now, '审核通过', '已发送审核通过邮件' + (pl.note ? `；审核意见：${pl.note}` : ''), OB_USER));
+      obOperLog(r, '审批', '审核结果：通过' + (pl.note ? `，审核意见：${pl.note}` : ''), 'high');
+      showToast(obSendReviewMail(r, 'approved', now) ? '已通过' : '已通过，但邮件发送失败');
+    } else if (kind === 'reject') {
+      Object.assign(r, { status:'rejected', reviewer:OB_USER, reviewedAt:now, updatedAt:now, rejectReason:pl.reason });
+      r.logs.push(obL(now, '审核拒绝', `拒绝原因：${pl.reason}。已发送审核拒绝邮件`, OB_USER, true));
+      obOperLog(r, '审批', `审核结果：拒绝，拒绝原因：${pl.reason}`, 'high');
+      showToast(obSendReviewMail(r, 'rejected', now) ? '已拒绝，已发送拒绝通知邮件' : '已拒绝，但邮件发送失败');
+    } else if (kind === 'supp') {
+      const exp = obAddDays(30);
+      Object.assign(r, { status:'supplement', reviewer:OB_USER, reviewedAt:now, updatedAt:now, expireAt:exp, supp:{ parts:pl.parts, msg:pl.msg, at:now } });
+      const partText = pl.parts.map(k => OB_PART_LABEL[k] + (k === 's4' ? '（含 ⑤ 人员文件）' : '')).join('、');
+      r.logs.push(obL(now, '要求补件', `补件部分：${partText}；说明：${pl.msg}。有效期重新计算至 ${exp}`, OB_USER));
+      obOperLog(r, '审批', `审核结果：要求补件，补件部分：${partText}；链接有效期重新计算至 ${exp}`, 'high');
+      showToast(obSendReviewMail(r, 'supplement', now) ? '已发送补件通知' : '已要求补件，但邮件发送失败');
+    } else if (kind === 'resend') {
+      const fromSt = r.status;
+      if (r.status === 'expired') { r.status = r.prevStatus || 'invited'; r.prevStatus = null; }
+      Object.assign(r, { expireAt:obAddDays(30), updatedAt:now, mailFailed:false, token:obToken() });
+      if (r.reviewMailFailed && r.reviewMailFailed.mail === 'supplement') r.reviewMailFailed = null;
+      r.logs.push(obL(now, '重新邀请', `新链接已发送至 ${r.email}，旧链接已失效`, OB_USER));
+      obOperLog(r, '修改', `重新邀请，新链接已发送至 ${r.email}，旧链接失效，链接有效期至 ${r.expireAt}` + (fromSt === 'expired' ? `；状态：已过期 → ${OB_STATUS[r.status].label}` : ''), 'medium');
+      showToast('已重新邀请');
+    } else if (kind === 'email') {
+      const old = r.email;
+      Object.assign(r, { email:pl.email, updatedAt:now });
+      r.logs.push(obL(now, '修改邮箱', `${old} → ${pl.email}`, OB_USER));
+      obOperLog(r, '修改', `修改邮箱：${old} → ${pl.email}`, 'high');
+      showToast('邮箱已修改，请点「重新邀请」');
+    }
+    closeObAct();
+    obRenderDetail();
+    obRender();
+  }
+
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     renderTabs();
@@ -11772,6 +13530,11 @@
     arRender();
     mdAssetFiltersInit();
     merchantRender();
+    receivingMerchantRender();
+    obFiltersInit();
+    obRender();
+    fbFiltersInit();
+    fbRender();
     roleFiltersInit();
     roleRender();
     operlogPopulateFilters();

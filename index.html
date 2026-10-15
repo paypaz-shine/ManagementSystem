@@ -10906,14 +10906,14 @@
       obSection('资产', `<div class="rmd-stats">
         ${stat('总余额', T.balance)}${stat('可提现', avail, '#67C23A')}${stat('收款冻结', T.frozen, '#F56C6C')}${stat('提现冻结', T.wdFrozen, '#E6A23C')}
       </div>`) +
-      obSection('收款地址', rmAddrSectionHtml(r, absIdx), `<button class="btn btn-primary btn-sm" onclick="openRmAddrEdit(${absIdx})">新增</button>`) +
+      obSection('钱包地址', rmAddrSectionHtml(r, absIdx), `<button class="btn btn-primary btn-sm" onclick="openRmAddrEdit(${absIdx})">新增</button>`) +
+      obSection('币对管理', rmTokenSectionHtml(r, absIdx)) +
       obSection('汇率', `<div class="table-wrap"><table style="width:100%;table-layout:auto;"><thead><tr><th>币对</th><th>汇率</th><th>状态</th><th>最近更新时间</th></tr></thead><tbody>
         <tr><td style="font-family:Inter,sans-serif;font-weight:500;">USDT/CNY</td>
           <td>${d.rate ? `<span style="font-family:Inter,sans-serif">1 USDT = ${d.rate} CNY</span>` : rmdEmpty}</td>
           <td>${d.rateEnabled == null ? rmdEmpty : d.rateEnabled ? '<span class="badge-enabled">已启用</span>' : '<span class="badge-disabled">已禁用</span>'}</td>
           <td style="font-family:Inter,sans-serif">${d.rateAt || rmdEmpty}</td></tr>
       </tbody></table></div>`) +
-      obSection('代币配置', rmTokenSectionHtml(r, absIdx)) +
       obSection('汇率变更记录', `<div class="table-wrap"><table style="width:100%;table-layout:auto;"><thead><tr><th>变更时间</th><th>变更前</th><th>变更后</th><th>操作人</th></tr></thead><tbody>
         ${d.rateLog.length ? d.rateLog.map(h => `<tr><td style="font-family:Inter,sans-serif">${h.time}</td><td style="font-family:Inter,sans-serif">${h.before}</td><td style="font-family:Inter,sans-serif">${h.after}</td><td style="font-family:Inter,sans-serif">${obEsc(h.op)}</td></tr>`).join('')
           : '<tr><td colspan="4" style="text-align:center;color:#C0C4CC;height:60px">暂无数据</td></tr>'}

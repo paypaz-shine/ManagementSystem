@@ -8067,6 +8067,17 @@
           <input type="hidden" id="wda-out-addr" value="${payAddr.addr}">` : `<span class="detail-value" style="color:#E6A23C;">请先在收款商户详情配置提币地址</span>`}
       </div>
       <div class="detail-item" style="grid-column:1/-1">
+        <span class="detail-label">处理方式</span>
+        <div class="select-wrap" style="width:100%;">
+          <select class="field-select" id="wda-action-select" onchange="wdaRcvToggleAction(${payAddr ? 'true' : 'false'})" style="width:100%;">
+            <option value="">请选择</option>
+            <option value="rcv_paid">确认打款</option>
+            <option value="audit_rejected">拒绝</option>
+          </select>
+          <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+        </div>
+      </div>
+      <div class="detail-item" id="wda-tx-hash-wrap" style="grid-column:1/-1;display:none;">
         <span class="detail-label"><span style="color:#F56C6C;margin-right:2px">*</span>交易哈希</span>
         <input class="field-input" id="wda-tx-hash" placeholder="请输入交易哈希" style="width:100%;font-family:Inter,sans-serif;" oninput="wdaFieldErr('wda-tx-hash', '')">
         <div class="ob-err" id="wda-tx-hash-err"></div>
@@ -8081,11 +8092,20 @@
       </div>`;
     document.getElementById('wda-manage-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeWdaManage()">取消</button>
-      <button class="btn btn-danger btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('audit_rejected')">拒绝</button>
-      <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="confirmWdaAction('rcv_paid')"${payAddr ? '' : ' disabled'}>确认打款</button>
+      <button class="btn btn-default btn-sm" id="wda-submit-btn" style="margin-left:8px;" disabled>确认</button>
     `;
     document.getElementById('wda-manage-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
+  }
+  // 收款商户处理方式：确认打款 → 展示交易哈希（必填）；拒绝 → 隐藏交易哈希
+  function wdaRcvToggleAction(hasPayAddr) {
+    const val = document.getElementById('wda-action-select').value;
+    document.getElementById('wda-tx-hash-wrap').style.display = val === 'rcv_paid' ? '' : 'none';
+    wdaFieldErr('wda-tx-hash', ''); wdaRemarkErr('');
+    const btn = document.getElementById('wda-submit-btn');
+    btn.disabled = !val || (val === 'rcv_paid' && !hasPayAddr);
+    btn.className = val ? 'btn btn-primary btn-sm' : 'btn btn-default btn-sm';
+    btn.onclick = val ? () => confirmWdaAction(val) : null;
   }
   // 收款商户确认打款：字段错误显示在对应输入框下方
   function wdaFieldErr(id, msg) {

@@ -809,12 +809,17 @@
     .fp-sec { grid-column:1/-1; font-size:13px; font-weight:600; color:#303133; padding-top:4px; border-top:1px solid #EBEEF5; }
     .fp-sec:first-child { border-top:none; padding-top:0; }
     /* 收款商户详情：资产统计 / 明细 tab */
-    .rmd-stats { display:flex; align-items:center; padding:16px 20px; }
+    .rmd-stats { display:flex; align-items:flex-start; padding:16px 20px; }
     .rmd-stat { display:flex; flex-direction:column; gap:6px; padding-right:32px; }
     .rmd-stat + .rmd-stat { padding-left:32px; border-left:1px solid #EBEEF5; }
     .rmd-stat-label { font-size:12px; color:#909399; }
     .rmd-stat-value { font-size:22px; font-weight:600; color:#303133; font-family:'Inter',sans-serif; }
     .rmd-stat-value small { font-size:12px; font-weight:400; color:#909399; margin-left:4px; }
+    /* 收款商户详情：代收 / 代付汇率 tab（放在区块标题位置） */
+    .rmd-tabs { display:flex; gap:20px; }
+    .rmd-tab { cursor:pointer; color:#909399; font-weight:600; }
+    .rmd-tab:hover { color:#409EFF; }
+    .rmd-tab.active { color:#409EFF; }
 
     .detail-section-hd { padding:10px 20px; font-size:13px; font-weight:600; color:#303133; border-bottom:1px solid #EBEEF5; background:#FAFAFA; }
     .detail-grid { display:grid; grid-template-columns:1fr 1fr; }
@@ -850,8 +855,6 @@
     .wd-manage-link { color:#409EFF; font-size:13px; cursor:pointer; background:none; border:none; padding:0; font-family:'Noto Sans SC',sans-serif; }
     .wd-manage-link:hover { text-decoration:underline; }
     .btn-danger  { background:#F56C6C; border:1px solid #F56C6C; color:#fff; }
-    /* 本次改动核对标注（2026-10-14 退款确认）：黄色底色高亮新增或修改处，核对完删除此规则即可去掉 */
-    .chg { background:#FFF59D !important; box-shadow:0 0 0 3px #FFF59D; border-radius:2px; }
     .btn-danger:hover  { background:#f78989; border-color:#f78989; }
     .btn-warning { background:#E6A23C; border:1px solid #E6A23C; color:#fff; }
     .btn-warning:hover { background:#ebb563; border-color:#ebb563; }
@@ -1233,6 +1236,9 @@
     .ob-files { display:flex; flex-direction:column; gap:4px; min-width:0; }
     .ob-file { display:flex; align-items:center; gap:10px; color:#303133; min-width:0; }
     .ob-file-nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ob-doc + .ob-doc { margin-top:8px; }
+    .ob-doc-nm { color:#606266; margin-bottom:2px; }
+    .ob-doc-opt { color:#909399; font-size:12px; }
     .ob-link { color:#409EFF; cursor:pointer; font-size:12px; flex-shrink:0; }
     .ob-link:hover { text-decoration:underline; }
     .ob-sign { height:90px; border:1px dashed #DCDFE6; border-radius:4px; background:#FAFAFA; display:flex; align-items:center; justify-content:center; }
@@ -1264,18 +1270,6 @@
   </style>
 </head>
 <body>
-<script>
-(function(){
-  if (sessionStorage.getItem('ppz_auth') !== '1') {
-    var input = prompt('请输入访问密码');
-    if (input !== '@PayPaz.tech') {
-      document.documentElement.innerHTML = '<body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;color:#606266;font-size:15px;background:#F5F7FA;">无权限访问</body>';
-      throw new Error('unauthorized');
-    }
-    sessionStorage.setItem('ppz_auth', '1');
-  }
-})();
-</script>
 
   <!-- ── Sidebar ─────────────────────────────────────── -->
   <aside class="sidebar">
@@ -1305,6 +1299,10 @@
           <div class="nav-item nav-sub-item" data-page="adjust-review">
             <i data-lucide="scale" class="nav-icon" style="width:14px;height:14px;"></i>
             <span class="nav-label">企业商户账户调账</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="merchant-frozen">
+            <i data-lucide="lock" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">企业商户冻结明细</span>
           </div>
           <div class="nav-item nav-sub-item" data-page="fiat-ledger">
             <i data-lucide="receipt" class="nav-icon" style="width:14px;height:14px;"></i>
@@ -1349,6 +1347,23 @@
             <span class="nav-label">收款订单</span>
           </div>
           <div class="nav-item nav-sub-item" data-page="fiat-appeal">
+            <i data-lucide="gavel" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">申诉处理</span>
+          </div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-hd" id="nav-ghd-fiatpo" onclick="toggleNavGroup('fiatpo')">
+          <i data-lucide="hand-coins" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">法币代付</span>
+          <i data-lucide="chevron-up" id="nav-caret-fiatpo" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-fiatpo">
+          <div class="nav-item nav-sub-item" data-page="po-orders">
+            <i data-lucide="file-text" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">代付订单</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="po-appeal">
             <i data-lucide="gavel" class="nav-icon" style="width:14px;height:14px;"></i>
             <span class="nav-label">申诉处理</span>
           </div>
@@ -1497,15 +1512,19 @@
           </div>
         </div>
 
-        <!-- 法币收款待办 -->
+        <!-- 法币代收/代付待办：代收申诉、代付申诉、退款、提现、充币，处理后移出；不做申诉数量 / 时长 / 超时率统计 -->
         <div class="home-card">
-          <div class="home-card-hd"><span class="home-card-title">法币收款</span></div>
-          <div class="home-summary-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="home-card-hd"><span class="home-card-title">法币代收/代付</span></div>
+          <div class="home-summary-grid" style="grid-template-columns:repeat(5,1fr);">
             <div class="home-summary-box red clickable" onclick="navigateTo('fiat-appeal')">
-              <span class="home-summary-label">申诉待处理</span>
+              <span class="home-summary-label">代收申诉待处理</span>
               <span class="home-summary-value"><span id="home-todo-appeal">0</span><span style="font-size:12px;font-weight:400;color:#909399;margin-left:4px;">笔</span></span>
             </div>
-            <div class="home-summary-box amber clickable chg" onclick="homeGoRefundConfirm()">
+            <div class="home-summary-box red clickable" onclick="navigateTo('po-appeal')">
+              <span class="home-summary-label">代付申诉待处理</span>
+              <span class="home-summary-value"><span id="home-po-appeal">0</span><span style="font-size:12px;font-weight:400;color:#909399;margin-left:4px;">笔</span></span>
+            </div>
+            <div class="home-summary-box amber clickable" onclick="homeGoRefundConfirm()">
               <span class="home-summary-label">退款待确认</span>
               <span class="home-summary-value"><span id="home-todo-refund">0</span><span style="font-size:12px;font-weight:400;color:#909399;margin-left:4px;">笔</span></span>
             </div>
@@ -1856,7 +1875,7 @@
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>代币</th><th>网络</th><th>金额</th>
                   <th>变动后余额</th>
                   <th>
-                    <span class="me-info-wrap" onmouseenter="showTip(event,'充币：充币订单号\n手续费（随充值）：对应的充币订单号\n提现：提现订单号\n手续费（随提现）：对应的提现订单号\n调账：调账申请单号\n法币收款 / 手续费（随法币收款）：收款订单号\n网络费：所属业务的单号（随提现 → 提现订单号；随 On Ramp → On Ramp 订单号）')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
+                    <span class="me-info-wrap" onmouseenter="showTip(event,'Top Up / 充币：充币订单号（提币退回生成的充币为调账申请单号）\n手续费（随充币）：对应的充币订单号\nSettlement / 提币：提币订单号\n手续费（随提币）：对应的提币订单号\n调账：调账申请单号\n法币收款 / 手续费（随法币收款）：收款订单号\n网络费：对应的充币订单号（只有 On Ramp 充币会产生）')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
                       关联单号
                       <span class="me-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
                     </span>
@@ -3733,6 +3752,7 @@
         <span class="md-tab" data-tab="token" onclick="mdSwitchTab('token')">代币</span>
         <span class="md-tab" data-tab="ramp-token" onclick="mdSwitchTab('ramp-token')">On Ramp</span>
         <span class="md-tab" data-tab="payin" onclick="mdSwitchTab('payin')">法币收款</span>
+        <span class="md-tab" data-tab="payout" onclick="mdSwitchTab('payout')">法币代付</span>
         <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
       </div>
       <!-- 渠道 tab content -->
@@ -3919,6 +3939,28 @@
           </div>
         </div>
       </div>
+      <!-- 法币代付 tab content：加点、代付手续费按商户配置，下单锁定，只影响新单 -->
+      <div class="md-tab-content" id="md-content-payout" style="display:none;flex-direction:column;">
+        <div class="content-area">
+          <div class="table-card">
+            <div class="table-wrap">
+              <table style="width:100%;table-layout:auto;">
+                <thead>
+                  <tr>
+                    <th style="white-space:nowrap;">币对</th>
+                    <th style="white-space:nowrap;">状态</th>
+                    <th style="white-space:nowrap;">汇率加点</th>
+                    <th style="white-space:nowrap;">代付手续费</th>
+                    <th style="white-space:nowrap;">最近修改</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="md-payout-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- API keys tab content -->
       <div class="md-tab-content" id="md-content-apikeys" style="display:none;flex-direction:column;">
         <div class="content-area">
@@ -4055,6 +4097,128 @@
         </div>
       </div>
     </div><!-- /page-fiat-appeal -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 法币代付 › 代付订单                         -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-po-orders">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item"><span class="filter-label-el">订单号</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入订单号" id="po-f-id"></div></div>
+            <div class="filter-item"><span class="filter-label-el">商户订单号</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入商户订单号" id="po-f-mno"></div></div>
+            <div class="filter-item"><span class="filter-label-el">下单商户</span><div class="filter-control"><div class="ms-lite" id="po-f-merchant-lite" tabindex="0" onclick="msLiteToggle('po-f-merchant')" onblur="setTimeout(function(){msLiteClose('po-f-merchant')}, 150)"><span class="ms-lite-text placeholder" id="po-f-merchant-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="po-f-merchant-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">客户 ID</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入客户 ID" id="po-f-uid"></div></div>
+            <div class="filter-item"><span class="filter-label-el">收款服务商</span><div class="filter-control"><div class="ms-lite" id="po-f-rm-lite" tabindex="0" onclick="msLiteToggle('po-f-rm')" onblur="setTimeout(function(){msLiteClose('po-f-rm')}, 150)"><span class="ms-lite-text placeholder" id="po-f-rm-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="po-f-rm-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">状态</span><div class="filter-control"><div class="ms-lite" id="po-f-status-lite" tabindex="0" onclick="msLiteToggle('po-f-status')" onblur="setTimeout(function(){msLiteClose('po-f-status')}, 150)"><span class="ms-lite-text placeholder" id="po-f-status-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="po-f-status-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">创建时间</span><div class="filter-control"><div class="date-range-el"><input class="date-input-el" type="date" id="po-f-cre-from"><span class="range-sep-el">—</span><input class="date-input-el" type="date" id="po-f-cre-to"></div></div></div>
+            <div class="filter-item"><span class="filter-label-el">完成时间</span><div class="filter-control"><div class="date-range-el"><input class="date-input-el" type="date" id="po-f-done-from"><span class="range-sep-el">—</span><input class="date-input-el" type="date" id="po-f-done-to"></div></div></div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="fpReset('po')"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置</button>
+            <button class="btn btn-primary" onclick="fpSearch('po')"><i data-lucide="search" style="width:13px;height:13px;"></i>搜索</button>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-stats">
+              <span>订单笔数：<b id="po-stat-count">0</b></span>
+              <span>订单金额（合计）：<b id="po-stat-cny">0.00</b> CNY</span>
+              <span>成功金额（合计）：<b id="po-stat-ok-cny">0.00</b> CNY</span>
+              <span class="po-q">价差收入（合计）：<b id="po-stat-spread">0.00</b> USDT</span>
+              <span class="po-q">代付手续费（合计）：<b id="po-stat-fee">0.00</b> USDT</span>
+            </div>
+            <div class="summary-spacer"></div>
+            <button class="export-btn" id="po-export-btn" onclick="poExport('代付订单')"><i data-lucide="download" style="width:13px;height:13px;"></i>导出</button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:2400px;table-layout:auto;">
+              <thead><tr>
+                <th>订单号</th><th>商户订单号</th><th>下单商户</th><th>客户 ID</th><th>收款服务商</th><th>订单金额</th><th class="po-q">代付汇率</th><th>结算汇率</th>
+                <th>商户扣款</th><th class="po-q">服务商入账</th><th class="po-q">价差收入</th><th class="po-q">代付手续费</th>
+                <th>状态</th><th>截止时间</th><th>创建时间</th><th>完成时间</th><th>操作</th>
+              </tr></thead>
+              <tbody id="po-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" id="po-pager"></div>
+        </div>
+      </div>
+    </div><!-- /page-po-orders -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 法币代付 › 申诉处理（付款超时 / 商户确认超时 / 商户异议 / 服务商付款异常 / 客户反馈）  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-po-appeal">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item"><span class="filter-label-el">订单号</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入订单号" id="pp-f-id"></div></div>
+            <div class="filter-item"><span class="filter-label-el">申诉来源</span><div class="filter-control"><div class="ms-lite" id="pp-f-src-lite" tabindex="0" onclick="msLiteToggle('pp-f-src')" onblur="setTimeout(function(){msLiteClose('pp-f-src')}, 150)"><span class="ms-lite-text placeholder" id="pp-f-src-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="pp-f-src-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">下单商户</span><div class="filter-control"><div class="ms-lite" id="pp-f-merchant-lite" tabindex="0" onclick="msLiteToggle('pp-f-merchant')" onblur="setTimeout(function(){msLiteClose('pp-f-merchant')}, 150)"><span class="ms-lite-text placeholder" id="pp-f-merchant-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="pp-f-merchant-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">客户 ID</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入客户 ID" id="pp-f-uid"></div></div>
+            <div class="filter-item"><span class="filter-label-el">收款服务商</span><div class="filter-control"><div class="ms-lite" id="pp-f-rm-lite" tabindex="0" onclick="msLiteToggle('pp-f-rm')" onblur="setTimeout(function(){msLiteClose('pp-f-rm')}, 150)"><span class="ms-lite-text placeholder" id="pp-f-rm-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="pp-f-rm-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">申诉时间</span><div class="filter-control"><div class="date-range-el"><input class="date-input-el" type="date" id="pp-f-cre-from"><span class="range-sep-el">—</span><input class="date-input-el" type="date" id="pp-f-cre-to"></div></div></div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="fpReset('pp')"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置</button>
+            <button class="btn btn-primary" onclick="fpSearch('pp')"><i data-lucide="search" style="width:13px;height:13px;"></i>搜索</button>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-stats">
+              <span>笔数：<b id="pp-stat-count">0</b></span>
+              <span>订单金额（合计）：<b id="pp-stat-cny">0.00</b> CNY</span>
+              <span>冻结金额（合计）：<b class="neg" id="pp-stat-hold">0.00</b> USDT</span>
+            </div>
+            <div class="summary-spacer"></div>
+            <button class="export-btn" id="pp-export-btn" onclick="poExport('申诉处理')"><i data-lucide="download" style="width:13px;height:13px;"></i>导出</button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1600px;table-layout:auto;">
+              <thead><tr><th>订单号</th><th>申诉来源</th><th>下单商户</th><th>客户 ID</th><th>收款服务商</th><th>订单金额</th><th>冻结金额</th><th>申诉时间</th><th>已等待</th><th>操作</th></tr></thead>
+              <tbody id="pp-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" id="pp-pager"></div>
+        </div>
+      </div>
+    </div><!-- /page-po-appeal -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 平台资产 › 企业商户冻结明细（本期仅代付冻结）  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-merchant-frozen">
+      <div class="content-area">
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item"><span class="filter-label-el">商户</span><div class="filter-control"><div class="ms-lite" id="mz-f-merchant-lite" tabindex="0" onclick="msLiteToggle('mz-f-merchant')" onblur="setTimeout(function(){msLiteClose('mz-f-merchant')}, 150)"><span class="ms-lite-text placeholder" id="mz-f-merchant-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="mz-f-merchant-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">变动类型</span><div class="filter-control"><div class="ms-lite" id="mz-f-type-lite" tabindex="0" onclick="msLiteToggle('mz-f-type')" onblur="setTimeout(function(){msLiteClose('mz-f-type')}, 150)"><span class="ms-lite-text placeholder" id="mz-f-type-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="mz-f-type-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">关联单号</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入关联单号" id="mz-f-ref"></div></div>
+            <div class="filter-item"><span class="filter-label-el">时间</span><div class="filter-control"><div class="date-range-el"><input class="date-input-el" type="date" id="mz-f-cre-from"><span class="range-sep-el">—</span><input class="date-input-el" type="date" id="mz-f-cre-to"></div></div></div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="fpReset('mz')"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置</button>
+            <button class="btn btn-primary" onclick="fpSearch('mz')"><i data-lucide="search" style="width:13px;height:13px;"></i>搜索</button>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-stats"><span>笔数：<b id="mz-stat-count">0</b></span></div>
+            <div class="summary-spacer"></div>
+            <button class="export-btn" id="mz-export-btn" onclick="poExport('企业商户冻结明细')"><i data-lucide="download" style="width:13px;height:13px;"></i>导出</button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1300px;table-layout:auto;">
+              <thead><tr><th>商户名称</th><th>代币</th><th>网络</th><th>关联单号</th><th>时间</th><th>变动类型</th><th>冻结金额</th><th>变动后冻结余额</th></tr></thead>
+              <tbody id="mz-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" id="mz-pager"></div>
+        </div>
+      </div>
+    </div><!-- /page-merchant-frozen -->
 
     <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 法币收款 › 收款商户资金明细                         -->
@@ -5431,6 +5595,59 @@
     </div>
   </div>
 
+  <!-- 法币代付配置弹窗：结构同法币收款配置；加点为扣减 Rm＝Rc×(1－p) -->
+  <div class="modal-overlay" id="payout-edit-modal" onclick="if(event.target===this)closePayoutEdit()">
+    <div class="modal" style="width:500px;">
+      <div class="modal-header">
+        <span class="modal-title" id="poe-title">法币代付配置</span>
+        <span class="modal-close" onclick="closePayoutEdit()"><i data-lucide="x" style="width:18px;height:18px;"></i></span>
+      </div>
+      <div style="padding:20px 24px 8px;">
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>状态</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="poe-status" value="on" onchange="poeToggleReq()"><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="poe-status" value="off" onchange="poeToggleReq()"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label">参考代付汇率</span>
+          <div><span id="poe-rc-display" style="font-family:'Inter',sans-serif;font-size:13px;color:#606266;"></span>
+            <div style="font-size:12px;color:#909399;line-height:1.6;">实际按派单通道锁定</div></div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req poe-req">*</span>汇率加点</span>
+          <div class="tk-addon-wrap">
+            <input type="number" class="field-input" id="poe-markup" min="0" step="0.01" placeholder="请输入" oninput="poeRenderRatePreview()">
+            <span class="tk-addon">%</span>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label">结算汇率</span>
+          <span id="poe-rm-display" style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#303133;"></span>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req poe-req">*</span>代付手续费</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="poe-fee-mode" value="rate" onchange="poeToggleFeeMode()"><span class="ak-dot"></span>按比例</label>
+            <label class="ak-radio-item"><input type="radio" name="poe-fee-mode" value="fixed" onchange="poeToggleFeeMode()"><span class="ak-dot"></span>固定金额</label>
+          </div>
+        </div>
+        <div class="tk-row" style="margin-bottom:20px;">
+          <span class="ak-label"></span>
+          <div class="tk-addon-wrap">
+            <input type="number" class="field-input" id="poe-fee-value" min="0" step="0.01" placeholder="请输入">
+            <span class="tk-addon" id="poe-fee-unit">%</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closePayoutEdit()" style="margin-right:8px;">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="savePayoutEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 代币编辑弹窗 -->
   <div class="modal-overlay" id="token-edit-modal" onclick="if(event.target===this)closeTokenEdit()">
     <div class="modal tk-edit-dialog">
@@ -5875,6 +6092,9 @@
     'merchant-receiving-detail': { label: '收款商户详情', icon: 'layout-grid' },
     'fiat-orders':   { label: '收款订单', icon: 'file-text', parent: '法币收款' },
     'fiat-appeal':   { label: '申诉处理', icon: 'gavel', parent: '法币收款' },
+    'po-orders':     { label: '代付订单', icon: 'file-text', parent: '法币代付' },
+    'po-appeal':     { label: '申诉处理', icon: 'gavel', parent: '法币代付' },
+    'merchant-frozen': { label: '企业商户冻结明细', icon: 'lock', parent: '平台资产' },
     'fiat-ledger':   { label: '收款商户资金明细', icon: 'receipt', parent: '平台资产' },
     'fiat-frozen':   { label: '收款商户冻结明细', icon: 'lock', parent: '平台资产' },
     'merchant-receiving': { label: '收款商户', icon: 'credit-card', parent: '商户管理' },
@@ -5893,7 +6113,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'merchant-receiving-detail', 'fiat-orders', 'fiat-appeal', 'fiat-ledger', 'fiat-frozen', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review']);
+  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'merchant-receiving-detail', 'fiat-orders', 'fiat-appeal', 'fiat-ledger', 'fiat-frozen', 'po-orders', 'po-appeal', 'merchant-frozen', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -5945,6 +6165,7 @@
   }
 
   function navigateTo(pid) {
+    if (typeof poApplyMenuPerms === 'function') poApplyMenuPerms(pid);
     if (!openTabs.includes(pid)) openTabs.push(pid);
     activePage = pid;
 
@@ -5978,10 +6199,16 @@
       fiatGhd.classList.toggle('group-active', pid === 'fiat-orders' || pid === 'fiat-appeal');
     }
 
+    // update fiat payout (法币代付) group header active state
+    const fiatPoGhd = document.getElementById('nav-ghd-fiatpo');
+    if (fiatPoGhd) {
+      fiatPoGhd.classList.toggle('group-active', pid === 'po-orders' || pid === 'po-appeal');
+    }
+
     // update platform group header active state
     const platformGhd = document.getElementById('nav-ghd-platform');
     if (platformGhd) {
-      platformGhd.classList.toggle('group-active', pid === 'platform-assets' || pid === 'account-ledger' || pid === 'adjust-review' || pid === 'fiat-ledger' || pid === 'fiat-frozen');
+      platformGhd.classList.toggle('group-active', pid === 'platform-assets' || pid === 'account-ledger' || pid === 'adjust-review' || pid === 'merchant-frozen' || pid === 'fiat-ledger' || pid === 'fiat-frozen');
     }
 
     const systemPages = ['sys-user', 'sys-role', 'sys-role-users', 'sys-menu', 'sys-dept', 'sys-post', 'sys-operlog'];
@@ -6266,6 +6493,9 @@
     unavailable:    { label:'代币/网络不可用', cls:'badge-gray' },
     account_frozen: { label:'商户/用户已冻结', cls:'badge-blue' },
     pending_confirm: { label:'待确认到账', cls:'badge-orange' },   // 仅收款商户：申报充币，待运营确认到账 / 拒绝
+    // 钱包未启用：充币钱包切换后，仍充到旧钱包地址（实际入账钱包 ≠ 对应代币配置的充币钱包）；
+    // 可退款，也可审核通过（运营填写充值手续费）→ 待匹配订单；资金留在实际入账钱包，不归集
+    wallet_disabled: { label:'钱包未启用', cls:'badge-amber' },
   };
   const rcvDash = '<span class="cell-empty">—</span>';
 
@@ -6307,6 +6537,9 @@
     // 异常充值审核通过、原地流转到「待匹配订单」，还没关联订单/编辑为已到账——只有
     // account_frozen 能走审核通过，unavailable 只能退款，不会出现在 pending/arrived 状态
     { uid:'460004375', name:'sherry@bdy.tech', userId:'U30015923', token:'USDT', network:'TRON',     exceptionType:'account_frozen', amount:'11.20', fee:'0.01', wallet:'TBv9eFa5KPm2sQrLJHN8xGcD3wE6tY7unk',                   time:'2026-07-30 16:47:09', hash:'18293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f9a1b2c3d4e5f607', channel:'', status:'pending', note:'商户账户已于 2026-07-15 冻结，链上充值仍到账，需人工核实商户状态后处理', remark:'商户账户已于 2026-07-29 解冻，审核通过' },
+    // 钱包未启用：depositWallet 为实际入账钱包（旧钱包），cfgWallet 为对应代币配置当前的充币钱包；
+    { uid:'635102950', name:'kara',            userId:'635102950', accountType:'main', token:'USDT', network:'TRON', exceptionType:'wallet_disabled', depositWallet:'Cobo Holding', cfgWallet:'Cobo Payment', amount:'200.00', fee:'', wallet:'TKq7Hn3vRd8YmW2pLc5sXe9BfA4uJ6gZtN', time:'2026-10-27 14:36:08', hash:'7c3e9a1f5b8d2e6c4a0f7b3d9e1c5a8f2b6d4e0c7a9f3b1d5e8c2a6f4b0d9e7c', channel:'', status:'manual_review', note:'商户代币配置充币钱包已于 2026-10-20 由 Cobo Holding 切换为 Cobo Payment，本笔充值到账 Cobo Holding 地址' },
+    { uid:'884590488', name:'kara2',           userId:'U20051736', token:'USDT', network:'TRON', exceptionType:'wallet_disabled', depositWallet:'Cobo Payment', cfgWallet:'Cobo Holding', amount:'500.00', fee:'', wallet:'TRz4Lm8cWq2NvH6kXp1sDf9YbE3aJ7uGtK', time:'2026-10-28 09:12:51', hash:'2f8b4d0e6a1c7f3b9d5e2a8c4f0b6d1e7a3c9f5b2d8e4a0c6f1b7d3e9a5c2f8b', channel:'', status:'manual_review', note:'客户代币配置（直连）充币钱包已于 2026-10-22 由 Cobo Payment 切换为 Cobo Holding，本笔充值到账 Cobo Payment 地址' },
     // 异常充值审核通过后流转到「待匹配订单」，再走到「已到账」终态——exceptionType 作为
     // 永久元数据保留在行上，详情弹窗依然展示网络、异常类型；订单号字段则看这一行是
     // 运营直接编辑确认到账（没有订单号），还是关联订单成功（有订单号，见 PAYMENT_ALL）
@@ -6380,9 +6613,20 @@
     return r.depositWallet;
   }
 
-  // 渠道：商户主账号充币为「商户」，其余为直连 / Meta Trader / On Ramp
+  // 渠道：共 5 个值，互不包含：商户 / 直连 / Meta Trader / On Ramp / 提币退回。
+  // 判定顺序：提币退回（不论退到主账号还是子账号）→ On Ramp 入金（含主账号收到的）→ 主账号 / 收款商户自己充的记「商户」→ 按 r.channel 记直连 / Meta Trader，默认直连。
+  // 列表、详情、导出、筛选及「充币审核」页都读这个函数
   function depositTypeOf(r) {
-    return r.accountType === 'main' || r.accountType === 'receiving' ? '商户' : (r.channel || '直连');
+    if (depositIsWithdrawReturn(r)) return '提币退回';
+    if (r.channel === 'On Ramp' || RAMP_IN_ORDERS.some(o => o.txHash === r.hash)) return 'On Ramp';
+    if (r.accountType === 'main' || r.accountType === 'receiving') return '商户';
+    return r.channel || '直连';
+  }
+  // 渠道筛选项 value → 显示值
+  const D_CHANNEL_LABEL = { merchant:'商户', direct:'直连', 'Meta Trader':'Meta Trader', 'On Ramp':'On Ramp', withdraw_return:'提币退回' };
+  // 提币退回：调账审核通过（adjustType withdraw_return）时生成的充值记录，原型以生成时写入的备注前缀识别
+  function depositIsWithdrawReturn(r) {
+    return (r.remark || '').startsWith('由企业商户账户调账 - 提币退回生成');
   }
 
   function depositRender() {
@@ -6466,7 +6710,7 @@
       { value:'rejected', label:'已拒绝' },
     ], '状态');
     msLiteInit('d-channel', [
-      { value:'merchant', label:'商户' }, { value:'direct', label:'直连' }, { value:'Meta Trader', label:'Meta Trader' }, { value:'On Ramp', label:'On Ramp' },
+      { value:'merchant', label:'商户' }, { value:'direct', label:'直连' }, { value:'Meta Trader', label:'Meta Trader' }, { value:'On Ramp', label:'On Ramp' }, { value:'withdraw_return', label:'提币退回' },
     ], '全部');
     msLiteInit('d-depwallet', [
       { value:'Cobo Holding', label:'Cobo Holding' }, { value:'Cobo Payment', label:'Cobo Payment' },
@@ -6495,7 +6739,8 @@
       if (tokens.length   && !tokens.includes(r.token))        return false;
       if (nets.length     && !nets.includes(r.network))        return false;
       if (sts.length      && !sts.includes(r.status))          return false;
-      if (channels.length && !channels.some(c => c === 'merchant' ? (r.accountType === 'main' || r.accountType === 'receiving') : depositTypeOf(r) === (c === 'direct' ? '直连' : c))) return false;
+      // 渠道：5 个值互不包含，按 depositTypeOf 精确匹配
+      if (channels.length && !channels.some(c => depositTypeOf(r) === D_CHANNEL_LABEL[c])) return false;
       if (acctTypes.length && !acctTypes.includes(r.accountType || 'sub')) return false;
       if (depWallets.length && !depWallets.includes(depositWalletOf(r))) return false;
       if (hash    && !r.hash.toLowerCase().includes(hash))    return false;
@@ -6592,6 +6837,8 @@
       items.push(di('异常类型', `<span class="badge ${DE_TYPE[r.exceptionType].cls}">${DE_TYPE[r.exceptionType].label}</span>`));
     }
     items.push(di('充币钱包', depositWalletOf(r)));
+    // 钱包未启用：对照展示对应代币配置当前的充币钱包
+    if (r.exceptionType === 'wallet_disabled') items.push(di('配置充币钱包', r.cfgWallet));
     items.push(di('渠道',     depositTypeOf(r)));
     const rcv = r.accountType === 'receiving';
     items.push(di('到账时间', rcv ? (r.status === 'arrived' ? r.confirmTime : '—') : r.time));
@@ -6784,6 +7031,7 @@
     msLiteInit('de-type', [
       { value:'unavailable', label:'代币/网络不可用' }, { value:'account_frozen', label:'商户/用户已冻结' },
       { value:'pending_match', label:'自动匹配失败' }, { value:'pending_confirm', label:'待确认到账' },
+      { value:'wallet_disabled', label:'钱包未启用' },
     ], '请选择');
     msLiteInit('de-status', [
       { value:'manual_review', label:'待人工审核' }, { value:'pending', label:'待匹配订单' },
@@ -6934,7 +7182,9 @@
     const r = DEPOSIT_ALL[idx];
     // 审核通过只对「商户/用户已冻结」开放——账户冻结不影响手续费计算，fee 到账时
     // 就已确定，不需要补录；「代币/网络不可用」只能退款，处理方式下拉不出现这个选项
-    const canApprove = r.exceptionType === 'account_frozen';
+    // 「钱包未启用」也可审核通过，但需运营填写充值手续费（预填按当前配置计算的值）
+    const canApprove = r.exceptionType === 'account_frozen' || r.exceptionType === 'wallet_disabled';
+    const wd = r.exceptionType === 'wallet_disabled';
     document.getElementById('de-manage-title').textContent = '异常充值审核';
     document.getElementById('de-manage-body').innerHTML = _dItems(r) +
       `<div class="detail-item" style="grid-column:1/-1">
@@ -6948,15 +7198,29 @@
           <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
         </div>
       </div>
+      ${wd ? `<div id="de-approve-fields" style="display:none;">
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label">入账钱包</span>
+          <span class="detail-value">${depositWalletOf(r)}</span>
+        </div>
+        <div class="detail-item" style="grid-column:1/-1">
+          <span class="detail-label"><span style="color:#F56C6C;margin-right:2px">*</span>充值手续费</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="field-input" type="number" step="0.0001" min="0" id="de-approve-fee" value="${deCfgDepositFee(r)}" placeholder="请输入充值手续费" style="font-family:'Inter',sans-serif;flex:1;" oninput="deRcvErr('de-approve-fee', '')">
+            <span style="font-size:13px;color:#909399;">${r.token}</span>
+          </div>
+          <div class="ob-err" id="de-approve-fee-err"></div>
+        </div>
+      </div>` : ''}
       <div id="de-refund-fields" style="display:none;">
         <div class="detail-item" style="grid-column:1/-1">
           <span class="detail-label">退款钱包</span>
-          <span class="detail-value">${depositWalletOf(r)}<span style="color:#909399;">（原入账钱包）</span></span>
+          <span class="detail-value">${depositWalletOf(r)}</span>
         </div>
         <div class="detail-item" style="grid-column:1/-1">
           <span class="detail-label">充值手续费</span>
           <div style="display:flex;align-items:center;gap:8px;">
-            <input class="field-input" type="number" step="0.0001" min="0" id="de-deposit-fee" value="${r.fee || ''}" placeholder="请输入充值手续费" style="font-family:'Inter',sans-serif;flex:1;" oninput="deRecalcRefundAmount()">
+            <input class="field-input" type="number" step="0.0001" min="0" id="de-deposit-fee" value="${r.fee || (wd ? deCfgDepositFee(r) : '')}" placeholder="请输入充值手续费" style="font-family:'Inter',sans-serif;flex:1;" oninput="deRecalcRefundAmount()">
             <span style="font-size:13px;color:#909399;">${r.token}</span>
           </div>
         </div>
@@ -6985,6 +7249,17 @@
     `;
     document.getElementById('de-manage-modal').classList.add('show');
     if (window.lucide) lucide.createIcons();
+  }
+
+  // 钱包未启用审核通过：充值手续费按该笔渠道对应代币配置预算 max(到账金额 × 充币手续费%, 最小充币手续费)，
+  // 商户 → 商户代币配置；直连 / Meta Trader → 客户代币配置对应渠道；写法同调账 arApplyWdFeeConfig
+  function deCfgDepositFee(r) {
+    const row = TOKEN_ROWS.find(t => t.token === r.token && t.network === r.network);
+    if (!row) return '';
+    const ch = depositTypeOf(r);
+    const cfg = ch === '商户' ? row.merchantDeposit : row.customerConfig[ch === 'Meta Trader' ? 'metatrader' : 'direct'].deposit;
+    const amount = parseFloat(r.amount) || 0;
+    return Math.min(Math.max(amount * (parseFloat(cfg.feeRate) || 0) / 100, parseFloat(cfg.feeMin) || 0), amount).toFixed(2);
   }
 
   // 收款商户申报充币审核：处理方式「确认到账」（填写实际到账金额，入账）/「拒绝」（备注必填，作为驳回原因），无退款
@@ -7050,6 +7325,8 @@
     const val = document.getElementById('de-action-select').value;
     const wrap = document.getElementById('de-refund-fields');
     wrap.style.display = val === 'refunded' ? 'contents' : 'none';
+    const approveWrap = document.getElementById('de-approve-fields');
+    if (approveWrap) approveWrap.style.display = val === 'pending' ? 'contents' : 'none';
     if (val === 'refunded') deRecalcRefundAmount();
     const btn = document.getElementById('de-submit-btn');
     if (val === 'pending') {
@@ -7109,6 +7386,11 @@
       cfg = Object.assign({}, cfg, { msg:`确认后，该笔充值按实际到账金额 ${parseFloat(amt).toFixed(2)} ${DEPOSIT_ALL[deManageIdx].token} 入账收款商户代币余额，状态变为「已到账」，且无法撤销。确认继续吗？` });
     }
     if (action === 'rcv_rejected' && !document.getElementById('de-remark').value.trim()) { deRcvErr('de-remark', '拒绝时必填，请填写驳回原因'); return; }
+    if (action === 'pending' && document.getElementById('de-approve-fee')) {
+      const fee = document.getElementById('de-approve-fee').value.trim();
+      if (fee === '' || parseFloat(fee) < 0) { deRcvErr('de-approve-fee', '请输入充值手续费'); return; }
+      if (parseFloat(fee) >= parseFloat(DEPOSIT_ALL[deManageIdx].amount)) { deRcvErr('de-approve-fee', '充值手续费需小于到账金额'); return; }
+    }
     document.getElementById('de-confirm-icon').innerHTML =
       `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
     document.getElementById('de-confirm-title').textContent = cfg.title;
@@ -7170,8 +7452,10 @@
       newStatus = 'rejected';
       logDepositExceptionAction(r, '审批', `状态由${beforeLabel}变更为已拒绝，驳回原因：${r.remark}`, 'high');
     } else if (newStatus === 'pending') {
+      const feeInput = document.getElementById('de-approve-fee');
+      if (feeInput) r.fee = feeInput.value.trim();
       logDepositExceptionAction(r, '审批',
-        `状态由${beforeLabel}审核通过，变更为待匹配订单`,
+        `状态由${beforeLabel}审核通过，变更为待匹配订单` + (feeInput ? `，充值手续费 ${r.fee} ${r.token}，入账钱包 ${depositWalletOf(r)}` : ''),
         'high');
     }
     r.status = newStatus;
@@ -7214,6 +7498,7 @@
     { id:'635102950', name:'kara'  },
     { id:'460466234', name:'kara3' },
     { id:'291654802', name:'kara4' },
+    { id:'884590488', name:'kara2' },
   ];
 
   const WITHDRAW_ALL = [
@@ -7264,6 +7549,12 @@
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-6.81', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 15:35:01', time:'2026-06-24 15:35:28', hash:'f3761637e63afe678d9335fdb542a18c9e07b4d2',             paypazId:'00b0bb0b-1d8a-4d50-8032-514f3c9e7a21', supplierId:'47623fa6-7875-430d-9c44-43cf8d1b5e92', channel:'Cobo', status:'completed' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022002', token:'USDT', network:'TRON', net:'-6.67', fee:'0.01', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-06-24 15:23:33', time:'2026-06-24 15:23:59', hash:'e170de42bb24a554d9216d8285f6c3a71b9e04d8',             paypazId:'5bf9659b-51f1-4f6f-b39a-3426f9d2c10e', supplierId:'93140917-fa86-4614-826d-3d0f5c72b48a', channel:'Cobo', status:'completed' },
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON', net:'-0.11', fee:'0.01', wallet:'TDPsP9PpZhMTegg6KaciPgdjZr8nFbqVmY', wdTime:'2026-06-17 08:44:19', time:'-', hash:'-',                                                                       paypazId:'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', supplierId:'-',                                    channel:'Cobo', status:'failed'    },
+    // 与企业商户账户明细的提币类流水对应（关联单号＝商户订单号 clientWithdrawalId）：Settlement 为商户后台单笔提币，Withdrawal 为 API 提币；
+    // 明细只记本金行，手续费为 0；提币钱包直接写实际钱包，不参与 Cobo 钱包批次号编排
+    { merchantId:'635102950', merchantName:'kara',  userId:'-',         token:'USDT', network:'TRON', net:'-50.00', fee:'0.00', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-08-22 11:08:42', time:'2026-08-22 11:10:00', hash:'3b7e1c9a5f2d8e4b6c0a1f3d5e7b9c2a4d6f8e1b', paypazId:'WD00000000000080', supplierId:'5e2c8a1f-3b7d-4e9a-8c6f-1d4b7e2a9c50', channel:'Cobo Holding', status:'completed' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20099887', token:'USDT', network:'TRON', net:'-25.00', fee:'0.00', wallet:'TMnxRrxk5P9vLjBZQcQpGMkLVFwG7RYdim', wdTime:'2026-08-20 13:13:27', time:'2026-08-20 13:15:00', hash:'8d4f2a6c1e9b3d7f5a0c2e4b6d8f1a3c5e7b9d2f', paypazId:'WD00000000000081', supplierId:'a1c7e3f9-5b2d-4c8e-9f6a-3e1b7d4c2a85', channel:'Cobo Payment', status:'completed' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON', net:'-10.00', fee:'0.00', wallet:'TG1xjhWr6oppy26WwnP5bkJzhN3cQmBvYs', wdTime:'2026-08-17 13:58:16', time:'2026-08-17 14:00:00', hash:'c6a2e8f4b1d7c3e9a5f0b2d4e6c8a1f3b5d7e9c2', paypazId:'WD00000000000082', supplierId:'7f4b2d8e-1c6a-4e3f-b9d5-2a8c6e1f4b73', channel:'Cobo Payment', status:'completed' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'-',         token:'USDT', network:'TRON', net:'-30.00', fee:'0.00', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-08-14 11:58:05', time:'2026-08-14 12:00:00', hash:'e2b8d4f6a3c9e1b5d7f0a2c4e6b8d1f3a5c7e9b4', paypazId:'WD00000000000083', supplierId:'9c3e7a1d-4f8b-4d2e-a6c9-5b1f3e8d2c64', channel:'Cobo Holding', status:'completed' },
   ];
 
   (function assignWithdrawBatches() {
@@ -7276,7 +7567,7 @@
 
   (function assignWithdrawMethod() {
     // 提币方式：Excel 对应 viaExcel 批量导入；其余为商户后台"单笔"表单发起或直接调用 API
-    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3']);
+    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', 'WD00000000000080', 'WD00000000000083']);
     WITHDRAW_ALL.forEach(r => {
       r.method = r.accountType === 'receiving' ? '单笔' : r.viaExcel ? 'Excel' : (singleMarkers.has(r.hash) || singleMarkers.has(r.paypazId) ? '单笔' : 'API');
     });
@@ -8860,7 +9151,6 @@
   }
   function closeModal() {
     document.getElementById('detail-modal').classList.remove('show');
-    document.querySelector('#detail-modal .modal-title').classList.remove('chg');   // 去掉「退款确认」弹窗的核对标注
     const mb = document.getElementById('modal-body');
     mb.className = 'modal-body';
     document.querySelector('#detail-modal .modal').style.width = '';
@@ -9214,6 +9504,8 @@
     // default to asset (渠道) tab
     document.querySelectorAll('.md-tab').forEach(el => el.classList.toggle('md-tab-active', el.dataset.tab === 'tunnel'));
     document.querySelectorAll('.md-tab-content').forEach(el => { el.style.display = el.id === 'md-content-tunnel' ? 'flex' : 'none'; });
+    // 无「企业商户法币代付配置查看」权限时隐藏法币代付 tab
+    document.querySelector('.md-tab[data-tab="payout"]').style.display = poCan('merchant_payout_view') ? '' : 'none';
     navigateTo('merchant-detail');
   }
 
@@ -9799,6 +10091,108 @@
     showToast('已保存，只影响之后的新订单');
   }
 
+  // ── 法币代付配置：按商户配置加点与代付手续费；Rm＝Rc×(1－加点%) 向下取整 4 位；下单锁定，只影响之后的新订单 ──
+  const PAYOUT_BY_MERCHANT = {
+    '462513816': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.00', feeMode:'rate', feeValue:'0.50', updated:'2026-10-15 15:02:11' }],
+    '291654802': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'0.80', feeMode:'rate', feeValue:'0.50', updated:'2026-10-15 15:10:40' }],
+    '460466234': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.20', feeMode:'rate', feeValue:'0.60', updated:'2026-10-15 15:18:03' }],
+    '673738868': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.00', feeMode:'fixed', feeValue:'5.00', updated:'2026-10-15 15:22:56' }],
+  };
+  function payoutPairs() {
+    const m = MERCHANT_ALL[currentMerchantIdx];
+    const k = m ? m.id : '_';
+    // 未配置过：默认禁用，加点、手续费留空；仅启用时必填，禁用时可留空保存
+    if (!PAYOUT_BY_MERCHANT[k]) PAYOUT_BY_MERCHANT[k] = [{ crypto:'USDT', fiat:'CNY', enabled:false, markup:'', feeMode:'rate', feeValue:'', updated:'' }];
+    return PAYOUT_BY_MERCHANT[k];
+  }
+  function mdRenderPayoutTable() {
+    const tbody = document.getElementById('md-payout-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = payoutPairs().map((r, i) => `<tr>
+        <td style="font-family:'Inter',sans-serif;font-weight:500;">${r.crypto}<span style="color:#C0C4CC;margin:0 2px;">/</span>${r.fiat}</td>
+        <td>${tBadge(r.enabled ? 'on' : 'off')}</td>
+        <td>${rpMarkupCell(r.markup)}</td>
+        <td>${payinFeeCell(r)}</td>
+        <td style="font-family:'Inter',sans-serif;">${r.updated || '<span style="color:#C0C4CC;">—</span>'}</td>
+        <td>${poCan('merchant_payout_edit') ? `<span class="action-icon" onclick="openPayoutEdit(${i})" title="编辑">${_EDIT_SVG}</span>` : '<span class="cell-empty">—</span>'}</td>
+      </tr>`).join('');
+  }
+  let _poeIdx = -1;
+  function openPayoutEdit(i) {
+    if (!poCan('merchant_payout_edit')) { showToast('无编辑权限'); return; }
+    _poeIdx = i;
+    const r = payoutPairs()[i];
+    document.getElementById('poe-title').textContent = `法币代付配置（${r.crypto}/${r.fiat}）`;
+    document.querySelectorAll('input[name="poe-status"]').forEach(el => { el.checked = el.value === (r.enabled ? 'on' : 'off'); });
+    document.getElementById('poe-markup').value = r.markup;
+    document.querySelectorAll('input[name="poe-fee-mode"]').forEach(el => { el.checked = el.value === r.feeMode; });
+    document.getElementById('poe-fee-value').value = r.feeValue;
+    poeToggleFeeMode();
+    poeToggleReq();
+    poeRenderRatePreview();
+    document.getElementById('payout-edit-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  // 参考汇率：取已开通代付的收款商户中第一个的代付汇率 Rc；实际按派单选中通道的 Rc 在下单时锁定
+  function poeCurrentRc() {
+    const k = Object.keys(PO_PARTNER).find(n => PO_PARTNER[n].enabled && PO_PARTNER[n].rateEnabled);
+    return k ? { name:k, rc:PO_PARTNER[k].rc } : null;
+  }
+  function poeRenderRatePreview() {
+    const ref = poeCurrentRc(), raw = document.getElementById('poe-markup').value.trim();
+    const ok = /^\d+(\.\d{1,2})?$/.test(raw) && parseFloat(raw) < 100;
+    document.getElementById('poe-rc-display').innerHTML = ref ? `1 USDT = ${ref.rc} CNY` : '—';
+    document.getElementById('poe-rm-display').textContent = ref && ok ? `1 USDT = ${poFloor4(parseFloat(ref.rc) * (1 - parseFloat(raw) / 100)).toFixed(4)} CNY` : '—';
+  }
+  function closePayoutEdit() { document.getElementById('payout-edit-modal').classList.remove('show'); }
+  // 加点、手续费仅在状态为「启用」时必填：禁用时隐藏必填标记
+  function poeToggleReq() {
+    const on = (document.querySelector('input[name="poe-status"]:checked') || {}).value === 'on';
+    document.querySelectorAll('#payout-edit-modal .poe-req').forEach(el => { el.style.display = on ? '' : 'none'; });
+  }
+  function poeToggleFeeMode() {
+    const r = payoutPairs()[_poeIdx];
+    const mode = (document.querySelector('input[name="poe-fee-mode"]:checked') || {}).value;
+    document.getElementById('poe-fee-unit').textContent = mode === 'fixed' ? r.crypto : '%';
+  }
+  function savePayoutEdit() {
+    const r = payoutPairs()[_poeIdx];
+    const NUM2 = /^\d+(\.\d{1,2})?$/;
+    const mkRaw = document.getElementById('poe-markup').value.trim();
+    const feeRaw = document.getElementById('poe-fee-value').value.trim();
+    const feeModeSel = document.querySelector('input[name="poe-fee-mode"]:checked').value;
+    const toEnabled = document.querySelector('input[name="poe-status"]:checked').value === 'on';
+    // 仅启用时加点、手续费必填；禁用时可留空，填写了仍校验格式
+    // 加点 0 ≤ p < 100%；手续费非负，比例不超过 100%；最多 2 位小数
+    if (!mkRaw && toEnabled) { showToast('请输入汇率加点'); return; }
+    if (mkRaw && (!NUM2.test(mkRaw) || parseFloat(mkRaw) >= 100)) { showToast('汇率加点需 ≥ 0 且小于 100，最多 2 位小数'); return; }
+    if (!feeRaw && toEnabled) { showToast('请输入代付手续费'); return; }
+    if (feeRaw && (!NUM2.test(feeRaw) || (feeModeSel === 'rate' && parseFloat(feeRaw) > 100))) {
+      showToast(feeModeSel === 'rate' ? '代付手续费需为 0–100 之间的数字，最多 2 位小数' : '代付手续费需为 ≥ 0 的数字，最多 2 位小数'); return;
+    }
+    const markup = mkRaw ? parseFloat(mkRaw).toFixed(2) : '', fee = feeRaw ? parseFloat(feeRaw).toFixed(2) : '';
+    const same = r.updated !== '' && r.enabled === toEnabled && r.markup === markup && r.feeMode === feeModeSel && r.feeValue === fee;
+    if (same) { closePayoutEdit(); showToast('配置无变化'); return; }   // 无变化不写重复日志
+    if (r.enabled && !toEnabled) {
+      obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'禁用法币代付',
+        msg:'禁用后该商户调用代付下单接口将直接拒绝，已创建的订单照常履约。确认禁用？',
+        btnCls:'btn-danger', btnTxt:'确认禁用',
+        onOk: () => { closeObConfirm(); commitPayoutEdit(r, toEnabled, markup, feeModeSel, fee); } });
+      return;
+    }
+    commitPayoutEdit(r, toEnabled, markup, feeModeSel, fee);
+  }
+  function commitPayoutEdit(r, toEnabled, markup, feeMode, fee) {
+    const txt = x => `${x.enabled ? '启用' : '禁用'}，汇率加点 ${x.markup === '' ? '—' : x.markup + '%'}，代付手续费 ${x.feeValue === '' ? '—' : x.feeMode === 'rate' ? x.feeValue + '%' : x.feeValue + ' USDT'}`;
+    const before = r.updated === '' ? '未配置' : txt(r);
+    Object.assign(r, { enabled:toEnabled, markup, feeMode, feeValue:fee, updated:fpNow() });
+    const m = MERCHANT_ALL[currentMerchantIdx];
+    fpLog('商户管理', '修改', `${m ? m.name : ''} 法币代付配置（${r.crypto}/${r.fiat}）`, `${before} → ${txt(r)}`, 'high');
+    closePayoutEdit();
+    mdRenderPayoutTable();
+    showToast('已保存，只影响之后的新订单');
+  }
+
   function merchantDetailBack() {
     openTabs = openTabs.filter(t => t !== 'merchant-detail');
     navigateTo('merchant');
@@ -9812,6 +10206,7 @@
     if (tab === 'token')      mdRenderTokenTable();
     if (tab === 'ramp-token') mdRenderRampTokenTable();
     if (tab === 'payin')      mdRenderPayinTable();
+    if (tab === 'payout')     mdRenderPayoutTable();
     if (tab === 'observer')   mdRenderObserversTable();
   }
 
@@ -10407,7 +10802,7 @@
     fpLog(/^收款商户(资金|冻结)明细$/.test(name) ? '平台资产' : '法币收款', '导出', name, '导出' + name + '列表', 'high');
     showToast('已开始导出' + name);
   }
-  // 首页待办：申诉待处理 / 提现待处理（不含待重试）/ 充币待确认（收款商户待人工审核充币）
+  // 首页「法币代收/代付」待办：代收申诉待处理 / 退款待确认 / 提现待处理（不含待重试）/ 充币待确认（收款商户待人工审核充币）；代付申诉待处理见 poHomeTodo
   function fpHomeTodo() {
     const a = document.getElementById('home-todo-appeal'), w = document.getElementById('home-todo-wd'), d = document.getElementById('home-todo-dep');
     if (a) a.textContent = FIAT_ORDERS.filter(o => o.status === 'appeal' && o.appeal && !o.appeal.ruling).length;
@@ -10472,7 +10867,6 @@
     document.getElementById('fp-drawer').classList.remove('show');
   }
   function fpOpenModal(title, html, width) {
-    document.querySelector('#detail-modal .modal-title').classList.remove('chg');
     document.querySelector('#detail-modal .modal-title').textContent = title;
     document.querySelector('#detail-modal .modal').style.width = width || '640px';
     document.getElementById('modal-body').innerHTML = html;
@@ -10506,9 +10900,9 @@
         <td>${ok ? fpNum(fpFmt(o.spread), 'USDT') : fpEmpty}</td>
         <td>${ok ? fpNum(fpFmt(o.fee), 'USDT') : fpEmpty}</td>
         <td>${fpMono(FP_CARDS[o.rm].no)}</td>
-        <td><span class="badge ${st.cls}${o.status === 'refunding' ? ' chg' : ''}">${st.label}</span>${o.status === 'appeal' && o.appeal && o.appeal.ruling ? `<div style="font-size:11px;color:#909399">${o.refundReject ? '<span class="chg">退款被驳回，待收款商户重新回传</span>' : '已裁定，' + FP_RULING[o.appeal.ruling.result].next}</div>` : o.status === 'refunding' ? '<div style="font-size:11px;color:#909399"><span class="chg">待 Paypaz 确认</span></div>' : ''}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span>${o.status === 'appeal' && o.appeal && o.appeal.ruling ? `<div style="font-size:11px;color:#909399">${o.refundReject ? '退款被驳回，待收款商户重新回传' : '已裁定，' + FP_RULING[o.appeal.ruling.result].next}</div>` : o.status === 'refunding' ? '<div style="font-size:11px;color:#909399">待 Paypaz 确认</div>' : ''}</td>
         <td>${fpMono(o.created)}</td><td>${o.done ? fpMono(o.done) : fpEmpty}</td>
-        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openFiatOrderDetail('${o.id}')">${_D_EYE_SVG}</span>${fpManualBtn(o)}${o.status === 'refunding' ? `<span class="chg"><button class="btn btn-primary btn-sm" onclick="openFpRefundConfirm('${o.id}')">退款确认</button></span>` : ''}</div></td>
+        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openFiatOrderDetail('${o.id}')">${_D_EYE_SVG}</span>${fpManualBtn(o)}${o.status === 'refunding' ? `<button class="btn btn-primary btn-sm" onclick="openFpRefundConfirm('${o.id}')">退款确认</button>` : ''}</div></td>
       </tr>`;
     }).join('') || fpEmptyRow(16);
     if (window.lucide) lucide.createIcons();
@@ -10521,10 +10915,10 @@
     if (o.status !== 'pay' && o.status !== 'cancelled') tl.push([ap ? ap.proofTime : o.proofTime, '用户提交付款凭证', '']);
     if (ap) tl.push([ap.time, ap.by + '发起申诉', o.appealType]);
     if (ap && ap.ruling) tl.push([ap.ruling.time, '平台裁定：' + FP_RULING[ap.ruling.result].label, ap.ruling.note]);
-    (o.refundLog || []).forEach(e => tl.push([e[0], `<span class="chg">${e[1]}</span>`, e[2]]));
+    (o.refundLog || []).forEach(e => tl.push([e[0], `${e[1]}`, e[2]]));
     if (o.manual) tl.push([o.manual.time, '人工标记已退款（' + o.manual.by + '）', o.manual.note]);
     // 裁定无异常 / 资金已到账即生效：系统自动结算，无需收款商户确认收款
-    const END = o.manual ? null : { success:[ap && ap.ruling ? '裁定生效，系统自动结算' : '收款商户确认收款', `扣划 ${fpFmt(o.y)} USDT，商户到账 ${ok ? fpFmt(o.x) : ''} USDT`], refunded:['<span class="chg">Paypaz 确认退款' + (o.refund && o.refund.confirm ? '（' + o.refund.confirm.by + '）' : '') + '</span>', '订单已退款，冻结释放'],
+    const END = o.manual ? null : { success:[ap && ap.ruling ? '裁定生效，系统自动结算' : '收款商户确认收款', `扣划 ${fpFmt(o.y)} USDT，商户到账 ${ok ? fpFmt(o.x) : ''} USDT`], refunded:['Paypaz 确认退款' + (o.refund && o.refund.confirm ? '（' + o.refund.confirm.by + '）' : ''), '订单已退款，冻结释放'],
       failed:['平台裁定资金未到账', '订单失败，冻结释放'], cancelled:['用户超时未付款', '订单取消，冻结释放'] }[o.status];
     if (END) tl.push([o.done, END[0], END[1]]);
     const html =
@@ -10542,18 +10936,18 @@
       fpDi('收款商户', o.rm) + fpDi('卡号', fpMono(c.no)) + fpDi('账户名', c.name) + fpDi('开户银行', c.bank) +
       (ap ? fpAppealSections(o) : '') +
       (o.refund ? fpSec('退款信息') +
-        fpDi('退款金额', fpNum(fpFmt(o.refund.amt), 'CNY')) + fpDi(o.manual ? '退款时间' : '<span class="chg">回传时间</span>', fpMono(o.refund.time)) +
+        fpDi('退款金额', fpNum(fpFmt(o.refund.amt), 'CNY')) + fpDi(o.manual ? '退款时间' : '回传时间', fpMono(o.refund.time)) +
         fpDi('处理方', o.refund.by + (o.refund.op ? `<span style="color:#909399;font-size:12px;">（${o.refund.op}）</span>` : '')) +
-        fpDi('<span class="chg">确认状态</span>', o.manual ? '运营人工标记，无需确认' : o.refund.confirm ? `<span class="badge badge-green">已确认</span><span style="color:#909399;font-size:12px;margin-left:6px;">${o.refund.confirm.by} · ${o.refund.confirm.time}</span>` : '<span class="badge badge-orange">待 Paypaz 确认</span>') +
-        fpDi('退款凭证', fpFiles([o.refund.file]), true) + fpDi(o.manual ? '处理说明' : '<span class="chg">少退说明</span>', o.refund.note || '—', true) : '') +
-      (!o.refund && o.refundReject ? fpSec('<span class="chg">退款信息</span>') + fpDi('<span class="chg">确认状态</span>', '<span class="badge badge-red">已驳回</span>') + fpDi('<span class="chg">驳回时间</span>', fpMono(o.refundReject.time)) + fpDi('<span class="chg">驳回原因</span>', o.refundReject.reason, true) : '') +
+        fpDi('确认状态', o.manual ? '运营人工标记，无需确认' : o.refund.confirm ? `<span class="badge badge-green">已确认</span><span style="color:#909399;font-size:12px;margin-left:6px;">${o.refund.confirm.by} · ${o.refund.confirm.time}</span>` : '<span class="badge badge-orange">待 Paypaz 确认</span>') +
+        fpDi('退款凭证', fpFiles([o.refund.file]), true) + fpDi(o.manual ? '处理说明' : '少退说明', o.refund.note || '—', true) : '') +
+      (!o.refund && o.refundReject ? fpSec('退款信息') + fpDi('确认状态', '<span class="badge badge-red">已驳回</span>') + fpDi('驳回时间', fpMono(o.refundReject.time)) + fpDi('驳回原因', o.refundReject.reason, true) : '') +
       fpSec('处理记录') +
       `<div class="timeline" style="grid-column:1/-1;padding:0 4px;">${tl.map(t => `<div class="tl-item"><span class="tl-dot done"></span><div class="tl-content"><div class="tl-label">${t[1]}</div>${t[0] ? `<div class="tl-time">${t[0]}</div>` : ''}${t[2] ? `<div class="tl-desc">${t[2]}</div>` : ''}</div></div>`).join('')}</div>`;
     // 右侧抽屉：顶部订单号与状态，中间可滚动，底部固定操作（需人工处理时显示对应按钮）
     const mk = fpManualKind(o);
     openFpDrawer('订单详情', `${o.id} · ${st.label}`, html,
       (mk ? `<button class="btn btn-primary btn-sm" onclick="closeFpDrawer();openFpManual('${o.id}')">人工标记已退款</button>` : '') +
-      (o.status === 'refunding' ? `<span class="chg"><button class="btn btn-primary btn-sm" onclick="closeFpDrawer();openFpRefundConfirm('${o.id}')">退款确认</button></span>` : '') +
+      (o.status === 'refunding' ? `<button class="btn btn-primary btn-sm" onclick="closeFpDrawer();openFpRefundConfirm('${o.id}')">退款确认</button>` : '') +
       `<button class="btn btn-default btn-sm" onclick="closeFpDrawer()">关闭</button>`);
   }
 
@@ -10632,7 +11026,6 @@
       <div class="detail-item" id="fprc-reason-wrap" style="grid-column:1/-1;display:none"><span class="detail-label"><span style="color:#F56C6C">*</span> 驳回原因</span>
         <textarea class="field-input" id="fprc-reason" rows="3" maxlength="500" placeholder="请输入驳回原因" oninput="fpRefundConfirmCheck()" style="width:100%;height:auto;padding:6px 10px;resize:vertical;"></textarea></div>`;
     fpOpenModal('退款确认', html, '600px');
-    document.querySelector('#detail-modal .modal-title').classList.add('chg');   // 核对标注：整个弹窗为本次新增
     document.querySelector('#detail-modal .modal-footer').innerHTML = `
       <button class="btn btn-default btn-sm" onclick="closeModal()">取消</button>
       <button class="btn btn-primary btn-sm" id="fprc-submit" disabled onclick="fpRefundConfirmSubmit('${id}')">确定</button>`;
@@ -10700,8 +11093,8 @@
     fpAppealCur = id;
     const o = FIAT_ORDERS.find(x => x.id === id), c = FP_CARDS[o.rm];
     const exc = o.appealType === '到账异常', mismatch = fpMismatch(o);
-    const opts = exc ? [['refund', '需退款', '通知收款商户原路退款并回传退款凭证，<span class="chg">回传后订单为「退款中」，Paypaz 确认后为「已退款」</span>'], ['ok', '无异常', '裁定后立即扣划冻结代币并按锁定汇率自动结算，订单变为「成功」']]
-                     : [['arrived', '资金已到账', '裁定后立即扣划冻结代币并按锁定汇率自动结算，订单变为「成功」；须有收款商户流水举证或已核实到账'], ['refund', '需退款', '订单保持「申诉中」，通知收款商户原路退款并回传退款凭证，<span class="chg">回传后订单为「退款中」，Paypaz 确认后为「已退款」</span>'], ['notarrived', '资金未到账', '订单变为「失败」，释放冻结，不涉及退款；失败原因同步给下单商户']];
+    const opts = exc ? [['refund', '需退款', '通知收款商户原路退款并回传退款凭证，回传后订单为「退款中」，Paypaz 确认后为「已退款」'], ['ok', '无异常', '裁定后立即扣划冻结代币并按锁定汇率自动结算，订单变为「成功」']]
+                     : [['arrived', '资金已到账', '裁定后立即扣划冻结代币并按锁定汇率自动结算，订单变为「成功」；须有收款商户流水举证或已核实到账'], ['refund', '需退款', '订单保持「申诉中」，通知收款商户原路退款并回传退款凭证，回传后订单为「退款中」，Paypaz 确认后为「已退款」'], ['notarrived', '资金未到账', '订单变为「失败」，释放冻结，不涉及退款；失败原因同步给下单商户']];
     const html =
       fpSec('订单信息') +
       fpDi('订单号', fpMono(o.id)) + fpDi('下单商户', o.merchant) + fpDi('客户 ID', fpMono(o.uid)) + fpDi('客户', o.customer) +
@@ -10799,7 +11192,7 @@
 
   // ── 收款商户资金明细 / 收款商户冻结明细：汇总全部收款商户的流水，口径同收款商户后台，便于运营对账 ──
   const FL_TYPES = {
-    deposit:{ label:'充值入账', cls:'badge-green' }, deduct:{ label:'订单扣划', cls:'badge-orange' }, wd_done:{ label:'提现完成', cls:'badge-orange' }, fee:{ label:'手续费', cls:'badge-gray' },
+    deposit:{ label:'充值入账', cls:'badge-green' }, po_income:{ label:'代付入账', cls:'badge-green' }, deduct:{ label:'订单扣划', cls:'badge-orange' }, wd_done:{ label:'提现完成', cls:'badge-orange' }, fee:{ label:'手续费', cls:'badge-gray' },
     freeze:{ label:'订单冻结', cls:'badge-blue' }, release:{ label:'订单释放', cls:'badge-gray' }, refund_release:{ label:'退款释放', cls:'badge-gray' },
     deduct_unfreeze:{ label:'扣划解冻', cls:'badge-gray' }, wd_freeze:{ label:'提现冻结', cls:'badge-blue' },
     wd_unfreeze:{ label:'提现完成解冻', cls:'badge-gray' }, wd_reject:{ label:'提现驳回解冻', cls:'badge-gray' },
@@ -10826,6 +11219,636 @@
     if (window.lucide) lucide.createIcons();
   }
 
+  // ══ 法币代付：代付订单 / 申诉处理 ════════════════════════
+  // 计算口径（PRD 3.1）：Rm＝Rc×(1－p) 向下取整 4 位；X＝CNY÷Rm 向上取整 2 位；Y＝CNY÷Rc 向下取整 2 位；
+  // F 按 X 的比例或固定 USDT，向上取整 2 位；下单冻结 X＋F；成功：商户扣 X＋F、收款商户入账 Y、平台收入 X－Y＋F。
+  // 下单即锁定报价快照，配置调整只影响新单；状态：待接单（可拒单；派单后 30 分钟内未接单系统自动拒绝）/ 待付款（收款商户接单后，不可拒单；接单后 30 分钟内未提交有效付款凭证转申诉中，来源「付款超时」）/ 待确认到账（提交凭证后 30 分钟内未确认直接转申诉中，来源「商户确认超时」）/ 申诉中 / 成功 / 失败 / 已拒绝
+  const poFloor4 = v => Math.floor(Math.round(v * 1e8) / 1e4) / 1e4;
+  const poFloor2 = v => Math.floor(Math.round(v * 1e6) / 1e4) / 100;
+  const poR2 = v => Math.round(v * 100) / 100;
+  const poMs = t => new Date(t.replace(/-/g, '/')).getTime();
+  const poAgo = min => fpFmtTime(new Date(Date.now() - min * 60000));
+  const poAdd = (t, min) => fpFmtTime(new Date(poMs(t) + min * 60000));
+  const PO_T0 = 30, PO_T1 = 30, PO_T2 = 30;   // 分钟：接单截止自派单起；付款截止自接单起（接单时生成，未接单为空）；确认截止自提交有效凭证起
+  const PO_DAY = fpNow().slice(0, 10).replace(/-/g, '');
+
+  // 收款商户代付能力：运营只负责启用 / 禁用（默认启用，与收款商户编辑弹窗「法币代付」开关一致）；代付汇率、通道由收款商户在其后台维护，此处只读
+  const PO_PARTNER = {
+    'sunrise-settle': { enabled:true, rc:'7.10', rateEnabled:true, rateAt:'2026-10-17 08:55:10', opened:{ by:'admin', time:'2026-10-15 14:20:00' },
+      channels:[{ id:'POC-0001', banks:['中国工商银行（ICBC）', '招商银行（CMB）', '中国建设银行（CCB）', '中国农业银行（ABC）'], start:'09:00', end:'17:00', min:1000, max:100000, limit:5000000, enabled:true }] },
+    'goldpay-cn':     { enabled:true, rc:'7.12', rateEnabled:true, rateAt:'2026-10-17 09:02:41', opened:{ by:'admin', time:'2026-10-15 14:26:12' },
+      channels:[{ id:'POC-0001', banks:['中国建设银行（CCB）', '中国银行（BOC）', '交通银行（BOCOM）'], start:'09:00', end:'17:00', min:5000, max:80000, limit:3000000, enabled:true },
+                { id:'POC-0002', banks:['中国工商银行（ICBC）'], start:'10:00', end:'16:00', min:1000, max:50000, limit:1000000, enabled:false }] },
+    'silverlink-fin': { enabled:true, rc:'7.0950', rateEnabled:true, rateAt:'2026-10-16 18:30:05', opened:{ by:'admin', time:'2026-10-16 10:05:33' },
+      channels:[{ id:'POC-0001', banks:['招商银行（CMB）', '浦发银行（SPDB）', '中信银行（CITIC）', '中国工商银行（ICBC）'], start:'09:00', end:'17:00', min:1000, max:100000, limit:5000000, enabled:true }] },
+    // 演示：收款商户已在其后台配好汇率和通道，但运营已禁用代付，不进入派单候选
+    'rapidsettle':    { enabled:false, rc:'7.08', rateEnabled:true, rateAt:'2026-10-16 11:20:18', opened:null,
+      channels:[{ id:'POC-0001', banks:['中国工商银行（ICBC）', '中国农业银行（ABC）'], start:'09:00', end:'17:00', min:1000, max:100000, limit:2000000, enabled:true }] },
+  };
+  function poPartner(name) {
+    if (!PO_PARTNER[name]) PO_PARTNER[name] = { enabled:true, rc:null, rateEnabled:null, rateAt:null, opened:null, channels:[] };
+    return PO_PARTNER[name];
+  }
+
+  const PO_STATUS = {
+    pending:{ label:'待接单', cls:'badge-blue' }, paying:{ label:'待付款', cls:'badge-blue' }, confirming:{ label:'待确认到账', cls:'badge-orange' },
+    appeal:{ label:'申诉中', cls:'badge-red' }, success:{ label:'成功', cls:'badge-green' }, failed:{ label:'失败', cls:'badge-gray' },
+    rejected:{ label:'已拒绝', cls:'badge-gray' },
+  };
+  const PO_SRC = { timeout:'付款超时', confirm_timeout:'商户确认超时', merchant:'商户异议', partner:'服务商付款异常', customer:'客户反馈' };
+  const PO_FAIL = { platform_release:'平台裁定全额解冻' };
+  const PO_REJECT = { partner_rejected:'服务商拒单', accept_timeout:'接单超时（派单后 30 分钟内未接单）' };
+  const poRejectText = o => (PO_REJECT[o.rejectCode] || '') + (o.rejectCode === 'partner_rejected' && o.rejectReason ? '：' + o.rejectReason : '');
+  const PO_CONFIRM_SRC = { portal:'商户后台确认', api:'商户 API 确认', ruling:'平台裁定足额到账' };
+  const PO_BANK = { processing:['处理中', '#E6A23C'], succeeded:['成功', '#67C23A'], returned:['已退回', '#F56C6C'], failed:['失败', '#909399'] };
+  // 申诉记录发起方：三方随时可追加说明和附件；平台不在申诉记录中添加备注（备注只在「备注」模块），只有系统自动转入的首条和裁定标「平台」
+  const PO_PARTY = { merchant:['下单商户', '#409EFF'], partner:['收款服务商', '#E6A23C'], customer:['客户', '#8B5CF6'] };
+  const PO_SYS_PARTY = ['平台', '#606266'];
+  const PO_MID = { shine:'462513816', kara4:'291654802', kara3:'460466234', rogan:'673738868' };
+  // 转申诉通知渠道：商户确认超时 / 商户异议 / 客户反馈通知三方；服务商付款异常由服务商发起，不通知服务商 TG
+  const PO_NOTIFY_ALL = '已通知收款服务商（TG）、运营（Lark）及商户（Webhook）';
+  const PO_NOTIFY_NO_TG = '已通知运营（Lark）及商户（Webhook）';
+  // 付款记录类型：付款 / 补报付款（付款超时转申诉后，收款服务商补报的付款）
+  const PO_PAY_KIND = { normal:'付款', late:'补报付款' };
+  // 开户银行展示为「名称（编码）」
+  const PO_BANK_CODE = { '中国工商银行':'ICBC', '中国建设银行':'CCB', '招商银行':'CMB', '中国农业银行':'ABC', '中国银行':'BOC', '交通银行':'BOCOM', '浦发银行':'SPDB', '中信银行':'CITIC' };
+  const poBankText = b => PO_BANK_CODE[b] ? `${b}（${PO_BANK_CODE[b]}）` : b;
+
+  // 报价快照（下单锁定）
+  function poQuote(o) {
+    o.rmRate = poFloor4(o.rc * (1 - o.markup / 100));
+    o.x = fpCeil2(o.cny / o.rmRate);
+    o.y = poFloor2(o.cny / o.rc);
+    o.fee = o.feeMode === 'rate' ? fpCeil2(o.x * o.feeValue / 100) : o.feeValue;
+    o.hold = poR2(o.x + o.fee);
+    o.spread = poR2(o.x - o.y);
+  }
+  // 实付合计：只计银行状态「成功」且未退回的付款记录
+  const poNetPaid = o => poR2((o.payments || []).filter(p => p.bank === 'succeeded').reduce((s, p) => s + p.amt, 0));
+  const poHasReturned = o => (o.payments || []).some(p => p.bank === 'returned');
+  const poPay = (no, amt, at, bank, extra) => Object.assign({ no, kind:'normal', payer:'', amt, at, bank, files:[['银行回单_' + no.slice(-6) + '.pdf', '386 KB']], by:'' }, extra || {});
+
+  function poMk(d) {
+    const o = Object.assign({ markup:1.0, feeMode:'rate', feeValue:0.5, exec:'none', payments:[], log:[], notes:[], idType:'ID_CARD' }, d);
+    o.rcText = d.rc; o.rc = parseFloat(d.rc);
+    o.acctName = o.name;
+    o.t0 = poAdd(o.created, PO_T0);   // acceptDeadlineAt
+    // 接单时间取处理记录中的「收款服务商已接单」；付款截止 = 接单时间 + 30 分钟（paymentDeadlineAt，未接单为 null）
+    const acc = o.log.find(l => l[1].startsWith('收款服务商已接单'));
+    o.acceptedAt = o.acceptedAt || (acc ? acc[0] : null);
+    o.t1 = o.acceptedAt ? poAdd(o.acceptedAt, PO_T1) : null;
+    if (o.proofAt) o.t2 = poAdd(o.proofAt, PO_T2);
+    const pt = poPartner(o.rm);
+    o.payer = o.payer || ({ 'sunrise-settle':'招商银行 尾号 3391', 'goldpay-cn':'建设银行 尾号 1204', 'silverlink-fin':'农业银行 尾号 5562' }[o.rm] || '—');
+    o.payments.forEach(p => { p.payer = p.payer || o.payer; p.by = p.by || 'ops@' + o.rm + '.com'; });
+    poQuote(o);
+    // 冻结明细（按网络）：下单时按网络拆分冻结 X＋F；未指定时全部冻结在 TRON；最后一段金额未写时取剩余
+    const fs = d.freezeSplit || [['TRON']];
+    let left = o.hold;
+    o.freezeSplit = fs.map(([network, amt], i) => { const a = i === fs.length - 1 ? poR2(left) : amt; left = poR2(left - a); return { network, amt:a }; });
+    o.log.unshift([o.created, '订单创建并派单', `冻结 ${fpFmt(o.hold)} USDT，派单至 ${o.rm} · ${o.channel}`]);
+    return o;
+  }
+
+  const PO_ORDERS = [
+    poMk({ id:`PZPO${PO_DAY}-00021`, mno:'CFD-PO-20261017-0021', merchant:'shine', uid:'635102950', name:'李娜', idNo:'440301199003151234', acctNo:'6222 0212 3456 7890 123', bank:'中国工商银行',
+      rm:'sunrise-settle', channel:'POC-0001', cny:100000, rc:'7.10', status:'pending', created:poAgo(6) }),
+    poMk({ id:`PZPO${PO_DAY}-00020`, mno:'CFD-PO-20261017-0020', merchant:'kara4', uid:'291654802', name:'张伟', idNo:'310101198807223318', acctNo:'6217 0012 8890 4521 006', bank:'中国建设银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:50000, rc:'7.12', markup:0.8, status:'paying', exec:'executing', created:poAgo(14),
+      log:[[poAgo(9), '收款服务商已接单，转待付款', '']] }),
+    poMk({ id:`PZPO${PO_DAY}-00018`, mno:'CFD-PO-20261017-0018', merchant:'shine', uid:'291654802', name:'王芳', idNo:'330106199201015547', acctNo:'6225 8801 7766 2210', bank:'招商银行',
+      rm:'silverlink-fin', channel:'POC-0001', cny:80000, rc:'7.0950', status:'confirming', exec:'reported', created:poAgo(32), proofAt:poAgo(12), customerConfirmedAt:poAgo(6),
+      payments:[poPay('BT20261017093355108', 80000, poAgo(14), 'succeeded')],
+      log:[[poAgo(28), '收款服务商已接单，转待付款', ''], [poAgo(12), '收款服务商报告付款', '实付 80,000.00 CNY，提交凭证 1 份；商户 30 分钟确认时限开始计时']] }),
+    poMk({ id:`PZPO${PO_DAY}-00017`, mno:'CFD-PO-20261017-0017', merchant:'kara4', uid:'291654802', name:'刘洋', idNo:'320106199207144419', acctNo:'6222 0213 5521 8806 437', bank:'中国工商银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:60000, rc:'7.12', markup:0.8, status:'appeal', exec:'reported', created:poAgo(75), proofAt:poAgo(52),
+      payments:[poPay('BT20261017090518362', 60000, poAgo(54), 'succeeded')],
+      appeal:{ no:'POA-' + PO_DAY + '-0009', src:'customer', reason:'客户反馈实际到账 55,000 CNY，与订单金额 60,000 CNY 不符', time:poAgo(44), note:'客户在出金页面点击「未到账 / 金额有误」：实际到账 55,000 CNY，与订单金额 60,000 CNY 不符；附网银入账截图', files:[['客户入账截图_0017.png', '480 KB']],
+        posts:[{ time:poAgo(30), by:'merchant', note:'已联系客户核对，客户网银显示该笔入账 55,000 CNY，附客户补充的网银明细', files:[['客户网银明细_0017.png', '450 KB']] }], ruling:null },
+      log:[[poAgo(72), '收款服务商已接单，转待付款', ''], [poAgo(52), '收款服务商报告付款', '实付 60,000.00 CNY，提交凭证 1 份；商户 30 分钟确认时限开始计时'], [poAgo(44), '客户反馈未到账 / 金额有误，转申诉中', '来源客户反馈；资金保持冻结，' + PO_NOTIFY_ALL]] }),
+    poMk({ id:`PZPO${PO_DAY}-00015`, mno:'CFD-PO-20261017-0015', merchant:'rogan', uid:'372615904', name:'邓超', idNo:'110105198512304417', acctNo:'6228 4810 2233 9081 117', bank:'中国农业银行',
+      rm:'sunrise-settle', channel:'POC-0001', cny:30000, rc:'7.10', feeMode:'fixed', feeValue:5, status:'appeal', exec:'reported', created:poAgo(118), proofAt:poAgo(92),
+      payments:[poPay('BT20261017081207733', 30000, poAgo(95), 'succeeded')],
+      appeal:{ no:'POA-' + PO_DAY + '-0008', src:'confirm_timeout', reason:'提交凭证后 30 分钟内商户未确认到账', time:poAgo(62), note:'系统自动转入：提交凭证后 30 分钟确认时限内商户未确认到账', files:[], posts:[], ruling:null },
+      log:[[poAgo(112), '收款服务商已接单，转待付款', ''], [poAgo(92), '收款服务商报告付款', '实付 30,000.00 CNY，提交凭证 1 份；商户 30 分钟确认时限开始计时'], [poAgo(62), '商户确认超时，转申诉中', '来源商户确认超时；资金保持冻结，' + PO_NOTIFY_ALL]] }),
+    poMk({ id:`PZPO${PO_DAY}-00012`, mno:'CFD-PO-20261017-0012', merchant:'kara3', uid:'460466237', name:'陈静', idNo:'320102199406186622', acctNo:'6013 8200 1188 3302 554', bank:'中国银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:65000, rc:'7.12', markup:1.2, feeValue:0.6, status:'appeal', exec:'reported', created:poAgo(170), proofAt:poAgo(146),
+      payments:[poPay('BT20261017073320415', 65000, poAgo(148), 'succeeded')],
+      appeal:{ no:'POA-' + PO_DAY + '-0007', src:'confirm_timeout', reason:'提交凭证后 30 分钟内商户未确认到账', time:poAgo(116), note:'系统自动转入：提交凭证后 30 分钟确认时限内商户未确认到账', files:[], posts:[], ruling:null },
+      log:[[poAgo(165), '收款服务商已接单，转待付款', ''], [poAgo(146), '收款服务商报告付款', '实付 65,000.00 CNY，提交凭证 1 份；商户 30 分钟确认时限开始计时'], [poAgo(116), '商户确认超时，转申诉中', '来源商户确认超时；资金保持冻结，' + PO_NOTIFY_ALL]] }),
+    poMk({ id:`PZPO${PO_DAY}-00010`, mno:'CFD-PO-20261017-0010', merchant:'shine', uid:'518230417', name:'黄磊', idNo:'440106199109093315', acctNo:'6225 8802 4410 7731', bank:'招商银行',
+      rm:'silverlink-fin', channel:'POC-0001', cny:100000, rc:'7.0950', status:'appeal', exec:'executing', created:poAgo(260),
+      payments:[poPay('BT20261017063018552', 100000, poAgo(160), 'succeeded', { kind:'late', reportedAt:poAgo(150) })],
+      appeal:{ no:'POA-' + PO_DAY + '-0006', src:'timeout', reason:'接单后 30 分钟内未提交有效付款凭证', time:poAgo(225), note:'系统自动转入：付款截止时已接单，但未提交付款记录', files:[],
+        posts:[{ time:poAgo(200), by:'partner', note:'接单后网银 U 盾故障，转账尚未发起，正在联系银行处理', files:[] }], ruling:null },
+      log:[[poAgo(255), '收款服务商已接单，转待付款', ''], [poAgo(225), '付款超时（接单后 30 分钟内未提交有效付款凭证），转申诉中', '付款超时；资金保持冻结，' + PO_NOTIFY_ALL + '，不自动取消或改派'], [poAgo(150), '收款服务商补报付款', '补报实付 100,000.00 CNY，提交凭证 1 份；订单保持申诉中']] }),
+    poMk({ id:'PZPO20261016-00088', mno:'CFD-PO-20261016-0088', merchant:'kara4', uid:'291654802', name:'林涛', idNo:'350203199305124478', acctNo:'6222 0236 9910 2245 308', bank:'中国工商银行',
+      rm:'sunrise-settle', channel:'POC-0001', cny:45000, rc:'7.10', markup:0.8, status:'appeal', exec:'reported', created:'2026-10-16 15:10:22', proofAt:'2026-10-16 15:31:40',
+      payments:[poPay('BT20261016152955821', 45000, '2026-10-16 15:29:55', 'succeeded')],
+      appeal:{ no:'POA-20261016-0005', src:'merchant', reason:'未到账', time:'2026-10-16 15:48:03', note:'客户反馈指定账户未收到该笔款项，附客户 10-16 全天账户流水', files:[['客户账户流水_1016.pdf', '920 KB']],
+        posts:[{ time:'2026-10-16 16:20:35', by:'customer', note:'本人已向开户行查询，10-16 当天该账户无 45,000 CNY 入账，附银行 App 交易明细截图', files:[['客户银行App明细_0088.png', '610 KB']] },
+               { time:'2026-10-16 17:12:46', by:'partner', note:'已向招商银行查询，交易状态为成功，附银行盖章证明', files:[['银行转账成功证明_0088.pdf', '1.1 MB']] }], ruling:null },
+      log:[[ '2026-10-16 15:12:04', '收款服务商已接单，转待付款', ''], ['2026-10-16 15:31:40', '收款服务商报告付款', '实付 45,000.00 CNY，提交凭证 1 份；商户 30 分钟确认时限开始计时'], ['2026-10-16 15:48:03', '商户提交异议', '未到账；转申诉中，资金保持冻结，' + PO_NOTIFY_ALL]] }),
+    poMk({ id:'PZPO20261016-00085', mno:'CFD-PO-20261016-0085', merchant:'rogan', uid:'372615904', name:'高峰', idNo:'420102198911035519', acctNo:'6217 8501 2004 6618', bank:'中国银行',
+      rm:'silverlink-fin', channel:'POC-0001', cny:100000, rc:'7.0950', feeMode:'fixed', feeValue:5, status:'appeal', exec:'reported', created:'2026-10-16 14:02:15',
+      payments:[poPay('BT20261016141822604', 90000, '2026-10-16 14:18:22', 'succeeded')],
+      appeal:{ no:'POA-20261016-0004', src:'partner', reason:'少付', time:'2026-10-16 14:25:37', note:'网银单笔限额 90,000，实际只转出 90,000 CNY，差额 10,000 CNY 未付', files:[['网银限额提示.png', '410 KB']],
+        posts:[{ time:'2026-10-16 15:20:31', by:'merchant', note:'客户确认 14:18 到账 90,000 CNY，差额 10,000 CNY 未到账', files:[['客户入账流水_0085.jpg', '640 KB']] },
+             ], ruling:null },
+      notes:[{ time:'2026-10-16 15:42:18', operator:'admin', note:'双方流水一致，确认少付 10,000 CNY；已通过 TG 联系收款服务商 silverlink-fin，对方称差额将于 10-17 上午另行支付', files:[] }],
+      log:[['2026-10-16 14:05:51', '收款服务商已接单，转待付款', ''], ['2026-10-16 14:25:37', '收款服务商发起付款异常', '少付；转申诉中，' + PO_NOTIFY_NO_TG]] }),
+    poMk({ id:'PZPO20261016-00080', mno:'CFD-PO-20261016-0080', merchant:'shine', uid:'460466237', name:'吴敏', idNo:'510104199507287736', acctNo:'6228 4800 7765 1029 914', bank:'中国农业银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:20000, rc:'7.12', status:'appeal', exec:'reported', created:'2026-10-16 11:20:45', proofAt:'2026-10-16 11:41:02',
+      payments:[poPay('BT20261016113805277', 20000, '2026-10-16 11:38:05', 'returned', { note:'收款行退回：户名与账号不符' })],
+      appeal:{ no:'POA-20261016-0003', src:'merchant', reason:'未到账', time:'2026-10-16 12:02:19', note:'客户未收到款项', files:[],
+        posts:[{ time:'2026-10-16 13:30:12', by:'partner', note:'银行于 13:05 将 20,000 CNY 原路退回至付款账户', files:[['退汇通知_0080.pdf', '520 KB'], ['退回到账流水.png', '380 KB']] },
+             ], ruling:null },
+      notes:[{ time:'2026-10-16 13:52:40', operator:'admin', note:'已核对退汇通知与付款账户入账流水，20,000 CNY 已全部退回；待确认客户账户信息后决定关闭', files:[] }],
+      log:[['2026-10-16 11:22:30', '收款服务商已接单，转待付款', ''], ['2026-10-16 11:41:02', '收款服务商报告付款', '实付 20,000.00 CNY；商户 30 分钟确认时限开始计时'], ['2026-10-16 12:02:19', '商户提交异议', '未到账；转申诉中，' + PO_NOTIFY_ALL]] }),
+    poMk({ id:'PZPO20261016-00072', mno:'CFD-PO-20261016-0072', merchant:'kara4', uid:'291654802', name:'赵磊', idNo:'370202199012113376', acctNo:'6217 0012 3301 8840 225', bank:'中国建设银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:60000, rc:'7.12', markup:0.8, status:'success', exec:'reported', created:'2026-10-16 10:15:33', proofAt:'2026-10-16 10:36:10', done:'2026-10-16 10:49:27',
+      confirm:{ src:'portal', by:'finance@kara4', time:'2026-10-16 10:49:27' },
+      payments:[poPay('BT20261016103322108', 60000, '2026-10-16 10:33:22', 'succeeded')],
+      log:[['2026-10-16 10:17:02', '收款服务商已接单，转待付款', ''], ['2026-10-16 10:36:10', '收款服务商报告付款', '实付 60,000.00 CNY；商户 30 分钟确认时限开始计时']] }),
+    poMk({ id:'PZPO20261016-00066', mno:'CFD-PO-20261016-0066', merchant:'shine', uid:'635102950', name:'周杰', idNo:'440304198702027715', acctNo:'6225 8801 9032 4416', bank:'招商银行',
+      rm:'sunrise-settle', channel:'POC-0001', cny:100000, rc:'7.10', status:'success', exec:'reported', created:'2026-10-16 09:40:18', freezeSplit:[['TRON', 10000], ['Ethereum']], proofAt:'2026-10-16 10:02:44', done:'2026-10-16 11:05:12',
+      confirm:{ src:'ruling', by:'admin', time:'2026-10-16 11:05:12' },
+      payments:[poPay('BT20261016100015932', 100000, '2026-10-16 10:00:15', 'succeeded')],
+      appeal:{ no:'POA-20261016-0002', src:'confirm_timeout', reason:'提交凭证后 30 分钟内商户未确认到账', time:'2026-10-16 10:32:44', note:'系统自动转入：提交凭证后 30 分钟确认时限内商户未确认到账', files:[], posts:[],
+        ruling:{ result:'success', note:'线下联系 Shine 财务 Amy（Telegram，10-16 10:52），商户确认客户已收到 100,000 CNY，并发来客户网银入账截图', files:[['客户入账截图_0066.png', '520 KB']], by:'admin', time:'2026-10-16 11:05:12', netPaid:100000 } },
+      log:[['2026-10-16 09:41:55', '收款服务商已接单，转待付款', ''], ['2026-10-16 10:02:44', '收款服务商报告付款', '实付 100,000.00 CNY；商户 30 分钟确认时限开始计时'], ['2026-10-16 10:32:44', '商户确认超时，转申诉中', '来源商户确认超时；资金保持冻结，' + PO_NOTIFY_ALL]] }),
+    poMk({ id:'PZPO20261016-00061', mno:'CFD-PO-20261016-0061', merchant:'kara3', uid:'460466237', name:'冯雪', idNo:'210102199308085527', acctNo:'6226 2201 5531 0087', bank:'浦发银行',
+      rm:'silverlink-fin', channel:'POC-0001', cny:25000, rc:'7.0950', markup:1.2, feeValue:0.6, status:'success', exec:'reported', created:'2026-10-16 09:12:40', proofAt:'2026-10-16 09:30:18', done:'2026-10-16 09:44:02',
+      confirm:{ src:'api', by:'API Key kara3-prod', time:'2026-10-16 09:44:02' },
+      payments:[poPay('BT20261016092801446', 25000, '2026-10-16 09:28:01', 'succeeded')],
+      log:[['2026-10-16 09:14:10', '收款服务商已接单，转待付款', ''], ['2026-10-16 09:30:18', '收款服务商报告付款', '实付 25,000.00 CNY；商户 30 分钟确认时限开始计时']] }),
+    poMk({ id:'PZPO20261016-00055', mno:'CFD-PO-20261016-0055', merchant:'rogan', uid:'372615904', name:'孙丽', idNo:'130102199611214428', acctNo:'6222 0240 1187 6630 512', bank:'中国工商银行',
+      rm:'sunrise-settle', channel:'POC-0001', cny:40000, rc:'7.10', feeMode:'fixed', feeValue:5, status:'rejected', exec:'none', created:'2026-10-16 16:42:11', done:'2026-10-16 16:50:37', rejectCode:'partner_rejected', rejectReason:'其他（临近服务结束，当日无法完成付款）',
+      log:[['2026-10-16 16:50:37', '收款服务商拒单，订单已拒绝', '原因：其他（临近服务结束，当日无法完成付款）']] }),
+    poMk({ id:'PZPO20261016-00053', mno:'CFD-PO-20261016-0053', merchant:'shine', uid:'635102950', name:'郑凯', idNo:'440305199108194413', acctNo:'6217 0012 5508 3316 772', bank:'中国建设银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:30000, rc:'7.12', status:'rejected', exec:'none', created:'2026-10-16 15:55:20', done:'2026-10-16 16:25:20', rejectCode:'accept_timeout',
+      log:[['2026-10-16 16:25:20', '接单超时（派单后 30 分钟内未接单），系统自动拒绝', '']] }),
+    poMk({ id:'PZPO20261016-00050', mno:'CFD-PO-20261016-0050', merchant:'shine', uid:'518230417', name:'许诺', idNo:'440303199211306619', acctNo:'6217 0030 6621 4408', bank:'中国建设银行',
+      rm:'goldpay-cn', channel:'POC-0001', cny:70000, rc:'7.12', status:'failed', exec:'executing', created:'2026-10-16 08:30:05', done:'2026-10-16 11:20:48', failReason:'platform_release',
+      appeal:{ no:'POA-20261016-0001', src:'timeout', reason:'接单后 30 分钟内未提交有效付款凭证', time:'2026-10-16 09:01:40', note:'系统自动转入', files:[],
+        posts:[{ time:'2026-10-16 10:40:27', by:'partner', note:'接单后网银登录异常，未发起转账，附当日全部交易明细', files:[['网银交易明细_1016.pdf', '700 KB']] }],
+        ruling:{ result:'fail', reason:'platform_release', note:'收款服务商 10-16 全天网银交易明细无该笔转出；商户确认客户未收到款项，全额解冻', files:[], by:'admin', time:'2026-10-16 11:20:48' } },
+      log:[['2026-10-16 08:31:40', '收款服务商已接单，转待付款', ''], ['2026-10-16 09:01:40', '付款超时（接单后 30 分钟内未提交有效付款凭证），转申诉中', '付款超时；资金保持冻结，' + PO_NOTIFY_ALL + '，不自动取消或改派']] }),
+    poMk({ id:'PZPO20261015-00042', mno:'CFD-PO-20261015-0042', merchant:'kara4', uid:'291654802', name:'马丽', idNo:'610102199004156647', acctNo:'6222 0211 7740 3389 026', bank:'中国工商银行',
+      rm:'sunrise-settle', channel:'POC-0001', cny:35000, rc:'7.10', markup:0.8, status:'success', exec:'reported', created:'2026-10-15 14:20:16', proofAt:'2026-10-15 14:41:50', done:'2026-10-15 17:02:33',
+      confirm:{ src:'ruling', by:'admin', time:'2026-10-15 17:02:33' },
+      payments:[poPay('BT20261015143911207', 35000, '2026-10-15 14:39:11', 'succeeded')],
+      appeal:{ no:'POA-20261015-0001', src:'merchant', reason:'未到账', time:'2026-10-15 15:05:40', note:'客户称未到账', files:[],
+        posts:[{ time:'2026-10-15 16:44:20', by:'merchant', note:'客户重新查询，14:39 已到账 35,000 CNY', files:[['客户流水_0042.png', '560 KB']] }],
+        ruling:{ result:'success', note:'客户银行流水与银行回单 BT20261015143911207 一致，足额到账', files:[], by:'admin', time:'2026-10-15 17:02:33', netPaid:35000 } },
+      notes:[{ time:'2026-10-16 10:48:12', operator:'admin', note:'银行退汇：收款行 10-16 退回 35,000 CNY 至收款服务商付款账户，原单已成功；已线下协调收款服务商重新付款', files:[['退汇通知_0042.pdf', '450 KB']] }],
+      log:[['2026-10-15 14:22:03', '收款服务商已接单，转待付款', ''], ['2026-10-15 14:41:50', '收款服务商报告付款', '实付 35,000.00 CNY；商户 30 分钟确认时限开始计时'], ['2026-10-15 15:05:40', '商户提交异议', '未到账；转申诉中，' + PO_NOTIFY_ALL]] }),
+  ];
+
+  function poLeft(t) {
+    const m = Math.round((poMs(t) - Date.now()) / 60000);
+    return m >= 0 ? `<span style="color:#E6A23C">剩余 ${m} 分</span>` : `<span style="color:#F56C6C">已超时 ${fpWaited(t)}</span>`;
+  }
+  const poHoldTag = o => o.status === 'success' ? '已扣划' : o.status === 'failed' || o.status === 'rejected' ? '已释放' : '冻结中';
+
+  function poLog(type, target, content, level) { fpLog('法币代付', type, target, content, level || 'high'); }
+  // 权限：按当前角色权限判断；原型无登录角色，按当前账号 admin＝超级管理员取该角色权限（演示默认全权限）
+  function poCan(perm) {
+    const r = ROLE_ALL.find(x => x.key === 'superadmin');
+    return !!(r && r.status === 'enabled' && r.perms.includes(perm));
+  }
+  // 菜单：代付订单（po_order_view）/ 申诉处理（po_appeal_view）；两个都无权限时隐藏「法币代付」分组
+  function poApplyMenuPerms(pid) {
+    const show = { 'po-orders':poCan('po_order_view'), 'po-appeal':poCan('po_appeal_view') };
+    Object.keys(show).forEach(k => { const el = document.querySelector(`.nav-item[data-page="${k}"]`); if (el) el.style.display = show[k] ? '' : 'none'; });
+    const g = document.getElementById('nav-ghd-fiatpo');
+    if (g) g.closest('.nav-group').style.display = show['po-orders'] || show['po-appeal'] ? '' : 'none';
+    // 进入代付相关页面时按最新角色权限重绘（列、按钮）
+    if (['po-orders', 'po-appeal', 'merchant-frozen'].includes(pid)) { poOrdersRender(); poAppealRender(); poFrozenRender(); }
+  }
+  const poShow = (id, on) => { const el = document.getElementById(id); if (el) el.style.display = on ? '' : 'none'; };
+  function poExport(name) {
+    const perm = { '代付订单':'po_order_export', '申诉处理':'po_appeal_export', '企业商户冻结明细':'merchant_frozen_export' }[name];
+    if (perm && !poCan(perm)) { showToast('无导出权限'); return; }
+    fpLog(name === '企业商户冻结明细' ? '平台资产' : '法币代付', '导出', name, '导出' + name + '列表（按当前筛选全部结果，不含操作列）', 'high');
+    showToast('已开始导出' + name);
+  }
+  // 首页「法币代收/代付」待办：代付申诉待处理
+  function poHomeTodo() {
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('home-po-appeal', PO_ORDERS.filter(o => o.status === 'appeal').length);
+  }
+  function poRefreshAll() {
+    poOrdersRender(); poAppealRender(); poFrozenRender(); poHomeTodo();
+    if (typeof alState !== 'undefined') { alState.rows = alFilteredRows(); alRender(); }
+  }
+
+  // ── 通用筛选 / 分页：复用法币收款的 FP_STATE 机制 ──
+  Object.assign(FP_STATE, { po:{ page:1, size:10, f:{} }, pp:{ page:1, size:10, f:{} }, mz:{ page:1, size:10, f:{} } });
+  Object.assign(FP_FILTERS, {
+    po:['id', 'mno', 'merchant', 'uid', 'rm', 'status', 'cre-from', 'cre-to', 'done-from', 'done-to'],
+    pp:['id', 'src', 'merchant', 'uid', 'rm', 'cre-from', 'cre-to'],
+    mz:['merchant', 'type', 'ref', 'cre-from', 'cre-to'],
+  });
+  Object.assign(FP_RENDER, { po:() => poOrdersRender(), pp:() => poAppealRender(), mz:() => poFrozenRender() });
+  const poIn = (arr, v) => !arr || !arr.length || arr.includes(v);
+
+  // ── 代付订单 ──
+  // 状态列只显示状态标签；确认来源、失败原因等见详情
+  function poStatusCell(o) {
+    const st = PO_STATUS[o.status];
+    return `<span class="badge ${st.cls}">${st.label}</span>`;
+  }
+  function poDeadlineCell(o) {
+    // 待接单显示接单截止（派单后 30 分钟），待付款显示付款截止（接单后 30 分钟）
+    if (o.status === 'pending') return `${fpMono(o.t0)}<div style="font-size:11px">${poLeft(o.t0)}</div>`;
+    if (o.status === 'paying') return `${fpMono(o.t1)}<div style="font-size:11px">${poLeft(o.t1)}</div>`;
+    if (o.status === 'confirming') return `${fpMono(o.t2)}<div style="font-size:11px">${poLeft(o.t2)}</div>`;
+    // 申诉中无截止时间：三方可随时追加说明和附件
+    return fpEmpty;
+  }
+  function poOrdersRender() {
+    const f = FP_STATE.po.f;
+    const rows = PO_ORDERS.filter(o => (!f.id || o.id.includes(f.id)) && (!f.mno || o.mno.includes(f.mno)) && poIn(f.merchant, o.merchant) && (!f.uid || o.uid.includes(f.uid)) &&
+      poIn(f.rm, o.rm) && poIn(f.status, o.status) && fpInRange(o.created, f['cre-from'], f['cre-to']) && fpInRange(o.done, f['done-from'], f['done-to']))
+      .sort((a, b) => a.created < b.created ? 1 : -1);
+    const ok = rows.filter(o => o.status === 'success'), q = poCan('po_order_quote');
+    // 无 po_order_quote 时隐藏代付汇率、服务商入账、价差收入、代付手续费列及对应统计
+    document.querySelectorAll('#page-po-orders .po-q').forEach(el => { el.style.display = q ? '' : 'none'; });
+    poShow('po-export-btn', poCan('po_order_export'));
+    document.getElementById('po-stat-count').textContent = rows.length;
+    document.getElementById('po-stat-cny').textContent = fpFmt(rows.reduce((s, o) => s + o.cny, 0));
+    document.getElementById('po-stat-ok-cny').textContent = fpFmt(ok.reduce((s, o) => s + o.cny, 0));
+    document.getElementById('po-stat-spread').textContent = fpFmt(ok.reduce((s, o) => s + o.spread, 0));
+    document.getElementById('po-stat-fee').textContent = fpFmt(ok.reduce((s, o) => s + o.fee, 0));
+    document.getElementById('po-tbody').innerHTML = fpPage('po', rows).map(o => {
+      const ok = o.status === 'success', tag = poHoldTag(o);
+      return `<tr>
+        <td>${fpMono(o.id)}</td><td>${fpMono(o.mno)}</td><td>${o.merchant}</td><td>${fpMono(o.uid)}</td><td>${o.rm}</td>
+        <td>${fpNum(fpFmt(o.cny), 'CNY')}</td>${q ? `<td>${fpRate(o.rcText)}</td>` : ''}<td>${fpRate(o.rmRate.toFixed(4))}</td>
+        <td>${fpNum(fpFmt(o.hold), 'USDT', tag === '冻结中' ? '#F56C6C' : '')}<div style="font-size:11px;color:#909399">${tag}</div></td>
+        ${q ? `<td>${ok ? fpNum(fpFmt(o.y), 'USDT') : fpEmpty}</td>
+        <td>${ok ? fpNum(fpFmt(o.spread), 'USDT') : fpEmpty}</td>
+        <td>${ok ? fpNum(fpFmt(o.fee), 'USDT') : fpEmpty}</td>` : ''}
+        <td>${poStatusCell(o)}</td><td>${poDeadlineCell(o)}</td>
+        <td>${fpMono(o.created)}</td><td>${o.done ? fpMono(o.done) : fpEmpty}</td>
+        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openPoDetail('${o.id}')">${_D_EYE_SVG}</span>${poActBtn(o)}</div></td>
+      </tr>`;
+    }).join('') || fpEmptyRow(q ? 17 : 13);
+    if (window.lucide) lucide.createIcons();
+  }
+  // 代付订单只查看；申诉中在「申诉处理」菜单处理
+  function poActBtn(o) { return ''; }
+
+  // ── 详情各分组（订单详情、申诉处理共用）──
+  function poMaskId(v) { return v.length > 8 ? v.slice(0, 4) + '*'.repeat(v.length - 8) + v.slice(-4) : v; }
+  function poBaseSections(o) {
+    const q = poCan('po_order_quote');
+    return fpSec('订单信息') +
+      fpDi('订单号', fpMono(o.id)) + fpDi('商户订单号', fpMono(o.mno)) +
+      fpDi('下单商户', o.merchant) + fpDi('客户 ID', fpMono(o.uid)) +
+      fpDi('创建时间', fpMono(o.created)) + fpDi('完成时间', o.done ? fpMono(o.done) : '—') +
+      (o.customerConfirmedAt ? fpDi('客户确认到账时间', fpMono(o.customerConfirmedAt)) + fpDi('', '') : '') +
+      (o.status === 'success' && o.confirm ? fpDi('确认来源', PO_CONFIRM_SRC[o.confirm.src]) + fpDi('确认人 / 时间', `${o.confirm.by}<span style="color:#909399;font-size:12px;margin-left:6px;">${o.confirm.time}</span>`) : '') +
+      (o.status === 'failed' ? fpDi('失败原因', PO_FAIL[o.failReason]) + fpDi('', '') : '') +
+      (o.status === 'rejected' ? fpDi('拒绝时间', fpMono(o.done)) + fpDi('拒绝原因', poRejectText(o)) : '') +
+      fpSec('收款人与账户') +
+      fpDi('收款人姓名', o.name) + fpDi('证件', `${o.idType === 'ID_CARD' ? '身份证' : '护照'} · ${fpMono(poMaskId(o.idNo))}`) +
+      fpDi('户名', o.acctName) + fpDi('卡号', fpMono(o.acctNo)) + fpDi('开户银行', poBankText(o.bank)) + fpDi('', '') +
+      fpSec('报价与结算') +
+      fpDi('订单金额', fpNum(fpFmt(o.cny), 'CNY')) + (q ? fpDi('代付汇率', fpRate(o.rcText)) : '') +
+      fpDi('汇率加点', fpMono(o.markup.toFixed(2) + '%')) + fpDi('商户结算汇率', fpRate(o.rmRate.toFixed(4))) +
+      fpDi('商户应付', fpNum(fpFmt(o.x), 'USDT')) +
+      fpDi('代付手续费', fpNum(fpFmt(o.fee), 'USDT') + `<span style="color:#909399;font-size:12px;">（${o.feeMode === 'rate' ? o.feeValue.toFixed(2) + '%' : '固定 ' + o.feeValue.toFixed(2) + ' USDT'}）</span>`) +
+      fpDi('合计冻结', fpNum(fpFmt(o.hold), 'USDT', poHoldTag(o) === '冻结中' ? '#F56C6C' : '') + `<span style="color:#909399;font-size:12px;margin-left:4px;">${poHoldTag(o)}</span>`) +
+      fpDi('冻结明细（按网络）', fpMono(o.freezeSplit.map(x => `${x.network} ${fpFmt(x.amt)}`).join(' / ') + ' USDT')) +
+      (q ? fpDi('收款服务商入账', fpNum(fpFmt(o.y), 'USDT')) +
+      fpDi('价差收入', fpNum(fpFmt(o.spread), 'USDT')) + fpDi('平台收入', fpNum(fpFmt(poR2(o.spread + o.fee)), 'USDT')) : '') +
+      fpSec('执行进度') +
+      fpDi('收款服务商', o.rm) + fpDi('代付通道', fpMono(o.channel)) +
+      fpDi('接单截止时间（派单后 30 分钟）', fpMono(o.t0)) + fpDi('付款截止时间（接单后 30 分钟）', o.t1 ? fpMono(o.t1) : '—') +
+      fpDi('凭证提交时间', o.proofAt ? fpMono(o.proofAt) : '—') + fpDi('确认截止时间（提交凭证后 30 分钟）', o.t2 ? fpMono(o.t2) : '—') +
+      poPaymentsSection(o);
+  }
+  function poPaymentsSection(o) {
+    const net = poNetPaid(o);
+    const rows = o.payments.map(p => `<tr><td>${PO_PAY_KIND[p.kind || 'normal']}</td><td>${fpMono(p.no)}</td><td>${p.payer}</td><td>${fpNum(fpFmt(p.amt), 'CNY')}</td><td>${fpMono(p.at)}</td>
+      <td><span style="color:${PO_BANK[p.bank][1]}">${PO_BANK[p.bank][0]}</span>${p.note ? `<div style="font-size:11px;color:#909399">${p.note}</div>` : ''}</td>
+      <td>${p.files.map(([n]) => `<a style="color:#409EFF;cursor:pointer" onclick="showToast('（原型）预览 ${n}')">${n}</a>`).join('<br>')}</td></tr>`).join('');
+    return fpSec('付款记录') + (o.payments.length
+      ? `<div class="table-wrap" style="grid-column:1/-1"><table style="width:100%;table-layout:auto;"><thead><tr><th>类型</th><th>银行流水号</th><th>付款账户</th><th>实付金额</th><th>付款时间</th><th>银行状态</th><th>凭证</th></tr></thead><tbody>${rows}</tbody></table></div>` +
+        fpDi('实付合计（成功且未退回）', fpNum(fpFmt(net), 'CNY', net !== o.cny ? '#F56C6C' : '') + (net !== o.cny ? `<span style="color:#F56C6C;font-size:12px;">（与订单金额相差 ${fpFmt(Math.abs(o.cny - net))} CNY）</span>` : ''), true)
+      : fpDi('', '<span style="color:#909399">收款服务商尚未提交付款记录</span>', true));
+  }
+  // 申诉：每单只有一个申诉，来源只作标签和筛选，处理流程不按来源区分。
+  // 申诉期间下单商户 / 收款商户 / 客户可随时追加说明和附件（无截止时间）；平台可裁定；全部按时间合成「申诉记录」
+  // 备注统一存在订单 notes（代付订单详情、申诉处理抽屉的「备注」模块共用维护），只在备注模块展示，不进入申诉记录
+  const PO_APPEAL_BY = { merchant:'merchant', partner:'partner', timeout:'platform', confirm_timeout:'platform', customer:'customer' };
+  const PO_SYS_SRC = ['timeout', 'confirm_timeout'];
+  function poAppealItems(o) {
+    const a = o.appeal;
+    const items = [{ time:a.time, by:PO_APPEAL_BY[a.src], title:(PO_SYS_SRC.includes(a.src) ? '系统自动转入申诉（' : '发起申诉（') + PO_SRC[a.src] + '）', note:a.note, files:a.files }];
+    (a.posts || []).forEach(p => items.push({ time:p.time, by:p.by, title:'补充材料', note:p.note, files:p.files }));
+    // 付款超时转申诉后，收款服务商补报的付款也进入申诉记录
+    o.payments.filter(p => p.kind === 'late').forEach(p => items.push({ time:p.reportedAt || p.at, by:'partner', title:'补报付款', note:`实付 ${fpFmt(p.amt)} CNY（${PO_BANK[p.bank][0]}）`, files:p.files }));
+    if (a.ruling) {
+      const r = a.ruling;
+      items.push({ time:r.time, by:'platform', op:r.by, title:r.result === 'success' ? '裁定成功（足额到账）' : '裁定失败（全额解冻）',
+        tag:r.result === 'success' ? '<span style="color:#67C23A;font-weight:400;margin-left:8px;">订单成功</span>' : `<span style="color:#909399;font-weight:400;margin-left:8px;">订单失败（${PO_FAIL[r.reason]}）</span>`,
+        note:r.note, files:r.files });
+    }
+    return items.sort((p, q) => p.time < q.time ? -1 : 1);
+  }
+  const poPartyTag = by => { const [l, c] = by === 'platform' ? PO_SYS_PARTY : PO_PARTY[by]; return `<span style="display:inline-block;padding:0 6px;margin-right:6px;border:1px solid ${c};border-radius:3px;color:${c};font-size:12px;font-weight:400;line-height:18px;">${l}</span>`; };
+  function poAppealSections(o) {
+    const a = o.appeal, r = a.ruling;
+    return fpSec('申诉信息') +
+      fpDi('申诉来源', PO_SRC[a.src]) + fpDi('申诉时间', fpMono(a.time)) +
+      fpDi('处理结果', r ? (r.result === 'success' ? '<span style="color:#67C23A">裁定成功，订单成功</span>' : `<span style="color:#909399">裁定失败（${PO_FAIL[r.reason]}）</span>`) : '<span style="color:#E6A23C">处理中</span>') +
+      fpDi('实付合计（成功且未退回）', r && r.result === 'success' ? fpNum(fpFmt(r.netPaid), 'CNY') : '—') + fpDi('申诉原因', a.reason, true) +
+      fpSec('申诉记录') + poAppealItems(o).map(it => `<div class="detail-item" style="grid-column:1/-1;background:#FAFAFA;border-radius:4px;padding:10px 12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><b>${poPartyTag(it.by)}${it.title}${it.op ? `<span style="color:#909399;font-weight:400;margin-left:6px;">${it.op}</span>` : ''}${it.tag || ''}</b><span style="color:#909399;font-size:12px;font-family:Inter,sans-serif;">${it.time}</span></div>
+        ${it.note ? `<div style="font-size:12px;color:#606266;margin-top:4px;">${it.note}</div>` : ''}${it.files && it.files.length ? `<div style="margin-top:4px;font-size:12px;">${fpFiles(it.files)}</div>` : ''}</div>`).join('');
+  }
+  // 处理记录操作方：系统 / 收款服务商 / 下单商户 / 客户 / 平台
+  function poOpOf(o, label) {
+    if (label.startsWith('订单创建') || label.includes('超时')) return '系统';
+    if (label.startsWith('收款服务商')) return '收款服务商 · ops@' + o.rm + '.com';
+    if (label.startsWith('商户')) return '下单商户 · ' + o.merchant;
+    if (label.startsWith('客户')) return '客户';
+    return '系统';
+  }
+  function poTimeline(o) {
+    const tl = o.log.concat(o.customerConfirmedAt ? [[o.customerConfirmedAt, '客户在出金页面确认足额到账', '已通知下单商户；订单状态不变，不触发结算']] : []).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+    // 申诉期间三方提交的补充材料也进入处理记录（内容见申诉记录）
+    if (o.appeal) (o.appeal.posts || []).forEach(p => tl.push([p.time, PO_PARTY[p.by][0] + '提交补充材料', '', p.by === 'partner' ? '收款服务商 · ops@' + o.rm + '.com' : p.by === 'merchant' ? '下单商户 · ' + o.merchant : '客户']));
+    const ruling = o.appeal && o.appeal.ruling;
+    // 申诉中商户确认到账（后台 / API）：订单成功、申诉自动关闭
+    const END = { success:o.confirm ? [o.done, o.appeal && o.confirm.src !== 'ruling' ? '商户确认到账，申诉关闭' : PO_CONFIRM_SRC[o.confirm.src] + '，订单成功', `扣划 ${fpFmt(o.hold)} USDT` + (poCan('po_order_quote') ? `，收款服务商入账 ${fpFmt(o.y)} USDT` : ''),
+        (o.confirm.src === 'ruling' ? '平台 · ' : '下单商户 · ') + o.confirm.by] : null,
+      failed:[o.done, '订单失败（' + (PO_FAIL[o.failReason] || '') + '）', `释放冻结 ${fpFmt(o.hold)} USDT，释放客户在途名额与原时段额度`, '平台 · ' + (ruling ? ruling.by : 'admin')],
+      rejected:[o.done, '订单已拒绝：' + (PO_REJECT[o.rejectCode] || ''), `释放冻结 ${fpFmt(o.hold)} USDT，释放客户在途名额与原时段额度`, o.rejectCode === 'partner_rejected' ? '收款服务商 · ops@' + o.rm + '.com' : '系统'] }[o.status];
+    if (END && !tl.some(t => t[1] === END[1])) tl.push(END);
+    tl.sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+    return fpSec('处理记录') + `<div class="timeline" style="grid-column:1/-1;padding:0 4px;">${tl.map(t => `<div class="tl-item"><span class="tl-dot done"></span><div class="tl-content"><div class="tl-label">${t[1]}</div><div class="tl-time">${t[0]} · 操作方：${t[3] || poOpOf(o, t[1])}</div>${t[2] ? `<div class="tl-desc">${t[2]}</div>` : ''}</div></div>`).join('')}</div>`;
+  }
+  // ── 备注：所有状态（含终态）都可添加，记录线下沟通；内容必填、附件选填，不改变订单状态，写入操作日志 ──
+  // 权限：代付订单 › 备注（po_order_note）；原型无登录角色，按当前账号 admin＝超级管理员取该角色权限，无权限时只读
+  function poCanNote() {
+    const r = ROLE_ALL.find(x => x.key === 'superadmin');
+    return !!(r && r.status === 'enabled' && r.perms.includes('po_order_note'));
+  }
+  let poNoteFiles = [];
+  let poNoteDrawer = 'detail';   // 备注模块所在抽屉：detail＝代付订单详情，appeal＝申诉处理
+  function poNotesSection(o) {
+    const list = (o.notes || []).slice().sort((p, q) => p.time < q.time ? -1 : 1);
+    const items = list.length ? list.map(n => `<div class="detail-item" style="grid-column:1/-1;background:#FAFAFA;border-radius:4px;padding:10px 12px;">
+        <div style="font-size:13px;color:#303133;white-space:pre-wrap;">${obEsc(n.note)}</div>${n.files && n.files.length ? `<div style="margin-top:4px;font-size:12px;">${fpFiles(n.files)}</div>` : ''}
+        <div style="margin-top:6px;font-size:12px;color:#909399;">${obEsc(n.operator)}<span style="margin-left:12px;font-family:Inter,sans-serif;">${n.time}</span></div></div>`).join('')
+      : fpDi('', '<span style="color:#909399">暂无备注</span>', true);
+    const form = poCanNote() ? `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">${poReq('备注内容')}</span>
+        <div class="ob-note-box"><textarea class="wm-remark" id="pn-note" maxlength="500" placeholder="请输入备注内容" oninput="poNoteInput()"></textarea>
+        <span class="ob-note-count"><span id="pn-note-count">0</span>/500</span></div></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="detail-label">附件</span>
+        <div style="display:flex;align-items:center;gap:8px;"><button class="btn btn-default btn-sm" onclick="document.getElementById('pn-file').click()">上传文件</button>
+        <span id="pn-file-name" style="font-size:12px;color:#909399;">JPG / JPEG / PNG / HEIC / WEBP / PDF，单个 10MB 以内，最多 5 个</span></div>
+        <input type="file" id="pn-file" multiple accept=".jpg,.jpeg,.png,.heic,.webp,.pdf" style="display:none" onchange="poNotePick(this)"></div>
+      <div class="detail-item" style="grid-column:1/-1;align-items:flex-end;"><button class="btn btn-primary btn-sm" id="pn-submit" disabled onclick="poNoteSubmit('${o.id}')">保存备注</button></div>` : '';
+    return fpSec('备注') + items + form;
+  }
+  // 代付附件统一规则（备注附件、申诉裁定附件）：JPG / JPEG / PNG / HEIC / WEBP / PDF，单个 10MB 以内，每次最多 5 个
+  const PO_FILE_RE = /\.(jpe?g|png|heic|webp|pdf)$/i, PO_FILE_MAX = 10 * 1024 * 1024, PO_FILE_COUNT = 5;
+  function poPickValid(input) {
+    const all = [...input.files], valid = all.filter(f => PO_FILE_RE.test(f.name) && f.size <= PO_FILE_MAX), ok = valid.slice(0, PO_FILE_COUNT);
+    const msgs = [];
+    if (valid.length < all.length) msgs.push('部分文件格式不支持或超过 10MB，已忽略（支持 JPG / JPEG / PNG / HEIC / WEBP / PDF，单个 10MB 以内）');
+    if (valid.length > PO_FILE_COUNT) msgs.push(`每次最多上传 ${PO_FILE_COUNT} 个文件，已保留前 ${PO_FILE_COUNT} 个`);
+    if (msgs.length) showToast(msgs.join('；'));
+    return ok;
+  }
+  function poNoteInput() {
+    const v = document.getElementById('pn-note').value;
+    document.getElementById('pn-note-count').textContent = v.length;
+    document.getElementById('pn-submit').disabled = !v.trim();
+  }
+  function poNotePick(input) {
+    const ok = poPickValid(input);
+    poNoteFiles = ok.map(f => [f.name, (f.size / 1024).toFixed(0) + ' KB']);
+    document.getElementById('pn-file-name').textContent = poNoteFiles.length ? poNoteFiles.map(f => f[0]).join('、') : 'JPG / JPEG / PNG / HEIC / WEBP / PDF，单个 10MB 以内，最多 5 个';
+  }
+  function poNoteSubmit(id) {
+    const o = PO_ORDERS.find(x => x.id === id);
+    if (!poCanNote()) { showToast('无备注权限'); return; }
+    const note = document.getElementById('pn-note').value.trim();
+    if (!note) { showToast('请输入备注内容'); return; }
+    const files = poNoteFiles.slice(), fileTxt = files.length ? '；附件 ' + files.length + ' 份' : '';
+    const n = { time:fpNow(), operator:OB_USER, note, files };
+    (o.notes = o.notes || []).push(n);
+    poLog('修改', `订单 ${o.id}（${PO_STATUS[o.status].label}）`, `添加备注：${note}${fileTxt}`, 'medium');
+    const body = document.querySelector('#fp-drawer .fp-drawer-body'), top = body.scrollTop;
+    // 在哪个抽屉保存就刷新哪个抽屉；申诉处理抽屉保留已填写的处理方式、处理说明和附件
+    if (poNoteDrawer === 'appeal') {
+      const act = (document.querySelector('input[name="pp-act"]:checked') || {}).value, ppNote = (document.getElementById('pp-note') || {}).value, upl = poUploadFiles.slice();
+      openPoAppeal(id);
+      if (act) {
+        document.querySelector(`input[name="pp-act"][value="${act}"]`).checked = true;
+        poAppealForm(id);
+        if (ppNote) document.getElementById('pp-note').value = ppNote;
+        poUploadFiles = upl;
+        if (upl.length) document.getElementById('pp-file-name').textContent = upl.map(f => f[0]).join('、');
+        poAppealCheck(id);
+      }
+    } else openPoDetail(id);
+    body.scrollTop = top;
+    showToast('已保存备注');
+  }
+  function openPoDetail(id) {
+    const o = PO_ORDERS.find(x => x.id === id), st = PO_STATUS[o.status];
+    poNoteFiles = []; poNoteDrawer = 'detail';
+    const html = poBaseSections(o) + (o.appeal ? poAppealSections(o) : '') + poNotesSection(o) + poTimeline(o);
+    openFpDrawer('代付订单详情', `${o.id} · ${st.label}`, html, `<button class="btn btn-default btn-sm" onclick="closeFpDrawer()">关闭</button>`);
+  }
+
+  const poReq = label => `<span style="color:#F56C6C">*</span> ${label}`;
+  const poTa = (id, label, ph, onIn) => `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">${poReq(label)}</span>
+    <textarea class="field-input" id="${id}" rows="3" placeholder="${ph || '请输入' + label}" oninput="${onIn || ''}" style="width:100%;height:auto;padding:6px 10px;resize:vertical;"></textarea></div>`;
+  const poInput = (id, label, ph, type, onIn, full) => `<div class="detail-item"${full ? ' style="grid-column:1/-1"' : ''}><span class="detail-label">${poReq(label)}</span>
+    <input class="field-input" id="${id}" type="${type || 'text'}" placeholder="${ph || '请输入' + label}" oninput="${onIn || ''}" onchange="${onIn || ''}" style="width:100%"></div>`;
+  const poNowLocal = (addMin) => fpFmtTime(new Date(Date.now() + (addMin || 0) * 60000)).slice(0, 16).replace(' ', 'T');
+  const poFromLocal = v => v ? v.replace('T', ' ') + ':00' : '';
+  // ── 申诉处理：同一订单只有一个申诉，三方材料、平台备注（订单详情 / 申诉处理「备注」模块添加）、裁定都追加在同一申诉记录内 ──
+  function poAppealRender() {
+    const f = FP_STATE.pp.f;
+    const rows = PO_ORDERS.filter(o => o.status === 'appeal' && (!f.id || o.id.includes(f.id)) && poIn(f.src, o.appeal.src) &&
+      poIn(f.merchant, o.merchant) && (!f.uid || o.uid.includes(f.uid)) && poIn(f.rm, o.rm) && fpInRange(o.appeal.time, f['cre-from'], f['cre-to']))
+      .sort((a, b) => a.appeal.time < b.appeal.time ? -1 : 1);
+    poHomeTodo();
+    poShow('pp-export-btn', poCan('po_appeal_export'));
+    const canRule = poCan('po_appeal_rule');
+    document.getElementById('pp-stat-count').textContent = rows.length;
+    document.getElementById('pp-stat-cny').textContent = fpFmt(rows.reduce((s, o) => s + o.cny, 0));
+    document.getElementById('pp-stat-hold').textContent = fpFmt(rows.reduce((s, o) => s + o.hold, 0));
+    document.getElementById('pp-tbody').innerHTML = fpPage('pp', rows).map((o, i) => `<tr>
+        <td>${fpMono(o.id)}</td><td>${PO_SRC[o.appeal.src]}</td><td>${o.merchant}</td><td>${fpMono(o.uid)}</td><td>${o.rm}</td>
+        <td>${fpNum(fpFmt(o.cny), 'CNY')}</td><td>${fpNum(fpFmt(o.hold), 'USDT', '#F56C6C')}</td>
+        <td>${fpMono(o.appeal.time)}</td>
+        <td><span style="font-family:Inter,sans-serif;${i === 0 ? 'color:#F56C6C;font-weight:500' : ''}">${fpWaited(o.appeal.time)}</span></td>
+        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openPoDetail('${o.id}')">${_D_EYE_SVG}</span>${canRule ? `<button class="btn btn-primary btn-sm" onclick="openPoAppeal('${o.id}')">处理</button>` : ''}</div></td>
+      </tr>`).join('') || fpEmptyRow(10);
+    if (window.lucide) lucide.createIcons();
+  }
+  // 处理方式：裁定成功 / 裁定失败；不按付款记录校验，运营核实后自行裁定；提交只要求已选处理方式且处理说明非空
+  const PO_ACTS = [['success', '裁定成功（足额到账）'], ['fail', '裁定失败（全额解冻）']];
+  let poUploadFiles = [];
+  function openPoAppeal(id) {
+    if (!poCan('po_appeal_rule')) { showToast('无裁定权限'); return; }
+    const o = PO_ORDERS.find(x => x.id === id);
+    poNoteFiles = []; poNoteDrawer = 'appeal'; poUploadFiles = [];
+    // 备注模块与代付订单详情共用 poNotesSection 和订单 notes 数据
+    const html = poBaseSections(o) + poAppealSections(o) + poNotesSection(o) + poTimeline(o) +
+      fpSec('处理') +
+      `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">${poReq('处理方式')}</span>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:4px;">${PO_ACTS.map(([v, l]) =>
+          `<label class="ak-radio-item"><input type="radio" name="pp-act" value="${v}" onchange="poAppealForm('${id}')"><span class="ak-dot"></span>${l}</label>`).join('')}</div></div>
+      <div id="pp-form" class="fp-dr-grid" style="grid-column:1/-1"></div>`;
+    openFpDrawer('申诉处理', `${o.id} · ${PO_SRC[o.appeal.src]}`, html, `
+      <button class="btn btn-default btn-sm" onclick="closeFpDrawer()">取消</button>
+      <button class="btn btn-primary btn-sm" id="pp-submit" disabled onclick="poAppealSubmit('${id}')">提交</button>`);
+  }
+  const poFileField = () => `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label">附件</span>
+        <div style="display:flex;align-items:center;gap:8px;"><button class="btn btn-default btn-sm" onclick="document.getElementById('pp-file').click()">上传文件</button>
+        <span id="pp-file-name" style="font-size:12px;color:#909399;">JPG / JPEG / PNG / HEIC / WEBP / PDF，单个 10MB 以内，最多 5 个</span></div>
+        <input type="file" id="pp-file" multiple accept=".jpg,.jpeg,.png,.heic,.webp,.pdf" style="display:none" onchange="poUploadPick(this)"></div>`;
+  function poAppealForm(id) {
+    const o = PO_ORDERS.find(x => x.id === id), act = document.querySelector('input[name="pp-act"]:checked').value;
+    const chk = "poAppealCheck('" + id + "')", net = poNetPaid(o);
+    poUploadFiles = [];
+    let h = '';
+    // 裁定成功：订单成功并结算；实付合计仅作参考（与订单金额不等时标红提示差额，不拦截）；处理说明必填、附件选填
+    if (act === 'success') h += fpDi('实付合计（成功且未退回）', fpNum(fpFmt(net), 'CNY', net !== o.cny ? '#F56C6C' : '') + (net !== o.cny ? `<span style="color:#F56C6C;font-size:12px;">（与订单金额相差 ${fpFmt(Math.abs(o.cny - net))} CNY）</span>` : '') + '<span style="color:#909399;font-size:12px;margin-left:4px;">仅作参考</span>') +
+      (poCan('po_order_quote') ? fpDi('扣划 / 入账', `${fpFmt(o.hold)} / ${fpFmt(o.y)} USDT`) : fpDi('扣划', `${fpFmt(o.hold)} USDT`)) + poFileField() + poTa('pp-note', '处理说明', '', chk);
+    // 裁定失败：订单失败，全额释放商户冻结；处理说明必填、附件选填
+    if (act === 'fail') h += fpDi('失败原因', PO_FAIL.platform_release) + fpDi('全额解冻', fpNum(fpFmt(o.hold), 'USDT')) + poFileField() + poTa('pp-note', '处理说明', '', chk);
+    document.getElementById('pp-form').innerHTML = h;
+    document.getElementById('pp-submit').textContent = '提交裁定';
+    if (window.lucide) lucide.createIcons();
+    poAppealCheck(id);
+  }
+  function poUploadPick(input) {
+    const ok = poPickValid(input);
+    poUploadFiles = ok.map(f => [f.name, (f.size / 1024).toFixed(0) + ' KB']);
+    document.getElementById('pp-file-name').textContent = poUploadFiles.length ? poUploadFiles.map(f => f[0]).join('、') : 'JPG / JPEG / PNG / HEIC / WEBP / PDF，单个 10MB 以内，最多 5 个';
+  }
+  function poAppealCheck(id) {
+    const act = (document.querySelector('input[name="pp-act"]:checked') || {}).value;
+    const note = (document.getElementById('pp-note') || {}).value;
+    document.getElementById('pp-submit').disabled = !act || !(note && note.trim());
+  }
+  function poAppealSubmit(id) {
+    const o = PO_ORDERS.find(x => x.id === id), a = o.appeal, act = document.querySelector('input[name="pp-act"]:checked').value;
+    const note = document.getElementById('pp-note').value.trim(), t = fpNow(), target = `订单 ${o.id}（${PO_SRC[a.src]}）`;
+    if (!poCan('po_appeal_rule')) { showToast('无裁定权限'); return; }
+    if (!note) { showToast('请输入处理说明'); return; }
+    const files = poUploadFiles.slice(), fileTxt = files.length ? '；附件 ' + files.length + ' 份' : '';
+    const done = msg => { closeObConfirm(); closeFpDrawer(); poRefreshAll(); showToast(msg); };
+    if (act === 'success') {
+      const net = poNetPaid(o);
+      return obConfirmBox({ icon:'alert-circle', color:'#E6A23C', title:'裁定成功', msg:`将扣划商户 <b>${fpFmt(o.hold)} USDT</b>${poCan('po_order_quote') ? `，收款服务商入账 <b>${fpFmt(o.y)} USDT</b>` : ''}，订单成功且不可撤销。`, btnCls:'btn-primary', btnTxt:'确认裁定',
+        onOk:() => {
+          a.ruling = { result:'success', note, files, by:OB_USER, time:t, netPaid:net };
+          Object.assign(o, { status:'success', done:t, confirm:{ src:'ruling', by:OB_USER, time:t } });
+          poLedgerAppend(o);
+          poLog('审批', target, `裁定成功（扣划 ${fpFmt(o.hold)} USDT，收款服务商入账 ${fpFmt(o.y)} USDT）；说明：${note}${fileTxt}`);
+          done('已裁定成功');
+        } });
+    }
+    if (act === 'fail') {
+      const reason = 'platform_release';
+      return obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'裁定失败', msg:`订单失败（${PO_FAIL[reason]}），全额解冻 <b>${fpFmt(o.hold)} USDT</b>，不可撤销。`, btnCls:'btn-danger', btnTxt:'确认裁定',
+        onOk:() => {
+          a.ruling = { result:'fail', reason, note, files, by:OB_USER, time:t };
+          Object.assign(o, { status:'failed', done:t, failReason:reason });
+          poLog('审批', target, `裁定失败（${PO_FAIL[reason]}），全额解冻 ${fpFmt(o.hold)} USDT；说明：${note}${fileTxt}`);
+          done('已裁定失败');
+        } });
+    }
+  }
+
+  // ── 资金联动：成功结算写入企业商户账户明细（法币代付 −X、手续费 −F）；收款商户「代付入账 ＋Y」由 rmdBuildData 读取 PO_ORDERS ──
+  function poLedgerAppend(o) {
+    const mid = PO_MID[o.merchant];
+    if (!mid || LEDGER_ALL.some(r => r.relatedNo === o.id)) return;
+    // 按冻结明细（freezeSplit）分网络逐行扣减：依次先扣代付金额 X，再扣手续费 F；变动后余额按「商户 + 代币 + 网络」滚存
+    let restX = o.x;
+    o.freezeSplit.forEach(seg => {
+      const px = poR2(Math.min(seg.amt, restX)), pf = poR2(seg.amt - px);
+      restX = poR2(restX - px);
+      const last = LEDGER_ALL.filter(r => r.merchantId === mid && r.token === 'USDT' && r.network === seg.network && r.time <= o.done).sort((a, b) => a.time < b.time ? 1 : -1)[0];
+      const bal = last ? parseFloat(last.balanceAfter) : 0, b1 = poR2(bal - px), b2 = poR2(b1 - pf);
+      const base = { merchantId:mid, merchantName:o.merchant, userId:o.uid, token:'USDT', network:seg.network, relatedNo:o.id, time:o.done };
+      if (px > 0) LEDGER_ALL.push(Object.assign({ type:'payout', amount:'-' + px.toFixed(2), balanceAfter:b1.toFixed(2), remark:'' }, base));
+      if (pf > 0) LEDGER_ALL.push(Object.assign({ type:'fee', amount:'-' + pf.toFixed(2), balanceAfter:b2.toFixed(2), remark:'代付手续费' }, base));
+    });
+  }
+  function poLedgerInit() {
+    PO_ORDERS.filter(o => o.status === 'success').sort((a, b) => a.done < b.done ? -1 : 1).forEach(poLedgerAppend);
+    alState.rows = [...LEDGER_ALL].sort((a, b) => b.time.localeCompare(a.time));
+  }
+
+  // ── 企业商户冻结明细（本期仅代付冻结）：下单 ＋(X＋F)；成功扣划解冻 －(X＋F)；失败释放 －(X＋F) ──
+  const MZ_TYPES = { po_freeze:{ label:'代付冻结', cls:'badge-blue' }, po_deduct:{ label:'代付扣划解冻', cls:'badge-gray' }, po_release:{ label:'代付释放', cls:'badge-gray' } };
+  function poFrozenRows() {
+    const ev = [];
+    // 按冻结明细（freezeSplit）分网络逐行记录；变动后冻结余额按「商户 + 网络」滚存
+    PO_ORDERS.forEach(o => o.freezeSplit.forEach(seg => {
+      const b = { merchant:o.merchant, network:seg.network, ref:o.id };
+      ev.push(Object.assign({ time:o.created, type:'po_freeze', delta:seg.amt }, b));
+      if (o.status === 'success') ev.push(Object.assign({ time:o.done, type:'po_deduct', delta:-seg.amt }, b));
+      if (o.status === 'failed' || o.status === 'rejected') ev.push(Object.assign({ time:o.done, type:'po_release', delta:-seg.amt }, b));
+    }));
+    const bal = {};
+    ev.sort((a, b) => a.time < b.time ? -1 : a.time > b.time ? 1 : 0).forEach(e => { const k = e.merchant + '|' + e.network; bal[k] = poR2((bal[k] || 0) + e.delta); e.after = bal[k]; });
+    return ev.reverse();
+  }
+  function poFrozenRender() {
+    const f = FP_STATE.mz.f;
+    const rows = poFrozenRows().filter(e => poIn(f.merchant, e.merchant) && poIn(f.type, e.type) && (!f.ref || e.ref.includes(f.ref)) && fpInRange(e.time, f['cre-from'], f['cre-to']));
+    poShow('mz-export-btn', poCan('merchant_frozen_export'));
+    document.getElementById('mz-stat-count').textContent = rows.length;
+    document.getElementById('mz-tbody').innerHTML = fpPage('mz', rows).map(e => `<tr>
+        <td>${e.merchant}</td><td style="font-family:Inter,sans-serif">USDT</td><td style="font-family:Inter,sans-serif">${e.network}</td><td>${fpMono(e.ref)}</td><td>${fpMono(e.time)}</td>
+        <td><span class="badge ${MZ_TYPES[e.type].cls}">${MZ_TYPES[e.type].label}</span></td>
+        <td>${fpNum((e.delta < 0 ? '-' : '+') + fpFmt(Math.abs(e.delta)), 'USDT', e.delta > 0 ? '#E6A23C' : '#909399')}</td>
+        <td>${fpNum(fpFmt(e.after), 'USDT')}</td>
+      </tr>`).join('') || fpEmptyRow(8);
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // ── 收款商户详情 · 代付通道（只读）：代付开关在「编辑收款商户」中启用 / 禁用（默认启用）；汇率与通道由收款商户维护 ──
+  function poPartnerUsed(name, ch) {
+    // 本时段已用：归属当日时段的进行中＋已成功订单；失败释放
+    const day = fpNow().slice(0, 10);
+    return PO_ORDERS.filter(o => o.rm === name && o.channel === ch && !['failed', 'rejected'].includes(o.status) && o.created.slice(0, 10) === day).reduce((s, o) => s + o.cny, 0);
+  }
+  function poPartnerSectionHtml(r, absIdx) {
+    const p = poPartner(r.name), inflight = PO_ORDERS.filter(o => o.rm === r.name && !['success', 'failed', 'rejected'].includes(o.status));
+    const ready = p.enabled && p.rateEnabled && p.channels.some(c => c.enabled);
+    const kv = (k, v) => obKv(k, v, false);
+    const tip = p.enabled && !ready ? '<div style="padding:10px 16px 0;font-size:12px;color:#E6A23C;">代付已启用，但汇率或通道未启用，暂不进入派单候选</div>'
+      : !p.enabled && p.rc ? '<div style="padding:10px 16px 0;font-size:12px;color:#909399;">收款服务商已配置代付汇率与通道，代付启用后才会派单</div>' : '';
+    return tip + `<div class="ob-grid">
+        ${kv('代付能力', p.enabled ? '<span class="badge-enabled">启用</span>' : '<span class="badge-disabled">禁用</span>')}
+        ${kv('启用人 / 时间', p.opened ? `${obEsc(p.opened.by)} · ${p.opened.time}` : '—')}
+        ${kv('在途订单', inflight.length ? `<span style="font-family:Inter,sans-serif">${inflight.length} 笔 · ${fpFmt(inflight.reduce((s, o) => s + o.cny, 0))} CNY</span>` : '0 笔')}
+      </div>
+      <div class="table-wrap"><table style="width:100%;table-layout:auto;"><thead><tr><th>通道</th><th>支持银行</th><th>服务时段（UTC+8）</th><th>单笔范围（CNY）</th><th>时段额度（CNY）</th><th>本时段已用 / 剩余</th><th>状态</th></tr></thead><tbody>
+      ${p.channels.length ? p.channels.map(c => { const used = poPartnerUsed(r.name, c.id); return `<tr><td style="font-family:Inter,sans-serif">${c.id}</td><td>${c.banks.join('、')}</td>
+        <td style="font-family:Inter,sans-serif">${c.start}–${c.end}</td><td style="font-family:Inter,sans-serif">${fpFmt(c.min).replace('.00', '')}–${fpFmt(c.max).replace('.00', '')}</td>
+        <td style="font-family:Inter,sans-serif">${fpFmt(c.limit).replace('.00', '')}</td><td style="font-family:Inter,sans-serif">${fpFmt(used).replace('.00', '')} / ${fpFmt(c.limit - used).replace('.00', '')}</td>
+        <td>${c.enabled ? '<span class="badge-ton">启用</span>' : '<span class="badge-toff">禁用</span>'}</td></tr>`; }).join('')
+        : '<tr><td colspan="7" style="text-align:center;color:#C0C4CC;height:60px">收款服务商尚未配置代付通道</td></tr>'}
+      </tbody></table></div>`;
+  }
   // ── 收款商户详情（只读）：基本信息、资产、汇率 ──
   // 资产演示数据按收款商户 ID 回放充值 / 订单 / 提现流水生成；未激活的收款商户没有汇率和资产
   function rmdHash(seed) {
@@ -10895,6 +11918,8 @@
       if (st === 'approved') ev.push([done, () => { T.wdFrozen = rmdR2(T.wdFrozen - hold); push(done, 'wd_done', id, -amount, -hold); push(done, 'fee', id, -fee, 0); }]);
       if (st === 'rejected') ev.push([done, () => { T.wdFrozen = rmdR2(T.wdFrozen - hold); push(done, 'wd_reject', id, 0, -hold); }]);
     });
+    // 法币代付成功：收款商户总余额 ＋Y（代付入账），可用于后续收款冻结或提现
+    PO_ORDERS.filter(o => o.rm === r.name && o.status === 'success').forEach(o => ev.push([o.done, () => push(o.done, 'po_income', o.id, o.y, 0)]));
     ev.sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0).forEach(e => e[1]());
     funds.sort((a, b) => a.created < b.created ? 1 : -1);
         // 汇率变更记录（收款商户在收款商户后台修改汇率或状态时产生），按变更时间倒序
@@ -10914,8 +11939,12 @@
     const st = RM_STATUS[r.status];
     const d = rmdBuildData(r);
     const T = d.token, avail = rmdR2(T.balance - T.frozen - T.wdFrozen);
+    // 汇率变更记录：代收、代付合并按变更时间倒序
+    const rateLogAll = d.rateLog.map(h => Object.assign({ kind:'in' }, h)).concat(poRateLog(r)).sort((a, b) => a.time < b.time ? 1 : -1);
     const kv = (k, v) => obKv(k, v, false);
-    const stat = (label, v, color) => `<div class="rmd-stat"><span class="rmd-stat-label">${label}</span><span class="rmd-stat-value"${color ? ` style="color:${color}"` : ''}>${rmdFmt(v)}<small>USDT</small></span></div>`;
+    const stat = (label, v, color, sub, tip) => `<div class="rmd-stat"><span class="rmd-stat-label">${tip ? `<span class="me-info-wrap" style="gap:4px;cursor:default" onmouseenter="showTip(event,'${tip}')" onmousemove="moveTip(event)" onmouseleave="hideTip()">${label}<span class="me-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span></span>` : label}</span><span class="rmd-stat-value"${color ? ` style="color:${color}"` : ''}>${rmdFmt(v)}<small>USDT</small></span>${sub ? `<span class="rmd-stat-label" title="进行中订单成功后入账的金额；裁定失败或拒单不入账">${sub}</span>` : ''}</div>`;
+    // 代付待入账：已接单的进行中代付订单（待付款 / 待确认到账 / 申诉中）成功后的入账金额 Y 合计，仅提示，不计入总余额（同收款商户后台首页）
+    const poPending = rmdR2(PO_ORDERS.filter(o => o.rm === r.name && ['paying', 'confirming', 'appeal'].includes(o.status)).reduce((n, o) => n + o.y, 0));
     document.getElementById('rmd-body').innerHTML =
       obSection('基本信息', `<div class="ob-grid">
         ${kv('名称', obEsc(r.name))}${kv('ID', obEsc(r.id))}
@@ -10924,21 +11953,40 @@
         ${obKv('备注', r.remark ? obEsc(r.remark) : '', true)}
       </div>`) +
       obSection('资产', `<div class="rmd-stats">
-        ${stat('总余额', T.balance)}${stat('可提现', avail, '#67C23A')}${stat('收款冻结', T.frozen, '#F56C6C')}${stat('提现冻结', T.wdFrozen, '#E6A23C')}
+        ${stat('总余额', T.balance)}${stat('可提现', avail, '#67C23A')}${stat('收款冻结', T.frozen, '#F56C6C')}${stat('提现冻结', T.wdFrozen, '#E6A23C')}${stat('代付待入账', poPending, '#909399', '不计入总余额', '进行中订单成功后入账的金额；裁定失败或拒单不入账')}
       </div>`) +
       obSection('钱包地址', rmAddrSectionHtml(r, absIdx), `<button class="btn btn-primary btn-sm" onclick="openRmAddrEdit(${absIdx})">新增</button>`) +
-      obSection('币对管理', rmTokenSectionHtml(r, absIdx)) +
-      obSection('汇率', `<div class="table-wrap"><table style="width:100%;table-layout:auto;"><thead><tr><th>币对</th><th>汇率</th><th>状态</th><th>最近更新时间</th></tr></thead><tbody>
-        <tr><td style="font-family:Inter,sans-serif;font-weight:500;">USDT/CNY</td>
-          <td>${d.rate ? `<span style="font-family:Inter,sans-serif">1 USDT = ${d.rate} CNY</span>` : rmdEmpty}</td>
-          <td>${d.rateEnabled == null ? rmdEmpty : d.rateEnabled ? '<span class="badge-enabled">已启用</span>' : '<span class="badge-disabled">已禁用</span>'}</td>
-          <td style="font-family:Inter,sans-serif">${d.rateAt || rmdEmpty}</td></tr>
-      </tbody></table></div>`) +
-      obSection('汇率变更记录', `<div class="table-wrap"><table style="width:100%;table-layout:auto;"><thead><tr><th>变更时间</th><th>变更前</th><th>变更后</th><th>操作人</th></tr></thead><tbody>
-        ${d.rateLog.length ? d.rateLog.map(h => `<tr><td style="font-family:Inter,sans-serif">${h.time}</td><td style="font-family:Inter,sans-serif">${h.before}</td><td style="font-family:Inter,sans-serif">${h.after}</td><td style="font-family:Inter,sans-serif">${obEsc(h.op)}</td></tr>`).join('')
-          : '<tr><td colspan="4" style="text-align:center;color:#C0C4CC;height:60px">暂无数据</td></tr>'}
+      obSection('代币管理', rmTokenSectionHtml(r, absIdx)) +
+      obSection(`<span class="rmd-tabs"><span class="rmd-tab active" data-rt="in" onclick="rmdRateTab('in')">代收汇率</span><span class="rmd-tab" data-rt="out" onclick="rmdRateTab('out')">代付汇率</span></span>`,
+        rmdRateTable('in', d.rate, d.rateEnabled, d.rateAt) + rmdRateTable('out', poPartner(r.name).rc, poPartner(r.name).rateEnabled, poPartner(r.name).rateAt)) +
+      obSection('汇率变更记录', `<div class="table-wrap"><table style="width:100%;table-layout:auto;"><thead><tr><th>变更时间</th><th>类型</th><th>变更前</th><th>变更后</th><th>操作人</th></tr></thead><tbody>
+        ${rateLogAll.length ? rateLogAll.map(h => `<tr><td style="font-family:Inter,sans-serif">${h.time}</td><td>${h.kind === 'out' ? '代付' : '代收'}</td><td style="font-family:Inter,sans-serif">${h.before}</td><td style="font-family:Inter,sans-serif">${h.after}</td><td style="font-family:Inter,sans-serif">${obEsc(h.op)}</td></tr>`).join('')
+          : '<tr><td colspan="5" style="text-align:center;color:#C0C4CC;height:60px">暂无数据</td></tr>'}
       </tbody></table></div>`);
     navigateTo('merchant-receiving-detail');
+  }
+  // 代付汇率变更记录（演示）：收款商户在其后台修改代付汇率或启停时产生
+  function poRateLog(r) {
+    const p = poPartner(r.name);
+    if (!p.rc) return [];
+    const dec = (p.rc.split('.')[1] || '').length || 2, prev = (parseFloat(p.rc) + 0.03).toFixed(dec);
+    return [
+      { kind:'out', time:p.rateAt, before:`1 USDT = ${prev} CNY · 启用`, after:`1 USDT = ${p.rc} CNY · 启用`, op:r.email },
+      { kind:'out', time:'2026-10-15 13:40:22', before:'—', after:`1 USDT = ${prev} CNY · 启用`, op:r.email },
+    ];
+  }
+  // 代收 / 代付汇率表：结构相同，代付汇率由收款商户在其后台维护，与代收汇率独立
+  function rmdRateTable(k, rate, enabled, at) {
+    return `<div class="table-wrap" data-rt-body="${k}"${k === 'in' ? '' : ' style="display:none"'}><table style="width:100%;table-layout:auto;"><thead><tr><th>币对</th><th>汇率</th><th>状态</th><th>最近更新时间</th></tr></thead><tbody>
+        <tr><td style="font-family:Inter,sans-serif;font-weight:500;">USDT/CNY</td>
+          <td>${rate ? `<span style="font-family:Inter,sans-serif">1 USDT = ${rate} CNY</span>` : rmdEmpty}</td>
+          <td>${enabled == null ? rmdEmpty : enabled ? '<span class="badge-enabled">已启用</span>' : '<span class="badge-disabled">已禁用</span>'}</td>
+          <td style="font-family:Inter,sans-serif">${at || rmdEmpty}</td></tr>
+      </tbody></table></div>`;
+  }
+  function rmdRateTab(k) {
+    document.querySelectorAll('#rmd-body .rmd-tab').forEach(el => el.classList.toggle('active', el.dataset.rt === k));
+    document.querySelectorAll('#rmd-body [data-rt-body]').forEach(el => { el.style.display = el.dataset.rtBody === k ? '' : 'none'; });
   }
   function rmDetailBack() {
     openTabs = openTabs.filter(t => t !== 'merchant-receiving-detail');
@@ -11139,9 +12187,23 @@
         <div class="me-row">
           <div class="me-label">状态</div>
           ${r.status === 'inactive' ? `<div><span class="${RM_STATUS.inactive.cls}">${RM_STATUS.inactive.label}</span></div>` : `<div class="me-radio-group">
-            <label class="me-radio"><input type="radio" name="rme-status" value="enabled" ${r.status==='enabled'?'checked':''}><span class="me-dot"></span> 启用</label>
-            <label class="me-radio"><input type="radio" name="rme-status" value="disabled" ${r.status==='disabled'?'checked':''}><span class="me-dot"></span> 禁用</label>
+            <label class="me-radio"><input type="radio" name="rme-status" value="enabled" ${r.status==='enabled'?'checked':''} onchange="rmSwToggle()"><span class="me-dot"></span> 启用</label>
+            <label class="me-radio"><input type="radio" name="rme-status" value="disabled" ${r.status==='disabled'?'checked':''} onchange="rmSwToggle()"><span class="me-dot"></span> 禁用</label>
           </div>`}
+        </div>
+        <div class="me-row">
+          <div class="me-label">法币代收</div>
+          <div class="me-radio-group">
+            <label class="me-radio"><input type="radio" name="rme-collect" value="on" ${rmCollectOn(r)?'checked':''}><span class="me-dot"></span> 启用</label>
+            <label class="me-radio"><input type="radio" name="rme-collect" value="off" ${rmCollectOn(r)?'':'checked'}><span class="me-dot"></span> 禁用</label>
+          </div>
+        </div>
+        <div class="me-row">
+          <div class="me-label">法币代付</div>
+          <div class="me-radio-group">
+            <label class="me-radio"><input type="radio" name="rme-payout" value="on" ${rmPayoutOn(r)?'checked':''}><span class="me-dot"></span> 启用</label>
+            <label class="me-radio"><input type="radio" name="rme-payout" value="off" ${rmPayoutOn(r)?'':'checked'}><span class="me-dot"></span> 禁用</label>
+          </div>
         </div>
         <div class="me-row">
           <div class="me-label">备注</div>
@@ -11156,8 +12218,20 @@
     `;
 
     document.getElementById('detail-modal').classList.add('show');
+    rmSwToggle();
   }
 
+  // 状态（总开关）为禁用时，法币代收 / 代付开关置灰不可操作，保留原值
+  function rmSwToggle() {
+    const off = (document.querySelector('input[name="rme-status"]:checked') || {}).value === 'disabled';
+    // 法币代付开关另受 receiving_payout_edit 权限控制，无权限时只读
+    const canPo = poCan('receiving_payout_edit');
+    document.querySelectorAll('input[name="rme-collect"], input[name="rme-payout"]').forEach(el => {
+      const dis = off || (el.name === 'rme-payout' && !canPo);
+      el.disabled = dis;
+      const lb = el.closest('label'); lb.style.opacity = dis ? '.5' : ''; lb.style.cursor = dis ? 'not-allowed' : '';
+    });
+  }
   function saveRmEdit(absIdx) {
     const r = MERCHANT_RECEIVING_ALL[absIdx];
     const nameEl = document.getElementById('rme-name');
@@ -11172,18 +12246,41 @@
     if (!obIsEmail(email)) { showToast('请输入有效的邮箱地址'); return; }
     if (rmEmailTaken(email, r.id)) { showToast('该邮箱已被使用'); return; }
     const status = statusEl ? statusEl.value : r.status;
+    const commit = () => commitRmEdit(absIdx, name, email, status, remark);
+    // 法币代付 启用 → 禁用：二次确认（N＝该服务商非终态代付单数）
+    const payoutOff = rmPayoutOn(r) && (document.querySelector('input[name="rme-payout"]:checked') || {}).value === 'off';
+    const confirmPayoutOff = () => {
+      if (!payoutOff) { commit(); return; }
+      const n = PO_ORDERS.filter(o => o.rm === r.name && !['success', 'failed', 'rejected'].includes(o.status)).length;
+      obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'禁用法币代付',
+        msg:`关闭后不再向 ${obEsc(r.name)} 派新代付单，现有 ${n} 笔在途订单照常处理。确认关闭？`,
+        btnCls:'btn-danger', btnTxt:'确认关闭',
+        onOk: () => { closeObConfirm(); commit(); } });
+    };
     // 启用 → 禁用：二次确认
     if (r.status === 'enabled' && status === 'disabled') {
       obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'禁用收款商户',
         msg:'禁用后该收款商户将不再接收新订单，主账号及子账号立即被强制下线、无法登录收款商户后台，且不能发起提现；进行中的订单由 Paypaz 与收款商户线下沟通处理。确认禁用？',
         btnCls:'btn-danger', btnTxt:'确认禁用',
-        onOk: () => { closeObConfirm(); commitRmEdit(absIdx, name, email, status, remark); } });
+        onOk: () => { closeObConfirm(); confirmPayoutOff(); } });
       return;
     }
-    commitRmEdit(absIdx, name, email, status, remark);
+    confirmPayoutOff();
   }
+  // 法币代收 / 代付开关：默认启用；代付开关即派单候选中的代付启用状态（PO_PARTNER.enabled，poPartner() 默认同为启用）
+  function rmCollectOn(r) { return r.collectOn !== false; }
+  function rmPayoutOn(r) { return poPartner(r.name).enabled; }
   function commitRmEdit(absIdx, name, email, status, remark) {
     const r = MERCHANT_RECEIVING_ALL[absIdx];
+    const sw = n => (document.querySelector(`input[name="${n}"]:checked`) || {}).value === 'on';
+    const collectOn = sw('rme-collect'), payoutOn = sw('rme-payout');
+    const swText = (c, o) => `法币代收 ${c ? '启用' : '禁用'}，法币代付 ${o ? '启用' : '禁用'}`;
+    const swBefore = swText(rmCollectOn(r), rmPayoutOn(r));
+    r.collectOn = collectOn;
+    const pt = poPartner(r.name);
+    if (payoutOn && !pt.enabled) pt.opened = { by:OB_USER, time:fpNow() };
+    pt.enabled = payoutOn;
+    if (swBefore !== swText(collectOn, payoutOn)) fpLog('收款商户', '状态变更', `${r.name}（${r.id}）`, `${swBefore} → ${swText(collectOn, payoutOn)}`, 'high');
     // 未激活时修改邮箱：保存后自动向新邮箱重发邀请邮件，旧链接失效，并重新开始 60 秒冷却
     const emailChanged = r.status === 'inactive' && email !== r.email;
     const disabling = r.status === 'enabled' && status === 'disabled';
@@ -11414,59 +12511,74 @@
   // ══════════════════════════════════════════════════════
   //  平台资产：企业商户账户明细 data & logic
   // ══════════════════════════════════════════════════════
+  // Top Up：入账到商户主账户的充币（用户 ID 为空），不含 On Ramp 入金、提币退回；Settlement：商户后台单笔提币。
+  // 其余充币（子钱包、On Ramp、提币退回）记充币，Excel 批量 / API 提币记提币
   const LG_TYPE = {
-    deposit:    { label:'充币',   cls:'badge-green'  },
-    withdraw:   { label:'提现',   cls:'badge-blue'   },
+    topup:      { label:'Top Up',     cls:'badge-green'  },
+    deposit:    { label:'充币',   cls:'badge-gray'   },   // 普通充币 / 提币用中性浅灰，与商户后台一致，区分 Top Up（绿）/ Settlement（蓝）
+    settlement: { label:'Settlement', cls:'badge-blue'   },
+    withdraw:   { label:'提币',   cls:'badge-gray'   },
     fee:        { label:'手续费', cls:'badge-gray'   },
     networkfee: { label:'网络费', cls:'badge-orange' },
     adjust:     { label:'调账',   cls:'badge-purple' },
     fiat:       { label:'法币收款', cls:'badge-green'  },
+    payout:     { label:'法币代付', cls:'badge-blue'   },
   };
 
   // 每个商户的流水按时间顺序滚存余额，末笔 balanceAfter 与 MERCHANT_ALL 对应商户的
   // 当前 balance 字段保持一致——人工调账通过审核后会在此基础上继续追加新的一笔
   // 变动后余额按「商户 + 代币 + 网络」三个维度各自独立滚存，不同代币/网络组合互不合并
   const LEDGER_ALL = [
-    // On Ramp 入金完成后，网络费（PayPaz）和 On Ramp 手续费分开记录为两笔独立流水，不再合并，
-    // 关联单号为对应的 On Ramp 订单号（见「On Ramp 入金」页 RAMP_IN_ORDERS）
-    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'networkfee', amount:'-3.00',    balanceAfter:'-3.00',   relatedNo:'RAMP-20260805-0001', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-05 09:28:45' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'fee',     amount:'-5.00',    balanceAfter:'-8.00',   relatedNo:'RAMP-20260805-0001', remark:'On Ramp 手续费扣除', time:'2026-08-05 09:28:45' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'networkfee', amount:'-3.69',    balanceAfter:'-11.69',  relatedNo:'RAMP-20260809-0010', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-09 15:22:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'fee',     amount:'-6.00',    balanceAfter:'-17.69',  relatedNo:'RAMP-20260809-0010', remark:'On Ramp 手续费扣除', time:'2026-08-09 15:22:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'deposit', amount:'+500.00',  balanceAfter:'482.31',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'fee',     amount:'-0.50',    balanceAfter:'481.81',  relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'networkfee', amount:'-2.13',    balanceAfter:'-2.13',   relatedNo:'RAMP-20260811-0011', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-11 10:24:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'fee',     amount:'-3.50',    balanceAfter:'-5.63',   relatedNo:'RAMP-20260811-0011', remark:'On Ramp 手续费扣除', time:'2026-08-11 10:24:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'deposit', amount:'+800.00',  balanceAfter:'794.37',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'fee',     amount:'-0.80',    balanceAfter:'793.57',  relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'U10023846', token:'USDT', network:'TRON',     type:'withdraw',amount:'-50.00',   balanceAfter:'431.81',  relatedNo:'LG20260822111', remark:'', time:'2026-08-22 11:10:00' },
-    { merchantId:'635102950', merchantName:'kara',  userId:'', token:'USDT', network:'TRON',     type:'adjust',  amount:'+116.85',  balanceAfter:'548.66',  relatedNo:'ADJ20260823001', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', time:'2026-08-23 16:45:00' },
+    // On Ramp 入金完成后按「充币本金 → 手续费 → 网络费（PayPaz）」三笔记录；本金＝净入账（creditAmount）＋手续费＋网络费，
+    // 与线上 ChainAccountLedgerRecorder.depositPrincipalAmount 一致，三笔合计净增＝充值记录的净入账，
+    // 关联单号为对应充币单的订单号（LG + 到账时间 yyyyMMdd + HH + 分钟首位；充值记录页的订单号列仍显示 On Ramp 订单号）
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'deposit', amount:'+1000.00', balanceAfter:'1000.00', relatedNo:'LG20260805092', remark:'On Ramp 入金到账', time:'2026-08-05 09:28:45' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'fee',     amount:'-5.00',    balanceAfter:'995.00', relatedNo:'LG20260805092', remark:'On Ramp 手续费扣除', time:'2026-08-05 09:28:45' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'networkfee', amount:'-3.00',    balanceAfter:'992.00', relatedNo:'LG20260805092', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-05 09:28:45' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'deposit', amount:'+1200.00', balanceAfter:'2192.00', relatedNo:'LG20260809152', remark:'On Ramp 入金到账', time:'2026-08-09 15:22:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'fee',     amount:'-6.00',    balanceAfter:'2186.00', relatedNo:'LG20260809152', remark:'On Ramp 手续费扣除', time:'2026-08-09 15:22:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-78324901', token:'USDT', network:'TRON',     type:'networkfee', amount:'-3.69',    balanceAfter:'2182.31', relatedNo:'LG20260809152', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-09 15:22:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'deposit', amount:'+500.00',  balanceAfter:'2682.31', relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023841', token:'USDT', network:'TRON',     type:'fee',     amount:'-0.50',    balanceAfter:'2681.81', relatedNo:'LG20260820091', remark:'', time:'2026-08-20 09:00:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'deposit', amount:'+700.00',  balanceAfter:'700.00',  relatedNo:'LG20260811102', remark:'On Ramp 入金到账', time:'2026-08-11 10:24:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'fee',     amount:'-3.50',    balanceAfter:'696.50',  relatedNo:'LG20260811102', remark:'On Ramp 手续费扣除', time:'2026-08-11 10:24:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'USR-51204873', token:'USDC', network:'Ethereum', type:'networkfee', amount:'-2.13',    balanceAfter:'694.37',  relatedNo:'LG20260811102', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-11 10:24:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'deposit', amount:'+800.00',  balanceAfter:'1494.37', relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'U10023845', token:'USDC', network:'Ethereum', type:'fee',     amount:'-0.80',    balanceAfter:'1493.57', relatedNo:'LG20260821142', remark:'', time:'2026-08-21 14:20:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'', token:'USDT', network:'TRON',     type:'settlement',amount:'-50.00',   balanceAfter:'2631.81', relatedNo:'WD00000000000080', remark:'', time:'2026-08-22 11:10:00' },
+    { merchantId:'635102950', merchantName:'kara',  userId:'', token:'USDT', network:'TRON',     type:'adjust',  amount:'+116.85',  balanceAfter:'2748.66', relatedNo:'ADJ20260823001', remark:'长款：链上实际余额高于系统记录，经对账核实后调增', time:'2026-08-23 16:45:00' },
 
     { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDT', network:'TRON', type:'deposit', amount:'+1000.00', balanceAfter:'1000.00', relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
     { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDT', network:'TRON', type:'fee',     amount:'-1.00',    balanceAfter:'999.00',  relatedNo:'LG20260818100', remark:'', time:'2026-08-18 10:00:00' },
     { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDC', network:'BSC',  type:'deposit', amount:'+530.00',  balanceAfter:'530.00',  relatedNo:'LG20260819093', remark:'', time:'2026-08-19 09:30:00' },
     { merchantId:'884590488', merchantName:'kara2', userId:'U20048762', token:'USDC', network:'BSC',  type:'fee',     amount:'-0.53',    balanceAfter:'529.47',  relatedNo:'LG20260819093', remark:'', time:'2026-08-19 09:30:00' },
-    { merchantId:'884590488', merchantName:'kara2', userId:'U20099887', token:'USDT', network:'TRON', type:'withdraw',amount:'-25.00',   balanceAfter:'974.00',  relatedNo:'LG20260820131', remark:'', time:'2026-08-20 13:15:00' },
+    { merchantId:'884590488', merchantName:'kara2', userId:'U20099887', token:'USDT', network:'TRON', type:'withdraw',amount:'-25.00',   balanceAfter:'974.00',  relatedNo:'WD00000000000081', remark:'', time:'2026-08-20 13:15:00' },
     { merchantId:'884590488', merchantName:'kara2', userId:'', token:'USDT', network:'TRON', type:'adjust',  amount:'-2.41',    balanceAfter:'971.59',  relatedNo:'ADJ20260824001', remark:'短款：对账发现系统余额高于实际到账，经核实后调减', time:'2026-08-24 17:00:00' },
 
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON',    type:'deposit', amount:'+600.00',  balanceAfter:'600.00',  relatedNo:'LG20260815090', remark:'', time:'2026-08-15 09:00:00' },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON',    type:'fee',     amount:'-0.60',    balanceAfter:'599.40',  relatedNo:'LG20260815090', remark:'', time:'2026-08-15 09:00:00' },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDC', network:'Polygon', type:'deposit', amount:'+475.00',  balanceAfter:'475.00',  relatedNo:'LG20260816103', remark:'', time:'2026-08-16 10:30:00' },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011002', token:'USDC', network:'Polygon', type:'fee',     amount:'-0.48',    balanceAfter:'474.52',  relatedNo:'LG20260816103', remark:'', time:'2026-08-16 10:30:00' },
-    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON',    type:'withdraw',amount:'-10.00',   balanceAfter:'589.40',  relatedNo:'LG20260817140', remark:'', time:'2026-08-17 14:00:00' },
+    { merchantId:'460466234', merchantName:'kara3', userId:'U60011004', token:'USDT', network:'TRON',    type:'withdraw',amount:'-10.00',   balanceAfter:'589.40',  relatedNo:'WD00000000000082', remark:'', time:'2026-08-17 14:00:00' },
     { merchantId:'460466234', merchantName:'kara3', userId:'', token:'USDT', network:'TRON',    type:'adjust',  amount:'+6.22',    balanceAfter:'595.62',  relatedNo:'ADJ20260818001', remark:'人工调账：客户误退回款项补记', time:'2026-08-18 10:00:00' },
 
-    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'networkfee', amount:'-3.00',    balanceAfter:'-3.00',   relatedNo:'RAMP-20260801-0009', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-01 10:35:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'fee',     amount:'-3.00',    balanceAfter:'-6.00',   relatedNo:'RAMP-20260801-0009', remark:'On Ramp 手续费扣除', time:'2026-08-01 10:35:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'deposit', amount:'+300.00',  balanceAfter:'294.00',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'fee',     amount:'-0.30',    balanceAfter:'293.70',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'deposit', amount:'+600.00',  balanceAfter:'600.00',  relatedNo:'LG20260801103', remark:'On Ramp 入金到账', time:'2026-08-01 10:35:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'fee',     amount:'-3.00',    balanceAfter:'597.00',  relatedNo:'LG20260801103', remark:'On Ramp 手续费扣除', time:'2026-08-01 10:35:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'USR-84512096', token:'USDT', network:'TRON', type:'networkfee', amount:'-3.00',    balanceAfter:'594.00',  relatedNo:'LG20260801103', remark:'On Ramp 网络费（PayPaz）扣除', time:'2026-08-01 10:35:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'deposit', amount:'+300.00',  balanceAfter:'894.00',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'U60022001', token:'USDT', network:'TRON',   type:'fee',     amount:'-0.30',    balanceAfter:'893.70',  relatedNo:'LG20260812083', remark:'', time:'2026-08-12 08:30:00' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDC', network:'Solana', type:'deposit', amount:'+650.00',  balanceAfter:'650.00',  relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
     { merchantId:'291654802', merchantName:'kara4', userId:'U60022005', token:'USDC', network:'Solana', type:'fee',     amount:'-0.65',    balanceAfter:'649.35',  relatedNo:'LG20260813095', remark:'', time:'2026-08-13 09:50:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'U60022006', token:'USDT', network:'TRON',   type:'withdraw',amount:'-30.00',   balanceAfter:'263.70',  relatedNo:'LG20260814120', remark:'', time:'2026-08-14 12:00:00' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'adjust',  amount:'+1.87',    balanceAfter:'265.57',  relatedNo:'ADJ20260815001', remark:'长款：链上余额核对后调增', time:'2026-08-15 08:30:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'settlement',amount:'-30.00',   balanceAfter:'863.70',  relatedNo:'WD00000000000083', remark:'', time:'2026-08-14 12:00:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'adjust',  amount:'+1.87',    balanceAfter:'865.57',  relatedNo:'ADJ20260815001', remark:'长款：链上余额核对后调增', time:'2026-08-15 08:30:00' },
+    // 演示：shine 主账号 USDT 期初入金（TRON / Ethereum 各一笔），覆盖其法币代付按网络扣款（见 PZPO20261016-00066）
+    { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'TRON',     type:'topup', amount:'+20000.00', balanceAfter:'20000.00', relatedNo:'LG20261010090', remark:'', time:'2026-10-10 09:00:00' },
+    { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'TRON',     type:'fee',     amount:'-20.00',    balanceAfter:'19980.00', relatedNo:'LG20261010090', remark:'', time:'2026-10-10 09:00:00' },
+    { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'Ethereum', type:'topup', amount:'+5000.00',  balanceAfter:'5000.00',  relatedNo:'LG20261010093', remark:'', time:'2026-10-10 09:30:00' },
+    { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'Ethereum', type:'fee',     amount:'-5.00',     balanceAfter:'4995.00',  relatedNo:'LG20261010093', remark:'', time:'2026-10-10 09:30:00' },
     // 法币收款订单成功结算：商户到账与充值手续费分两笔记录，关联单号为收款订单号（见「法币收款 › 收款订单」FIAT_ORDERS）
-    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fee',     amount:'-241.13',  balanceAfter:'48249.74', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fiat',    amount:'+48225.30', balanceAfter:'48490.87', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fee',     amount:'-241.13',  balanceAfter:'48849.74', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fiat',    amount:'+48225.30', balanceAfter:'49090.87', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19' },
   ];
 
   const alState = { rows: [...LEDGER_ALL].sort((a,b) => b.time.localeCompare(a.time)), page: 1, size: 10 };
@@ -11485,9 +12597,10 @@
       { value:'Arbitrum', label:'Arbitrum' }, { value:'Base', label:'Base' },
     ], '全部');
     msLiteInit('al-type', [
-      { value:'deposit', label:'充币' }, { value:'withdraw', label:'提现' },
+      { value:'topup', label:'Top Up' }, { value:'deposit', label:'充币' },
+      { value:'settlement', label:'Settlement' }, { value:'withdraw', label:'提币' },
       { value:'fee', label:'手续费' }, { value:'networkfee', label:'网络费' }, { value:'adjust', label:'调账' },
-      { value:'fiat', label:'法币收款' },
+      { value:'fiat', label:'法币收款' }, { value:'payout', label:'法币代付' },
     ], '全部');
   }
   function alFilteredRows() {
@@ -12256,6 +13369,10 @@
       { id:'platform_adjust_apply', label:'发起调账' },
       { id:'platform_adjust_review', label:'企业商户账户调账（通过/驳回）' },
       { id:'platform_account_export', label:'企业商户账户明细/企业商户账户调账导出' },
+      { id:'merchant_frozen', label:'企业商户冻结明细', children:[
+        { id:'merchant_frozen_view', label:'查看' },
+        { id:'merchant_frozen_export', label:'导出' },
+      ] },
       { id:'fiat_ledger', label:'收款商户资金明细', children:[
         { id:'fiat_ledger_view', label:'查看' },
         { id:'fiat_ledger_export', label:'导出' },
@@ -12269,7 +13386,7 @@
       { id:'onboard_mgmt', label:'开户申请', children:[
         { id:'onboard_list', label:'开户申请列表' },
         { id:'onboard_detail', label:'详情' },
-        { id:'onboard_file', label:'文件预览 / 下载' },
+        { id:'onboard_file', label:'文件预览 / 下载 / 导出报告' },
         { id:'onboard_invite', label:'邀请开户' },
         { id:'onboard_review', label:'审核（通过 / 要求补件 / 拒绝）' },
         { id:'onboard_resend', label:'重新邀请' },
@@ -12294,6 +13411,8 @@
       { id:'merchant_observer_add', label:'观察者账号添加' },
       { id:'merchant_payin_view', label:'企业商户法币收款配置查看' },
       { id:'merchant_payin_edit', label:'企业商户法币收款配置编辑' },
+      { id:'merchant_payout_view', label:'企业商户法币代付配置查看' },
+      { id:'merchant_payout_edit', label:'企业商户法币代付配置编辑' },
       { id:'receiving_mgmt', label:'收款商户', children:[
         { id:'receiving_view', label:'查看' },
         { id:'receiving_invite', label:'邀请' },
@@ -12304,6 +13423,7 @@
         { id:'receiving_token_edit', label:'代币配置编辑' },
         { id:'receiving_addr_view', label:'收款地址查看' },
         { id:'receiving_addr_edit', label:'收款地址编辑' },
+        { id:'receiving_payout_edit', label:'法币代付启用 / 禁用' },
       ] },
     ] },
     { id:'fiat_payin', label:'法币收款', children:[
@@ -12317,6 +13437,19 @@
         { id:'fiat_appeal_evidence', label:'要求收款商户举证' },
         { id:'fiat_appeal_rule', label:'裁定' },
         { id:'fiat_appeal_export', label:'导出' },
+      ] },
+    ] },
+    { id:'fiat_payout', label:'法币代付', children:[
+      { id:'po_order', label:'代付订单', children:[
+        { id:'po_order_view', label:'查看' },
+        { id:'po_order_quote', label:'查看报价（代付汇率 / 服务商入账 / 价差 / 平台收入）' },
+        { id:'po_order_export', label:'导出' },
+        { id:'po_order_note', label:'备注' },
+      ] },
+      { id:'po_appeal', label:'申诉处理', children:[
+        { id:'po_appeal_view', label:'查看' },
+        { id:'po_appeal_rule', label:'裁定' },
+        { id:'po_appeal_export', label:'导出' },
       ] },
     ] },
     { id:'deposit_record', label:'充值记录', children:[
@@ -14254,10 +15387,10 @@
   // ══════════════════════════════════════════════════════
   //  系统管理 / 操作日志 data & logic
   // ══════════════════════════════════════════════════════
-  const OPERLOG_MODULES = ['收款商户','法币收款','用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
+  const OPERLOG_MODULES = ['收款商户','法币收款','法币代付','用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
     '客户端管理','对象存储配置','个人信息','登录日志','操作日志','在线用户',
     '商户管理','开户申请','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核',
-    '企业商户账户明细','企业商户账户调账'];
+    '企业商户账户明细','企业商户账户调账','平台资产'];
 
   const OPERLOG_TYPES = ['新增','修改','删除','状态变更','审批','授权','强退','导出'];
 
@@ -14270,6 +15403,13 @@
   };
 
   const OPERLOG_ALL = [
+    // 法币代付相关操作日志（企业商户代付配置、收款商户代付开通、申诉处理）
+    { id:'ol-po-m06', time:'2026-10-16 15:42:18', operator:'admin', module:'法币代付', type:'修改', target:'订单 PZPO20261016-00085（申诉中）', content:'添加备注：双方流水一致，确认少付 10,000 CNY；已通过 TG 联系收款服务商 silverlink-fin，对方称差额将于 10-17 上午另行支付', result:'success', ip:'103.45.13.21', level:'medium' },
+    { id:'ol-po-m05', time:'2026-10-16 13:52:40', operator:'admin', module:'法币代付', type:'修改', target:'订单 PZPO20261016-00080（申诉中）', content:'添加备注：已核对退汇通知与付款账户入账流水，20,000 CNY 已全部退回；待确认客户账户信息后决定关闭', result:'success', ip:'103.45.13.21', level:'medium' },
+    { id:'ol-po-m04', time:'2026-10-16 11:20:48', operator:'admin', module:'法币代付', type:'审批', target:'订单 PZPO20261016-00050（付款超时）', content:'裁定失败（平台裁定全额解冻），全额解冻 9,980.43 USDT；说明：收款服务商 10-16 全天网银交易明细无该笔转出；商户确认客户未收到款项，全额解冻', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-po-m03', time:'2026-10-16 11:05:12', operator:'admin', module:'法币代付', type:'审批', target:'订单 PZPO20261016-00066（商户确认超时）', content:'裁定成功（扣划 14,297.92 USDT，收款服务商入账 14,084.50 USDT）；说明：线下联系 Shine 财务 Amy（Telegram，10-16 10:52），商户确认客户已收到 100,000 CNY，并发来客户网银入账截图；附件 1 份', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-po-m02', time:'2026-10-16 10:05:33', operator:'admin', module:'收款商户', type:'状态变更', target:'silverlink-fin（370148901）', content:'法币代收 启用，法币代付 禁用 → 法币代收 启用，法币代付 启用', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-po-m01', time:'2026-10-15 15:02:11', operator:'admin', module:'商户管理', type:'修改', target:'shine 法币代付配置（USDT/CNY）', content:'未配置 → 启用，汇率加点 1.00%，代付手续费 0.50%', result:'success', ip:'103.45.13.21', level:'high' },
     // 法币收款相关操作日志（收款商户、商户法币收款配置、申诉、收款商户充提币审核）
     { id:'ol-fp-m14', time:'2026-10-06 11:30:05', operator:'grace.compliance', module:'法币收款', type:'导出', target:'收款订单', content:'导出收款订单列表（筛选：创建时间 2026-10-01 至 2026-10-06，共 19 条）', result:'success', ip:'61.148.22.44', level:'high' },
     { id:'ol-fp-m13', time:'2026-10-06 10:20:00', operator:'admin', module:'法币收款', type:'修改', target:'订单 PZPI20261006-00116（商户申诉）', content:'要求收款商户 sunrise-settle 补充举证（银行流水），已通过 WhatsApp 通知', result:'success', ip:'103.45.13.21', level:'medium' },
@@ -14292,7 +15432,7 @@
     { id:'ol-kyb-26', time:'2026-09-27 14:05:12', operator:'grace.compliance', module:'开户申请', type:'导出', target:'Helix Prime Trading Pty Ltd（KYB-2026-0011）', content:'打包下载全部文件 KYB-2026-0011.zip', result:'success', ip:'61.148.22.44', level:'high' },
     { id:'ol-kyb-25', time:'2026-09-26 10:21:45', operator:'kelly.bd', module:'开户申请', type:'导出', target:'Bluewave Markets LLC（KYB-2026-0008）', content:'复制邀请链接，链接有效期至 2026-10-22 15:10:00', result:'success', ip:'103.45.13.20', level:'high' },
     { id:'ol-kyb-24', time:'2026-09-25 16:00:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Summit Invest Partners（KYB-2026-0006）', content:'邀请开户，邮箱：ops@summit-ip.com，邀请邮件发送失败', result:'success', ip:'103.45.13.20', level:'medium' },
-    { id:'ol-kyb-23', time:'2026-09-24 11:18:02', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Meridian Securities SA（KYB-2026-0009）', content:'审核结果：要求补件，补件部分：④；链接有效期重新计算至 2026-10-24 11:18:02', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-kyb-23', time:'2026-09-24 11:18:02', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Meridian Securities SA（KYB-2026-0009）', content:'审核结果：要求补件，补件部分：③；链接有效期重新计算至 2026-10-24 11:18:02', result:'success', ip:'61.148.22.44', level:'high' },
     { id:'ol-kyb-22', time:'2026-09-24 11:02:37', operator:'grace.compliance', module:'开户申请', type:'导出', target:'Meridian Securities SA（KYB-2026-0009）', content:'下载文件 Passport_Marc.pdf', result:'success', ip:'61.148.22.44', level:'high' },
     { id:'ol-kyb-21', time:'2026-09-22 15:10:00', operator:'kelly.bd', module:'开户申请', type:'新增', target:'Bluewave Markets LLC（KYB-2026-0008）', content:'邀请开户，邮箱：admin@bluewave-mkts.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },
     { id:'ol-kyb-20', time:'2026-09-20 15:40:00', operator:'grace.compliance', module:'开户申请', type:'审批', target:'Crestline Trading Co., Ltd.（KYB-2026-0005）', content:'审核结果：通过', result:'success', ip:'61.148.22.44', level:'high' },
@@ -14544,12 +15684,11 @@
   const OB_ACTIVE = ['invited','filling','submitted','supplement'];
   const OB_PARTS = [
     { k:'s1', label:'① 企业信息' },
-    { k:'s2', label:'② 公司联系方式' },
-    { k:'s3', label:'③ 授权联系人' },
-    { k:'s4', label:'④ 人员' },
-    { k:'s5', label:'⑤ 数字资产钱包授权' },
+    { k:'s2', label:'② 授权联系人' },
+    { k:'s3', label:'③ 人员' },
+    { k:'s4', label:'④ 数字资产钱包授权' },
   ];
-  const OB_PART_LABEL = { s1:'①', s2:'②', s3:'③', s4:'④', s5:'⑤' };
+  const OB_PART_LABEL = { s1:'①', s2:'②', s3:'③', s4:'④' };
   const OB_USER = 'admin';
 
   function obPad(n) { return String(n).padStart(2, '0'); }
@@ -14569,11 +15708,12 @@
   function obIsEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
   // ── 样例资料 ─────────────────────────────────────────
-  // ① 企业信息 / ④ 人员的「证明文件」：选填，客户统一上传、不分文件类型，可多个
-  const OB_COMPANY_FILES = [
-    'Certificate_of_Incorporation.pdf', 'Certificate_of_Good_Standing.pdf', 'Articles_of_Association.pdf',
-    'Register_of_Shareholders.pdf', 'Company_Utility_Bill_2026-08.pdf', 'Org_Chart.png',
-    'Regulatory_License.pdf', 'Board_Resolution.pdf', 'Financial_Statements_2025.pdf',
+  // ① 企业信息 / ③ 人员的证明文件：必填，按文件类型逐项上传，每项可多个；「其他证明文件」选填
+  const OB_COMPANY_DOCS = [
+    { label:'Certificate of Incorporation', files:['Certificate_of_Incorporation.pdf'] },
+    { label:'Certificate of Incumbency', files:['Certificate_of_Incumbency_2026-08.pdf'] },
+    { label:'Company Structure Chart up to UBO Level', files:['Structure_Chart_to_UBO.png'] },
+    { label:'Other supporting documents', opt:true, files:['Articles_of_Association.pdf', 'Regulatory_License.pdf', 'Financial_Statements_2025.pdf'] },
   ];
 
   function obMkForm(o) {
@@ -14581,8 +15721,9 @@
     return {
       s1: [
         ['企业法定全称', o.company], ['注册商号 / 品牌', o.brand || '—'],
-        ['法律形式 / 企业类型', o.legal], ['注册号', o.regNo],
-        ['成立日期', o.founded], ['注册国家/地区', o.country],
+        ['法律形式 / 企业类型', o.legal || '—'], ['注册号', o.regNo],
+        ['成立日期', o.founded], ['官网 / 域名', 'https://www.' + dom],
+        ['注册国家/地区', o.country],
         ['注册地址', o.addr, 'full'], ['实际经营地址', o.physAddr || '与注册地址相同', 'full'],
         ['LEI', o.lei || '—'], ['税号 TIN', o.tin || '—'],
         ['业务性质', o.nature], ['业务用途', o.purpose || '处理客户出入金'],
@@ -14590,25 +15731,21 @@
         ['目标市场', o.markets],
         ['是否涉及受制裁国家 / 人员', o.sanction ? `是。${o.sanctionDesc}` : '否', 'full'],
         ['集团 / 母公司名称', o.parent || '—'],
-        ['证明文件', { files: o.companyFiles || OB_COMPANY_FILES }, 'full'],
+        ['企业信息（证明文件）', { docs: o.companyDocs || OB_COMPANY_DOCS }, 'full'],
       ],
       s2: [
-        ['官网 / 域名', 'https://www.' + dom], ['公司邮箱', 'info@' + dom],
-        ['联系电话', o.phone], ['其他联系方式', '—'],
-      ],
-      s3: [
         ['姓名', o.persons[0].name], ['邮箱', o.email],
         ['联系电话', o.phone], ['其他联系方式', 'Telegram: @' + o.persons[0].name.split(' ')[0].toLowerCase()],
       ],
-      s4: o.persons,
-      s5: [
+      s3: o.persons,
+      s4: [
         ['法定全称', o.company], ['证件类型及号码', '公司注册号 ' + o.regNo],
         ['User ID', '—'], ['邮箱', o.email],
         ['钱包地址', o.wallet, 'full'], ['区块链 / 网络', o.network],
         ['钱包用途', '两者（充值 / 提现）'], ['所有权声明', '已勾选确认'], ['风险确认', '已勾选确认'],
         ['所有权证明', { proofs: o.proofs || [ { type:'钱包服务商 / 交易所截图', files:['Wallet_Ownership_Proof.png'] } ] }, 'full'],
       ],
-      s6: { name:o.persons[0].name, title:'董事', signedAt:o.signedAt, ip:o.ip },
+      s5: { name:o.persons[0].name, title:'董事', signedAt:o.signedAt, ip:o.ip },
     };
   }
   function obPerson(name, roles, extra) {
@@ -14618,10 +15755,12 @@
       passport:'5329' + Math.abs(name.length * 7919 % 100000), pCountry:'英国', pExp:'2031-06-30',
       share: roles.includes('UBO') ? '60' : '—', vote: roles.includes('UBO') ? '60' : '—',
       pep:'否', email:'', phone:'+44 20 7946 0000',
-      // 证明文件示例：护照；股东 / UBO 另有持股证明；UBO 另有 UBO 证明
-      files:[ `Passport_${name.split(' ')[0]}.pdf` ]
-        .concat(roles.includes('UBO') || roles.includes('股东') ? [`Proof_of_Shareholding_${name.split(' ')[0]}.pdf`] : [])
-        .concat(roles.includes('UBO') ? [`UBO_Declaration_${name.split(' ')[0]}.pdf`] : []),
+      // 证明文件示例：护照、地址证明必传；股东 / UBO 另在「其他证明文件」上传持股证明
+      docs:[
+        { label:'Passport', files:[`Passport_${name.split(' ')[0]}.pdf`] },
+        { label:'Proof of address dated within 3 months', files:[`Proof_of_Address_${name.split(' ')[0]}_2026-08.pdf`] },
+        { label:'Other supporting documents', opt:true, files: roles.includes('UBO') || roles.includes('股东') ? [`Proof_of_Shareholding_${name.split(' ')[0]}.pdf`] : [] },
+      ],
     }, extra || {});
   }
   function obL(t, label, desc, by, fail) { return { t, label, desc:desc || '', by:by || '系统', fail:!!fail }; }
@@ -14636,7 +15775,7 @@
     {
       id:'KYB-2026-0012', company:'Northstar Capital Markets Ltd', email:'ops@northstar-cm.com', note:'BD Kelly 引荐',
       status:'submitted', sanction:false, createdAt:'2026-09-15 10:02:11', sentAt:'2026-09-15 10:02:11', expireAt:'2026-10-15 10:02:11',
-      submittedAt:'2026-09-28 16:42:08', updatedAt:'2026-09-28 16:42:08', filled:6,
+      submittedAt:'2026-09-28 16:42:08', updatedAt:'2026-09-28 16:42:08', filled:5,
       form: obMkForm({ company:'Northstar Capital Markets Ltd', email:'ops@northstar-cm.com', brand:'Northstar CM', legal:'私人股份有限公司', regNo:'C-204811', founded:'2018-03-21', country:'塞浦路斯', addr:'12 Arch. Makariou III Ave, 3030 Limassol, Cyprus', physAddr:'Office 502, 5th Floor, Nicosia Tower Centre, 36 Vyronos Ave, 1096 Nicosia, Cyprus', lei:'2138004N5KQ7XWJ0T812', tin:'CY10204811M', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'欧洲、中东（主要国家：塞浦路斯、阿联酋）', phone:'+357 25 000 111', wallet:'TQ5N1gJ8h8Vd3kXq2sL9mZ7cB4rW6yP0aE', network:'TRON', proofs:[ { type:'钱包服务商 / 交易所截图', files:['Wallet_Ownership_Proof.png'] }, { type:'区块浏览器截图 + 控制权证明', files:['Tronscan_Address.png'], control:{ method:'签名消息', content:'Northstar Capital Markets Ltd confirms ownership of TQ5N1gJ8h8Vd3kXq2sL9mZ7cB4rW6yP0aE · 2026-09-28' } } ], signedAt:'2026-09-28 16:41:55', ip:'85.10.52.18',
         persons:[ obPerson('James Whitmore', ['董事','UBO','授权签字人'], { email:'j.whitmore@northstar-cm.com' }), obPerson('Elena Petrou', ['董事','股东'], { nat:'塞浦路斯', res:'塞浦路斯', dob:'1986-09-02', email:'e.petrou@northstar-cm.com' }) ] }),
       logs:[ obL('2026-09-15 10:02:11','邀请开户','开户邮件已发送至 ops@northstar-cm.com','kelly.bd'), obL('2026-09-16 09:12:40','客户开始填写','','客户'), obL('2026-09-28 16:42:08','客户提交','签署 IP 85.10.52.18','客户') ],
@@ -14645,7 +15784,7 @@
       id:'KYB-2026-0011', company:'Helix Prime Trading Pty Ltd', email:'compliance@helixprime.com.au',
       status:'submitted', sanction:true, sanctionDesc:'涉及国家 / 地区：伊朗；业务性质：部分终端客户居住地为伊朗；预计交易量：每月约 2 万美元。',
       note:'EDD：已向客户索取 UBO Reza Karimi 的资金来源说明，等待回复',
-      createdAt:'2026-08-01 10:30:00', sentAt:'2026-09-10 14:20:00', expireAt:'2026-10-10 14:20:00', submittedAt:'2026-09-26 10:15:33', updatedAt:'2026-09-26 10:15:33', filled:6,
+      createdAt:'2026-08-01 10:30:00', sentAt:'2026-09-10 14:20:00', expireAt:'2026-10-10 14:20:00', submittedAt:'2026-09-26 10:15:33', updatedAt:'2026-09-26 10:15:33', filled:5,
       form: obMkForm({ company:'Helix Prime Trading Pty Ltd', email:'compliance@helixprime.com.au', legal:'私人股份有限公司', regNo:'ACN 612 448 190', founded:'2016-07-11', country:'澳大利亚', addr:'Level 9, 60 Margaret St, Sydney NSW 2000, Australia', tin:'ABN 43 612 448 190', nature:'外汇与金融市场交易', purpose:'接受客户加密货币付款、处理客户出入金', currencies:'USD、USDT、USDC', volume:'500,000 以上（预计 800,000）', markets:'亚太、中东（主要国家：新加坡、阿联酋）', phone:'+61 2 9000 1234', wallet:'0x7a3F9c2E81b4D6e5A1c8B0f2E9d4C7a6B5e3F1d2', network:'Ethereum', signedAt:'2026-09-26 10:15:20', ip:'203.12.8.77', sanction:true, sanctionDesc:'涉及国家 / 地区：伊朗；业务性质：部分终端客户居住地为伊朗；预计交易量：每月约 2 万美元。',
         persons:[ obPerson('Daniel Hughes', ['董事','授权签字人'], { nat:'澳大利亚', res:'澳大利亚', email:'d.hughes@helixprime.com.au' }), obPerson('Reza Karimi', ['UBO'], { nat:'阿联酋', res:'阿联酋', share:'75', vote:'75', pep:{ type:'relative', relation:'配偶', pepName:'Leila Karimi', pepTitle:'某国中央银行顾问（2015–2019）' }, email:'reza@helixprime.com.au' }) ] }),
       logs:[ obL('2026-08-01 10:30:00','邀请开户','英文邀请邮件已发送至 compliance@helixprime.com.au','kelly.bd'), obL('2026-08-31 10:30:00','链接过期','有效期内未提交'),
@@ -14655,7 +15794,7 @@
     {
       id:'KYB-2026-0010', company:'Aurora FX Group Limited', email:'kyc@aurorafx.io',
       status:'submitted', sanction:false, createdAt:'2026-09-01 11:00:00', sentAt:'2026-09-03 16:13:05', expireAt:'2026-10-19 10:05:00',
-      submittedAt:'2026-09-27 09:30:12', updatedAt:'2026-09-27 09:30:12', filled:6,
+      submittedAt:'2026-09-27 09:30:12', updatedAt:'2026-09-27 09:30:12', filled:5,
       reviewer:'grace.compliance', reviewedAt:'2026-09-19 10:05:00',
       form: obMkForm({ company:'Aurora FX Group Limited', email:'kyc@aurorafx.io', brand:'AuroraFX', legal:'国际商业公司（IBC）', regNo:'2029384', founded:'2019-11-05', country:'塞舌尔', addr:'Suite 3, Global Village, Jivan’s Complex, Mont Fleuri, Mahé, Seychelles', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'亚太（主要国家：新加坡、马来西亚）', phone:'+248 4 380 000', wallet:'TMx8P2vQ7rK1nB5cD9eF3gH6jL0aS4wZyU', network:'TRON', signedAt:'2026-09-27 09:30:01', ip:'119.8.24.105',
         persons:[ obPerson('Wei Ling Tan', ['董事','UBO','授权签字人'], { nat:'新加坡', res:'新加坡', dob:'1984-02-18', email:'weiling@aurorafx.io' }) ] }),
@@ -14667,18 +15806,18 @@
     {
       id:'KYB-2026-0009', company:'Meridian Securities SA', email:'onboarding@meridian-sec.ch',
       status:'supplement', sanction:false, createdAt:'2026-09-05 09:40:00', sentAt:'2026-09-05 09:40:00', expireAt:'2026-10-24 11:18:02',
-      submittedAt:'2026-09-20 17:05:44', updatedAt:'2026-09-24 11:18:02', filled:6,
-      supp:{ parts:['s4'], msg:'UBO Marc Keller 的护照复印件不清晰，请重新上传彩色清晰件；请补充 Marc Keller 的持股证明。', at:'2026-09-24 11:18:02' },
+      submittedAt:'2026-09-20 17:05:44', updatedAt:'2026-09-24 11:18:02', filled:5,
+      supp:{ parts:['s3'], msg:'UBO Marc Keller 的护照复印件不清晰，请重新上传彩色清晰件；请补充 Marc Keller 的持股证明。', at:'2026-09-24 11:18:02' },
       reviewer:'grace.compliance', reviewedAt:'2026-09-24 11:18:02',
       form: obMkForm({ company:'Meridian Securities SA', email:'onboarding@meridian-sec.ch', legal:'股份公司（SA）', regNo:'CHE-409.228.113', founded:'2012-05-30', country:'瑞士', addr:'Rue du Rhône 80, 1204 Genève, Switzerland', lei:'5067009KQ5V2X8H1R339', nature:'证券与投资交易', volume:'500,000 以上（预计 1,200,000）', markets:'欧洲、英国', parent:'Meridian Holding AG', phone:'+41 22 000 4455', wallet:'0x3b8E5f1A9c7D2e4F6a0B1c3D5e7F9a2B4c6D8e0F', network:'Ethereum', signedAt:'2026-09-20 17:05:30', ip:'178.197.2.61',
         persons:[ obPerson('Marc Keller', ['董事','UBO','授权签字人'], { nat:'瑞士', res:'瑞士', email:'m.keller@meridian-sec.ch' }) ] }),
       logs:[ obL('2026-09-05 09:40:00','邀请开户','开户邮件已发送至 onboarding@meridian-sec.ch','kelly.bd'), obL('2026-09-20 17:05:44','客户提交','签署 IP 178.197.2.61','客户'),
-        obL('2026-09-24 11:18:02','要求补件','补件部分：④；说明：UBO Marc Keller 的护照复印件不清晰，请重新上传彩色清晰件；请补充 Marc Keller 的持股证明。有效期重新计算至 2026-10-24 11:18:02','grace.compliance') ],
+        obL('2026-09-24 11:18:02','要求补件','补件部分：③；说明：UBO Marc Keller 的护照复印件不清晰，请重新上传彩色清晰件；请补充 Marc Keller 的持股证明。有效期重新计算至 2026-10-24 11:18:02','grace.compliance') ],
     },
     {
       id:'KYB-2026-0008', company:'Bluewave Markets LLC', email:'admin@bluewave-mkts.com', note:'迪拜展会线索',
       status:'filling', sanction:false, createdAt:'2026-09-22 15:10:00', sentAt:'2026-09-22 15:10:00', expireAt:'2026-10-22 15:10:00',
-      submittedAt:'', updatedAt:'2026-09-27 20:41:19', filled:3,
+      submittedAt:'', updatedAt:'2026-09-27 20:41:19', filled:2,
       form: obMkForm({ company:'Bluewave Markets LLC', email:'admin@bluewave-mkts.com', legal:'有限责任公司（LLC）', regNo:'DMCC-194552', founded:'2021-01-14', country:'阿联酋', addr:'Unit 1203, Jumeirah Bay X2, JLT, Dubai, UAE', nature:'CFD 交易', volume:'50,000 以下', markets:'中东、其他：非洲（主要国家：阿联酋、尼日利亚）', phone:'+971 4 000 7788', wallet:'', network:'', signedAt:'', ip:'',
         persons:[ obPerson('Omar Haddad', ['董事','UBO'], { nat:'约旦', res:'阿联酋' }) ] }),
       logs:[ obL('2026-09-22 15:10:00','邀请开户','开户邮件已发送至 admin@bluewave-mkts.com','kelly.bd'), obL('2026-09-23 10:02:51','客户开始填写','','客户'),
@@ -14705,7 +15844,7 @@
     {
       id:'KYB-2026-0005', company:'Crestline Trading Co., Ltd.', email:'finance@crestline.hk',
       status:'approved', sanction:false, createdAt:'2026-08-20 10:00:00', sentAt:'2026-08-20 10:00:00', expireAt:'2026-09-19 10:00:00',
-      submittedAt:'2026-09-02 13:22:10', updatedAt:'2026-09-20 15:40:00', filled:6,
+      submittedAt:'2026-09-02 13:22:10', updatedAt:'2026-09-20 15:40:00', filled:5,
       reviewer:'grace.compliance', reviewedAt:'2026-09-20 15:40:00',
       form: obMkForm({ company:'Crestline Trading Co., Ltd.', email:'finance@crestline.hk', legal:'私人股份有限公司', regNo:'3120558', founded:'2017-08-08', country:'中国香港', addr:'Room 2101, 21/F, Lippo Centre Tower 2, 89 Queensway, Admiralty, Hong Kong', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'亚太（主要国家：中国香港、新加坡）', phone:'+852 3000 6611', wallet:'TFb3eD7nR2kP9qX4wZ1cV8mL5sA6gH0jTy', network:'TRON', signedAt:'2026-09-02 13:22:01', ip:'43.252.8.19',
         persons:[ obPerson('Kwok Ming Chan', ['董事','UBO','授权签字人'], { nat:'中国香港', res:'中国香港' }) ] }),
@@ -14714,7 +15853,7 @@
     {
       id:'KYB-2026-0004', company:'Vertex Asset Management', email:'kyb@vertex-am.com',
       status:'approved', sanction:false, createdAt:'2026-06-02 09:00:00', sentAt:'2026-06-02 09:00:00', expireAt:'2026-07-02 09:00:00',
-      submittedAt:'2026-06-08 18:10:45', updatedAt:'2026-06-10 11:25:00', filled:6,
+      submittedAt:'2026-06-08 18:10:45', updatedAt:'2026-06-10 11:25:00', filled:5,
       reviewer:'grace.compliance', reviewedAt:'2026-06-10 11:25:00',
       reviewMailFailed:{ mail:'approved', at:'2026-06-10 11:25:03', reason:'邮件服务返回失败（SMTP 连接超时）' },
       form: obMkForm({ company:'Vertex Asset Management', email:'kyb@vertex-am.com', legal:'有限合伙（LP）', regNo:'LP-88213', founded:'2015-02-10', country:'开曼群岛', addr:'PO Box 309, Ugland House, Grand Cayman, KY1-1104, Cayman Islands', nature:'证券与投资交易', volume:'100,001 – 500,000', markets:'北美、欧洲', phone:'+1 345 000 2200', wallet:'0x9e2C7a4F1b8D3e6A0c5B9f2E4d7C1a8B6e3F0d9C', network:'Ethereum', signedAt:'2026-06-08 18:10:30', ip:'64.23.155.4',
@@ -14724,7 +15863,7 @@
     {
       id:'KYB-2026-0003', company:'Pinnacle CFD Ltd', email:'ops@pinnaclecfd.com',
       status:'rejected', sanction:true, sanctionDesc:'涉及国家 / 地区：朝鲜；业务性质：未说明；预计交易量：未说明。',
-      createdAt:'2026-07-01 10:00:00', sentAt:'2026-07-01 10:00:00', expireAt:'2026-07-31 10:00:00', submittedAt:'2026-07-09 22:14:03', updatedAt:'2026-07-12 09:50:00', filled:6,
+      createdAt:'2026-07-01 10:00:00', sentAt:'2026-07-01 10:00:00', expireAt:'2026-07-31 10:00:00', submittedAt:'2026-07-09 22:14:03', updatedAt:'2026-07-12 09:50:00', filled:5,
       reviewer:'grace.compliance', reviewedAt:'2026-07-12 09:50:00', rejectReason:'UBO 与受制裁地区存在关联，且无法提供资金来源说明，不符合准入要求。',
       form: obMkForm({ company:'Pinnacle CFD Ltd', email:'ops@pinnaclecfd.com', legal:'国际商业公司（IBC）', regNo:'IBC-77120', founded:'2023-10-01', country:'圣文森特和格林纳丁斯', addr:'First Floor, First St. Vincent Bank Ltd Building, James Street, Kingstown', nature:'CFD 交易', volume:'500,000 以上（预计 2,000,000）', markets:'欧洲、北美、拉美、英国、中东、亚太', phone:'+1 784 000 0099', wallet:'TJk2L9mN4pQ7rS1tU5vW8xY0zA3bC6dE9f', network:'TRON', signedAt:'2026-07-09 22:13:50', ip:'91.132.147.9', sanction:true, sanctionDesc:'涉及国家 / 地区：朝鲜；业务性质：未说明；预计交易量：未说明。',
         persons:[ obPerson('Viktor Sokolov', ['董事','UBO','授权签字人'], { nat:'俄罗斯', res:'阿联酋' }) ] }),
@@ -14733,7 +15872,7 @@
     {
       id:'KYB-2026-0002', company:'Lumen Brokerage Inc.', email:'hello@lumenbrokerage.com',
       status:'expired', prevStatus:'filling', sanction:false, createdAt:'2026-07-20 10:00:00', sentAt:'2026-07-20 10:00:00', expireAt:'2026-08-19 10:00:00',
-      submittedAt:'', updatedAt:'2026-08-19 10:00:00', filled:2,
+      submittedAt:'', updatedAt:'2026-08-19 10:00:00', filled:1,
       form: obMkForm({ company:'Lumen Brokerage Inc.', email:'hello@lumenbrokerage.com', legal:'股份有限公司（Inc.）', regNo:'BC1288431', founded:'2020-06-17', country:'加拿大', addr:'1055 W Georgia St, Vancouver, BC V6E 3P3, Canada', nature:'外汇与金融市场交易', volume:'50,000 以下', markets:'北美', phone:'+1 604 000 3322', wallet:'', network:'', signedAt:'', ip:'',
         persons:[ obPerson('Noah Tremblay', ['董事','UBO'], { nat:'加拿大', res:'加拿大' }) ] }),
       logs:[ obL('2026-07-20 10:00:00','邀请开户','开户邮件已发送至 hello@lumenbrokerage.com','kelly.bd'), obL('2026-07-22 14:00:10','客户开始填写','','客户'), obL('2026-08-19 10:00:00','链接过期','有效期内未提交') ],
@@ -14741,7 +15880,7 @@
     {
       id:'KYB-2026-0001', company:'Tidal Markets Ltd', email:'kyc@tidalmarkets.io',
       status:'expired', prevStatus:'supplement', sanction:false, createdAt:'2026-06-15 10:00:00', sentAt:'2026-06-15 10:00:00', expireAt:'2026-08-05 16:30:00',
-      submittedAt:'2026-06-28 12:00:00', updatedAt:'2026-08-05 16:30:00', filled:6,
+      submittedAt:'2026-06-28 12:00:00', updatedAt:'2026-08-05 16:30:00', filled:5,
       supp:{ parts:['s1'], msg:'请补充集团 / 母公司名称，并更正注册地址（与注册证书不一致）。', at:'2026-07-06 16:30:00' },
       reviewer:'grace.compliance', reviewedAt:'2026-07-06 16:30:00',
       form: obMkForm({ company:'Tidal Markets Ltd', email:'kyc@tidalmarkets.io', legal:'私人股份有限公司', regNo:'MU-C179902', founded:'2022-04-19', country:'毛里求斯', addr:'Level 3, Tower 1, NeXTeracom, Ebène, Mauritius', nature:'CFD 交易', volume:'100,001 – 500,000', markets:'亚太、其他：非洲（主要国家：毛里求斯、南非）', phone:'+230 400 1188', wallet:'TRx4Z7aB1cD5eF8gH2jK6mN9pQ3rS0tUvW', network:'TRON', signedAt:'2026-06-28 11:59:40', ip:'102.115.3.72',
@@ -15076,16 +16215,29 @@
   // 文件下载记入系统操作日志（开户申请模块），不进详情页操作记录
   function obDownload(name) { obOperLog(obGet(obCurId), '导出', `下载文件 ${name}`, 'high'); showToast('已开始下载：' + name); }
   function obDownloadAll() { obOperLog(obGet(obCurId), '导出', `打包下载全部文件 ${obCurId}.zip`, 'high'); showToast(`已开始打包下载：${obCurId}.zip`); }
+  // 导出报告：客户最近一次提交的资料汇总为 PDF，记入系统操作日志
+  function obExportReport() {
+    const r = obGet(obCurId), fn = `${r.id}_${r.company}_Report.pdf`;
+    obOperLog(r, '导出', `导出报告 ${fn}`, 'high');
+    showToast('已开始导出：' + fn);
+  }
   function obSection(title, inner, extra) {
     return `<div class="detail-section"><div class="detail-section-hd ob-sec-hd"><span>${title}</span>${extra || ''}</div>${inner}</div>`;
   }
   function obEmpty(msg) { return `<div class="ob-empty">${msg || '客户尚未填写'}</div>`; }
   function obKvList(list) {
-    return `<div class="ob-grid">${list.map(([k, v, full]) => obKv(k, (v && v.proofs) ? obProofsHtml(v.proofs) : (v && v.files) ? obFilesHtml(v.files) : (v && v.file) ? obFileHtml(v.file) : obEsc(v), full === 'full')).join('')}</div>`;
+    return `<div class="ob-grid">${list.map(([k, v, full]) => obKv(k, (v && v.proofs) ? obProofsHtml(v.proofs) : (v && v.docs) ? obDocsHtml(v.docs) : (v && v.files) ? obFilesHtml(v.files) : (v && v.file) ? obFileHtml(v.file) : obEsc(v), full === 'full')).join('')}</div>`;
   }
-  // 证明文件（选填，可多个）：未上传时显示「未上传」
+  // 证明文件（可多个）：未上传时显示「未上传」
   function obFilesHtml(files) {
     return files && files.length ? `<div class="ob-files">${files.map(fn => obFileHtml(fn)).join('')}</div>` : obFileHtml('');
+  }
+  // 证明文件按文件类型分项展示
+  function obDocsHtml(docs) {
+    return docs.map(d => `<div class="ob-doc">
+      <div class="ob-doc-nm">${obEsc(d.label)}${d.opt ? '<span class="ob-doc-opt">（选填）</span>' : ''}</div>
+      ${obFilesHtml(d.files)}
+    </div>`).join('');
   }
   // ⑤ 所有权证明：至少一项、可多选；区块浏览器方式需附控制权证明（签名消息或参考码）
   function obProofsHtml(proofs) {
@@ -15123,7 +16275,9 @@
               <button class="btn btn-default btn-sm" onclick="obOpenAct('email')">修改邮箱</button>
               <button class="btn btn-default btn-sm" onclick="obOpenAct('resend')">重新邀请</button>`;
     }
-    // 打包下载：客户填写过资料即可下载（含 ① 公司证明文件、④ 人员证明文件、⑤ 所有权证明）
+    // 打包下载：客户填写过资料即可下载（含 ① 企业证明文件、③ 人员证明文件、④ 所有权证明），按文件类型分文件夹
+    // 导出报告：客户提交过至少一次即可导出
+    if (['submitted','supplement','approved','rejected'].includes(r.status)) acts = `<button class="btn btn-default btn-sm" onclick="obExportReport()">导出报告</button>` + acts;
     if (r.form && r.filled > 0) acts = `<button class="btn btn-default btn-sm" onclick="obDownloadAll()">打包下载全部文件</button>` + acts;
     document.getElementById('ob-dt-bar').innerHTML = `
       <span class="ob-dt-title">${r.id}</span>
@@ -15151,14 +16305,13 @@
     }
     if (r.status === 'rejected') banners += `<div class="ob-banner ob-banner-danger"><b>已拒绝</b>（${r.reviewedAt}）：拒绝原因：${obEsc(r.rejectReason)}</div>`;
 
-    // ── 左栏：①–⑥ 资料 ──
+    // ── 左栏：①–⑤ 资料 ──
     const f = r.form, n = r.filled || 0;
     const sec = (i) => f && n >= i;
     let left = '';
     left += obSection('① 企业信息' + obSuppTag(r, 's1'), sec(1) ? obKvList(f.s1) : obEmpty());
-    left += obSection('② 公司联系方式' + obSuppTag(r, 's2'), sec(2) ? obKvList(f.s2) : obEmpty());
-    left += obSection('③ 授权联系人' + obSuppTag(r, 's3'), sec(3) ? obKvList(f.s3) : obEmpty());
-    left += obSection('④ 人员（董事 / UBO / 股东 / 授权签字人）' + obSuppTag(r, 's4'), sec(4) ? f.s4.map(p => `
+    left += obSection('② 授权联系人' + obSuppTag(r, 's2'), sec(2) ? obKvList(f.s2) : obEmpty());
+    left += obSection('③ 人员（董事 / UBO / 股东 / 授权签字人）' + obSuppTag(r, 's3'), sec(3) ? f.s3.map(p => `
       <div class="ob-person">
         <div class="ob-person-hd">${obEsc(p.name)}${p.roles.map(x => `<span class="badge badge-lblue" style="font-weight:400;">${x}</span>`).join('')}</div>
         <div class="ob-grid">
@@ -15169,17 +16322,17 @@
           ${obKv('护照到期日', p.pExp)}${obKv('是否 PEP', obPepHtml(p))}
           ${obKv('持股比例 %', p.share)}${obKv('投票权比例 %', p.vote)}
           ${obKv('邮箱', obEsc(p.email))}${obKv('联系电话', p.phone)}
-          ${obKv('证明文件', obFilesHtml(p.files), true)}
+          ${obKv('人员信息（证明文件）', obDocsHtml(p.docs), true)}
         </div>
       </div>`).join('') : obEmpty());
-    left += obSection('⑤ 数字资产钱包授权' + obSuppTag(r, 's5'), sec(5) ? obKvList(f.s5) : obEmpty());
-    left += obSection('⑥ 声明与签名', sec(6) && f.s6.signedAt ? `<div class="ob-grid">
-        ${obKv('授权代表姓名', obEsc(f.s6.name))}${obKv('职位 / 角色', f.s6.title)}
+    left += obSection('④ 数字资产钱包授权' + obSuppTag(r, 's4'), sec(4) ? obKvList(f.s4) : obEmpty());
+    left += obSection('⑤ 声明与签名', sec(5) && f.s5.signedAt ? `<div class="ob-grid">
+        ${obKv('授权代表姓名', obEsc(f.s5.name))}${obKv('职位 / 角色', f.s5.title)}
         ${obKv('确认声明', '已勾选确认', true)}
         <div class="ob-kv full"><div class="ob-k">手写签名</div>
           <div class="ob-sign"><svg width="180" height="60" viewBox="0 0 180 60" fill="none" stroke="#303133" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 42c10-22 18-30 22-24s-8 26-2 24 14-26 20-22-4 20 2 20 10-14 16-14 2 12 8 12 12-18 20-18-6 18 2 18 16-10 24-12 14 6 28 2"/></svg></div>
         </div>
-        ${obKv('签署时间', f.s6.signedAt)}${obKv('签署 IP', f.s6.ip)}
+        ${obKv('签署时间', f.s5.signedAt)}${obKv('签署 IP', f.s5.ip)}
       </div>` : obEmpty(r.status === 'filling' || r.status === 'invited' || r.status === 'expired' ? '客户尚未签名提交' : ''));
 
     // ── 右栏：审核信息 / 备注 / 操作记录 ──
@@ -15257,9 +16410,9 @@
     if (window.lucide) lucide.createIcons();
   }
 
-  // 通过时审核意见必填的条件：制裁风险，或 ④ 中有 PEP 为「是」的人员
+  // 通过时审核意见必填的条件：制裁风险，或 ③ 中有 PEP 为「是」的人员
   function obApproveRisk(r) {
-    const pep = !!(r.form && r.form.s4 && r.form.s4.some(p => p.pep && p.pep !== '否'));
+    const pep = !!(r.form && r.form.s3 && r.form.s3.some(p => p.pep && p.pep !== '否'));
     if (r.sanction && pep) return '制裁风险和 PEP 人员';
     if (r.sanction) return '制裁风险';
     if (pep) return 'PEP 人员';
@@ -15485,6 +16638,7 @@
     rampOutRender();
     paFiltersInit();
     paRender();
+    poLedgerInit();
     alFiltersInit();
     alRender();
     arFiltersInit();
@@ -15496,7 +16650,7 @@
     fiatAppealRender();
     msLiteInit('fp-f-merchant', [...new Set(FIAT_ORDERS.map(o => o.merchant))].map(v => ({ value:v, label:v })), '全部');
     msLiteInit('fp-f-type', ['到账异常', '未查到入账', '商户申诉'].map(v => ({ value:v, label:v })), '全部');
-    msLiteInit('fl-f-type', ['deposit', 'deduct', 'wd_done', 'fee'].map(k => ({ value:k, label:FL_TYPES[k].label })), '全部');
+    msLiteInit('fl-f-type', ['deposit', 'po_income', 'deduct', 'wd_done', 'fee'].map(k => ({ value:k, label:FL_TYPES[k].label })), '全部');
     msLiteInit('fz-f-type', ['freeze', 'release', 'refund_release', 'deduct_unfreeze', 'wd_freeze', 'wd_unfreeze', 'wd_reject'].map(k => ({ value:k, label:FL_TYPES[k].label })), '全部');
     msLiteInit('fo-f-merchant', [...new Set(FIAT_ORDERS.map(o => o.merchant))].map(v => ({ value:v, label:v })), '全部');
     msLiteInit('fo-f-rm', MERCHANT_RECEIVING_ALL.map(r => ({ value:r.name, label:r.name })), '全部');
@@ -15505,6 +16659,18 @@
     ['fl-f-rm', 'fz-f-rm'].forEach(id => msLiteInit(id, MERCHANT_RECEIVING_ALL.map(r => ({ value:r.name, label:r.name })), '全部'));
     fiatLedgerRender('fl');
     fiatLedgerRender('fz');
+    // 法币代付
+    const poMerchants = [...new Set(PO_ORDERS.map(o => o.merchant))].map(v => ({ value:v, label:v }));
+    const poRms = MERCHANT_RECEIVING_ALL.map(r => ({ value:r.name, label:r.name }));
+    ['po-f-merchant', 'pp-f-merchant', 'mz-f-merchant'].forEach(id => msLiteInit(id, poMerchants, '全部'));
+    ['po-f-rm', 'pp-f-rm'].forEach(id => msLiteInit(id, poRms, '全部'));
+    msLiteInit('po-f-status', Object.keys(PO_STATUS).map(k => ({ value:k, label:PO_STATUS[k].label })), '全部');
+    msLiteInit('pp-f-src', Object.keys(PO_SRC).map(k => ({ value:k, label:PO_SRC[k] })), '全部');
+    msLiteInit('mz-f-type', Object.keys(MZ_TYPES).map(k => ({ value:k, label:MZ_TYPES[k].label })), '全部');
+    poOrdersRender();
+    poAppealRender();
+    poFrozenRender();
+    poApplyMenuPerms();
     obFiltersInit();
     obRender();
     fbFiltersInit();

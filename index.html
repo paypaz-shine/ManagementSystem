@@ -1267,6 +1267,9 @@
     .fb-msg-cell .fb-msg { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .ob-msg { font-size:14px; color:#606266; line-height:1.75; }
     .ob-chk-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+    /* 商户转账 */
+    .mt-inline { display:flex; align-items:center; gap:8px; }
+    .mt-unit { font-size:12px; color:#909399; white-space:nowrap; }
   </style>
 </head>
 <body>
@@ -1332,6 +1335,23 @@
           <div class="nav-item nav-sub-item" data-page="merchant-receiving">
             <i data-lucide="credit-card" class="nav-icon" style="width:14px;height:14px;"></i>
             <span class="nav-label">收款商户</span>
+          </div>
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-hd" id="nav-ghd-mtransfer" onclick="toggleNavGroup('mtransfer')">
+          <i data-lucide="arrow-left-right" class="nav-icon" style="width:16px;height:16px;"></i>
+          <span class="nav-label">商户转账</span>
+          <i data-lucide="chevron-up" id="nav-caret-mtransfer" class="nav-caret" style="width:13px;height:13px;"></i>
+        </div>
+        <div class="nav-sub-items" id="nav-sub-mtransfer">
+          <div class="nav-item nav-sub-item" data-page="mt-records">
+            <i data-lucide="file-text" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">转账记录</span>
+          </div>
+          <div class="nav-item nav-sub-item" data-page="mt-groups">
+            <i data-lucide="link" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">转账关系</span>
           </div>
         </div>
       </div>
@@ -1875,7 +1895,7 @@
                   <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>代币</th><th>网络</th><th>金额</th>
                   <th>变动后余额</th>
                   <th>
-                    <span class="me-info-wrap" onmouseenter="showTip(event,'Top Up / 充币：充币订单号（提币退回生成的充币为调账申请单号）\n手续费（随充币）：对应的充币订单号\nSettlement / 提币：提币订单号\n手续费（随提币）：对应的提币订单号\n调账：调账申请单号\n法币收款 / 手续费（随法币收款）：收款订单号\n网络费：对应的充币订单号（只有 On Ramp 充币会产生）')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
+                    <span class="me-info-wrap" onmouseenter="showTip(event,'Top Up / 充币：充币订单号（提币退回生成的充币为调账申请单号）\n手续费（随充币）：对应的充币订单号\nSettlement / 提币：提币订单号\n手续费（随提币）：对应的提币订单号\n调账：调账申请单号\n法币收款 / 手续费（随法币收款）：收款订单号\n网络费：对应的充币订单号（只有 On Ramp 充币会产生）\n转账转出 / 转账转入：转账单号')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
                       关联单号
                       <span class="me-info-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
                     </span>
@@ -2067,6 +2087,246 @@
 
       </div>
     </div><!-- /page-adjust-review -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 商户转账 › 转账记录  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-mt-records">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">转账单号</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入转账单号" id="mtr-no">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">转账关系</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="mtr-group-lite" tabindex="0"
+                     onclick="msLiteToggle('mtr-group')" onblur="setTimeout(function(){msLiteClose('mtr-group')}, 150)">
+                  <span class="ms-lite-text placeholder" id="mtr-group-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtr-group-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">转出商户</span>
+              <div class="filter-control">
+                <div class="ms-select-box" onclick="document.getElementById('mtr-from').focus()">
+                  <div class="ms-tags" id="mtr-from-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="mtr-from" autocomplete="off"
+                         oninput="mtMsInput('mtr-from')" onfocus="mtMsInput('mtr-from')"
+                         onblur="setTimeout(function(){mtMsHide('mtr-from')}, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtr-from-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">收款商户</span>
+              <div class="filter-control">
+                <div class="ms-select-box" onclick="document.getElementById('mtr-to').focus()">
+                  <div class="ms-tags" id="mtr-to-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="mtr-to" autocomplete="off"
+                         oninput="mtMsInput('mtr-to')" onfocus="mtMsInput('mtr-to')"
+                         onblur="setTimeout(function(){mtMsHide('mtr-to')}, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtr-to-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">代币</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="mtr-token-lite" tabindex="0"
+                     onclick="msLiteToggle('mtr-token')" onblur="setTimeout(function(){msLiteClose('mtr-token')}, 150)">
+                  <span class="ms-lite-text placeholder" id="mtr-token-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtr-token-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">网络</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="mtr-network-lite" tabindex="0"
+                     onclick="msLiteToggle('mtr-network')" onblur="setTimeout(function(){msLiteClose('mtr-network')}, 150)">
+                  <span class="ms-lite-text placeholder" id="mtr-network-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtr-network-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">转账时间</span>
+              <div class="filter-control">
+                <div class="date-range-el">
+                  <input class="date-input-el" type="date" id="mtr-date-start">
+                  <span class="range-sep-el">—</span>
+                  <input class="date-input-el" type="date" id="mtr-date-end">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="mtReset('mtr')">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="mtSearch('mtr')">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-spacer"></div>
+            <button class="export-btn" onclick="mtrExport()">
+              <i data-lucide="download" style="width:13px;height:13px;"></i>导出
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1450px;">
+              <colgroup>
+                <col style="width:170px"><col style="width:120px"><col style="width:100px"><col style="width:130px"><col style="width:100px"><col style="width:130px"><col style="width:70px"><col style="width:90px"><col style="width:120px"><col style="width:220px"><col style="width:152px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>转账单号</th><th>转账关系</th><th>转出商户 ID</th><th>转出商户名称</th><th>收款商户 ID</th><th>收款商户名称</th><th>代币</th><th>网络</th><th>转账金额</th><th>转账备注</th><th>转账时间</th>
+                </tr>
+              </thead>
+              <tbody id="mtr-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="mtr-page-total">共 0 条</span>
+            <select class="page-size-select" id="mtr-page-size" onchange="mtPageSize('mtr')">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+            </select>
+            <button class="page-btn" id="mtr-btn-prev" onclick="mtPage('mtr', MT_VIEWS['mtr'].page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="mtPage('mtr', 1)">1</button>
+            <button class="page-btn" onclick="mtPage('mtr', 2)">2</button>
+            <button class="page-btn" id="mtr-btn-next" onclick="mtPage('mtr', MT_VIEWS['mtr'].page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')mtPage('mtr', +this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-mt-records -->
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!--  PAGE: 商户转账 › 转账关系  -->
+    <!-- ════════════════════════════════════════════════ -->
+    <div class="page" id="page-mt-groups">
+      <div class="content-area">
+
+        <!-- Filter -->
+        <div class="filter-card">
+          <div class="filter-grid">
+            <div class="filter-item">
+              <span class="filter-label-el">关系名称</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入关系名称" id="mtg-name">
+              </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">成员商户</span>
+              <div class="filter-control">
+                <div class="ms-select-box" onclick="document.getElementById('mtg-member').focus()">
+                  <div class="ms-tags" id="mtg-member-tags"></div>
+                  <input class="ms-select-input" type="text" placeholder="商户 ID / 商户名称"
+                         id="mtg-member" autocomplete="off"
+                         oninput="mtMsInput('mtg-member')" onfocus="mtMsInput('mtg-member')"
+                         onblur="setTimeout(function(){mtMsHide('mtg-member')}, 150)">
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtg-member-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">状态</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="mtg-status-lite" tabindex="0"
+                     onclick="msLiteToggle('mtg-status')" onblur="setTimeout(function(){msLiteClose('mtg-status')}, 150)">
+                  <span class="ms-lite-text placeholder" id="mtg-status-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="mtg-status-dropdown" style="display:none;"></div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-default" onclick="mtReset('mtg')">
+              <i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置
+            </button>
+            <button class="btn btn-primary" onclick="mtSearch('mtg')">
+              <i data-lucide="search" style="width:13px;height:13px;"></i>搜索
+            </button>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="summary-bar">
+            <div class="summary-spacer"></div>
+            <button class="btn btn-primary" style="height:32px;" onclick="openMtgEdit(-1)">
+              <i data-lucide="plus" style="width:13px;height:13px;"></i>新增转账关系
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:1000px;">
+              <colgroup>
+                <col style="width:160px"><col style="width:100px"><col style="width:80px"><col style="width:260px"><col style="width:90px"><col style="width:170px"><col style="width:80px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>关系名称</th><th>成员</th><th>状态</th><th>备注</th><th>更新人</th><th>更新时间</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="mtg-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar">
+            <span class="pagination-total" id="mtg-page-total">共 0 条</span>
+            <select class="page-size-select" id="mtg-page-size" onchange="mtPageSize('mtg')">
+              <option value="10">10条/页</option>
+              <option value="20">20条/页</option>
+              <option value="50">50条/页</option>
+              <option value="100">100条/页</option>
+              <option value="200">200条/页</option>
+            </select>
+            <button class="page-btn" id="mtg-btn-prev" onclick="mtPage('mtg', MT_VIEWS['mtg'].page-1)">
+              <i data-lucide="chevron-left" style="width:14px;height:14px;"></i>
+            </button>
+            <button class="page-btn active" onclick="mtPage('mtg', 1)">1</button>
+            <button class="page-btn" onclick="mtPage('mtg', 2)">2</button>
+            <button class="page-btn" id="mtg-btn-next" onclick="mtPage('mtg', MT_VIEWS['mtg'].page+1)">
+              <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            </button>
+            <span class="goto-label">前往</span>
+            <input class="goto-input" type="number" min="1" onkeydown="if(event.key==='Enter')mtPage('mtg', +this.value)">
+            <span class="goto-suffix">页</span>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-mt-groups -->
 
     <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 充币记录                                  -->
@@ -3754,6 +4014,7 @@
         <span class="md-tab" data-tab="payin" onclick="mdSwitchTab('payin')">法币收款</span>
         <span class="md-tab" data-tab="payout" onclick="mdSwitchTab('payout')">法币代付</span>
         <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
+        <span class="md-tab" data-tab="whitelist" onclick="mdSwitchTab('whitelist')">提币白名单</span>
       </div>
       <!-- 渠道 tab content -->
       <div class="md-tab-content" id="md-content-tunnel" style="flex-direction:column;">
@@ -4003,6 +4264,67 @@
                   <tr><th>账号</th><th>最后登录时间</th><th>操作</th></tr>
                 </thead>
                 <tbody id="md-observer-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 提币白名单 tab content：开关由运营控制，白名单由商户在商户后台维护，此处只读 -->
+      <div class="md-tab-content" id="md-content-whitelist" style="display:none;flex-direction:column;">
+        <div class="content-area">
+          <div class="filter-card">
+            <div class="filter-grid">
+              <div class="filter-item"><span class="filter-label-el">地址名称</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入地址名称" id="md-wl-f-name"></div></div>
+              <div class="filter-item"><span class="filter-label-el">地址</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入地址" id="md-wl-f-addr"></div></div>
+              <div class="filter-item">
+                <span class="filter-label-el">网络</span>
+                <div class="filter-control">
+                  <div class="ms-lite" id="md-wl-f-net-lite" tabindex="0"
+                       onclick="msLiteToggle('md-wl-f-net')" onblur="setTimeout(function(){msLiteClose('md-wl-f-net')}, 150)">
+                    <span class="ms-lite-text placeholder" id="md-wl-f-net-text">全部</span>
+                    <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                  </div>
+                </div>
+                <div class="p-merch-dropdown" id="md-wl-f-net-dropdown" style="display:none;"></div>
+              </div>
+              <div class="filter-item">
+                <span class="filter-label-el">状态</span>
+                <div class="filter-control">
+                  <div class="select-wrap">
+                    <select class="field-select" id="md-wl-status">
+                      <option value="">全部</option>
+                      <option value="active">未删除</option>
+                      <option value="deleted">已删除</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button class="btn btn-default" onclick="mdWlReset()"><i data-lucide="rotate-ccw" style="width:13px;height:13px;"></i>重置</button>
+              <button class="btn btn-primary" onclick="mdRenderWhitelistTable()"><i data-lucide="search" style="width:13px;height:13px;"></i>搜索</button>
+            </div>
+          </div>
+          <div class="table-card">
+            <div class="summary-bar">
+              <div class="summary-spacer"></div>
+              <span style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#606266;">
+                <span>提币白名单</span>
+                <label class="role-switch"><input type="checkbox" id="md-wl-switch" onclick="mdWlToggle(event)"><span></span></label>
+                <span id="md-wl-switch-label" style="color:#909399;"></span>
+              </span>
+            </div>
+            <div class="table-wrap">
+              <table style="min-width:1200px;">
+                <colgroup>
+                  <col style="width:130px"><col style="width:90px"><col style="width:320px"><col style="width:150px">
+                  <col style="width:90px"><col style="width:160px"><col style="width:80px"><col style="width:160px">
+                </colgroup>
+                <thead>
+                  <tr><th>地址名称</th><th>网络</th><th>地址</th><th>备注</th><th>操作人</th><th>添加时间</th><th>状态</th><th>更新时间</th></tr>
+                </thead>
+                <tbody id="md-whitelist-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -5266,6 +5588,80 @@
     </div>
   </div>
 
+  <!-- ── 商户转账：新增 / 编辑转账关系 Modal ─────────── -->
+  <div class="modal-overlay" id="mtg-edit-modal" onclick="if(event.target===this)closeMtgEdit()">
+    <div class="modal" style="width:600px;">
+      <div class="modal-header">
+        <span class="modal-title" id="mtg-edit-title">新增转账关系</span>
+        <span class="modal-close" onclick="closeMtgEdit()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </span>
+      </div>
+      <div class="modal-body" style="display:block;padding:24px 24px 8px;">
+        <div class="ak-form-row">
+          <span class="ak-label"><span class="ak-req">*</span>关系名称</span>
+          <div>
+            <input class="field-input" type="text" id="mtg-edit-name" maxlength="50" style="width:100%;" placeholder="请输入关系名称" oninput="mtlEditClearErr('mtg-edit-name-err')">
+            <div class="ar-wd-hint" id="mtg-edit-name-err"></div>
+          </div>
+        </div>
+        <div class="ak-form-row" style="align-items:start;">
+          <span class="ak-label" style="padding-top:6px;"><span class="ak-req">*</span>成员商户</span>
+          <div style="position:relative;min-width:0;">
+            <div class="ms-select-box" onclick="document.getElementById('mtg-edit-member').focus()">
+              <input class="ms-select-input" type="text" placeholder="搜索商户 ID / 商户名称，可多选"
+                     id="mtg-edit-member" autocomplete="off"
+                     oninput="mtgMemberInput()" onfocus="mtgMemberInput()"
+                     onblur="setTimeout(function(){document.getElementById('mtg-edit-member-dropdown').style.display='none'}, 150)">
+              <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+            </div>
+            <div class="p-merch-dropdown" id="mtg-edit-member-dropdown" style="display:none;left:0;"></div>
+            <div id="mtg-edit-member-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+            <div class="ar-wd-hint" id="mtg-edit-member-err"></div>
+          </div>
+        </div>
+        <div class="ak-form-row">
+          <span class="ak-label">状态</span>
+          <div class="ak-radios">
+            <label class="ak-radio-item"><input type="radio" name="mtg-edit-status" value="enabled" id="mtg-edit-status-enabled" checked><span class="ak-dot"></span>启用</label>
+            <label class="ak-radio-item"><input type="radio" name="mtg-edit-status" value="disabled" id="mtg-edit-status-disabled"><span class="ak-dot"></span>禁用</label>
+          </div>
+        </div>
+        <div class="ak-form-row" style="align-items:start;">
+          <span class="ak-label" style="padding-top:6px;">备注</span>
+          <div class="wm-remark-wrap" style="margin-top:0;position:relative;">
+            <textarea class="wm-remark" id="mtg-edit-remark" placeholder="请输入备注" maxlength="200" oninput="document.getElementById('mtg-edit-remark-count').textContent=this.value.length"></textarea>
+            <span class="wm-remark-count"><span id="mtg-edit-remark-count">0</span>/200</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" onclick="closeMtgEdit()">取消</button>
+        <button class="btn btn-primary btn-sm" style="margin-left:8px;" onclick="submitMtgEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 商户转账：二次确认 Modal ───────────────────── -->
+  <div class="modal-overlay" id="mt-confirm-modal" style="z-index:1100;" onclick="if(event.target===this)closeMtConfirm()">
+    <div class="modal" style="width:380px;">
+      <div class="wd-confirm-box">
+        <button class="wd-confirm-close" onclick="closeMtConfirm()">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <div class="wd-confirm-hd">
+          <span id="mt-confirm-icon"></span>
+          <span class="wd-confirm-title" id="mt-confirm-title"></span>
+        </div>
+        <p class="wd-confirm-msg" id="mt-confirm-msg"></p>
+        <div class="wd-confirm-actions">
+          <button class="btn btn-default btn-sm" onclick="closeMtConfirm()">取消</button>
+          <button class="btn btn-sm" id="mt-confirm-ok"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Invite Modal ──────────────────────────────── -->
   <div class="modal-overlay" id="invite-modal" onclick="if(event.target===this)closeInviteModal()">
     <div class="modal" style="width:460px;">
@@ -6098,6 +6494,8 @@
     'fiat-ledger':   { label: '收款商户资金明细', icon: 'receipt', parent: '平台资产' },
     'fiat-frozen':   { label: '收款商户冻结明细', icon: 'lock', parent: '平台资产' },
     'merchant-receiving': { label: '收款商户', icon: 'credit-card', parent: '商户管理' },
+    'mt-records':   { label: '转账记录', icon: 'file-text', parent: '商户转账' },
+    'mt-groups':    { label: '转账关系', icon: 'link', parent: '商户转账' },
     withdraw: { label: '提币记录',  icon: 'circle-arrow-up' },
     'withdraw-audit': { label: '提币审核', icon: 'shield-check' },
     currency: { label: '币种管理',  icon: 'circle-dollar-sign' },
@@ -6113,7 +6511,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'merchant-receiving-detail', 'fiat-orders', 'fiat-appeal', 'fiat-ledger', 'fiat-frozen', 'po-orders', 'po-appeal', 'merchant-frozen', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review']);
+  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'merchant-receiving-detail', 'fiat-orders', 'fiat-appeal', 'fiat-ledger', 'fiat-frozen', 'po-orders', 'po-appeal', 'merchant-frozen', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review', 'mt-records', 'mt-groups']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -6191,6 +6589,12 @@
     const merchantGhd = document.getElementById('nav-ghd-merchant');
     if (merchantGhd) {
       merchantGhd.classList.toggle('group-active', pid === 'onboard' || pid === 'onboard-detail' || pid === 'merchant' || pid === 'merchant-detail' || pid === 'merchant-receiving' || pid === 'merchant-receiving-detail');
+    }
+
+    // update merchant transfer (商户转账) group header active state
+    const mtGhd = document.getElementById('nav-ghd-mtransfer');
+    if (mtGhd) {
+      mtGhd.classList.toggle('group-active', pid === 'mt-records' || pid === 'mt-groups');
     }
 
     // update fiat (法币收款) group header active state
@@ -7513,6 +7917,9 @@
     { merchantId:'820193456', merchantName:'goldpay-cn',     userId:'-', accountType:'receiving', token:'USDT', network:'TRON', net:'-30002.00', fee:'2.00', wallet:'TGv5cL9pXr2WmK7sN4bHq1YdE8aJ3uFzT6', wdTime:'2026-10-05 10:20:44', time:'-', hash:'-', paypazId:'-', supplierId:'-', channel:'-', status:'audit_rejected', remark:'提币地址存在风险，请更换地址后重新申请' },
     // 示例：Meta Trader 客户 API 提币，Cobo Payment 与兜底钱包 Cobo Holding 余额均不足，进入待重试
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023853', token:'USDT', network:'BNB Smart Chain', net:'-9.01', fee:'0.01', wallet:'0xD7e8F9a0B1c2D3e4F5a6B7c8D9e0F1a2B3c4D5e6', wdTime:'2026-09-28 15:20:11', time:'-', hash:'-', paypazId:'WD00000000000070', supplierId:'-', channel:'Cobo Payment', status:'manual_review', reviewType:'balance_retry', partner:'metatrader', retryReason:'Cobo Payment 余额不足，兜底钱包 Cobo Holding 余额不足' },
+    // 提币白名单演示：kara 开启白名单后的商户后台单笔提币（wlId＝提交时匹配的白名单 ID）；第一笔的地址审核前已被商户删除 → 列表显示「已被移出白名单」，详情 / 审核弹窗顶部显示提示条
+    { merchantId:'635102950', merchantName:'kara',  userId:'-', token:'USDT', network:'TRON', net:'-3000.00', fee:'0.00', wallet:'TAd9zHCayg9LumQ2Kx5nWbYh8Rc4o6P8r0', wdTime:'2026-10-30 10:12:05', time:'-', hash:'-', paypazId:'WD00000000000091', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review', wlId:2 },
+    { merchantId:'635102950', merchantName:'kara',  userId:'-', token:'USDT', network:'TRON', net:'-2000.00', fee:'0.00', wallet:'TPeH4FLWrPTGqsUrxA4JK12i8kUWc1eeHQ', wdTime:'2026-10-30 09:40:22', time:'-', hash:'-', paypazId:'WD00000000000092', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review', wlId:5 },
     // 示例：配置钱包 Cobo Payment 余额不足，自动兜底从 Cobo Holding 出金
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023854', token:'USDT', network:'TRON', net:'-20.01', fee:'0.01', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-09-29 10:05:42', time:'2026-09-29 10:06:20', hash:'9c1e7a3f5b2d8e4c6a0f1b3d5e7c9a2b4d6f8e0c', paypazId:'WD00000000000071', supplierId:'7f3e2a1b-9c4d-4e8f-a6b5-1d2c3e4f5a6b', channel:'Cobo Holding', configWallet:'Cobo Payment', fallback:true, status:'completed' },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', wdTime:'2026-06-25 09:12:03', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
@@ -7567,7 +7974,7 @@
 
   (function assignWithdrawMethod() {
     // 提币方式：Excel 对应 viaExcel 批量导入；其余为商户后台"单笔"表单发起或直接调用 API
-    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', 'WD00000000000080', 'WD00000000000083']);
+    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', 'WD00000000000080', 'WD00000000000083', 'WD00000000000091', 'WD00000000000092']);
     WITHDRAW_ALL.forEach(r => {
       r.method = r.accountType === 'receiving' ? '单笔' : r.viaExcel ? 'Excel' : (singleMarkers.has(r.hash) || singleMarkers.has(r.paypazId) ? '单笔' : 'API');
     });
@@ -8060,7 +8467,7 @@
         <td class="cell-red">${wAmt(r)}</td>
         <td>${wFeeNeg(r)}</td>
         <td class="cell-red">${r.net}</td>
-        <td>${fullCell(r.wallet)}</td>
+        <td>${fullCell(r.wallet)}${wlRemovedTag(r)}</td>
         <td style="font-family:Inter,sans-serif;white-space:nowrap;">${r.wdTime}</td>
         <td>${r.batch === '-' ? '-' : fullCell(r.batch)}</td>
         <td>${paypazCell}</td>
@@ -8276,6 +8683,8 @@
         ${(!value || value === '-') ? '<span class="detail-value">—</span>' : truncCell(value)}
       </div>`;
     return [
+      // 提币白名单：地址提交后被商户移出白名单时，详情 / 审核弹窗顶部提示
+      wlRemovedTag(r) ? '<div class="md-token-tip" style="grid-column:1/-1">该提币地址已被移出商户白名单，请先与商户确认后再操作。</div>' : '',
       di('商户 ID',      r.merchantId + rmTag(r)),
       di('商户名称',     r.merchantName),
       di('客户 ID',      r.userId),
@@ -9506,6 +9915,7 @@
     document.querySelectorAll('.md-tab-content').forEach(el => { el.style.display = el.id === 'md-content-tunnel' ? 'flex' : 'none'; });
     // 无「企业商户法币代付配置查看」权限时隐藏法币代付 tab
     document.querySelector('.md-tab[data-tab="payout"]').style.display = poCan('merchant_payout_view') ? '' : 'none';
+    document.querySelector('.md-tab[data-tab="whitelist"]').style.display = poCan('merchant_whitelist_view') ? '' : 'none';
     navigateTo('merchant-detail');
   }
 
@@ -10208,6 +10618,83 @@
     if (tab === 'payin')      mdRenderPayinTable();
     if (tab === 'payout')     mdRenderPayoutTable();
     if (tab === 'observer')   mdRenderObserversTable();
+    if (tab === 'whitelist')  { if (!MS_LITE['md-wl-f-net']) msLiteInit('md-wl-f-net', [{ value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }], '全部'); mdRenderWhitelistTable(); }
+  }
+
+  // ── 提币白名单（PRD：提币白名单）──────────────────────
+  // 按商户开关，默认关闭；开启后商户后台显示「提币白名单」菜单，单笔提币只能选白名单地址
+  // 白名单由商户在商户后台维护（新增 / 删除需邮箱 + 谷歌验证码），运营只读；删除为软删除，这里展示已删除记录
+  // 操作人 / 更新时间：最近一次新增、编辑或删除该地址的人和时间
+  const MD_WL = {
+    '635102950': { on:true, list:[
+      { id:5, name:'币安主账户', net:'TRON', addr:'TPeH4FLWrPTGqsUrxA4JK12i8kUWc1eeHQ', remark:'日常结算', by:'张伟明', time:'2026-10-28 16:20:11', updBy:'李晓燕', updTime:'2026-10-29 11:02:36' },
+      { id:4, name:'OKX 归集', net:'Ethereum', addr:'0x8f3Cc1B5a9E2d4F6a7B8c9D0e1F2a3B4c5D6e7F8', remark:'', by:'张伟明', time:'2026-10-25 10:05:42' },
+      { id:3, name:'冷钱包', net:'TRON', addr:'TXpqZ3mNc4o6P8r0T2v4X6z8B0d2F4h6J8', remark:'大额资金归集', by:'李晓燕', time:'2026-10-20 09:31:08' },
+      { id:2, name:'旧收款地址', net:'TRON', addr:'TAd9zHCayg9LumQ2Kx5nWbYh8Rc4o6P8r0', remark:'', by:'张伟明', time:'2026-10-12 14:12:55', delBy:'张伟明', delTime:'2026-10-30 10:30:18' },
+    ] },
+  };
+  function mdWl(merchantId) { return MD_WL[merchantId] || (MD_WL[merchantId] = { on:false, list:[] }); }
+  function mdWlSame(net, a, b) { return net === 'TRON' ? a === b : a.toLowerCase() === b.toLowerCase(); }
+  // 提币审核标签：提交时经过白名单校验（有 wlId）、商户开关仍开启、白名单中已不存在该「网络 + 地址」
+  function wlRemovedTag(r) {
+    if (!r.wlId) return '';
+    const st = mdWl(r.merchantId);
+    if (!st.on || st.list.some(w => !w.delTime && w.net === r.network && mdWlSame(w.net, w.addr, r.wallet))) return '';
+    return '<span class="badge badge-red" style="margin-top:4px;">已被移出白名单</span>';
+  }
+
+  function mdRenderWhitelistTable() {
+    const m = MERCHANT_ALL[currentMerchantIdx];
+    const st = mdWl(m.id);
+    const sw = document.getElementById('md-wl-switch');
+    sw.checked = st.on;
+    sw.disabled = !poCan('merchant_whitelist_switch');
+    document.getElementById('md-wl-switch-label').textContent = st.on ? '已启用' : '已禁用';
+    const f = document.getElementById('md-wl-status').value;
+    const name = document.getElementById('md-wl-f-name').value.trim(), addr = document.getElementById('md-wl-f-addr').value.trim().toLowerCase();
+    const nets = msLiteGet('md-wl-f-net');
+    const rows = st.list.filter(w => (!f || (f === 'deleted') === !!w.delTime) && (!name || w.name.includes(name)) &&
+      (!addr || w.addr.toLowerCase().includes(addr)) && (!nets.length || nets.includes(w.net))).sort((a, b) => a.time < b.time ? 1 : -1);
+    const empty = '<span class="cell-empty">—</span>';
+    document.getElementById('md-whitelist-tbody').innerHTML = rows.map(w => `<tr>
+        <td>${obEsc(w.name)}</td><td>${w.net}</td><td>${fullCell(w.addr)}</td><td>${w.remark ? obEsc(w.remark) : empty}</td>
+        <td>${w.delBy || w.updBy || w.by}</td><td style="font-family:Inter,sans-serif;">${w.time}</td>
+        <td>${w.delTime ? '<span class="badge badge-gray">已删除</span>' : '<span class="badge badge-green">未删除</span>'}</td>
+        <td style="font-family:Inter,sans-serif;">${w.delTime || w.updTime || w.time}</td>
+      </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;color:#C0C4CC;padding:48px 0;">商户暂未添加白名单地址</td></tr>`;
+  }
+
+  function mdWlReset() {
+    document.getElementById('md-wl-f-name').value = '';
+    document.getElementById('md-wl-f-addr').value = '';
+    document.getElementById('md-wl-status').value = '';
+    msLiteReset('md-wl-f-net');
+    mdRenderWhitelistTable();
+  }
+
+  // 开关切换先二次确认，确认后才生效；取消则开关保持原状
+  function mdWlToggle(e) {
+    e.preventDefault();
+    if (!poCan('merchant_whitelist_switch')) return;
+    const m = MERCHANT_ALL[currentMerchantIdx];
+    const st = mdWl(m.id);
+    const turnOn = !st.on;
+    mtOpenConfirm(turnOn ? {
+      icon:'shield-check', iconColor:'#409EFF', title:'启用提币白名单', btnCls:'btn-primary', btnTxt:'启用',
+      msg:`启用后，${m.name} 在商户后台提币只能提到白名单地址；当前白名单为空时需先添加地址才能提币。确认启用吗？`,
+    } : {
+      icon:'alert-triangle', iconColor:'#E6A23C', title:'禁用提币白名单', btnCls:'btn-danger', btnTxt:'禁用',
+      msg:`禁用后，${m.name} 提币将不再校验白名单，已添加的地址保留。确认禁用吗？`,
+    }, () => {
+      st.on = turnOn;
+      closeMtConfirm();
+      mdRenderWhitelistTable();
+      if (typeof withdrawAuditRender === 'function') withdrawAuditRender();
+      OPERLOG_ALL.unshift({ id:'ol-wl-' + Date.now(), time:_arNowStr(), operator:'admin', module:'企业商户', type:'修改',
+        target:`${m.name}（${m.id}）`, content:`提币白名单：${turnOn ? '禁用 → 启用' : '启用 → 禁用'}`, result:'success', ip:'127.0.0.1', level:'high' });
+      if (typeof operlogSearch === 'function') operlogSearch();
+      showToast(turnOn ? '已启用提币白名单' : '已禁用提币白名单');
+    });
   }
 
   // ── Channel ───────────────────────────────────────────
@@ -12523,6 +13010,8 @@
     adjust:     { label:'调账',   cls:'badge-purple' },
     fiat:       { label:'法币收款', cls:'badge-green'  },
     payout:     { label:'法币代付', cls:'badge-blue'   },
+    transfer_out: { label:'转账转出', cls:'badge-orange' },
+    transfer_in:  { label:'转账转入', cls:'badge-green'  },
   };
 
   // 每个商户的流水按时间顺序滚存余额，末笔 balanceAfter 与 MERCHANT_ALL 对应商户的
@@ -12601,6 +13090,7 @@
       { value:'settlement', label:'Settlement' }, { value:'withdraw', label:'提币' },
       { value:'fee', label:'手续费' }, { value:'networkfee', label:'网络费' }, { value:'adjust', label:'调账' },
       { value:'fiat', label:'法币收款' }, { value:'payout', label:'法币代付' },
+      { value:'transfer_out', label:'转账转出' }, { value:'transfer_in', label:'转账转入' },
     ], '全部');
   }
   function alFilteredRows() {
@@ -13382,6 +13872,17 @@
         { id:'fiat_frozen_export', label:'导出' },
       ] },
     ] },
+    { id:'merchant_transfer', label:'商户转账', children:[
+      { id:'mt_records', label:'转账记录', children:[
+        { id:'mt_records_view', label:'查看' },
+        { id:'mt_records_export', label:'导出' },
+      ] },
+      { id:'mt_groups', label:'转账关系', children:[
+        { id:'mt_groups_view', label:'查看' },
+        { id:'mt_groups_add', label:'新增' },
+        { id:'mt_groups_edit', label:'编辑' },
+      ] },
+    ] },
     { id:'merchant_mgmt', label:'商户管理', children:[
       { id:'onboard_mgmt', label:'开户申请', children:[
         { id:'onboard_list', label:'开户申请列表' },
@@ -13413,6 +13914,8 @@
       { id:'merchant_payin_edit', label:'企业商户法币收款配置编辑' },
       { id:'merchant_payout_view', label:'企业商户法币代付配置查看' },
       { id:'merchant_payout_edit', label:'企业商户法币代付配置编辑' },
+      { id:'merchant_whitelist_view', label:'企业商户提币白名单查看' },
+      { id:'merchant_whitelist_switch', label:'企业商户提币白名单开关' },
       { id:'receiving_mgmt', label:'收款商户', children:[
         { id:'receiving_view', label:'查看' },
         { id:'receiving_invite', label:'邀请' },
@@ -15390,7 +15893,7 @@
   const OPERLOG_MODULES = ['收款商户','法币收款','法币代付','用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
     '客户端管理','对象存储配置','个人信息','登录日志','操作日志','在线用户',
     '商户管理','开户申请','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核',
-    '企业商户账户明细','企业商户账户调账','平台资产'];
+    '企业商户账户明细','企业商户账户调账','平台资产','商户转账'];
 
   const OPERLOG_TYPES = ['新增','修改','删除','状态变更','审批','授权','强退','导出'];
 
@@ -16617,6 +17120,383 @@
     obRender();
   }
 
+  // ══════════════════════════════════════════════════════
+  //  商户转账：转账记录 / 转账关系 data & logic
+  // ══════════════════════════════════════════════════════
+  // 平台内记账划转，不上链：A 扣减 X，B 同代币同网络增加 X；不收手续费、不限额、无审核，提交即到账
+  // 转账关系：组内任意两个成员可相互转账，开通后可转全部代币和网络；一个商户只能加入一个转账关系；只保留组的启用 / 禁用
+  const MT_TOKENS = ['USDT', 'USDC'];
+  const MT_NETWORKS = ['TRON', 'Ethereum', 'BSC', 'Polygon', 'Solana', 'Arbitrum', 'Base'];
+
+  // members 为商户 ID，名称从 MERCHANT_ALL 取
+  const MT_GROUPS = [
+    { id:'G003', name:'Gamma 集团', members:['304857192', '987654321'], status:'disabled', remark:'业务暂停，待线下确认后再启用', updater:'admin', updateTime:'2026-10-26 18:00:00' },
+    { id:'G002', name:'Alpha 集团', members:['512847362', '731924856'], status:'enabled', remark:'', updater:'admin', updateTime:'2026-10-20 11:00:00' },
+    { id:'G001', name:'Kara 集团', members:['635102950', '884590488', '460466234', '291654802'], status:'enabled', remark:'同集团主体间资金往来', updater:'admin', updateTime:'2026-10-15 09:20:00' },
+  ];
+
+  // 转账单只有「已完成」：校验不通过不生成；groupId / groupName 为提交时所属转账关系
+  const MT_ORDERS = [
+    { id:'MT20261029000001', groupId:'G001', groupName:'Kara 集团',  fromId:'635102950', fromName:'kara',      toId:'884590488', toName:'kara2',    token:'USDT', network:'TRON',     amount:'500.00',  remark:'10 月货款结算', time:'2026-10-29 10:12:30' },
+    { id:'MT20261028000002', groupId:'G001', groupName:'Kara 集团',  fromId:'884590488', fromName:'kara2',     toId:'635102950', toName:'kara',     token:'USDC', network:'Ethereum', amount:'260.00',  remark:'', time:'2026-10-28 15:40:18' },
+    { id:'MT20261028000001', groupId:'G001', groupName:'Kara 集团',  fromId:'635102950', fromName:'kara',      toId:'460466234', toName:'kara3',    token:'USDT', network:'TRON',     amount:'120.00',  remark:'内部资金调拨', time:'2026-10-28 11:05:12' },
+    { id:'MT20261027000001', groupId:'G001', groupName:'Kara 集团',  fromId:'635102950', fromName:'kara',      toId:'884590488', toName:'kara2',    token:'USDT', network:'TRON',     amount:'200.00',  remark:'9 月货款结算', time:'2026-10-27 14:58:40' },
+    { id:'MT20261024000001', groupId:'G001', groupName:'Kara 集团',  fromId:'291654802', fromName:'kara4',     toId:'635102950', toName:'kara',     token:'USDT', network:'TRON',     amount:'60.00',   remark:'', time:'2026-10-24 13:10:00' },
+    { id:'MT20261023000001', groupId:'G003', groupName:'Gamma 集团', fromId:'304857192', fromName:'gamma-fx',  toId:'987654321', toName:'delta-ex', token:'USDC', network:'Ethereum', amount:'800.00',  remark:'服务费', time:'2026-10-23 16:02:10' },
+    { id:'MT20261021000001', groupId:'G002', groupName:'Alpha 集团', fromId:'512847362', fromName:'alpha-pay', toId:'731924856', toName:'betacorp', token:'USDT', network:'TRON',     amount:'300.00',  remark:'', time:'2026-10-21 09:40:05' },
+    { id:'MT20261020000001', groupId:'G001', groupName:'Kara 集团',  fromId:'291654802', fromName:'kara4',     toId:'635102950', toName:'kara',     token:'USDT', network:'TRON',     amount:'300.00',  remark:'服务费', time:'2026-10-20 10:58:00' },
+    { id:'MT20261016000001', groupId:'G001', groupName:'Kara 集团',  fromId:'460466234', fromName:'kara3',     toId:'291654802', toName:'kara4',    token:'USDT', network:'TRON',     amount:'1500.00', remark:'', time:'2026-10-16 17:22:48' },
+  ];
+
+  const mtFmt = v => (parseFloat(v) || 0).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  const mtMono = v => `<span style="font-family:Inter,sans-serif">${v}</span>`;
+  const mtEmpty = '<span class="cell-empty">—</span>';
+  const mtMerchantName = id => { const m = MERCHANT_ALL.find(x => x.id === id); return m ? m.name : id; };
+  const mtMemberLabel = id => `${mtMerchantName(id)}（${id}）`;
+  function mtEmptyRow(cols) { return `<tr><td colspan="${cols}" style="text-align:center;color:#909399;padding:32px 0;">暂无数据</td></tr>`; }
+
+  // ── 资金联动：转账写入企业商户账户明细（A：转账转出 −X；B：转账转入 ＋X），按「商户 + 代币 + 网络」滚存 ──
+  function mtLedgerAppend(r) {
+    if (LEDGER_ALL.some(x => x.relatedNo === r.id)) return;
+    const last = mid => LEDGER_ALL.filter(x => x.merchantId === mid && x.token === r.token && x.network === r.network && x.time <= r.time)
+      .sort((a, b) => b.time.localeCompare(a.time))[0];
+    const x = parseFloat(r.amount);
+    const lastA = last(r.fromId), lastB = last(r.toId);
+    const a1 = (lastA ? parseFloat(lastA.balanceAfter) : 0) - x;
+    const b1 = (lastB ? parseFloat(lastB.balanceAfter) : 0) + x;
+    const base = { userId:'', token:r.token, network:r.network, relatedNo:r.id, time:r.time };
+    LEDGER_ALL.push(Object.assign({ merchantId:r.fromId, merchantName:r.fromName, type:'transfer_out', amount:'-' + x.toFixed(2), balanceAfter:a1.toFixed(2), remark:`转给 ${r.toName}（${r.toId}）` }, base));
+    LEDGER_ALL.push(Object.assign({ merchantId:r.toId, merchantName:r.toName, type:'transfer_in', amount:'+' + x.toFixed(2), balanceAfter:b1.toFixed(2), remark:`来自 ${r.fromName}（${r.fromId}）` }, base));
+  }
+  function mtLedgerInit() {
+    [...MT_ORDERS].sort((a, b) => a.time.localeCompare(b.time)).forEach(mtLedgerAppend);
+    alState.rows = [...LEDGER_ALL].sort((a, b) => b.time.localeCompare(a.time));
+  }
+
+  // ── 列表通用：mtr 转账记录 / mtg 转账关系 ──
+  const MT_VIEWS = {
+    mtr: { page:1, size:10, rows:[] },
+    mtg: { page:1, size:10, rows:[] },
+  };
+  const MT_TEXT_FILTERS = {
+    mtr: ['mtr-no', 'mtr-from', 'mtr-to', 'mtr-date-start', 'mtr-date-end'],
+    mtg: ['mtg-name', 'mtg-member'],
+  };
+  const MT_LITE_FILTERS = {
+    mtr: ['mtr-group', 'mtr-token', 'mtr-network'],
+    mtg: ['mtg-status'],
+  };
+
+  const mtGroupOpts = () => MT_GROUPS.map(g => ({ value:g.id, label:g.name }));
+  function mtFiltersInit() {
+    msLiteInit('mtr-group', mtGroupOpts(), '全部');
+    msLiteInit('mtr-token', MT_TOKENS.map(v => ({ value:v, label:v })), '全部');
+    msLiteInit('mtr-network', MT_NETWORKS.map(v => ({ value:v, label:v })), '全部');
+    msLiteInit('mtg-status', [{ value:'enabled', label:'启用' }, { value:'disabled', label:'禁用' }], '全部');
+  }
+
+  const mtVal = id => document.getElementById(id).value.trim().toLowerCase();
+
+  // 商户筛选：下拉多选（同调账页商户筛选）；选项为各转账关系内的商户
+  const mtMemberOpts = () => [...new Set(MT_GROUPS.flatMap(g => g.members))].map(id => ({ id, name:mtMerchantName(id) }));
+  const MT_MS = {
+    'mtr-from': { sel:[], src:mtMemberOpts }, 'mtr-to': { sel:[], src:mtMemberOpts },
+    'mtg-member': { sel:[], src:mtMemberOpts },
+  };
+  function mtMsInput(fid) {
+    const cfg = MT_MS[fid];
+    const val = document.getElementById(fid).value.trim().toLowerCase();
+    const dd = document.getElementById(fid + '-dropdown');
+    const all = cfg.src();
+    const list = val ? all.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : all;
+    dd.innerHTML = list.length ? list.map(m => `<div class="ms-option${cfg.sel.includes(m.id) ? ' selected' : ''}" onmousedown="event.preventDefault();mtMsToggle('${fid}','${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`).join('') : `<div class="ms-empty">无匹配商户</div>`;
+    dd.style.display = '';
+  }
+  function mtMsToggle(fid, id) {
+    const sel = MT_MS[fid].sel, i = sel.indexOf(id);
+    if (i > -1) sel.splice(i, 1); else sel.push(id);
+    mtMsRender(fid);
+    mtMsInput(fid);
+  }
+  function mtMsRemove(fid, id) {
+    MT_MS[fid].sel = MT_MS[fid].sel.filter(x => x !== id);
+    mtMsRender(fid);
+    mtMsInput(fid);
+  }
+  function mtMsRender(fid) {
+    const cfg = MT_MS[fid];
+    const all = cfg.src();
+    const items = cfg.sel.map(id => all.find(m => m.id === id)).filter(Boolean);
+    const MAX_VISIBLE = 1;
+    let html = items.slice(0, MAX_VISIBLE).map(m =>
+      `<span class="ms-tag"><span class="ms-tag-text">${m.name}</span><span class="ms-tag-x" onmousedown="event.preventDefault();mtMsRemove('${fid}','${m.id}')">×</span></span>`
+    ).join('');
+    if (items.length > MAX_VISIBLE) html += `<span class="ms-tag-more">+${items.length - MAX_VISIBLE}</span>`;
+    document.getElementById(fid + '-tags').innerHTML = html;
+    document.getElementById(fid).placeholder = items.length ? '' : '商户 ID / 商户名称';
+  }
+  function mtMsHide(fid) {
+    const dd = document.getElementById(fid + '-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+  const mtMsHit = (fid, id) => !MT_MS[fid].sel.length || MT_MS[fid].sel.includes(id);
+
+  function mtFilteredRows(p) {
+    if (p === 'mtg') {
+      const name = mtVal('mtg-name'), statuses = msLiteGet('mtg-status'), sel = MT_MS['mtg-member'].sel;
+      return [...MT_GROUPS].sort((a, b) => b.updateTime.localeCompare(a.updateTime)).filter(g =>
+        (!name || g.name.toLowerCase().includes(name)) &&
+        (!sel.length || g.members.some(id => sel.includes(id))) &&
+        (!statuses.length || statuses.includes(g.status)));
+    }
+    const no = mtVal('mtr-no');
+    const ds = document.getElementById('mtr-date-start').value, de = document.getElementById('mtr-date-end').value;
+    const groups = msLiteGet('mtr-group'), tokens = msLiteGet('mtr-token'), networks = msLiteGet('mtr-network');
+    return [...MT_ORDERS].sort((a, b) => b.time.localeCompare(a.time)).filter(r => {
+      if (no && !r.id.toLowerCase().includes(no)) return false;
+      if (groups.length && !groups.includes(r.groupId)) return false;
+      if (!mtMsHit('mtr-from', r.fromId) || !mtMsHit('mtr-to', r.toId)) return false;
+      if (tokens.length && !tokens.includes(r.token)) return false;
+      if (networks.length && !networks.includes(r.network)) return false;
+      const d = r.time.split(' ')[0];
+      if (ds && d < ds) return false;
+      if (de && d > de) return false;
+      return true;
+    });
+  }
+
+  function mtRender(p) {
+    const v = MT_VIEWS[p];
+    const slice = v.rows.slice((v.page - 1) * v.size, v.page * v.size);
+    const rowFn = { mtr: mtrRow, mtg: mtgRow }[p];
+    const cols = { mtr: 11, mtg: 7 }[p];
+    document.getElementById(p + '-tbody').innerHTML = slice.map(rowFn).join('') || mtEmptyRow(cols);
+    document.getElementById(p + '-page-total').textContent = `共 ${v.rows.length} 条`;
+    const total = Math.max(1, Math.ceil(v.rows.length / v.size));
+    document.getElementById(p + '-btn-prev').disabled = v.page <= 1;
+    document.getElementById(p + '-btn-next').disabled = v.page >= total;
+    const pageId = { mtr:'mt-records', mtg:'mt-groups' }[p];
+    document.querySelectorAll(`#page-${pageId} .page-btn:not(#${p}-btn-prev):not(#${p}-btn-next)`).forEach((btn, i) => {
+      btn.style.display = i + 1 <= total ? '' : 'none';
+      btn.classList.toggle('active', i + 1 === v.page);
+    });
+  }
+  function mtPage(p, n) {
+    const v = MT_VIEWS[p];
+    const total = Math.max(1, Math.ceil(v.rows.length / v.size));
+    if (n < 1 || n > total) return;
+    v.page = n; mtRender(p);
+  }
+  function mtPageSize(p) {
+    MT_VIEWS[p].size = +document.getElementById(p + '-page-size').value;
+    MT_VIEWS[p].page = 1; mtRender(p);
+  }
+  function mtSearch(p) {
+    MT_VIEWS[p].rows = mtFilteredRows(p);
+    MT_VIEWS[p].page = 1; mtRender(p);
+  }
+  function mtReset(p) {
+    MT_TEXT_FILTERS[p].forEach(id => { document.getElementById(id).value = ''; });
+    MT_LITE_FILTERS[p].forEach(msLiteReset);
+    Object.keys(MT_MS).filter(fid => fid.startsWith(p + '-')).forEach(fid => { MT_MS[fid].sel = []; mtMsRender(fid); });
+    mtSearch(p);
+  }
+  function mtRefreshAll() {
+    ['mtr', 'mtg'].forEach(p => {
+      const v = MT_VIEWS[p];
+      v.rows = mtFilteredRows(p);
+      v.page = Math.min(v.page, Math.max(1, Math.ceil(v.rows.length / v.size)));
+      mtRender(p);
+    });
+  }
+
+  function mtrRow(r) {
+    return `<tr>
+        <td>${fullCell(r.id)}</td>
+        <td>${htmlSafe(r.groupName)}</td>
+        <td>${mtMono(r.fromId)}</td>
+        <td>${r.fromName}</td>
+        <td>${mtMono(r.toId)}</td>
+        <td>${r.toName}</td>
+        <td>${r.token}</td>
+        <td>${r.network}</td>
+        <td>${mtMono(mtFmt(r.amount))}</td>
+        <td>${r.remark ? htmlSafe(r.remark) : mtEmpty}</td>
+        <td>${mtMono(r.time)}</td>
+      </tr>`;
+  }
+
+  // 成员列显示「N 个」，悬停展示成员名称（ID）
+  function mtgTip(e, idx) { showTip(e, MT_GROUPS[idx].members.map(mtMemberLabel).join('\n')); }
+  function mtgRow(g) {
+    const idx = MT_GROUPS.indexOf(g);
+    return `<tr>
+        <td>${htmlSafe(g.name)}</td>
+        <td><span style="cursor:default;border-bottom:1px dashed #C0C4CC;" onmouseenter="mtgTip(event, ${idx})" onmousemove="moveTip(event)" onmouseleave="hideTip()">${mtMono(g.members.length)} 个</span></td>
+        <td><span class="badge ${g.status === 'enabled' ? 'badge-green' : 'badge-gray'}">${g.status === 'enabled' ? '启用' : '禁用'}</span></td>
+        <td>${g.remark ? htmlSafe(g.remark) : mtEmpty}</td>
+        <td>${g.updater}</td>
+        <td>${mtMono(g.updateTime)}</td>
+        <td><div class="action-cell"><span class="action-icon" onclick="openMtgEdit(${idx})" title="编辑">${_EDIT_SVG}</span></div></td>
+      </tr>`;
+  }
+
+  function mtrExport() {
+    const headers = ['转账单号','转账关系','转出商户 ID','转出商户名称','收款商户 ID','收款商户名称','代币','网络','转账金额','转账备注','转账时间'];
+    csvDownload(headers, MT_VIEWS.mtr.rows.map(r => [
+      r.id, r.groupName, r.fromId, r.fromName, r.toId, r.toName, r.token, r.network, r.amount, r.remark || '-', r.time,
+    ]), '商户转账记录.csv');
+    mtOperLog('导出', '转账记录', `导出商户转账记录 CSV，共 ${MT_VIEWS.mtr.rows.length} 条`, 'medium');
+  }
+
+  function mtOperLog(type, target, content, level) {
+    OPERLOG_ALL.unshift({
+      id: 'ol-mt-' + Date.now(), time: _arNowStr(), operator: 'admin', module: '商户转账', type,
+      target, content, result: 'success', ip: '127.0.0.1', level,
+    });
+    if (typeof operlogSearch === 'function') operlogSearch();
+  }
+
+  // 预置日志：与 mock 转账关系对应；按时间插入，不改变原有日志顺序
+  const MT_OPERLOG_SEED = [
+    ['2026-10-15 09:20:00', '新增', 'Kara 集团', '新增转账关系：成员 kara（635102950）、kara2（884590488）、kara3（460466234）、kara4（291654802）；状态启用', 'high'],
+    ['2026-10-18 10:30:00', '新增', 'Gamma 集团', '新增转账关系：成员 gamma-fx（304857192）、delta-ex（987654321）；状态启用', 'high'],
+    ['2026-10-20 11:00:00', '新增', 'Alpha 集团', '新增转账关系：成员 alpha-pay（512847362）、betacorp（731924856）；状态启用', 'high'],
+    ['2026-10-26 18:00:00', '修改', 'Gamma 集团', '编辑转账关系：状态 启用 → 禁用', 'high'],
+    ['2026-10-28 18:05:12', '导出', '转账记录', '导出商户转账记录 CSV，共 8 条', 'medium'],
+  ];
+  function mtSeedOperlog() {
+    MT_OPERLOG_SEED.forEach(([time, type, target, content, level], i) => {
+      const row = { id: 'ol-mt-seed-' + i, time, operator: 'admin', module: '商户转账', type, target, content, result: 'success', ip: '103.45.13.21', level };
+      const at = OPERLOG_ALL.findIndex(r => r.time < time);
+      OPERLOG_ALL.splice(at < 0 ? OPERLOG_ALL.length : at, 0, row);
+    });
+    olState.rows = [...OPERLOG_ALL];
+  }
+
+  function mtOpenConfirm(cfg, onOk) {
+    document.getElementById('mt-confirm-icon').innerHTML =
+      `<i data-lucide="${cfg.icon}" style="width:22px;height:22px;color:${cfg.iconColor};flex-shrink:0;"></i>`;
+    document.getElementById('mt-confirm-title').textContent = cfg.title;
+    document.getElementById('mt-confirm-msg').textContent = cfg.msg;
+    const okBtn = document.getElementById('mt-confirm-ok');
+    okBtn.className = `btn ${cfg.btnCls} btn-sm`;
+    okBtn.textContent = cfg.btnTxt;
+    okBtn.onclick = onOk;
+    document.getElementById('mt-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeMtConfirm() {
+    document.getElementById('mt-confirm-modal').classList.remove('show');
+  }
+
+  // ── 转账关系：新增 / 编辑（成员在弹窗内维护，不设详情页） ──
+  let mtgEditIdx = -1;
+  let mtgEditSel = [];
+
+  function mtlEditClearErr(id) { document.getElementById(id).textContent = ''; }
+  function mtlEditSetErr(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.className = 'ar-wd-hint err'; }
+
+  function openMtgEdit(idx) {
+    mtgEditIdx = idx;
+    const g = idx >= 0 ? MT_GROUPS[idx] : null;
+    mtgEditSel = g ? [...g.members] : [];
+    document.getElementById('mtg-edit-name').value = g ? g.name : '';
+    document.getElementById('mtg-edit-member').value = '';
+    document.getElementById('mtg-edit-status-' + (g ? g.status : 'enabled')).checked = true;
+    document.getElementById('mtg-edit-remark').value = g ? g.remark : '';
+    document.getElementById('mtg-edit-remark-count').textContent = g ? g.remark.length : 0;
+    ['mtg-edit-name-err', 'mtg-edit-member-err'].forEach(mtlEditClearErr);
+    document.getElementById('mtg-edit-title').textContent = g ? '编辑转账关系' : '新增转账关系';
+    mtgMemberRender();
+    document.getElementById('mtg-edit-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+  function closeMtgEdit() {
+    document.getElementById('mtg-edit-modal').classList.remove('show');
+    mtgEditIdx = -1;
+  }
+
+  // 成员下拉：只列出启用且未加入其他转账关系的商户
+  function mtgMemberOpts() {
+    return MERCHANT_ALL.filter(m => m.status === 'enabled' && !MT_GROUPS.some((g, i) => i !== mtgEditIdx && g.members.includes(m.id)));
+  }
+  function mtgMemberInput() {
+    const val = document.getElementById('mtg-edit-member').value.trim().toLowerCase();
+    const all = mtgMemberOpts();
+    const list = val ? all.filter(m => m.name.toLowerCase().includes(val) || m.id.includes(val)) : all;
+    const dd = document.getElementById('mtg-edit-member-dropdown');
+    dd.innerHTML = list.length ? list.map(m => `<div class="ms-option${mtgEditSel.includes(m.id) ? ' selected' : ''}" onmousedown="event.preventDefault();mtgMemberToggle('${m.id}')">
+        <span class="ms-option-text">${m.name}</span><span class="p-merch-id">${m.id}</span><span class="ms-option-check">${MS_CHECK_SVG}</span>
+      </div>`).join('') : `<div class="ms-empty">无可选商户</div>`;
+    dd.style.display = '';
+  }
+  function mtgMemberToggle(id) {
+    const i = mtgEditSel.indexOf(id);
+    if (i > -1) mtgEditSel.splice(i, 1); else mtgEditSel.push(id);
+    mtlEditClearErr('mtg-edit-member-err');
+    mtgMemberRender();
+    mtgMemberInput();
+  }
+  function mtgMemberRender() {
+    document.getElementById('mtg-edit-member-list').innerHTML = mtgEditSel.map(id =>
+      `<span class="ms-tag" style="max-width:none;"><span class="ms-tag-text">${mtMemberLabel(id)}</span><span class="ms-tag-x" onmousedown="event.preventDefault();mtgMemberToggle('${id}')">×</span></span>`
+    ).join('') + `<span style="font-size:12px;color:#909399;line-height:22px;">已选 ${mtgEditSel.length} 个</span>`;
+  }
+
+  function submitMtgEdit() {
+    const g = mtgEditIdx >= 0 ? MT_GROUPS[mtgEditIdx] : null;
+    const name = document.getElementById('mtg-edit-name').value.trim();
+    let ok = true;
+    if (!name) { mtlEditSetErr('mtg-edit-name-err', '请输入关系名称'); ok = false; }
+    else if (MT_GROUPS.some(x => x !== g && x.name === name)) { mtlEditSetErr('mtg-edit-name-err', '关系名称已存在'); ok = false; }
+    if (mtgEditSel.length < 2) { mtlEditSetErr('mtg-edit-member-err', '请至少选择 2 个成员商户'); ok = false; }
+    if (!ok) return;
+
+    const vals = {
+      name, members:[...mtgEditSel],
+      status: document.getElementById('mtg-edit-status-disabled').checked ? 'disabled' : 'enabled',
+      remark: document.getElementById('mtg-edit-remark').value.trim(), updater:'admin', updateTime:_arNowStr(),
+    };
+    const removed = g ? g.members.filter(id => !vals.members.includes(id)) : [];
+    const disabling = g && g.status === 'enabled' && vals.status === 'disabled';
+    const save = () => {
+      if (g) {
+        const changes = [];
+        if (g.name !== vals.name) changes.push(`关系名称 ${g.name} → ${vals.name}`);
+        const added = vals.members.filter(id => !g.members.includes(id));
+        if (added.length) changes.push(`添加成员 ${added.map(mtMemberLabel).join('、')}`);
+        if (removed.length) changes.push(`移出成员 ${removed.map(mtMemberLabel).join('、')}`);
+        if (g.status !== vals.status) changes.push(`状态 ${g.status === 'enabled' ? '启用' : '禁用'} → ${vals.status === 'enabled' ? '启用' : '禁用'}`);
+        if (g.remark !== vals.remark) changes.push('修改备注');
+        Object.assign(g, vals);
+        mtOperLog('修改', g.name, `编辑转账关系：${changes.join('；') || '无变更'}`, 'high');
+        showToast('已保存');
+      } else {
+        const ng = Object.assign({ id:'G' + String(MT_GROUPS.length + 1).padStart(3, '0') }, vals);
+        MT_GROUPS.unshift(ng);
+        mtOperLog('新增', ng.name, `新增转账关系：成员 ${ng.members.map(mtMemberLabel).join('、')}；状态${ng.status === 'enabled' ? '启用' : '禁用'}`, 'high');
+        showToast('已新增');
+      }
+      if (MS_LITE['mtr-group']) MS_LITE['mtr-group'].options = mtGroupOpts();
+      closeMtgEdit();
+      mtRefreshAll();
+    };
+    // 移出成员 / 启用 → 禁用：二次确认，取消则不保存、弹窗保留
+    if (removed.length || disabling) {
+      const parts = [];
+      if (removed.length) parts.push(`移出后，${removed.map(mtMerchantName).join('、')} 不能再与该转账关系内的商户互转`);
+      if (disabling) parts.push(`禁用后，该转账关系内 ${vals.members.length} 个商户都不能再相互转账`);
+      mtOpenConfirm({ icon:'alert-circle', iconColor:'#F56C6C', title: disabling ? '禁用转账关系' : '移出成员', btnCls:'btn-danger', btnTxt:'确认',
+        msg: parts.join('；') + '。确认继续吗？' },
+        () => { closeMtConfirm(); save(); });
+      return;
+    }
+    save();
+  }
+
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     renderTabs();
@@ -16639,10 +17519,14 @@
     paFiltersInit();
     paRender();
     poLedgerInit();
+    mtLedgerInit();
+    mtSeedOperlog();
     alFiltersInit();
     alRender();
     arFiltersInit();
     arRender();
+    mtFiltersInit();
+    mtRefreshAll();
     mdAssetFiltersInit();
     merchantRender();
     receivingMerchantRender();

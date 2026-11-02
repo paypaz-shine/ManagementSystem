@@ -4014,7 +4014,7 @@
         <span class="md-tab" data-tab="payin" onclick="mdSwitchTab('payin')">法币收款</span>
         <span class="md-tab" data-tab="payout" onclick="mdSwitchTab('payout')">法币代付</span>
         <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
-        <span class="md-tab" data-tab="whitelist" onclick="mdSwitchTab('whitelist')">提币白名单</span>
+        <span class="md-tab" data-tab="whitelist" onclick="mdSwitchTab('whitelist')">Settlement 白名单</span>
       </div>
       <!-- 渠道 tab content -->
       <div class="md-tab-content" id="md-content-tunnel" style="flex-direction:column;">
@@ -4269,7 +4269,7 @@
           </div>
         </div>
       </div>
-      <!-- 提币白名单 tab content：开关由运营控制，白名单由商户在商户后台维护，此处只读 -->
+      <!-- Settlement 白名单 tab content：开关由运营控制，白名单由商户在商户后台维护，此处只读 -->
       <div class="md-tab-content" id="md-content-whitelist" style="display:none;flex-direction:column;">
         <div class="content-area">
           <div class="filter-card">
@@ -4310,7 +4310,7 @@
             <div class="summary-bar">
               <div class="summary-spacer"></div>
               <span style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#606266;">
-                <span>提币白名单</span>
+                <span>Settlement 白名单</span>
                 <label class="role-switch"><input type="checkbox" id="md-wl-switch" onclick="mdWlToggle(event)"><span></span></label>
                 <span id="md-wl-switch-label" style="color:#909399;"></span>
               </span>
@@ -7917,7 +7917,7 @@
     { merchantId:'820193456', merchantName:'goldpay-cn',     userId:'-', accountType:'receiving', token:'USDT', network:'TRON', net:'-30002.00', fee:'2.00', wallet:'TGv5cL9pXr2WmK7sN4bHq1YdE8aJ3uFzT6', wdTime:'2026-10-05 10:20:44', time:'-', hash:'-', paypazId:'-', supplierId:'-', channel:'-', status:'audit_rejected', remark:'提币地址存在风险，请更换地址后重新申请' },
     // 示例：Meta Trader 客户 API 提币，Cobo Payment 与兜底钱包 Cobo Holding 余额均不足，进入待重试
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023853', token:'USDT', network:'BNB Smart Chain', net:'-9.01', fee:'0.01', wallet:'0xD7e8F9a0B1c2D3e4F5a6B7c8D9e0F1a2B3c4D5e6', wdTime:'2026-09-28 15:20:11', time:'-', hash:'-', paypazId:'WD00000000000070', supplierId:'-', channel:'Cobo Payment', status:'manual_review', reviewType:'balance_retry', partner:'metatrader', retryReason:'Cobo Payment 余额不足，兜底钱包 Cobo Holding 余额不足' },
-    // 提币白名单演示：kara 开启白名单后的商户后台单笔提币（wlId＝提交时匹配的白名单 ID）；第一笔的地址审核前已被商户删除 → 列表显示「已被移出白名单」，详情 / 审核弹窗顶部显示提示条
+    // Settlement 白名单演示：kara 开启白名单后的商户后台单笔提币（wlId＝提交时匹配的白名单 ID）；第一笔的地址审核前已被商户删除 → 列表显示「已被移出白名单」，详情 / 审核弹窗顶部显示提示条
     { merchantId:'635102950', merchantName:'kara',  userId:'-', token:'USDT', network:'TRON', net:'-3000.00', fee:'0.00', wallet:'TAd9zHCayg9LumQ2Kx5nWbYh8Rc4o6P8r0', wdTime:'2026-10-30 10:12:05', time:'-', hash:'-', paypazId:'WD00000000000091', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review', wlId:2 },
     { merchantId:'635102950', merchantName:'kara',  userId:'-', token:'USDT', network:'TRON', net:'-2000.00', fee:'0.00', wallet:'TPeH4FLWrPTGqsUrxA4JK12i8kUWc1eeHQ', wdTime:'2026-10-30 09:40:22', time:'-', hash:'-', paypazId:'WD00000000000092', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review', wlId:5 },
     // 示例：配置钱包 Cobo Payment 余额不足，自动兜底从 Cobo Holding 出金
@@ -8683,7 +8683,7 @@
         ${(!value || value === '-') ? '<span class="detail-value">—</span>' : truncCell(value)}
       </div>`;
     return [
-      // 提币白名单：地址提交后被商户移出白名单时，详情 / 审核弹窗顶部提示
+      // Settlement 白名单：地址提交后被商户移出白名单时，详情 / 审核弹窗顶部提示
       wlRemovedTag(r) ? '<div class="md-token-tip" style="grid-column:1/-1">该提币地址已被移出商户白名单，请先与商户确认后再操作。</div>' : '',
       di('商户 ID',      r.merchantId + rmTag(r)),
       di('商户名称',     r.merchantName),
@@ -10621,9 +10621,9 @@
     if (tab === 'whitelist')  { if (!MS_LITE['md-wl-f-net']) msLiteInit('md-wl-f-net', [{ value:'TRON', label:'TRON' }, { value:'Ethereum', label:'Ethereum' }], '全部'); mdRenderWhitelistTable(); }
   }
 
-  // ── 提币白名单（PRD：提币白名单）──────────────────────
-  // 按商户开关，默认关闭；开启后商户后台显示「提币白名单」菜单，单笔提币只能选白名单地址
-  // 白名单由商户在商户后台维护（新增 / 删除需邮箱 + 谷歌验证码），运营只读；删除为软删除，这里展示已删除记录
+  // ── Settlement 白名单（PRD：Settlement 白名单）──────────────────────
+  // 按商户开关，默认关闭；开启后商户后台显示「Settlement 白名单」菜单，单笔提币只能选白名单地址
+  // 白名单由商户在商户后台维护（新增需邮箱 + 谷歌验证码，删除只需二次确认），运营只读；删除为软删除，这里展示已删除记录
   // 操作人 / 更新时间：最近一次新增、编辑或删除该地址的人和时间
   const MD_WL = {
     '635102950': { on:true, list:[
@@ -10680,10 +10680,10 @@
     const st = mdWl(m.id);
     const turnOn = !st.on;
     mtOpenConfirm(turnOn ? {
-      icon:'shield-check', iconColor:'#409EFF', title:'启用提币白名单', btnCls:'btn-primary', btnTxt:'启用',
+      icon:'shield-check', iconColor:'#409EFF', title:'启用 Settlement 白名单', btnCls:'btn-primary', btnTxt:'启用',
       msg:`启用后，${m.name} 在商户后台提币只能提到白名单地址；当前白名单为空时需先添加地址才能提币。确认启用吗？`,
     } : {
-      icon:'alert-triangle', iconColor:'#E6A23C', title:'禁用提币白名单', btnCls:'btn-danger', btnTxt:'禁用',
+      icon:'alert-triangle', iconColor:'#E6A23C', title:'禁用 Settlement 白名单', btnCls:'btn-danger', btnTxt:'禁用',
       msg:`禁用后，${m.name} 提币将不再校验白名单，已添加的地址保留。确认禁用吗？`,
     }, () => {
       st.on = turnOn;
@@ -10691,9 +10691,9 @@
       mdRenderWhitelistTable();
       if (typeof withdrawAuditRender === 'function') withdrawAuditRender();
       OPERLOG_ALL.unshift({ id:'ol-wl-' + Date.now(), time:_arNowStr(), operator:'admin', module:'企业商户', type:'修改',
-        target:`${m.name}（${m.id}）`, content:`提币白名单：${turnOn ? '禁用 → 启用' : '启用 → 禁用'}`, result:'success', ip:'127.0.0.1', level:'high' });
+        target:`${m.name}（${m.id}）`, content:`Settlement 白名单：${turnOn ? '禁用 → 启用' : '启用 → 禁用'}`, result:'success', ip:'127.0.0.1', level:'high' });
       if (typeof operlogSearch === 'function') operlogSearch();
-      showToast(turnOn ? '已启用提币白名单' : '已禁用提币白名单');
+      showToast(turnOn ? '已启用 Settlement 白名单' : '已禁用 Settlement 白名单');
     });
   }
 
@@ -13914,8 +13914,8 @@
       { id:'merchant_payin_edit', label:'企业商户法币收款配置编辑' },
       { id:'merchant_payout_view', label:'企业商户法币代付配置查看' },
       { id:'merchant_payout_edit', label:'企业商户法币代付配置编辑' },
-      { id:'merchant_whitelist_view', label:'企业商户提币白名单查看' },
-      { id:'merchant_whitelist_switch', label:'企业商户提币白名单开关' },
+      { id:'merchant_whitelist_view', label:'企业商户 Settlement 白名单查看' },
+      { id:'merchant_whitelist_switch', label:'企业商户 Settlement 白名单开关' },
       { id:'receiving_mgmt', label:'收款商户', children:[
         { id:'receiving_view', label:'查看' },
         { id:'receiving_invite', label:'邀请' },

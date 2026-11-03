@@ -681,6 +681,16 @@
     .asset-sum-val { font-size:22px; font-weight:600; color:#303133; font-family:'Inter',sans-serif; line-height:1.2; }
     .asset-sum-unit { font-size:12px; font-weight:400; color:#909399; margin-left:3px; font-family:'Noto Sans SC',sans-serif; }
     .asset-num { font-family:'Inter',sans-serif; text-align:right; }
+    .wb-total { display:flex; align-items:center; gap:12px; padding:12px 20px; font-size:14px; color:#606266; border-bottom:1px solid #EBEEF5; }
+    .wb-spacer { flex:1; }
+    .wb-total b { font-family:'Inter',sans-serif; font-size:20px; font-weight:600; color:#303133; margin-left:4px; }
+    #wb-tbody tr { background:#fff; }
+    #wb-tbody .wb-wallet-row { background:#FAFAFA; cursor:pointer; }
+    #wb-tbody .wb-wallet-row td { font-weight:600; }
+    #wb-tbody .wb-token-row { cursor:pointer; }
+    #wb-tbody .wb-token-row td:first-child { padding-left:34px; }
+    #wb-tbody .wb-net-row td:first-child { padding-left:78px; color:#606266; }
+    .wb-caret { width:14px; height:14px; margin-right:8px; vertical-align:-2px; color:#909399; }
     .asset-frozen { color:#E6A23C; }
     .type-tag { display:inline-flex; align-items:center; height:22px; padding:0 8px; border-radius:4px; font-size:12px; white-space:nowrap; }
     .type-tag-in  { border:1px solid #b3d8ff; background:#ecf5ff; color:#409EFF; }
@@ -1295,6 +1305,10 @@
             <i data-lucide="wallet" class="nav-icon" style="width:14px;height:14px;"></i>
             <span class="nav-label">资产余额</span>
           </div>
+          <div class="nav-item nav-sub-item" data-page="wallet-balance">
+            <i data-lucide="wallet-cards" class="nav-icon" style="width:14px;height:14px;"></i>
+            <span class="nav-label">钱包余额</span>
+          </div>
           <div class="nav-item nav-sub-item" data-page="account-ledger">
             <i data-lucide="receipt" class="nav-icon" style="width:14px;height:14px;"></i>
             <span class="nav-label">企业商户账户明细</span>
@@ -1698,17 +1712,6 @@
         <div class="filter-card">
           <div class="filter-grid">
             <div class="filter-item">
-              <span class="filter-label-el">钱包</span>
-              <div class="filter-control">
-                <div class="ms-lite" id="pa-wallet-lite" tabindex="0"
-                     onclick="msLiteToggle('pa-wallet')" onblur="setTimeout(function(){msLiteClose('pa-wallet')}, 150)">
-                  <span class="ms-lite-text placeholder" id="pa-wallet-text">全部</span>
-                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
-                </div>
-              </div>
-              <div class="p-merch-dropdown" id="pa-wallet-dropdown" style="display:none;"></div>
-            </div>
-            <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
                 <div class="ms-lite" id="pa-token-lite" tabindex="0"
@@ -1751,12 +1754,12 @@
             <div class="summary-spacer"></div>
           </div>
           <div class="table-wrap">
-            <table style="min-width:770px;">
+            <table style="min-width:600px;">
               <colgroup>
-                <col style="width:150px"><col style="width:120px"><col style="width:160px"><col style="width:180px"><col style="width:160px">
+                <col style="width:120px"><col style="width:160px"><col style="width:180px"><col style="width:160px">
               </colgroup>
               <thead>
-                <tr><th>钱包</th><th>代币</th><th>名称</th><th>网络</th><th class="asset-num">余额</th></tr>
+                <tr><th>代币</th><th>名称</th><th>网络</th><th class="asset-num">余额</th></tr>
               </thead>
               <tbody id="pa-tbody"></tbody>
             </table>
@@ -1784,6 +1787,34 @@
 
       </div>
     </div><!-- /page-platform-assets -->
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--  PAGE: 平台资产 › 钱包余额                                -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="page" id="page-wallet-balance">
+      <div class="content-area">
+
+        <!-- Table Card -->
+        <div class="table-card">
+          <div class="wb-total">
+            <span>钱包总余额：<b id="wb-total"></b></span>
+            <span class="wb-spacer"></span>
+            <span class="asset-update-lbl">更新时间：<span class="asset-update-time" id="wb-update-time"></span></span>
+            <button class="btn btn-default btn-sm" id="wb-refresh-btn" onclick="wbRefresh()">
+              <i data-lucide="refresh-cw" style="width:13px;height:13px;"></i><span id="wb-refresh-text">刷新</span>
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width:680px;">
+              <colgroup id="wb-colgroup"></colgroup>
+              <thead id="wb-thead"></thead>
+              <tbody id="wb-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-wallet-balance -->
 
     <!-- ════════════════════════════════════════════════ -->
     <!--  PAGE: 账户明细                                  -->
@@ -6479,6 +6510,7 @@
     'ramp-detail': { label: '出入金详情', icon: 'file-search' },
     home:     { label: '首页',      icon: 'house' },
     'platform-assets': { label: '资产余额', icon: 'wallet', parent: '平台资产' },
+    'wallet-balance':  { label: '钱包余额', icon: 'wallet-cards', parent: '平台资产' },
     'account-ledger':  { label: '企业商户账户明细', icon: 'receipt', parent: '平台资产' },
     'adjust-review':   { label: '企业商户账户调账', icon: 'scale', parent: '平台资产' },
     onboard:  { label: '开户申请',  icon: 'file-check', parent: '商户管理' },
@@ -6511,7 +6543,7 @@
   };
 
   // implemented pages
-  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'merchant-receiving-detail', 'fiat-orders', 'fiat-appeal', 'fiat-ledger', 'fiat-frozen', 'po-orders', 'po-appeal', 'merchant-frozen', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'account-ledger', 'adjust-review', 'mt-records', 'mt-groups']);
+  const IMPL_PAGES = new Set(['home', 'deposit', 'deposit-exception', 'withdraw', 'withdraw-audit', 'payment', 'onboard', 'onboard-detail', 'feedback', 'merchant', 'merchant-detail', 'merchant-receiving', 'merchant-receiving-detail', 'fiat-orders', 'fiat-appeal', 'fiat-ledger', 'fiat-frozen', 'po-orders', 'po-appeal', 'merchant-frozen', 'ramp-in', 'ramp-out', 'ramp-detail', 'sys-role', 'sys-role-users', 'sys-operlog', 'platform-assets', 'wallet-balance', 'account-ledger', 'adjust-review', 'mt-records', 'mt-groups']);
 
   let activePage = 'deposit';
   // openTabs: array of pageIds in open order
@@ -6612,7 +6644,7 @@
     // update platform group header active state
     const platformGhd = document.getElementById('nav-ghd-platform');
     if (platformGhd) {
-      platformGhd.classList.toggle('group-active', pid === 'platform-assets' || pid === 'account-ledger' || pid === 'adjust-review' || pid === 'merchant-frozen' || pid === 'fiat-ledger' || pid === 'fiat-frozen');
+      platformGhd.classList.toggle('group-active', pid === 'platform-assets' || pid === 'wallet-balance' || pid === 'account-ledger' || pid === 'adjust-review' || pid === 'merchant-frozen' || pid === 'fiat-ledger' || pid === 'fiat-frozen');
     }
 
     const systemPages = ['sys-user', 'sys-role', 'sys-role-users', 'sys-menu', 'sys-dept', 'sys-post', 'sys-operlog'];
@@ -8322,10 +8354,10 @@
   }
 
   // ── 钱包余额 ──
-  // 钱包余额取自「平台资产 → 资产余额」；未列出的 钱包 × 代币 × 网络 视为 0
+  // 钱包余额取自「平台资产 → 钱包余额」；未列出的 钱包 × 代币 × 网络 视为 0
   function wdChannelBalanceValue(channel, token, network) {
     const chain = network === 'BNB Smart Chain' ? 'BSC' : network;
-    const row = PLATFORM_ASSET_ALL.find(r => r.wallet === channel && r.token === token && r.chainName === chain);
+    const row = WALLET_BALANCE_ALL.find(r => r.wallet === channel && r.token === token && r.chainName === chain);
     return row ? parseFloat(row.balance) : 0;
   }
   function wdChannelBalanceLabel(channel, token, network) {
@@ -12894,32 +12926,19 @@
   // ══════════════════════════════════════════════════════
   //  平台资产：资产余额 data & logic
   // ══════════════════════════════════════════════════════
-  // 资产余额按 钱包 × 代币 × 网络 拆分；提币处理弹窗的钱包余额也取自这里
   const PLATFORM_ASSET_ALL = [
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'7085.03' },
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'1990.54' },
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'3.20' },
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Polygon',  balance:'520.00' },
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Arbitrum', balance:'300.00' },
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Base',     balance:'180.00' },
-    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Solana',   balance:'260.00' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'TRON',     balance:'320.50' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Ethereum', balance:'850.20' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'BSC',      balance:'150.00' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'410.00' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Arbitrum', balance:'120.00' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Base',     balance:'200.00' },
-    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Solana',   balance:'95.00' },
-    { wallet:'Cobo Holding', token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'1200000.00' },
-    { wallet:'Cobo Holding', token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'600.00' },
-    { wallet:'Cobo Holding', token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'5.60' },
-    { wallet:'Cobo Holding', token:'USDC', tokenName:'USDC', chainName:'Ethereum', balance:'300.00' },
-    { wallet:'Cobo Holding', token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'120.00' },
-    { wallet:'PayMe',        token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'1200.00' },
-    { wallet:'PayMe',        token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'450.00' },
-    { wallet:'PayMe',        token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'800.00' },
-    { wallet:'PayMe',        token:'USDC', tokenName:'USDC', chainName:'Arbitrum', balance:'60.00' },
-    { wallet:'PayMe',        token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'90.00' },
+    { token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'7085.03' },
+    { token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'1990.54' },
+    { token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'0.00' },
+    { token:'USDT', tokenName:'USDT', chainName:'Polygon',  balance:'0.00' },
+    { token:'USDT', tokenName:'USDT', chainName:'Arbitrum', balance:'0.00' },
+    { token:'USDT', tokenName:'USDT', chainName:'Base',     balance:'0.00' },
+    { token:'USDT', tokenName:'USDT', chainName:'Solana',   balance:'0.00' },
+    { token:'USDC', tokenName:'USDC', chainName:'TRON',     balance:'320.50' },
+    { token:'USDC', tokenName:'USDC', chainName:'Ethereum', balance:'850.20' },
+    { token:'USDC', tokenName:'USDC', chainName:'BSC',      balance:'0.00' },
+    { token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'0.00' },
+    { token:'USDC', tokenName:'USDC', chainName:'Solana',   balance:'0.00' },
   ];
 
   const paState = { rows: [...PLATFORM_ASSET_ALL], page: 1, size: 20 };
@@ -12931,9 +12950,6 @@
     document.getElementById('pa-total-unit').textContent = tokens.length === 1 ? tokens[0] : 'USD';
   }
   function paFiltersInit() {
-    msLiteInit('pa-wallet', [
-      { value:'Cobo Holding', label:'Cobo Holding' }, { value:'Cobo Payment', label:'Cobo Payment' }, { value:'PayMe', label:'PayMe' },
-    ], '全部');
     msLiteInit('pa-token', [
       { value:'USDT', label:'USDT' }, { value:'USDC', label:'USDC' },
     ], '全部');
@@ -12949,7 +12965,7 @@
     const start = (paState.page - 1) * paState.size;
     const slice = paState.rows.slice(start, start + paState.size);
     tbody.innerHTML = slice.map(r => `<tr>
-      <td>${r.wallet}</td><td>${r.token}</td><td>${r.tokenName}</td><td>${r.chainName}</td>
+      <td>${r.token}</td><td>${r.tokenName}</td><td>${r.chainName}</td>
       <td class="asset-num">${r.balance}</td>
     </tr>`).join('');
     document.getElementById('pa-page-total').textContent = `共 ${paState.rows.length} 条`;
@@ -12976,11 +12992,9 @@
     paState.page = 1; paRender();
   }
   function paSearch() {
-    const wallets = msLiteGet('pa-wallet');
     const tokens = msLiteGet('pa-token');
     const networks = msLiteGet('pa-network');
     paState.rows = PLATFORM_ASSET_ALL.filter(r => {
-      if (wallets.length && !wallets.includes(r.wallet)) return false;
       if (tokens.length && !tokens.includes(r.token)) return false;
       if (networks.length && !networks.includes(r.chainName)) return false;
       return true;
@@ -12988,11 +13002,105 @@
     paState.page = 1; paRender();
   }
   function paReset() {
-    msLiteReset('pa-wallet');
     msLiteReset('pa-token');
     msLiteReset('pa-network');
     paState.rows = [...PLATFORM_ASSET_ALL];
     paState.page = 1; paRender();
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  平台资产：钱包余额 data & logic
+  // ══════════════════════════════════════════════════════
+  const WALLET_BALANCE_ALL = [
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'7085.03' },
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'1990.54' },
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'3.20' },
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Polygon',  balance:'520.00' },
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Arbitrum', balance:'300.00' },
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Base',     balance:'180.00' },
+    { wallet:'Cobo Payment', token:'USDT', tokenName:'USDT', chainName:'Solana',   balance:'260.00' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'TRON',     balance:'320.50' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Ethereum', balance:'850.20' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'BSC',      balance:'150.00' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'410.00' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Arbitrum', balance:'120.00' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Base',     balance:'200.00' },
+    { wallet:'Cobo Payment', token:'USDC', tokenName:'USDC', chainName:'Solana',   balance:'95.00' },
+    { wallet:'Cobo Holding', token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'1200000.00' },
+    { wallet:'Cobo Holding', token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'600.00' },
+    { wallet:'Cobo Holding', token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'5.60' },
+    { wallet:'Cobo Holding', token:'USDC', tokenName:'USDC', chainName:'Ethereum', balance:'300.00' },
+    { wallet:'Cobo Holding', token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'120.00' },
+    { wallet:'PayMe',        token:'USDT', tokenName:'USDT', chainName:'TRON',     balance:'1200.00' },
+    { wallet:'PayMe',        token:'USDT', tokenName:'USDT', chainName:'Ethereum', balance:'450.00' },
+    { wallet:'PayMe',        token:'USDT', tokenName:'USDT', chainName:'BSC',      balance:'800.00' },
+    { wallet:'PayMe',        token:'USDC', tokenName:'USDC', chainName:'Arbitrum', balance:'60.00' },
+    { wallet:'PayMe',        token:'USDC', tokenName:'USDC', chainName:'Polygon',  balance:'90.00' },
+  ];
+  const WB_WALLETS  = ['Cobo Payment', 'Cobo Holding', 'PayMe'];
+  const WB_TOKENS   = ['USDT', 'USDC'];
+  const WB_NETWORKS = ['TRON', 'Ethereum', 'BSC', 'Polygon', 'Arbitrum', 'Base', 'Solana'];
+  const wbCollapsed = new Set(WB_WALLETS); // 默认钱包折叠，展开后代币默认展开
+
+  function wbFmt(n) {
+    return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function wbRender() {
+    const rows = WALLET_BALANCE_ALL;
+    const sum = list => list.reduce((a, x) => a + parseFloat(x.balance), 0);
+
+    // 三级树：钱包（USDT+USDC 按 USD 合计，不带单位）→ 代币 → 网络；点击行展开/收起，默认全部展开
+    document.getElementById('wb-thead').innerHTML =
+      '<tr><th>钱包 / 代币 / 网络</th><th class="asset-num">余额</th><th></th></tr>';
+    document.getElementById('wb-colgroup').innerHTML =
+      '<col style="width:280px"><col style="width:200px"><col>';
+    const caret = key => `<i data-lucide="${wbCollapsed.has(key) ? 'chevron-right' : 'chevron-down'}" class="wb-caret"></i>`;
+    // 钱包总余额：仅展示上的合计，不影响按链拆分的余额口径
+    document.getElementById('wb-total').textContent = wbFmt(sum(rows));
+    let html = '';
+    WB_WALLETS.forEach(w => {
+      const wRows = rows.filter(x => x.wallet === w);
+      if (!wRows.length) return;
+      html += `<tr class="wb-wallet-row" onclick="wbToggle('${w}')">
+        <td>${caret(w)}${w}</td><td class="asset-num">${wbFmt(sum(wRows))}</td><td></td></tr>`;
+      if (wbCollapsed.has(w)) return;
+      WB_TOKENS.forEach(t => {
+        const tRows = wRows.filter(x => x.token === t);
+        if (!tRows.length) return;
+        const tk = w + '|' + t;
+        html += `<tr class="wb-token-row" onclick="wbToggle('${tk}')">
+          <td>${caret(tk)}${t}</td><td class="asset-num">${wbFmt(sum(tRows))}</td><td></td></tr>`;
+        if (wbCollapsed.has(tk)) return;
+        WB_NETWORKS.forEach(n => {
+          const r = tRows.find(x => x.chainName === n);
+          if (r) html += `<tr class="wb-net-row"><td>${n}</td><td class="asset-num">${wbFmt(parseFloat(r.balance))}</td><td></td></tr>`;
+        });
+      });
+    });
+    document.getElementById('wb-tbody').innerHTML = html ||
+      '<tr><td colspan="3" style="text-align:center;color:#909399;">暂无数据</td></tr>';
+    if (window.lucide) lucide.createIcons();
+  }
+  // 进入页面 / 点击刷新：拉取各钱包渠道最新余额，记录更新时间（精确到秒）
+  function wbLoad() {
+    wbRender();
+    document.getElementById('wb-update-time').textContent = _arNowStr();
+  }
+  function wbRefresh() {
+    const btn = document.getElementById('wb-refresh-btn');
+    if (btn.disabled) return;
+    btn.disabled = true;
+    document.getElementById('wb-refresh-text').textContent = '刷新中…';
+    setTimeout(() => {
+      wbLoad();
+      btn.disabled = false;
+      document.getElementById('wb-refresh-text').textContent = '刷新';
+      showToast('余额已更新');
+    }, 600);
+  }
+  function wbToggle(key) {
+    wbCollapsed.has(key) ? wbCollapsed.delete(key) : wbCollapsed.add(key);
+    wbRender();
   }
 
   // ══════════════════════════════════════════════════════
@@ -13855,6 +13963,7 @@
     { id:'dashboard_view', label:'Dashboard查看' },
     { id:'platform_asset', label:'平台资产', children:[
       { id:'platform_asset_balance', label:'资产余额' },
+      { id:'platform_wallet_balance', label:'钱包余额' },
       { id:'platform_account_ledger', label:'企业商户账户明细' },
       { id:'platform_adjust_apply', label:'发起调账' },
       { id:'platform_adjust_review', label:'企业商户账户调账（通过/驳回）' },
@@ -17518,6 +17627,7 @@
     rampOutRender();
     paFiltersInit();
     paRender();
+    wbLoad();
     poLedgerInit();
     mtLedgerInit();
     mtSeedOperlog();

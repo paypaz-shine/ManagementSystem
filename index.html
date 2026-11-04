@@ -818,6 +818,35 @@
     /* 法币收款：详情弹窗分组标题 */
     .fp-sec { grid-column:1/-1; font-size:13px; font-weight:600; color:#303133; padding-top:4px; border-top:1px solid #EBEEF5; }
     .fp-sec:first-child { border-top:none; padding-top:0; }
+    /* 支付订单：回调记录抽屉 */
+    .pw-wrap { grid-column:1/-1; display:flex; flex-direction:column; gap:12px; }
+    .pw-card { border:1px solid #EBEEF5; border-radius:4px; }
+    .pw-card-main { padding:14px 16px; display:flex; justify-content:space-between; gap:16px; }
+    .pw-card-info { min-width:0; display:flex; flex-direction:column; gap:6px; }
+    .pw-card-side { flex-shrink:0; display:flex; align-items:flex-start; }
+    .pw-evt { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:#303133; font-family:Inter,sans-serif; }
+    .pw-url { font-size:12px; color:#606266; font-family:Inter,sans-serif; word-break:break-all; display:flex; align-items:center; gap:6px; }
+    .pw-off { font-size:12px; color:#909399; background:#f4f4f5; border-radius:3px; padding:0 6px; font-family:'Noto Sans SC',sans-serif; }
+    .pw-meta { font-size:12px; color:#909399; font-family:Inter,sans-serif; }
+    .pw-collapse { border-top:1px solid #EBEEF5; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; font-size:12px; color:#606266; cursor:pointer; user-select:none; }
+    .pw-collapse:hover { color:#409EFF; }
+    .pw-collapse svg { transition:transform .2s ease; }
+    .pw-collapse.open svg { transform:rotate(180deg); }
+    .pw-panel { border-top:1px solid #EBEEF5; padding:12px 16px; background:#FAFAFA; }
+    .pw-sub { font-size:12px; font-weight:600; color:#303133; margin:4px 0 8px; }
+    .pw-attempts { max-height:200px; overflow-y:auto; margin-bottom:16px; }
+    .pw-panel table { width:100%; border-collapse:collapse; font-size:12px; }
+    .pw-panel th { text-align:left; color:#909399; font-weight:500; padding:6px 8px; border-bottom:1px solid #EBEEF5; position:sticky; top:0; background:#FAFAFA; }
+    .pw-panel th.w-code { width:70px; }
+    .pw-panel th.w-time { width:150px; }
+    .pw-panel td { padding:8px; color:#303133; font-family:Inter,sans-serif; border-bottom:1px solid #F2F3F5; }
+    .pw-panel tr:last-child td { border-bottom:none; }
+    .pw-code { display:inline-block; min-width:36px; text-align:center; padding:1px 6px; border-radius:3px; font-size:12px; }
+    .pw-code.ok { background:#f0f9ea; color:#67C23A; border:1px solid #e1f3d8; }
+    .pw-code.err { background:#FEF0F0; color:#F56C6C; border:1px solid #fde2e2; }
+    .pw-json { margin:0; max-height:240px; overflow:auto; font-size:12px; line-height:1.6; color:#303133; font-family:Menlo,Consolas,monospace; white-space:pre; }
+    .pw-empty { grid-column:1/-1; text-align:center; color:#909399; font-size:13px; padding:60px 0; line-height:1.8; }
+    .pw-empty small { font-size:12px; color:#C0C4CC; }
     /* 收款商户详情：资产统计 / 明细 tab */
     .rmd-stats { display:flex; align-items:flex-start; padding:16px 20px; }
     .rmd-stat { display:flex; flex-direction:column; gap:6px; padding-right:32px; }
@@ -3293,7 +3322,7 @@
                 <col style="width:80px"><col style="width:80px"><col style="width:70px"><!-- 应付/实付/手续费 -->
                 <col style="width:70px"><col style="width:160px"><!-- 净入账/充值地址 -->
                 <col style="width:110px"><col style="width:155px"><col style="width:155px"><!-- 渠道/创建时间/完成时间 -->
-                <col style="width:100px"><col style="width:60px"><!-- 状态/操作 -->
+                <col style="width:100px"><col style="width:90px"><!-- 状态/操作 -->
               </colgroup>
               <thead>
                 <tr>
@@ -5964,6 +5993,26 @@
     <div class="fp-drawer-ft" id="fp-drawer-ft"></div>
   </div>
 
+  <!-- 支付订单：重试回调确认 -->
+  <div class="modal-overlay" id="pw-confirm-modal" style="z-index:1100;" onclick="if(event.target===this)closePwConfirm()">
+    <div class="modal" style="width:420px;">
+      <div class="wd-confirm-box">
+        <button class="wd-confirm-close" onclick="closePwConfirm()">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <div class="wd-confirm-hd">
+          <span id="pw-confirm-icon"></span>
+          <span class="wd-confirm-title">确认重试回调？</span>
+        </div>
+        <p class="wd-confirm-msg" id="pw-confirm-msg"></p>
+        <div class="wd-confirm-actions">
+          <button class="btn btn-default btn-sm" onclick="closePwConfirm()">取消</button>
+          <button class="btn btn-primary btn-sm" onclick="doPwRetry()">确认重试</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 收款配置弹窗 -->
   <div class="modal-overlay" id="payin-edit-modal" onclick="if(event.target===this)closePayinEdit()">
     <div class="modal" style="width:480px;">
@@ -7335,6 +7384,13 @@
           <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
         </div>
       </div>
+      <!-- 订单号：选「已到账」后才出现，选填；填写后保存时以该订单号生成已完成的支付订单并关联本笔充币 -->
+      <div class="detail-item" id="d-edit-order-wrap" style="grid-column:1/-1;display:${r.status === 'arrived' ? '' : 'none'};">
+        <span class="detail-label">订单号</span>
+        <input class="field-input" id="d-edit-order" maxlength="64" placeholder="请输入订单号" style="width:100%;" oninput="deRcvErr('d-edit-order', '')">
+        <div class="ob-err" id="d-edit-order-err"></div>
+        <div style="font-size:12px;color:#909399;margin-top:4px;">填写后将以该订单号生成支付订单并回调商户</div>
+      </div>
       <div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">备注</span>
         <div class="wm-remark-wrap">
@@ -7357,6 +7413,13 @@
     const saveBtn = document.getElementById('d-edit-save-btn');
     if (!sel || !saveBtn) return;
     saveBtn.disabled = sel.value === r.status;
+    const orderWrap = document.getElementById('d-edit-order-wrap');
+    if (orderWrap) orderWrap.style.display = sel.value === 'arrived' ? '' : 'none';
+  }
+
+  // 运营填写的订单号：同一商户下不能与已有支付订单的订单号重复
+  function depositOrderNoTaken(r, orderNo) {
+    return PAYMENT_ALL.some(p => p.order === orderNo && (p.merchantId === r.uid || p.merchantName === r.name));
   }
 
   function closeDepositEdit() {
@@ -7371,10 +7434,17 @@
     const r = DEPOSIT_ALL[dEditIdx];
     const newStatus = document.getElementById('d-edit-status').value;
     if (newStatus === r.status) return;
+    const orderNo = (document.getElementById('d-edit-order')?.value || '').trim();
+    if (orderNo && depositOrderNoTaken(r, orderNo)) {
+      deRcvErr('d-edit-order', '该商户下订单号已存在');
+      return;
+    }
     document.getElementById('d-confirm-icon').innerHTML =
       `<i data-lucide="check-circle" style="width:22px;height:22px;color:#67C23A;flex-shrink:0;"></i>`;
     document.getElementById('d-confirm-title').textContent = '确认已到账';
-    document.getElementById('d-confirm-msg').textContent = '确认后，该行状态将变为「已到账」（终态），且无法撤销。确认继续吗？';
+    document.getElementById('d-confirm-msg').textContent = orderNo
+      ? `确认后将以订单号 ${orderNo} 生成支付订单并关联本笔充币，同时回调商户，且无法撤销。确认继续吗？`
+      : '确认后，该行状态将变为「已到账」（终态），且无法撤销。确认继续吗？';
     const okBtn = document.getElementById('d-confirm-ok');
     okBtn.className = 'btn btn-primary btn-sm';
     okBtn.textContent = '确认';
@@ -7393,15 +7463,28 @@
     const newStatus = document.getElementById('d-edit-status').value;
     if (newStatus === r.status) return;
     const beforeLabel = D_STATUS[r.status].label;
+    const orderNo = (document.getElementById('d-edit-order')?.value || '').trim();
     r.status = newStatus;
     r.remark = (document.getElementById('d-edit-remark')?.value || '').trim();
-    logDepositExceptionAction(r, '状态变更', `状态由${beforeLabel}编辑变更为${D_STATUS[newStatus].label}`, 'normal');
+    // 填写了订单号：生成一笔已完成的支付订单（订单金额 = 到账金额，其余取自本笔充币）并关联，
+    // 充币记录的订单号 / 订单金额通过 depositMatchedOrder 按哈希反查得到
+    if (orderNo) {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const nowStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      const net = depositNetCell(r);
+      const order = { order:orderNo, merchantId:r.uid, merchantName:r.name, userId:r.userId, due:r.amount, paid:r.amount, fee:r.fee, net, source:'运营创建', token:r.token, network:r.network, channel:r.channel || '', time:nowStr, doneTime:nowStr, addr:r.wallet, status:'completed', editable:false, manual:true, operator:'admin',
+        deposits:[{ txid:'-', hash:r.hash, amount:r.amount, fee:r.fee, net, network:r.network, time:r.time }] };
+      PAYMENT_ALL.unshift(order);
+      pState.rows.unshift(order);
+    }
+    logDepositExceptionAction(r, '状态变更', `状态由${beforeLabel}编辑变更为${D_STATUS[newStatus].label}${orderNo ? `，订单号 ${orderNo}` : ''}`, 'normal');
     // 不再是「待匹配订单」，从「充币审核」的待处理队列里移出，不留审核历史
     deState.rows = deState.rows.filter(row => row !== r);
     closeDConfirm();
     closeDepositEdit();
     depositRender();
-    showToast('保存成功，状态已更新为' + D_STATUS[newStatus].label);
+    showToast(orderNo ? `保存成功，已生成支付订单 ${orderNo}` : '保存成功，状态已更新为' + D_STATUS[newStatus].label);
   }
 
   // ══════════════════════════════════════════════════════
@@ -9166,6 +9249,167 @@
       ]},
   ];
 
+  // ── 支付订单：回调记录（Webhook 事件）──────────────────────
+  // 一条事件 = 事件类型 × 回调 URL；只取 payinorder.* 三类，orderClientId = 支付订单号
+  // status: retrying 重试中 / delivered 已送达 / failed 失败；urlEnabled=false 表示商户已停用该 URL
+  // mockResult 仅用于原型演示重试结果
+  const PW_STATUS = {
+    retrying:  { label:'重试中', cls:'badge-blue'  },
+    delivered: { label:'已送达', cls:'badge-green' },
+    failed:    { label:'失败',   cls:'badge-red'   },
+  };
+  const pwAttempts = (n, code, last) => Array.from({ length: n }, (_, i) => ({
+    id: ['b0236277-e1fd-42c8-b15a-93dd155446ba','cfd151dd-ce53-403c-962d-7e5da57839e3','e268e2d2-a4a3-481c-9074-311545c7c4be',
+         '9b9b3dd7-9438-4393-8dbb-bffa7ab6af95','2d1e542a-ffb4-4f78-8b5f-44614542d8ce','7c41a0e2-5b6d-4e1f-9a3c-2f8d6b1e4a70',
+         '3e9f2c1a-8d4b-47e6-a5f0-6c2b9d8e1f34','a8d4e6f2-1c3b-4a9e-b7d5-0e2f4c6a8b19'][i % 8],
+    code: i === 0 ? code : (code === 200 ? 500 : code),
+    time: last[i] || last[last.length - 1],
+  }));
+  const PW_EVENTS = {
+    '291654802-52081414206720': [
+      { type:'transaction.payinorder.completed', url:'https://api.gmtm.com/paypaz/notify', urlEnabled:true, status:'failed', mockResult:'success',
+        attempts: pwAttempts(8, 500, ['2026-06-12 18:03:21','2026-06-12 17:03:21','2026-06-12 16:33:21','2026-06-12 16:18:21','2026-06-12 16:10:21','2026-06-12 16:06:21','2026-06-12 16:04:21','2026-06-12 16:03:21']) },
+    ],
+    '291654802-52079444850688': [
+      { type:'transaction.payinorder.completed', url:'https://xm-jp.com/webhook/paypaz', urlEnabled:true, status:'delivered', mockResult:'success',
+        attempts: pwAttempts(1, 200, ['2026-06-13 14:02:08']) },
+    ],
+    '291654802-51905185772032': [
+      { type:'transaction.payinorder.completed', url:'https://xm-jp.com/webhook/paypaz', urlEnabled:true, status:'delivered', mockResult:'success',
+        attempts: pwAttempts(1, 200, ['2026-06-04 16:58:35']) },
+      { type:'transaction.payinorder.completed', url:'https://old.xm-jp.com/callback', urlEnabled:false, status:'failed', mockResult:'fail',
+        attempts: pwAttempts(8, 404, ['2026-06-04 18:58:35','2026-06-04 17:58:35']) },
+    ],
+    '460004375-52099987654321': [
+      { type:'transaction.payinorder.underpaid', url:'https://ig-japan.com/api/paypaz-hook', urlEnabled:true, status:'delivered', mockResult:'success',
+        attempts: pwAttempts(1, 200, ['2026-07-28 08:51:02']) },
+      { type:'transaction.payinorder.completed', url:'https://ig-japan.com/api/paypaz-hook', urlEnabled:true, status:'failed', mockResult:'fail',
+        attempts: pwAttempts(8, 502, ['2026-07-28 11:30:28','2026-07-28 10:30:28','2026-07-28 10:00:28']) },
+    ],
+    // 异常充值手动关联后补发的 completed 回调，仍在自动重试
+    '291654802-52099912345678': [
+      { type:'transaction.payinorder.completed', url:'https://xm-jp.com/webhook/paypaz', urlEnabled:true, status:'retrying', mockResult:'success',
+        attempts: pwAttempts(3, 500, ['2026-07-27 14:44:18','2026-07-27 14:42:18','2026-07-27 14:40:18']) },
+    ],
+  };
+  let pwOpen = {};   // 推送详情展开状态，key: 事件下标
+  let pwOrderIdx = -1, pwRetryIdx = -1, pwBusy = -1;
+
+  function pwPayload(r, ev) {
+    return JSON.stringify({
+      eventType: ev.type,
+      data: {
+        payOrderNo: r.order, userId: r.merchantId, subUserId: r.userId,
+        tokenId: r.token, chainId: r.network, address: r.addr,
+        amount: r.due, arriveQuantity: r.paid, platformFee: r.fee, netAmount: r.net,
+        status: ev.type.split('.').pop().toUpperCase(),
+        createdAt: r.time, arriveTime: r.doneTime === '-' ? null : r.doneTime,
+      },
+    }, null, 2);
+  }
+
+  function pwRenderBody() {
+    const r = PAYMENT_ALL[pwOrderIdx];
+    const events = PW_EVENTS[r.order] || [];
+    if (!events.length) {
+      return `<div class="pw-empty">该订单暂无 Webhook 记录<br><small>商户未配置回调地址，或未订阅该订单的事件</small></div>`;
+    }
+    const cards = events.map((ev, i) => {
+      const st = PW_STATUS[ev.status];
+      const last = ev.attempts[0];
+      const busy = pwBusy === i;
+      const retryBtn = !ev.urlEnabled
+        ? `<button class="btn btn-default btn-sm" disabled title="该回调地址已被商户停用">重试</button>`
+        : `<button class="btn btn-default btn-sm" ${busy ? 'disabled' : ''} onclick="openPwConfirm(${i})">${busy ? '推送中…' : '重试'}</button>`;
+      const open = pwOpen[i];
+      return `<div class="pw-card">
+        <div class="pw-card-main">
+          <div class="pw-card-info">
+            <div class="pw-evt">${ev.type}<span class="badge ${st.cls}">${st.label}</span></div>
+            <div class="pw-url">${ev.url}${ev.urlEnabled ? '' : '<span class="pw-off">已停用</span>'}</div>
+            <div class="pw-meta">推送 ${ev.attempts.length} 次 · 最近推送 ${last.time}（HTTP ${last.code}）</div>
+          </div>
+          <div class="pw-card-side">${retryBtn}</div>
+        </div>
+        <div class="pw-collapse${open ? ' open' : ''}" onclick="pwToggle(${i})">
+          <span>推送详情</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        ${open ? `<div class="pw-panel">
+          <div class="pw-sub">推送记录</div>
+          <div class="pw-attempts"><table>
+            <thead><tr><th class="w-code">状态码</th><th>Attempt ID</th><th class="w-time">推送时间</th></tr></thead>
+            <tbody>${ev.attempts.map(a => `<tr>
+              <td><span class="pw-code ${a.code === 200 ? 'ok' : 'err'}">${a.code}</span></td>
+              <td>${a.id}</td><td>${a.time}</td></tr>`).join('')}</tbody>
+          </table></div>
+          <div class="pw-sub">事件内容</div>
+          <pre class="pw-json">${pwPayload(r, ev)}</pre>
+        </div>` : ''}
+      </div>`;
+    }).join('');
+    return `<div class="pw-wrap">${cards}</div>`;
+  }
+
+  function pwRefresh() {
+    const body = document.querySelector('#fp-drawer .fp-drawer-body'), top = body.scrollTop;
+    document.getElementById('fp-drawer-body').innerHTML = pwRenderBody();
+    body.scrollTop = top;
+  }
+
+  function openPwDrawer(idx) {
+    pwOrderIdx = idx; pwBusy = -1; pwOpen = {};
+    const r = PAYMENT_ALL[idx];
+    openFpDrawer('Webhook 记录', `订单号 ${r.order} · ${r.merchantName}（${r.merchantId}） · ${P_STATUS[r.status].label}`, pwRenderBody());
+  }
+
+  function pwToggle(i) {
+    pwOpen[i] = !pwOpen[i];
+    pwRefresh();
+  }
+
+  function openPwConfirm(i) {
+    pwRetryIdx = i;
+    const ev = PW_EVENTS[PAYMENT_ALL[pwOrderIdx].order][i];
+    const delivered = ev.status === 'delivered';
+    document.getElementById('pw-confirm-icon').innerHTML = delivered
+      ? `<i data-lucide="alert-triangle" style="width:22px;height:22px;color:#E6A23C;flex-shrink:0;"></i>`
+      : `<i data-lucide="info" style="width:22px;height:22px;color:#409EFF;flex-shrink:0;"></i>`;
+    document.getElementById('pw-confirm-msg').textContent = delivered
+      ? '商户已成功接收该事件，重复推送可能导致商户重复处理，确认继续重试吗？'
+      : `将以原始内容重新推送 ${ev.type} 至 ${ev.url}，确认重试吗？`;
+    document.getElementById('pw-confirm-modal').classList.add('show');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closePwConfirm() {
+    document.getElementById('pw-confirm-modal').classList.remove('show');
+  }
+
+  function doPwRetry() {
+    closePwConfirm();
+    const i = pwRetryIdx, order = PAYMENT_ALL[pwOrderIdx].order;
+    pwBusy = i; pwRefresh();
+    setTimeout(() => {
+      const ev = PW_EVENTS[order][i];
+      const ok = ev.mockResult === 'success';
+      const now = new Date(), p = n => String(n).padStart(2, '0');
+      ev.attempts.unshift({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        code: ok ? 200 : 500,
+        time: `${now.getFullYear()}-${p(now.getMonth() + 1)}-${p(now.getDate())} ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`,
+      });
+      // 与生产一致：成功置为已送达；失败保持原状态
+      if (ok) ev.status = 'delivered';
+      if (PAYMENT_ALL[pwOrderIdx].order !== order) return;
+      pwBusy = -1;
+      pwOpen[i] = true;
+      pwRefresh();
+      showToast(ok ? '推送成功，商户已接收' : '推送失败（HTTP 500），可稍后再试');
+    }, 900);
+  }
+
   const pState = { rows: [...PAYMENT_ALL], page: 1, size: 10 };
 
   function paymentRender() {
@@ -9205,6 +9449,14 @@
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/>
                 <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+              </svg>
+            </span>
+            <span class="action-icon" onclick="openPwDrawer(${PAYMENT_ALL.indexOf(r)})" title="Webhook 记录">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/>
+                <path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/>
+                <path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/>
               </svg>
             </span>
             ${editBtn}
@@ -14085,6 +14337,7 @@
     ] },
     { id:'payment_order', label:'支付订单', children:[
       { id:'payment_detail', label:'查看订单详情' },
+      { id:'payment_webhook_retry', label:'重试回调' },
     ] },
     { id:'currency_mgmt', label:'币种管理', children:[
       { id:'currency_list', label:'币种列表' },

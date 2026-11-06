@@ -7047,6 +7047,7 @@
     return PAYMENT_ALL.find(p => p.deposits && p.deposits.some(d => d.hash === r.hash)) || null;
   }
   function depositOrderNo(r) {
+    if (r.manualOrderNo) return r.manualOrderNo;   // 运营编辑为已到账时填写的订单号，不对应支付订单
     const p = depositMatchedOrder(r);
     if (p) return p.order;
     const ramp = RAMP_IN_ORDERS.find(o => o.txHash === r.hash);
@@ -7384,12 +7385,11 @@
           <i data-lucide="chevron-down" class="select-caret" style="width:12px;height:12px;"></i>
         </div>
       </div>
-      <!-- 订单号：选「已到账」后才出现，选填；填写后保存时以该订单号生成已完成的支付订单并关联本笔充币 -->
+      <!-- 订单号：选「已到账」后才出现，选填；只记录在本笔充币上，不生成支付订单 -->
       <div class="detail-item" id="d-edit-order-wrap" style="grid-column:1/-1;display:${r.status === 'arrived' ? '' : 'none'};">
         <span class="detail-label">订单号</span>
         <input class="field-input" id="d-edit-order" maxlength="64" placeholder="请输入订单号" style="width:100%;" oninput="deRcvErr('d-edit-order', '')">
         <div class="ob-err" id="d-edit-order-err"></div>
-        <div style="font-size:12px;color:#909399;margin-top:4px;">填写后将以该订单号生成支付订单并回调商户</div>
       </div>
       <div class="detail-item" style="grid-column:1/-1">
         <span class="detail-label">备注</span>
@@ -7417,9 +7417,10 @@
     if (orderWrap) orderWrap.style.display = sel.value === 'arrived' ? '' : 'none';
   }
 
-  // 运营填写的订单号：同一商户下不能与已有支付订单的订单号重复
+  // 运营填写的订单号：同一商户下不能与支付订单的订单号、其他充币记录的订单号重复
   function depositOrderNoTaken(r, orderNo) {
-    return PAYMENT_ALL.some(p => p.order === orderNo && (p.merchantId === r.uid || p.merchantName === r.name));
+    return PAYMENT_ALL.some(p => p.order === orderNo && (p.merchantId === r.uid || p.merchantName === r.name))
+      || DEPOSIT_ALL.some(d => d !== r && d.uid === r.uid && depositOrderNo(d) === orderNo);
   }
 
   function closeDepositEdit() {
@@ -7443,7 +7444,7 @@
       `<i data-lucide="check-circle" style="width:22px;height:22px;color:#67C23A;flex-shrink:0;"></i>`;
     document.getElementById('d-confirm-title').textContent = '确认已到账';
     document.getElementById('d-confirm-msg').textContent = orderNo
-      ? `确认后将以订单号 ${orderNo} 生成支付订单并关联本笔充币，同时回调商户，且无法撤销。确认继续吗？`
+      ? `确认后，该行状态将变为「已到账」（终态）并记录订单号 ${orderNo}，同时向商户发送充币到账回调，且无法撤销。确认继续吗？`
       : '确认后，该行状态将变为「已到账」（终态），且无法撤销。确认继续吗？';
     const okBtn = document.getElementById('d-confirm-ok');
     okBtn.className = 'btn btn-primary btn-sm';
@@ -7466,25 +7467,15 @@
     const orderNo = (document.getElementById('d-edit-order')?.value || '').trim();
     r.status = newStatus;
     r.remark = (document.getElementById('d-edit-remark')?.value || '').trim();
-    // 填写了订单号：生成一笔已完成的支付订单（订单金额 = 到账金额，其余取自本笔充币）并关联，
-    // 充币记录的订单号 / 订单金额通过 depositMatchedOrder 按哈希反查得到
-    if (orderNo) {
-      const now = new Date();
-      const pad = n => String(n).padStart(2, '0');
-      const nowStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-      const net = depositNetCell(r);
-      const order = { order:orderNo, merchantId:r.uid, merchantName:r.name, userId:r.userId, due:r.amount, paid:r.amount, fee:r.fee, net, source:'运营创建', token:r.token, network:r.network, channel:r.channel || '', time:nowStr, doneTime:nowStr, addr:r.wallet, status:'completed', editable:false, manual:true, operator:'admin',
-        deposits:[{ txid:'-', hash:r.hash, amount:r.amount, fee:r.fee, net, network:r.network, time:r.time }] };
-      PAYMENT_ALL.unshift(order);
-      pState.rows.unshift(order);
-    }
+    // 填写了订单号：只记录在本笔充币上（不生成支付订单，订单金额仍为空）
+    if (orderNo) r.manualOrderNo = orderNo;
     logDepositExceptionAction(r, '状态变更', `状态由${beforeLabel}编辑变更为${D_STATUS[newStatus].label}${orderNo ? `，订单号 ${orderNo}` : ''}`, 'normal');
     // 不再是「待匹配订单」，从「充币审核」的待处理队列里移出，不留审核历史
     deState.rows = deState.rows.filter(row => row !== r);
     closeDConfirm();
     closeDepositEdit();
     depositRender();
-    showToast(orderNo ? `保存成功，已生成支付订单 ${orderNo}` : '保存成功，状态已更新为' + D_STATUS[newStatus].label);
+    showToast('保存成功，状态已更新为' + D_STATUS[newStatus].label);
   }
 
   // ══════════════════════════════════════════════════════

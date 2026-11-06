@@ -730,6 +730,8 @@
     .m-exp-val.frozen { color:#E6A23C; }
     .m-exp-unit { font-size:12px; font-weight:400; color:#909399; margin-left:3px; }
     .m-exp-empty { font-size:13px; color:#C0C4CC; padding:12px 0; }
+    .m-exp-grp + .m-exp-grp { margin-top:12px; }
+    .m-exp-grp-lbl { font-size:12px; color:#606266; margin-bottom:8px; }
     /* ── 创建 API Keys 弹窗 ──────────────────────── */
     .ak-modal { background:#fff; border-radius:6px; width:560px; max-width:92vw; box-shadow:0 12px 40px rgba(0,0,0,0.18); }
     .ak-form-row { display:grid; grid-template-columns:90px 1fr; align-items:center; gap:8px; margin-bottom:18px; }
@@ -1875,6 +1877,17 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">账户</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="al-acct-lite" tabindex="0"
+                     onclick="msLiteToggle('al-acct')" onblur="setTimeout(function(){msLiteClose('al-acct')}, 150)">
+                  <span class="ms-lite-text placeholder" id="al-acct-text">全部</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="al-acct-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
                 <div class="ms-lite" id="al-token-lite" tabindex="0"
@@ -1943,16 +1956,16 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:1660px;">
+            <table style="min-width:1750px;">
               <colgroup>
                 <col style="width:95px"><col style="width:145px"><col style="width:100px"><col style="width:100px">
-                <col style="width:70px"><col style="width:90px">
+                <col style="width:90px"><col style="width:70px"><col style="width:90px">
                 <col style="width:120px"><col style="width:130px"><col style="width:260px">
                 <col style="width:260px"><col style="width:152px">
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>代币</th><th>网络</th><th>金额</th>
+                  <th>商户 ID</th><th>商户名称</th><th>用户 ID</th><th>类型</th><th>账户</th><th>代币</th><th>网络</th><th>金额</th>
                   <th>变动后余额</th>
                   <th>
                     <span class="me-info-wrap" onmouseenter="showTip(event,'Top Up / 充币：充币订单号（提币退回生成的充币为调账申请单号）\n手续费（随充币）：对应的充币订单号\nSettlement / 提币：提币订单号\n手续费（随提币）：对应的提币订单号\n调账：调账申请单号\n法币收款 / 手续费（随法币收款）：收款订单号\n网络费：对应的充币订单号（只有 On Ramp 充币会产生）\n转账转出 / 转账转入：转账单号')" onmousemove="moveTip(event)" onmouseleave="hideTip()">
@@ -2783,6 +2796,17 @@
               </div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">出金账户</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="w-acct-lite" tabindex="0"
+                     onclick="msLiteToggle('w-acct')" onblur="setTimeout(function(){msLiteClose('w-acct')}, 150)">
+                  <span class="ms-lite-text placeholder" id="w-acct-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="w-acct-dropdown" style="display:none;"></div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">代币</span>
               <div class="filter-control">
                 <div class="ms-lite" id="w-token-lite" tabindex="0"
@@ -2930,9 +2954,9 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:3198px;">
+            <table style="min-width:3298px;">
               <colgroup>
-                <col style="width:175px"><col style="width:145px"><col style="width:108px">
+                <col style="width:175px"><col style="width:145px"><col style="width:100px"><col style="width:108px">
                 <col style="width:68px"><col style="width:135px"><col style="width:110px">
                 <col style="width:70px"><col style="width:110px"><col style="width:380px">
                 <col style="width:165px"><col style="width:165px"><col style="width:150px">
@@ -2941,7 +2965,7 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th>商户 ID</th><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th>
+                  <th>商户 ID</th><th>商户名称</th><th>出金账户</th><th>客户 ID</th><th>代币</th><th>网络</th>
                   <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>提币时间</th><th>到账时间</th><th>哈希</th><th>批次号</th>
                   <th>商户订单号</th><th>钱包订单号 / 批次号</th>
@@ -3006,6 +3030,17 @@
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入内容" id="wa-userid">
               </div>
+            </div>
+            <div class="filter-item">
+              <span class="filter-label-el">出金账户</span>
+              <div class="filter-control">
+                <div class="ms-lite" id="wa-acct-lite" tabindex="0"
+                     onclick="msLiteToggle('wa-acct')" onblur="setTimeout(function(){msLiteClose('wa-acct')}, 150)">
+                  <span class="ms-lite-text placeholder" id="wa-acct-text">请选择</span>
+                  <i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i>
+                </div>
+              </div>
+              <div class="p-merch-dropdown" id="wa-acct-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
               <span class="filter-label-el">代币</span>
@@ -3132,10 +3167,10 @@
             </button>
           </div>
           <div class="table-wrap">
-            <table style="min-width:2593px;">
+            <table style="min-width:2693px;">
               <colgroup>
                 <col style="width:40px">
-                <col style="width:175px"><col style="width:145px"><col style="width:108px">
+                <col style="width:175px"><col style="width:145px"><col style="width:100px"><col style="width:108px">
                 <col style="width:68px"><col style="width:135px"><col style="width:110px">
                 <col style="width:70px"><col style="width:110px"><col style="width:380px">
                 <col style="width:165px">
@@ -3145,7 +3180,7 @@
               <thead>
                 <tr>
                   <th><label class="ak-check-item" style="justify-content:center"><input type="checkbox" id="wa-check-all" onchange="waToggleAllVisible(this.checked)"><span class="ak-box"></span></label></th>
-                  <th>商户 ID</th><th>商户名称</th><th>客户 ID</th><th>代币</th><th>网络</th>
+                  <th>商户 ID</th><th>商户名称</th><th>出金账户</th><th>客户 ID</th><th>代币</th><th>网络</th>
                   <th>提币金额</th><th>手续费</th><th>净入账</th><th>钱包地址</th>
                   <th>提币时间</th><th>批次号</th>
                   <th>商户订单号</th>
@@ -4023,7 +4058,7 @@
               <thead>
                 <tr>
                   <th></th><th>名称</th><th>ID</th><th>邮箱</th>
-                  <th>状态</th><th>子钱包</th><th>资产余额</th><th>创建时间</th><th>操作</th>
+                  <th>状态</th><th>子钱包</th><th>资产余额（USDT）</th><th>创建时间</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="m-tbody"></tbody>
@@ -4576,6 +4611,7 @@
         <div class="filter-card">
           <div class="filter-grid">
             <div class="filter-item"><span class="filter-label-el">商户</span><div class="filter-control"><div class="ms-lite" id="mz-f-merchant-lite" tabindex="0" onclick="msLiteToggle('mz-f-merchant')" onblur="setTimeout(function(){msLiteClose('mz-f-merchant')}, 150)"><span class="ms-lite-text placeholder" id="mz-f-merchant-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="mz-f-merchant-dropdown" style="display:none;"></div></div>
+            <div class="filter-item"><span class="filter-label-el">账户</span><div class="filter-control"><div class="ms-lite" id="mz-f-acct-lite" tabindex="0" onclick="msLiteToggle('mz-f-acct')" onblur="setTimeout(function(){msLiteClose('mz-f-acct')}, 150)"><span class="ms-lite-text placeholder" id="mz-f-acct-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="mz-f-acct-dropdown" style="display:none;"></div></div>
             <div class="filter-item"><span class="filter-label-el">变动类型</span><div class="filter-control"><div class="ms-lite" id="mz-f-type-lite" tabindex="0" onclick="msLiteToggle('mz-f-type')" onblur="setTimeout(function(){msLiteClose('mz-f-type')}, 150)"><span class="ms-lite-text placeholder" id="mz-f-type-text">全部</span><i data-lucide="chevron-down" class="ms-caret" style="width:12px;height:12px;"></i></div></div><div class="p-merch-dropdown" id="mz-f-type-dropdown" style="display:none;"></div></div>
             <div class="filter-item"><span class="filter-label-el">关联单号</span><div class="filter-control"><input class="field-input" type="text" placeholder="请输入关联单号" id="mz-f-ref"></div></div>
             <div class="filter-item"><span class="filter-label-el">时间</span><div class="filter-control"><div class="date-range-el"><input class="date-input-el" type="date" id="mz-f-cre-from"><span class="range-sep-el">—</span><input class="date-input-el" type="date" id="mz-f-cre-to"></div></div></div>
@@ -4593,7 +4629,7 @@
           </div>
           <div class="table-wrap">
             <table style="min-width:1300px;table-layout:auto;">
-              <thead><tr><th>商户名称</th><th>代币</th><th>网络</th><th>关联单号</th><th>时间</th><th>变动类型</th><th>冻结金额</th><th>变动后冻结余额</th></tr></thead>
+              <thead><tr><th>商户名称</th><th>账户</th><th>代币</th><th>网络</th><th>关联单号</th><th>时间</th><th>变动类型</th><th>冻结金额</th><th>变动后冻结余额</th></tr></thead>
               <tbody id="mz-tbody"></tbody>
             </table>
           </div>
@@ -5457,6 +5493,10 @@
         </span>
       </div>
       <div class="modal-body" style="display:block;padding:24px 24px 8px;">
+        <!-- 余额拆分为链上 / 法币账户后，调账（含提币退回）只调整链上账户，不提供账户选择 -->
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#909399;background:#f4f4f5;border-radius:4px;padding:8px 16px;margin-bottom:18px;">
+          <i data-lucide="info" style="width:14px;height:14px;flex-shrink:0;"></i>调账只作用于链上账户
+        </div>
         <div class="ak-form-row">
           <span class="ak-label"><span class="ak-req">*</span>调账类型</span>
           <div class="select-wrap" style="width:100%;">
@@ -8026,6 +8066,11 @@
     // Settlement 白名单演示：kara 开启白名单后的商户后台单笔提币（wlId＝提交时匹配的白名单 ID）；第一笔的地址审核前已被商户删除 → 列表显示「已被移出白名单」，详情 / 审核弹窗顶部显示提示条
     { merchantId:'635102950', merchantName:'kara',  userId:'-', token:'USDT', network:'TRON', net:'-3000.00', fee:'0.00', wallet:'TAd9zHCayg9LumQ2Kx5nWbYh8Rc4o6P8r0', wdTime:'2026-10-30 10:12:05', time:'-', hash:'-', paypazId:'WD00000000000091', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review', wlId:2 },
     { merchantId:'635102950', merchantName:'kara',  userId:'-', token:'USDT', network:'TRON', net:'-2000.00', fee:'0.00', wallet:'TPeH4FLWrPTGqsUrxA4JK12i8kUWc1eeHQ', wdTime:'2026-10-30 09:40:22', time:'-', hash:'-', paypazId:'WD00000000000092', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review', wlId:5 },
+    // 法币账户出金演示：kara4 商户后台单笔 Settlement 选择「法币账户」（资金来自法币收款 PZPI20261005-00079）；
+    // 提交即冻结法币账户，到账扣划解冻，拒绝释放回法币账户
+    { merchantId:'291654802', merchantName:'kara4', userId:'-', token:'USDT', network:'TRON', net:'-2000.00', fee:'0.00', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-11-05 14:06:31', time:'-', hash:'-', paypazId:'WD00000000000095', supplierId:'-', channel:'Cobo Holding', status:'manual_review', reviewType:'token_review' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'-', token:'USDT', network:'TRON', net:'-800.00', fee:'0.00', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-10-29 15:22:40', time:'-', hash:'-', paypazId:'WD00000000000093', supplierId:'-', channel:'Cobo Holding', status:'audit_rejected', remark:'商户申请撤回', reviewTime:'2026-10-29 16:05:12' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'-', token:'USDT', network:'TRON', net:'-5000.00', fee:'0.00', wallet:'TPeH4FLWPTGqsUrxA4JK12i8msBvREokY3', wdTime:'2026-10-08 10:30:12', time:'2026-10-08 10:32:05', hash:'7a3d9f1c5e8b2d4f6a0c3e5b7d9f1a2c4e6b8d0f', paypazId:'WD00000000000094', supplierId:'3d8f1b6a-2c7e-4a9d-b5f0-8e1c4a7d2b96', channel:'Cobo Holding', status:'completed' },
     // 示例：配置钱包 Cobo Payment 余额不足，自动兜底从 Cobo Holding 出金
     { merchantId:'635102950', merchantName:'kara',  userId:'U10023854', token:'USDT', network:'TRON', net:'-20.01', fee:'0.01', wallet:'TQn9Y2khEsLMG6vSw4kmXpMk3ktW9dJqUp', wdTime:'2026-09-29 10:05:42', time:'2026-09-29 10:06:20', hash:'9c1e7a3f5b2d8e4c6a0f1b3d5e7c9a2b4d6f8e0c', paypazId:'WD00000000000071', supplierId:'7f3e2a1b-9c4d-4e8f-a6b5-1d2c3e4f5a6b', channel:'Cobo Holding', configWallet:'Cobo Payment', fallback:true, status:'completed' },
     { merchantId:'460466234', merchantName:'kara3', userId:'U60011001', token:'USDT', network:'TRON', net:'-1.01', fee:'0.01', wallet:'TAd92HCayg9LuEfeAHBDA8dsAwBU6etXPi', wdTime:'2026-06-25 09:12:03', time:'-', hash:'-',                                                                       paypazId:'iC9OcFNFAHSqJSs175yVuDmt',       supplierId:'-',                                    channel:'-',    status:'risk_pending', viaExcel:true },
@@ -8080,9 +8125,18 @@
 
   (function assignWithdrawMethod() {
     // 提币方式：Excel 对应 viaExcel 批量导入；其余为商户后台"单笔"表单发起或直接调用 API
-    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', 'WD00000000000080', 'WD00000000000083', 'WD00000000000091', 'WD00000000000092']);
+    const singleMarkers = new Set(['3Z3EmPxCaVyWwEAR1X7PRIe8LhvnKboQf', 'JcILShgvxQ5NaydnpW2bmSNwiR7fYe3', 'WD00000000000080', 'WD00000000000083', 'WD00000000000091', 'WD00000000000092', 'WD00000000000093', 'WD00000000000094', 'WD00000000000095']);
     WITHDRAW_ALL.forEach(r => {
       r.method = r.accountType === 'receiving' ? '单笔' : r.viaExcel ? 'Excel' : (singleMarkers.has(r.hash) || singleMarkers.has(r.paypazId) ? '单笔' : 'API');
+    });
+  })();
+
+  (function assignWithdrawAcct() {
+    // 出金账户：商户后台单笔 Settlement 可选「法币账户」/「链上账户」，其余（API / Excel / 上线前历史数据）均为链上账户；
+    // 收款商户提现：资金最终划扣到商户的法币账户，出金账户记为「法币账户」
+    const fiatOrders = new Set(['WD00000000000093', 'WD00000000000094', 'WD00000000000095']);
+    WITHDRAW_ALL.forEach(r => {
+      r.acct = r.accountType === 'receiving' || fiatOrders.has(r.paypazId) ? '法币账户' : '链上账户';
     });
   })();
 
@@ -8199,6 +8253,7 @@
       return `<tr>
         <td style="font-family:Inter,sans-serif">${r.merchantId}${rmTag(r)}</td>
         <td>${r.merchantName}</td>
+        <td>${r.acct}</td>
         <td style="font-family:Inter,sans-serif">${r.userId}</td>
         <td>${r.token}</td><td>${r.network}</td>
         <td class="cell-red">${wAmt(r)}</td>
@@ -8292,6 +8347,9 @@
     if (dd) dd.style.display = 'none';
   }
   function withdrawFiltersInit() {
+    msLiteInit('w-acct', [
+      { value:'法币账户', label:'法币账户' }, { value:'链上账户', label:'链上账户' },
+    ], '请选择');
     msLiteInit('w-token', [
       { value:'USDT', label:'USDT' }, { value:'BTC', label:'BTC' },
     ], '请选择');
@@ -8316,6 +8374,7 @@
   }
   function withdrawSearch() {
     const userId   = document.getElementById('w-userid').value.trim().toLowerCase();
+    const accts    = msLiteGet('w-acct');
     const tokens   = msLiteGet('w-token');
     const nets     = msLiteGet('w-network');
     const wallet   = document.getElementById('w-wallet').value.trim().toLowerCase();
@@ -8336,6 +8395,7 @@
       if (wIsAuditRecord(r)) return false;
       if (wSelectedMerchants.length && !wSelectedMerchants.includes(r.merchantId)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
+      if (accts.length    && !accts.includes(r.acct))                  return false;
       if (tokens.length   && !tokens.includes(r.token))                return false;
       if (nets.length     && !nets.includes(r.network))                return false;
       if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
@@ -8360,15 +8420,15 @@
   function withdrawReset() {
     ['w-merchant','w-userid','w-wallet','w-hash','w-batch','w-paypazid','w-supplierid','w-channelbatch','w-wdtime-start','w-wdtime-end','w-date-start','w-date-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    ['w-token','w-network','w-status','w-channel','w-method','w-source'].forEach(msLiteReset);
+    ['w-acct','w-token','w-network','w-status','w-channel','w-method','w-source'].forEach(msLiteReset);
     wSelectedMerchants = [];
     wRenderMerchantTags();
     wState.rows = WITHDRAW_ALL.filter(r => !wIsAuditRecord(r)); wState.page = 1; withdrawRender();
   }
   function withdrawExport() {
-    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','商户订单号','钱包订单号','钱包批次号','提币钱包','渠道','提币方式','状态'];
+    const headers = ['商户ID','商户名称','出金账户','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','到账时间','哈希','批次号','商户订单号','钱包订单号','钱包批次号','提币钱包','渠道','提币方式','状态'];
     csvDownload(headers, wState.rows.map(r => [
-      r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
+      r.merchantId, r.merchantName, r.acct, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
       r.wdTime, r.time, r.hash, r.batch, r.paypazId, r.supplierId, r.channelBatch, r.channel, r.source, r.method, wdStatusView(r).label
     ]), '提币记录.csv');
   }
@@ -8407,6 +8467,7 @@
     return [
       di('商户 ID',      r.merchantId + rmTag(r)),
       di('商户名称',     r.merchantName),
+      di('出金账户',     r.acct),
       di('用户 ID',      r.userId),
       di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
       di('提币金额',    `<span style="color:#F56C6C;font-family:Inter,sans-serif">${wAmt(r)} USDT</span>`),
@@ -8568,6 +8629,7 @@
         <td>${checkCell}</td>
         <td style="font-family:Inter,sans-serif">${r.merchantId}${rmTag(r)}</td>
         <td>${r.merchantName}</td>
+        <td>${r.acct}</td>
         <td style="font-family:Inter,sans-serif">${r.userId}</td>
         <td>${r.token}</td><td>${r.network}</td>
         <td class="cell-red">${wAmt(r)}</td>
@@ -8690,6 +8752,9 @@
     if (dd) dd.style.display = 'none';
   }
   function withdrawAuditFiltersInit() {
+    msLiteInit('wa-acct', [
+      { value:'法币账户', label:'法币账户' }, { value:'链上账户', label:'链上账户' },
+    ], '请选择');
     msLiteInit('wa-token', [
       { value:'USDT', label:'USDT' }, { value:'BTC', label:'BTC' },
     ], '请选择');
@@ -8709,6 +8774,7 @@
   }
   function withdrawAuditSearch() {
     const userId   = document.getElementById('wa-userid').value.trim().toLowerCase();
+    const accts    = msLiteGet('wa-acct');
     const tokens   = msLiteGet('wa-token');
     const nets     = msLiteGet('wa-network');
     const wallet   = document.getElementById('wa-wallet').value.trim().toLowerCase();
@@ -8724,6 +8790,7 @@
       if (!wIsAuditRecord(r)) return false;
       if (waSelectedMerchants.length && !waSelectedMerchants.includes(r.merchantId)) return false;
       if (userId   && !r.userId.toLowerCase().includes(userId))       return false;
+      if (accts.length    && !accts.includes(r.acct))                  return false;
       if (tokens.length   && !tokens.includes(r.token))                return false;
       if (nets.length     && !nets.includes(r.network))                return false;
       if (wallet   && !r.wallet.toLowerCase().includes(wallet))        return false;
@@ -8743,15 +8810,15 @@
   function withdrawAuditReset() {
     ['wa-merchant','wa-userid','wa-wallet','wa-status','wa-batch','wa-paypazid','wa-wdtime-start','wa-wdtime-end']
       .forEach(id => { document.getElementById(id).value = ''; });
-    ['wa-token','wa-network','wa-channel','wa-method','wa-source'].forEach(msLiteReset);
+    ['wa-acct','wa-token','wa-network','wa-channel','wa-method','wa-source'].forEach(msLiteReset);
     waSelectedMerchants = [];
     waRenderMerchantTags();
     waState.rows = WITHDRAW_ALL.filter(wIsAuditRecord); waState.selected.clear(); waState.page = 1; withdrawAuditRender();
   }
   function withdrawAuditExport() {
-    const headers = ['商户ID','商户名称','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','批次号','商户订单号','提币钱包','渠道','提币方式','状态'];
+    const headers = ['商户ID','商户名称','出金账户','用户ID','代币','网络','提币金额','手续费','净入账','钱包地址','提币时间','批次号','商户订单号','提币钱包','渠道','提币方式','状态'];
     csvDownload(headers, waState.rows.map(r => [
-      r.merchantId, r.merchantName, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
+      r.merchantId, r.merchantName, r.acct, r.userId, r.token, r.network, wAmt(r), wFeeNeg(r), r.net, r.wallet,
       r.wdTime, r.batch, r.paypazId, r.channel, r.source, r.method, waStatusView(r).label
     ]), '提币审核.csv');
   }
@@ -8793,6 +8860,7 @@
       wlRemovedTag(r) ? '<div class="md-token-tip" style="grid-column:1/-1">该提币地址已被移出商户白名单，请先与商户确认后再操作。</div>' : '',
       di('商户 ID',      r.merchantId + rmTag(r)),
       di('商户名称',     r.merchantName),
+      di('出金账户',     r.acct),
       di('客户 ID',      r.userId),
       di('状态',        `<span class="badge ${st.cls}">${st.label}</span>`),
       di('提币金额',    `<span style="color:#F56C6C;font-family:Inter,sans-serif">${wAmt(r)} USDT</span>`),
@@ -9854,11 +9922,11 @@
     { id:'888166267', name:'rogan',       email:'rogan3@bdy.tech',        status:'enabled',  deposit:'enabled',  withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-05-29 13:59:50' },
     { id:'236751146', name:'rogan-v1',    email:'rogan-v1@bdy.tech',      status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-05-29 13:46:01' },
     { id:'848473309', name:'rogantest',   email:'rogantest@bdy.tech',     status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:115, wallets:0,  balance:'156.928888',   created:'2026-05-06 15:34:16' },
-    { id:'884590488', name:'kara2',       email:'kara2@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:10,   matchLower:90,  matchUpper:110, wallets:9,  balance:'1501.06',      created:'2026-04-13 17:40:36' },
+    { id:'884590488', name:'kara2',       email:'kara2@bdy.tech',         status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:10,   matchLower:90,  matchUpper:110, wallets:9,  balance:'1501.06', fiatBalance:'320.50',      created:'2026-04-13 17:40:36' },
     { id:'635102950', name:'kara',        email:'kara@bdy.tech',          status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:5,    matchLower:90,  matchUpper:110, wallets:10, balance:'1342.23',      created:'2026-04-13 16:00:01' },
     { id:'512847362', name:'alpha-pay',   email:'admin@alpha-pay.com',    status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:3,  balance:'580.00',       created:'2026-04-10 09:15:22' },
     { id:'731924856', name:'betacorp',    email:'admin@betacorp.com',     status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:1,  balance:'0',            created:'2026-04-08 14:30:00' },
-    { id:'304857192', name:'gamma-fx',    email:'ops@gamma-fx.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:6,  balance:'2410.75',      created:'2026-04-05 11:22:47' },
+    { id:'304857192', name:'gamma-fx',    email:'ops@gamma-fx.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:6,  balance:'2410.75', fiatBalance:'860.00',      created:'2026-04-05 11:22:47' },
     { id:'987654321', name:'delta-ex',    email:'support@delta-ex.com',   status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:2,  balance:'318.40',       created:'2026-04-01 16:05:38' },
     { id:'192837465', name:'epsilon',     email:'admin@epsilon.finance',  status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-03-28 10:44:19' },
     { id:'567891234', name:'zeta-pay',    email:'ops@zeta-pay.com',       status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:4,  balance:'755.20',       created:'2026-03-25 08:37:56' },
@@ -9874,7 +9942,7 @@
     { id:'741963852', name:'pi-finance',  email:'admin@pi-finance.com',   status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:2,  balance:'190.00',       created:'2026-01-30 09:22:15' },
     { id:'630852741', name:'rho-pay',     email:'ops@rho-pay.com',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:1,  balance:'75.50',        created:'2026-01-25 14:48:37' },
     { id:'519741630', name:'sigma-ex',    email:'admin@sigma-ex.com',     status:'disabled', deposit:'disabled', withdraw:'disabled', orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-01-20 10:55:04' },
-    { id:'408630519', name:'tau-corp',    email:'ops@tau-corp.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:8,  balance:'4120.78',      created:'2026-01-15 08:30:21' },
+    { id:'408630519', name:'tau-corp',    email:'ops@tau-corp.io',        status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:true,  minDepCheck:true,  minDeposit:1,    matchLower:90,  matchUpper:110, wallets:8,  balance:'4120.78', fiatBalance:'1250.00',      created:'2026-01-15 08:30:21' },
     { id:'297519408', name:'upsilon',     email:'admin@upsilon.finance',  status:'enabled',  deposit:'enabled',  withdraw:'enabled',  orderMatch:false, minDeposit:1,    matchLower:90,  matchUpper:110, wallets:0,  balance:'0',            created:'2026-01-10 16:17:49' },
   ];
 
@@ -9899,17 +9967,23 @@
   const _CHEVRON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
   const _REFRESH_MINI = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
 
+  // 资产余额拆分为链上账户 / 法币账户（USDT、USDC 按 1:1 合计）：fiatBalance 未配置视为 0，链上＝合计 − 法币
   function merchantAssetHTML(r) {
     if (r.balance === '0') return `<p class="m-exp-empty">暂无数据</p>`;
     const total  = parseFloat(r.balance);
-    const frozen = Math.round(total * 0.066 * 100) / 100;
-    const avail  = Math.round((total - frozen) * 100) / 100;
+    const fiat   = parseFloat(r.fiatBalance || 0);
+    const chain  = Math.round((total - fiat) * 100) / 100;
     const fmt = n => n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-    return `<div class="m-exp-cards">
-      <div class="m-exp-card"><div class="m-exp-lbl">余额</div><div><span class="m-exp-val">${fmt(total)}</span><span class="m-exp-unit">USDT</span></div></div>
-      <div class="m-exp-card"><div class="m-exp-lbl">可用</div><div><span class="m-exp-val">${fmt(avail)}</span><span class="m-exp-unit">USDT</span></div></div>
-      <div class="m-exp-card"><div class="m-exp-lbl">冻结</div><div><span class="m-exp-val frozen">${fmt(frozen)}</span><span class="m-exp-unit">USDT</span></div></div>
+    // 链上账户冻结沿用原演示比例；法币账户冻结演示为 0
+    const grp = (label, bal, frozen) => `<div class="m-exp-grp">
+      <div class="m-exp-grp-lbl">${label}</div>
+      <div class="m-exp-cards">
+        <div class="m-exp-card"><div class="m-exp-lbl">余额</div><div><span class="m-exp-val">${fmt(bal)}</span><span class="m-exp-unit">USDT</span></div></div>
+        <div class="m-exp-card"><div class="m-exp-lbl">可用</div><div><span class="m-exp-val">${fmt(Math.round((bal - frozen) * 100) / 100)}</span><span class="m-exp-unit">USDT</span></div></div>
+        <div class="m-exp-card"><div class="m-exp-lbl">冻结</div><div><span class="m-exp-val frozen">${fmt(frozen)}</span><span class="m-exp-unit">USDT</span></div></div>
+      </div>
     </div>`;
+    return grp('链上账户', chain, Math.round(chain * 0.066 * 100) / 100) + grp('法币账户', fiat, 0);
   }
 
   function merchantToggleExpand(id) {
@@ -9936,7 +10010,7 @@
     slice.forEach(r => {
       const absIdx     = MERCHANT_ALL.indexOf(r);
       const st         = M_STATUS[r.status];
-      const bal        = r.balance === '0' ? '0 USDT' : r.balance + ' USDT';
+      const bal        = r.balance === '0' ? '0.00' : r.balance;
       const isExpanded = mExpanded.has(r.id);
       const lockEl = r.status === 'enabled'
         ? `<span class="action-icon" style="color:#909399" onclick="merchantToggleLock(${absIdx})" title="禁用">${_LOCK_SVG}</span>`
@@ -12210,7 +12284,7 @@
   Object.assign(FP_FILTERS, {
     po:['id', 'mno', 'merchant', 'uid', 'rm', 'status', 'cre-from', 'cre-to', 'done-from', 'done-to'],
     pp:['id', 'src', 'merchant', 'uid', 'rm', 'cre-from', 'cre-to'],
-    mz:['merchant', 'type', 'ref', 'cre-from', 'cre-to'],
+    mz:['merchant', 'acct', 'type', 'ref', 'cre-from', 'cre-to'],
   });
   Object.assign(FP_RENDER, { po:() => poOrdersRender(), pp:() => poAppealRender(), mz:() => poFrozenRender() });
   const poIn = (arr, v) => !arr || !arr.length || arr.includes(v);
@@ -12545,7 +12619,7 @@
     o.freezeSplit.forEach(seg => {
       const px = poR2(Math.min(seg.amt, restX)), pf = poR2(seg.amt - px);
       restX = poR2(restX - px);
-      const last = LEDGER_ALL.filter(r => r.merchantId === mid && r.token === 'USDT' && r.network === seg.network && r.time <= o.done).sort((a, b) => a.time < b.time ? 1 : -1)[0];
+      const last = LEDGER_ALL.filter(r => r.merchantId === mid && lgAcct(r) === '链上账户' && r.token === 'USDT' && r.network === seg.network && r.time <= o.done).sort((a, b) => a.time < b.time ? 1 : -1)[0];
       const bal = last ? parseFloat(last.balanceAfter) : 0, b1 = poR2(bal - px), b2 = poR2(b1 - pf);
       const base = { merchantId:mid, merchantName:o.merchant, userId:o.uid, token:'USDT', network:seg.network, relatedNo:o.id, time:o.done };
       if (px > 0) LEDGER_ALL.push(Object.assign({ type:'payout', amount:'-' + px.toFixed(2), balanceAfter:b1.toFixed(2), remark:'' }, base));
@@ -12557,32 +12631,47 @@
     alState.rows = [...LEDGER_ALL].sort((a, b) => b.time.localeCompare(a.time));
   }
 
-  // ── 企业商户冻结明细（本期仅代付冻结）：下单 ＋(X＋F)；成功扣划解冻 －(X＋F)；失败释放 －(X＋F) ──
-  const MZ_TYPES = { po_freeze:{ label:'代付冻结', cls:'badge-blue' }, po_deduct:{ label:'代付扣划解冻', cls:'badge-gray' }, po_release:{ label:'代付释放', cls:'badge-gray' } };
+  // ── 企业商户冻结明细：代付冻结（链上账户）＋ 提币冻结（按出金账户）──
+  // 代付：下单 ＋(X＋F)；成功扣划解冻 －(X＋F)；失败释放 －(X＋F)
+  // 提币：提交即冻结出金账户 ＋|净入账|；到账扣划解冻；失败 / 拒绝释放回该账户
+  const MZ_TYPES = {
+    po_freeze:{ label:'代付冻结', cls:'badge-blue' }, po_deduct:{ label:'代付扣划解冻', cls:'badge-gray' }, po_release:{ label:'代付释放', cls:'badge-gray' },
+    wd_freeze:{ label:'提币冻结', cls:'badge-blue' }, wd_deduct:{ label:'提币扣划解冻', cls:'badge-gray' }, wd_release:{ label:'提币释放', cls:'badge-gray' },
+  };
+  // 演示：取上线后的部分提币生成冻结流水（法币账户 3 笔、链上账户 3 笔）
+  const MZ_WD_ORDERS = ['WD00000000000093', 'WD00000000000094', 'WD00000000000095', 'WD00000000000071', 'WD00000000000091', 'WD00000000000092'];
   function poFrozenRows() {
     const ev = [];
-    // 按冻结明细（freezeSplit）分网络逐行记录；变动后冻结余额按「商户 + 网络」滚存
+    // 按冻结明细（freezeSplit）分网络逐行记录；代付只冻结链上账户
     PO_ORDERS.forEach(o => o.freezeSplit.forEach(seg => {
-      const b = { merchant:o.merchant, network:seg.network, ref:o.id };
+      const b = { merchant:o.merchant, acct:'链上账户', token:'USDT', network:seg.network, ref:o.id };
       ev.push(Object.assign({ time:o.created, type:'po_freeze', delta:seg.amt }, b));
       if (o.status === 'success') ev.push(Object.assign({ time:o.done, type:'po_deduct', delta:-seg.amt }, b));
       if (o.status === 'failed' || o.status === 'rejected') ev.push(Object.assign({ time:o.done, type:'po_release', delta:-seg.amt }, b));
     }));
+    WITHDRAW_ALL.filter(r => MZ_WD_ORDERS.includes(r.paypazId)).forEach(r => {
+      const amt = Math.abs(parseFloat(r.net)), b = { merchant:r.merchantName, acct:r.acct, token:r.token, network:r.network, ref:r.paypazId };
+      ev.push(Object.assign({ time:r.wdTime, type:'wd_freeze', delta:amt }, b));
+      if (r.status === 'completed') ev.push(Object.assign({ time:r.time, type:'wd_deduct', delta:-amt }, b));
+      // 拒绝无到账时间，取审核时间 reviewTime
+      if (r.status === 'failed' || r.status === 'audit_rejected') ev.push(Object.assign({ time:r.time !== '-' ? r.time : (r.reviewTime || r.wdTime), type:'wd_release', delta:-amt }, b));
+    });
+    // 变动后冻结余额按「商户 + 账户 + 代币 + 网络」滚存
     const bal = {};
-    ev.sort((a, b) => a.time < b.time ? -1 : a.time > b.time ? 1 : 0).forEach(e => { const k = e.merchant + '|' + e.network; bal[k] = poR2((bal[k] || 0) + e.delta); e.after = bal[k]; });
+    ev.sort((a, b) => a.time < b.time ? -1 : a.time > b.time ? 1 : 0).forEach(e => { const k = [e.merchant, e.acct, e.token, e.network].join('|'); bal[k] = poR2((bal[k] || 0) + e.delta); e.after = bal[k]; });
     return ev.reverse();
   }
   function poFrozenRender() {
     const f = FP_STATE.mz.f;
-    const rows = poFrozenRows().filter(e => poIn(f.merchant, e.merchant) && poIn(f.type, e.type) && (!f.ref || e.ref.includes(f.ref)) && fpInRange(e.time, f['cre-from'], f['cre-to']));
+    const rows = poFrozenRows().filter(e => poIn(f.merchant, e.merchant) && poIn(f.acct, e.acct) && poIn(f.type, e.type) && (!f.ref || e.ref.includes(f.ref)) && fpInRange(e.time, f['cre-from'], f['cre-to']));
     poShow('mz-export-btn', poCan('merchant_frozen_export'));
     document.getElementById('mz-stat-count').textContent = rows.length;
     document.getElementById('mz-tbody').innerHTML = fpPage('mz', rows).map(e => `<tr>
-        <td>${e.merchant}</td><td style="font-family:Inter,sans-serif">USDT</td><td style="font-family:Inter,sans-serif">${e.network}</td><td>${fpMono(e.ref)}</td><td>${fpMono(e.time)}</td>
+        <td>${e.merchant}</td><td>${e.acct}</td><td style="font-family:Inter,sans-serif">${e.token}</td><td style="font-family:Inter,sans-serif">${e.network}</td><td>${fpMono(e.ref)}</td><td>${fpMono(e.time)}</td>
         <td><span class="badge ${MZ_TYPES[e.type].cls}">${MZ_TYPES[e.type].label}</span></td>
-        <td>${fpNum((e.delta < 0 ? '-' : '+') + fpFmt(Math.abs(e.delta)), 'USDT', e.delta > 0 ? '#E6A23C' : '#909399')}</td>
-        <td>${fpNum(fpFmt(e.after), 'USDT')}</td>
-      </tr>`).join('') || fpEmptyRow(8);
+        <td>${fpNum((e.delta < 0 ? '-' : '+') + fpFmt(Math.abs(e.delta)), e.token, e.delta > 0 ? '#E6A23C' : '#909399')}</td>
+        <td>${fpNum(fpFmt(e.after), e.token)}</td>
+      </tr>`).join('') || fpEmptyRow(9);
     if (window.lucide) lucide.createIcons();
   }
 
@@ -13416,10 +13505,18 @@
     { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'TRON',     type:'fee',     amount:'-20.00',    balanceAfter:'19980.00', relatedNo:'LG20261010090', remark:'', time:'2026-10-10 09:00:00' },
     { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'Ethereum', type:'topup', amount:'+5000.00',  balanceAfter:'5000.00',  relatedNo:'LG20261010093', remark:'', time:'2026-10-10 09:30:00' },
     { merchantId:'462513816', merchantName:'shine', userId:'', token:'USDT', network:'Ethereum', type:'fee',     amount:'-5.00',     balanceAfter:'4995.00',  relatedNo:'LG20261010093', remark:'', time:'2026-10-10 09:30:00' },
+    // 演示：kara4 链上账户 Top Up，覆盖其法币代付 / 转账转出（余额拆分后法币收款进法币账户，代付只扣链上账户）
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'topup',   amount:'+15000.00', balanceAfter:'15865.57', relatedNo:'LG20261010100', remark:'', time:'2026-10-10 10:00:00' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'fee',     amount:'-15.00',    balanceAfter:'15850.57', relatedNo:'LG20261010100', remark:'', time:'2026-10-10 10:00:00' },
     // 法币收款订单成功结算：商户到账与充值手续费分两笔记录，关联单号为收款订单号（见「法币收款 › 收款订单」FIAT_ORDERS）
-    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fee',     amount:'-241.13',  balanceAfter:'48849.74', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19' },
-    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fiat',    amount:'+48225.30', balanceAfter:'49090.87', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19' },
+    // 法币收款及其手续费、选择法币账户的 Settlement 记入法币账户（acct），与链上账户各自独立滚存；未标 acct 的流水均为链上账户
+    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fee',     amount:'-241.13',  balanceAfter:'47984.17', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19', acct:'法币账户' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'460466237', token:'USDT', network:'TRON',   type:'fiat',    amount:'+48225.30', balanceAfter:'48225.30', relatedNo:'PZPI20261005-00079', remark:'', time:'2026-10-05 10:25:19', acct:'法币账户' },
+    { merchantId:'291654802', merchantName:'kara4', userId:'', token:'USDT', network:'TRON',   type:'settlement',amount:'-5000.00', balanceAfter:'42984.17', relatedNo:'WD00000000000094', remark:'', time:'2026-10-08 10:32:05', acct:'法币账户' },
   ];
+
+  // 账户：未标 acct 的流水（含上线前历史数据、调账 / 转账 / 代付等追加流水）均为链上账户
+  function lgAcct(r) { return r.acct || '链上账户'; }
 
   const alState = { rows: [...LEDGER_ALL].sort((a,b) => b.time.localeCompare(a.time)), page: 1, size: 10 };
 
@@ -13428,6 +13525,9 @@
   function alMsBoxClick() { document.getElementById('al-merchant').focus(); }
 
   function alFiltersInit() {
+    msLiteInit('al-acct', [
+      { value:'法币账户', label:'法币账户' }, { value:'链上账户', label:'链上账户' },
+    ], '全部');
     msLiteInit('al-token', [
       { value:'USDT', label:'USDT' }, { value:'USDC', label:'USDC' },
     ], '全部');
@@ -13446,6 +13546,7 @@
   }
   function alFilteredRows() {
     const userId   = document.getElementById('al-userid').value.trim().toLowerCase();
+    const accts    = msLiteGet('al-acct');
     const tokens   = msLiteGet('al-token');
     const networks = msLiteGet('al-network');
     const types    = msLiteGet('al-type');
@@ -13455,6 +13556,7 @@
     return [...LEDGER_ALL].sort((a,b) => b.time.localeCompare(a.time)).filter(r => {
       if (alSelectedMerchants.length && !alSelectedMerchants.includes(r.merchantId)) return false;
       if (userId   && !(r.userId || '').toLowerCase().includes(userId)) return false;
+      if (accts.length    && !accts.includes(lgAcct(r))) return false;
       if (tokens.length   && !tokens.includes(r.token)) return false;
       if (networks.length && !networks.includes(r.network)) return false;
       if (types.length    && !types.includes(r.type)) return false;
@@ -13477,6 +13579,7 @@
         <td>${r.merchantName}</td>
         <td style="font-family:Inter,sans-serif">${r.userId || '<span class="cell-empty">—</span>'}</td>
         <td><span class="badge ${tp.cls}">${tp.label}</span></td>
+        <td>${lgAcct(r)}</td>
         <td>${r.token}</td>
         <td>${r.network}</td>
         <td style="font-family:Inter,sans-serif;color:${positive ? '#67C23A' : '#F56C6C'};">${r.amount}</td>
@@ -13512,7 +13615,7 @@
   }
   function alReset() {
     ['al-merchant','al-userid','al-related','al-date-start','al-date-end'].forEach(id => { document.getElementById(id).value = ''; });
-    ['al-token','al-network','al-type'].forEach(msLiteReset);
+    ['al-acct','al-token','al-network','al-type'].forEach(msLiteReset);
     alSelectedMerchants = [];
     alRenderMerchantTags();
     alState.rows = alFilteredRows();
@@ -14126,7 +14229,7 @@
 
   // 变动后余额按「商户 + 代币 + 网络」独立滚存，取该组合最近一笔流水的余额作为基数
   function alLastBalance(merchantId, token, network) {
-    const rows = LEDGER_ALL.filter(x => x.merchantId === merchantId && x.token === token && x.network === network);
+    const rows = LEDGER_ALL.filter(x => x.merchantId === merchantId && lgAcct(x) === '链上账户' && x.token === token && x.network === network);
     if (!rows.length) return 0;
     // 同一时间多条（如法币收款＋手续费）时，手续费为最后记账的一条，优先取其余额
     return parseFloat(rows.reduce((a, b) => a.time > b.time ? a : b.time > a.time ? b : (b.type === 'fee' ? b : a)).balanceAfter) || 0;
@@ -17511,7 +17614,7 @@
   // ── 资金联动：转账写入企业商户账户明细（A：转账转出 −X；B：转账转入 ＋X），按「商户 + 代币 + 网络」滚存 ──
   function mtLedgerAppend(r) {
     if (LEDGER_ALL.some(x => x.relatedNo === r.id)) return;
-    const last = mid => LEDGER_ALL.filter(x => x.merchantId === mid && x.token === r.token && x.network === r.network && x.time <= r.time)
+    const last = mid => LEDGER_ALL.filter(x => x.merchantId === mid && lgAcct(x) === '链上账户' && x.token === r.token && x.network === r.network && x.time <= r.time)
       .sort((a, b) => b.time.localeCompare(a.time))[0];
     const x = parseFloat(r.amount);
     const lastA = last(r.fromId), lastB = last(r.toId);
@@ -17900,7 +18003,10 @@
     // 法币代付
     const poMerchants = [...new Set(PO_ORDERS.map(o => o.merchant))].map(v => ({ value:v, label:v }));
     const poRms = MERCHANT_RECEIVING_ALL.map(r => ({ value:r.name, label:r.name }));
-    ['po-f-merchant', 'pp-f-merchant', 'mz-f-merchant'].forEach(id => msLiteInit(id, poMerchants, '全部'));
+    ['po-f-merchant', 'pp-f-merchant'].forEach(id => msLiteInit(id, poMerchants, '全部'));
+    // 冻结明细商户：代付商户 ＋ 有提币冻结流水的商户
+    msLiteInit('mz-f-merchant', [...new Set(PO_ORDERS.map(o => o.merchant).concat(WITHDRAW_ALL.filter(r => MZ_WD_ORDERS.includes(r.paypazId)).map(r => r.merchantName)))].map(v => ({ value:v, label:v })), '全部');
+    msLiteInit('mz-f-acct', [{ value:'法币账户', label:'法币账户' }, { value:'链上账户', label:'链上账户' }], '全部');
     ['po-f-rm', 'pp-f-rm'].forEach(id => msLiteInit(id, poRms, '全部'));
     msLiteInit('po-f-status', Object.keys(PO_STATUS).map(k => ({ value:k, label:PO_STATUS[k].label })), '全部');
     msLiteInit('pp-f-src', Object.keys(PO_SRC).map(k => ({ value:k, label:PO_SRC[k] })), '全部');

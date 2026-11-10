@@ -767,6 +767,18 @@
     .tk-row .ak-label { text-align:right; }
     .tk-section { font-size:12px; font-weight:600; color:#606266; letter-spacing:0.5px; margin:26px 0 10px; }
     .tk-addon-wrap { display:flex; align-items:stretch; width:100%; }
+    /* 法币收款 / 法币代付配置弹窗：标签列固定，控件统一满宽；说明、错误文案跟在控件下方 */
+    .fp-cfg-body { padding:20px 28px 6px; }
+    .fp-cfg-body .tk-row { grid-template-columns:96px 1fr; align-items:start; gap:14px; margin-bottom:18px; }
+    .fp-cfg-body .ak-label { line-height:32px; }
+    .fp-cfg-body .ak-radios { min-height:32px; }
+    .fp-cfg-body .field-select { width:100%; }
+    .fp-cfg-val { line-height:32px; font-family:'Inter',sans-serif; font-size:13px; color:#303133; }
+    .fp-cfg-val.strong { font-size:14px; font-weight:600; }
+    .fp-cfg-hint { font-size:12px; color:#909399; line-height:1.6; margin-top:2px; }
+    .fp-cfg-err { font-size:12px; color:#F56C6C; line-height:1.6; margin-top:2px; }
+    .fp-cfg-err:empty { display:none; }
+    .fp-cfg-stack { display:flex; flex-direction:column; gap:8px; }
     .tk-addon-wrap .field-input { border-top-right-radius:0; border-bottom-right-radius:0; border-right:none; width:100%; min-width:0; }
     .tk-addon { display:flex; align-items:center; padding:0 12px; background:#F5F7FA; border:1px solid #DCDFE6; border-left:none; border-radius:0 4px 4px 0; color:#606266; font-size:13px; white-space:nowrap; flex-shrink:0; }
     /* 代币编辑弹窗：仅改状态时 480px；商户 / 客户配置时 640px，避免长标签、手续费表、兜底说明被挤压 */
@@ -1403,13 +1415,13 @@
       <div class="nav-group">
         <div class="nav-group-hd" id="nav-ghd-fiat" onclick="toggleNavGroup('fiat')">
           <i data-lucide="banknote" class="nav-icon" style="width:16px;height:16px;"></i>
-          <span class="nav-label">法币收款</span>
+          <span class="nav-label">法币代收</span>
           <i data-lucide="chevron-up" id="nav-caret-fiat" class="nav-caret" style="width:13px;height:13px;"></i>
         </div>
         <div class="nav-sub-items" id="nav-sub-fiat">
           <div class="nav-item nav-sub-item" data-page="fiat-orders">
             <i data-lucide="file-text" class="nav-icon" style="width:14px;height:14px;"></i>
-            <span class="nav-label">收款订单</span>
+            <span class="nav-label">代收订单</span>
           </div>
           <div class="nav-item nav-sub-item" data-page="fiat-appeal">
             <i data-lucide="gavel" class="nav-icon" style="width:14px;height:14px;"></i>
@@ -4106,7 +4118,7 @@
         <span class="md-tab" data-tab="apikeys" onclick="mdSwitchTab('apikeys')">API keys</span>
         <span class="md-tab" data-tab="token" onclick="mdSwitchTab('token')">代币</span>
         <span class="md-tab" data-tab="ramp-token" onclick="mdSwitchTab('ramp-token')">On Ramp</span>
-        <span class="md-tab" data-tab="payin" onclick="mdSwitchTab('payin')">法币收款</span>
+        <span class="md-tab" data-tab="payin" onclick="mdSwitchTab('payin')">法币代收</span>
         <span class="md-tab" data-tab="payout" onclick="mdSwitchTab('payout')">法币代付</span>
         <span class="md-tab" data-tab="observer" onclick="mdSwitchTab('observer')">观察者账号</span>
         <span class="md-tab" data-tab="whitelist" onclick="mdSwitchTab('whitelist')">Settlement 白名单</span>
@@ -4284,6 +4296,7 @@
                   <tr>
                     <th style="white-space:nowrap;">币对</th>
                     <th style="white-space:nowrap;">状态</th>
+                    <th style="white-space:nowrap;">收款服务商</th>
                     <th style="white-space:nowrap;">汇率加点</th>
                     <th style="white-space:nowrap;">充值手续费</th>
                     <th>操作</th>
@@ -4305,6 +4318,7 @@
                   <tr>
                     <th style="white-space:nowrap;">币对</th>
                     <th style="white-space:nowrap;">状态</th>
+                    <th style="white-space:nowrap;">收款服务商</th>
                     <th style="white-space:nowrap;">汇率加点</th>
                     <th style="white-space:nowrap;">代付手续费</th>
                     <th style="white-space:nowrap;">最近修改</th>
@@ -4458,7 +4472,7 @@
               <span>充值手续费（合计）：<b id="fo-stat-fee">0.00</b> USDT</span>
             </div>
             <div class="summary-spacer"></div>
-            <button class="export-btn" onclick="fpExport('收款订单')"><i data-lucide="download" style="width:13px;height:13px;"></i>导出</button>
+            <button class="export-btn" onclick="fpExport('代收订单')"><i data-lucide="download" style="width:13px;height:13px;"></i>导出</button>
           </div>
           <div class="table-wrap">
             <table style="min-width:2160px;table-layout:auto;">
@@ -4733,13 +4747,13 @@
               <colgroup>
                 <col><col style="width:130px">
                 <col style="width:240px">
-                <col style="width:100px">
+                <col style="width:100px"><col style="width:100px"><col style="width:100px">
                 <col style="width:180px"><col style="width:100px">
               </colgroup>
               <thead>
                 <tr>
                   <th>名称</th><th>ID</th><th>邮箱</th>
-                  <th>状态</th><th>创建时间</th><th>操作</th>
+                  <th>状态</th><th>代收</th><th>代付</th><th>创建时间</th><th>操作</th>
                 </tr>
               </thead>
               <tbody id="rm-tbody"></tbody>
@@ -6055,28 +6069,34 @@
 
   <!-- 收款配置弹窗 -->
   <div class="modal-overlay" id="payin-edit-modal" onclick="if(event.target===this)closePayinEdit()">
-    <div class="modal" style="width:480px;">
+    <div class="modal" style="width:520px;">
       <div class="modal-header">
-        <span class="modal-title" id="pie-title">法币收款配置</span>
+        <span class="modal-title" id="pie-title">法币代收配置</span>
         <span class="modal-close" onclick="closePayinEdit()">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </span>
       </div>
-      <div style="padding:20px 24px 8px;">
+      <div class="fp-cfg-body">
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>状态</span>
-          <div class="ak-radios">
-            <label class="ak-radio-item"><input type="radio" name="pie-status" value="on"><span class="ak-dot"></span>启用</label>
-            <label class="ak-radio-item"><input type="radio" name="pie-status" value="off"><span class="ak-dot"></span>禁用</label>
+          <div>
+            <div class="ak-radios">
+              <label class="ak-radio-item"><input type="radio" name="pie-status" value="on"><span class="ak-dot"></span>启用</label>
+              <label class="ak-radio-item"><input type="radio" name="pie-status" value="off"><span class="ak-dot"></span>禁用</label>
+            </div>
+            <div class="fp-cfg-hint">启用后，商户还需在 API Key 中勾选 Fiat Pay-in 才能调用下单接口</div>
           </div>
         </div>
-        <div class="tk-row" style="margin-top:-6px;">
-          <span class="ak-label"></span>
-          <div style="font-size:12px;color:#909399;line-height:1.6;">启用后，商户还需在 API Key 中勾选 Fiat Pay-in 才能调用下单接口</div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>收款服务商</span>
+          <div>
+            <select class="field-select" id="pie-partner" onchange="fpPartnerErr('pie', '');pieRenderRatePreview()"></select>
+            <div class="fp-cfg-err" id="pie-partner-err"></div>
+          </div>
         </div>
         <div class="tk-row">
           <span class="ak-label">收款商汇率</span>
-          <span id="pie-rc-display" style="font-family:'Inter',sans-serif;font-size:13px;color:#606266;"></span>
+          <div><div class="fp-cfg-val" id="pie-rc-display"></div></div>
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>汇率加点</span>
@@ -6087,20 +6107,19 @@
         </div>
         <div class="tk-row">
           <span class="ak-label">结算汇率</span>
-          <span id="pie-rm-display" style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#303133;"></span>
+          <div class="fp-cfg-val strong" id="pie-rm-display"></div>
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>充值手续费</span>
-          <div class="ak-radios">
-            <label class="ak-radio-item"><input type="radio" name="pie-fee-mode" value="rate" onchange="pieToggleFeeMode()"><span class="ak-dot"></span>按比例</label>
-            <label class="ak-radio-item"><input type="radio" name="pie-fee-mode" value="fixed" onchange="pieToggleFeeMode()"><span class="ak-dot"></span>固定金额</label>
-          </div>
-        </div>
-        <div class="tk-row" style="margin-bottom:20px;">
-          <span class="ak-label"></span>
-          <div class="tk-addon-wrap">
-            <input type="number" class="field-input" id="pie-fee-value" min="0" step="0.01" placeholder="请输入">
-            <span class="tk-addon" id="pie-fee-unit">%</span>
+          <div class="fp-cfg-stack">
+            <div class="ak-radios">
+              <label class="ak-radio-item"><input type="radio" name="pie-fee-mode" value="rate" onchange="pieToggleFeeMode()"><span class="ak-dot"></span>按比例</label>
+              <label class="ak-radio-item"><input type="radio" name="pie-fee-mode" value="fixed" onchange="pieToggleFeeMode()"><span class="ak-dot"></span>固定金额</label>
+            </div>
+            <div class="tk-addon-wrap">
+              <input type="number" class="field-input" id="pie-fee-value" min="0" step="0.01" placeholder="请输入">
+              <span class="tk-addon" id="pie-fee-unit">%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -6113,23 +6132,32 @@
 
   <!-- 法币代付配置弹窗：结构同法币收款配置；加点为扣减 Rm＝Rc×(1－p) -->
   <div class="modal-overlay" id="payout-edit-modal" onclick="if(event.target===this)closePayoutEdit()">
-    <div class="modal" style="width:500px;">
+    <div class="modal" style="width:520px;">
       <div class="modal-header">
         <span class="modal-title" id="poe-title">法币代付配置</span>
         <span class="modal-close" onclick="closePayoutEdit()"><i data-lucide="x" style="width:18px;height:18px;"></i></span>
       </div>
-      <div style="padding:20px 24px 8px;">
+      <div class="fp-cfg-body">
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req">*</span>状态</span>
-          <div class="ak-radios">
-            <label class="ak-radio-item"><input type="radio" name="poe-status" value="on" onchange="poeToggleReq()"><span class="ak-dot"></span>启用</label>
-            <label class="ak-radio-item"><input type="radio" name="poe-status" value="off" onchange="poeToggleReq()"><span class="ak-dot"></span>禁用</label>
+          <div>
+            <div class="ak-radios">
+              <label class="ak-radio-item"><input type="radio" name="poe-status" value="on" onchange="poeToggleReq()"><span class="ak-dot"></span>启用</label>
+              <label class="ak-radio-item"><input type="radio" name="poe-status" value="off" onchange="poeToggleReq()"><span class="ak-dot"></span>禁用</label>
+            </div>
+          </div>
+        </div>
+        <div class="tk-row">
+          <span class="ak-label"><span class="ak-req">*</span>收款服务商</span>
+          <div>
+            <select class="field-select" id="poe-partner" onchange="fpPartnerErr('poe', '');poeRenderRatePreview()"></select>
+            <div class="fp-cfg-err" id="poe-partner-err"></div>
           </div>
         </div>
         <div class="tk-row">
           <span class="ak-label">参考代付汇率</span>
-          <div><span id="poe-rc-display" style="font-family:'Inter',sans-serif;font-size:13px;color:#606266;"></span>
-            <div style="font-size:12px;color:#909399;line-height:1.6;">实际按派单通道锁定</div></div>
+          <div><div class="fp-cfg-val" id="poe-rc-display"></div>
+            <div class="fp-cfg-hint">实际按派单通道锁定</div></div>
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req poe-req">*</span>汇率加点</span>
@@ -6140,20 +6168,19 @@
         </div>
         <div class="tk-row">
           <span class="ak-label">结算汇率</span>
-          <span id="poe-rm-display" style="font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#303133;"></span>
+          <div class="fp-cfg-val strong" id="poe-rm-display"></div>
         </div>
         <div class="tk-row">
           <span class="ak-label"><span class="ak-req poe-req">*</span>代付手续费</span>
-          <div class="ak-radios">
-            <label class="ak-radio-item"><input type="radio" name="poe-fee-mode" value="rate" onchange="poeToggleFeeMode()"><span class="ak-dot"></span>按比例</label>
-            <label class="ak-radio-item"><input type="radio" name="poe-fee-mode" value="fixed" onchange="poeToggleFeeMode()"><span class="ak-dot"></span>固定金额</label>
-          </div>
-        </div>
-        <div class="tk-row" style="margin-bottom:20px;">
-          <span class="ak-label"></span>
-          <div class="tk-addon-wrap">
-            <input type="number" class="field-input" id="poe-fee-value" min="0" step="0.01" placeholder="请输入">
-            <span class="tk-addon" id="poe-fee-unit">%</span>
+          <div class="fp-cfg-stack">
+            <div class="ak-radios">
+              <label class="ak-radio-item"><input type="radio" name="poe-fee-mode" value="rate" onchange="poeToggleFeeMode()"><span class="ak-dot"></span>按比例</label>
+              <label class="ak-radio-item"><input type="radio" name="poe-fee-mode" value="fixed" onchange="poeToggleFeeMode()"><span class="ak-dot"></span>固定金额</label>
+            </div>
+            <div class="tk-addon-wrap">
+              <input type="number" class="field-input" id="poe-fee-value" min="0" step="0.01" placeholder="请输入">
+              <span class="tk-addon" id="poe-fee-unit">%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -6607,8 +6634,8 @@
     merchant: { label: '企业商户',  icon: 'building-2', parent: '商户管理' },
     'merchant-detail': { label: '商户详情', icon: 'layout-grid' },
     'merchant-receiving-detail': { label: '收款商户详情', icon: 'layout-grid' },
-    'fiat-orders':   { label: '收款订单', icon: 'file-text', parent: '法币收款' },
-    'fiat-appeal':   { label: '申诉处理', icon: 'gavel', parent: '法币收款' },
+    'fiat-orders':   { label: '代收订单', icon: 'file-text', parent: '法币代收' },
+    'fiat-appeal':   { label: '申诉处理', icon: 'gavel', parent: '法币代收' },
     'po-orders':     { label: '代付订单', icon: 'file-text', parent: '法币代付' },
     'po-appeal':     { label: '申诉处理', icon: 'gavel', parent: '法币代付' },
     'merchant-frozen': { label: '企业商户冻结明细', icon: 'lock', parent: '平台资产' },
@@ -10752,13 +10779,30 @@
   // ── 收款（法币收款）配置：按商户配置加点与充值手续费；下单时锁定写入订单，调整只影响之后的新订单 ──
   // 法币收款配置按企业商户独立保存；未配置过的商户默认禁用
   const PAYIN_BY_MERCHANT = {
-    '462513816': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.00', feeMode:'rate', feeValue:'0.50' }],
+    '462513816': [{ crypto:'USDT', fiat:'CNY', enabled:true, partner:'sunrise-settle', markup:'1.00', feeMode:'rate', feeValue:'0.50' }],
+    '291654802': [{ crypto:'USDT', fiat:'CNY', enabled:true, partner:'trustcard-pay', markup:'0.80', feeMode:'rate', feeValue:'0.50' }],   // 演示：指定的收款服务商已被禁用
   };
+  // 指定收款服务商：选项为启用中的收款服务商；未指定时默认第一家（存量商户上线时默认指定为现有这一家）
+  const fpPartnerOpts = kind => kind === 'in' ? MERCHANT_RECEIVING_ALL.filter(r => r.status === 'enabled').map(r => r.name)
+    : Object.keys(PO_PARTNER).filter(n => PO_PARTNER[n].enabled);
+  const fpPartnerCell = r => r.partner || (fpPartnerOpts(r._kind)[0] || '<span style="color:#C0C4CC;">—</span>');
+  // 列表展示：已指定的服务商不可用（被禁用 / 被关闭代付）时标红「已禁用」
+  const fpPartnerTd = r => r.partner && !fpPartnerOpts(r._kind).includes(r.partner)
+    ? `${r.partner}<span style="color:#F56C6C;font-size:12px;margin-left:4px;">已禁用</span>` : fpPartnerCell(r);
+  function fpPartnerErr(pre, msg) { document.getElementById(pre + '-partner-err').textContent = msg; }
+  // 已指定的服务商不可用时：下拉仍显示原服务商并标「（已禁用）」（置灰、不可选），下方标红提示，必须重新选择后才能保存；不再静默切换到第一家
+  function fpFillPartner(sel, kind, cur, pre) {
+    const opts = fpPartnerOpts(kind), lost = cur && !opts.includes(cur), v = lost ? '' : (opts.includes(cur) ? cur : opts[0] || '');
+    sel.innerHTML = (lost ? `<option value="" disabled selected>${cur}（已禁用）</option>` : '') +
+      opts.map(n => `<option value="${n}"${n === v ? ' selected' : ''}>${n}</option>`).join('');
+    fpPartnerErr(pre, lost ? '当前收款服务商已不可用，请重新选择' : '');
+  }
   function payinPairs() {
     const m = MERCHANT_ALL[currentMerchantIdx];
     const k = m ? m.id : '_';
     // 未配置过：默认禁用，汇率加点、充值手续费留空，必须填写后才能保存
-    if (!PAYIN_BY_MERCHANT[k]) PAYIN_BY_MERCHANT[k] = [{ crypto:'USDT', fiat:'CNY', enabled:false, markup:'', feeMode:'rate', feeValue:'' }];
+    if (!PAYIN_BY_MERCHANT[k]) PAYIN_BY_MERCHANT[k] = [{ crypto:'USDT', fiat:'CNY', enabled:false, partner:'', markup:'', feeMode:'rate', feeValue:'' }];
+    PAYIN_BY_MERCHANT[k].forEach(r => { r._kind = 'in'; });
     return PAYIN_BY_MERCHANT[k];
   }
   function payinFeeCell(r) {
@@ -10772,6 +10816,7 @@
     tbody.innerHTML = payinPairs().map((r, i) => `<tr>
         <td style="font-family:'Inter',sans-serif;font-weight:500;">${r.crypto}<span style="color:#C0C4CC;margin:0 2px;">/</span>${r.fiat}</td>
         <td>${tBadge(r.enabled ? 'on' : 'off')}</td>
+        <td>${fpPartnerTd(r)}</td>
         <td>${rpMarkupCell(r.markup)}</td>
         <td>${payinFeeCell(r)}</td>
         <td><span class="action-icon" onclick="openPayinEdit(${i})" title="编辑">${_EDIT_SVG}</span></td>
@@ -10781,8 +10826,9 @@
   function openPayinEdit(i) {
     _pieIdx = i;
     const r = payinPairs()[i];
-    document.getElementById('pie-title').textContent = `法币收款配置（${r.crypto}/${r.fiat}）`;
+    document.getElementById('pie-title').textContent = `法币代收配置（${r.crypto}/${r.fiat}）`;
     document.querySelectorAll('input[name="pie-status"]').forEach(el => { el.checked = el.value === (r.enabled ? 'on' : 'off'); });
+    fpFillPartner(document.getElementById('pie-partner'), 'in', r.partner, 'pie');
     document.getElementById('pie-markup').value = r.markup;
     document.querySelectorAll('input[name="pie-fee-mode"]').forEach(el => { el.checked = el.value === r.feeMode; });
     document.getElementById('pie-fee-value').value = r.feeValue;
@@ -10792,8 +10838,10 @@
   }
   // 参考汇率：按当前收款商户汇率 Rc 与输入的加点实时估算商户结算汇率 Rm＝Rc×(1＋加点%)，4 位小数向上取整；实际以下单时锁定为准
   function pieCurrentRc() {
-    const rm = MERCHANT_RECEIVING_ALL.find(r => r.status === 'enabled' && r.rateEnabled !== false);
-    return rm ? rmdBuildData(rm).rate : null;
+    // 跟随所选收款服务商的代收汇率
+    const name = document.getElementById('pie-partner').value;
+    const rm = MERCHANT_RECEIVING_ALL.find(r => r.name === name);
+    return rm && rm.rateEnabled !== false ? rmdBuildData(rm).rate : null;
   }
   function pieRenderRatePreview() {
     // 收款商户汇率：当前实时值（只读）；商户结算汇率：随加点实时计算（只读），实际以下单时锁定为准
@@ -10818,6 +10866,7 @@
     const mkRaw = document.getElementById('pie-markup').value.trim();
     const feeRaw = document.getElementById('pie-fee-value').value.trim();
     const feeModeSel = document.querySelector('input[name="pie-fee-mode"]:checked').value;
+    if (!document.getElementById('pie-partner').value) { fpPartnerErr('pie', r.partner ? '当前收款服务商已不可用，请重新选择' : '请选择收款服务商'); return; }
     if (!mkRaw) { showToast('请输入汇率加点'); return; }
     if (!NUM2.test(mkRaw) || parseFloat(mkRaw) > 100) { showToast('汇率加点需为 0–100 之间的数字，最多 2 位小数'); return; }
     if (!feeRaw) { showToast('请输入充值手续费'); return; }
@@ -10828,7 +10877,7 @@
     const toEnabled = document.querySelector('input[name="pie-status"]:checked').value === 'on';
     // 启用 → 禁用：二次确认
     if (r.enabled && !toEnabled) {
-      obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'禁用法币收款',
+      obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'禁用法币代收',
         msg:'禁用后该商户调用下单接口将直接拒绝，已创建的订单照常流转。确认禁用？',
         btnCls:'btn-danger', btnTxt:'确认禁用',
         onOk: () => { closeObConfirm(); commitPayinEdit(r, toEnabled, markup, feeModeSel, fee); } });
@@ -10837,14 +10886,15 @@
     commitPayinEdit(r, toEnabled, markup, feeModeSel, fee);
   }
   function commitPayinEdit(r, toEnabled, markup, feeMode, fee) {
-    const before = r.markup === '' ? '未配置' : `${r.enabled ? '启用' : '禁用'}，汇率加点 ${r.markup}%，充值手续费 ${r.feeMode === 'rate' ? r.feeValue + '%' : r.feeValue + ' USDT'}`;
+    const before = r.markup === '' ? '未配置' : `${r.enabled ? '启用' : '禁用'}，收款服务商 ${fpPartnerCell(r)}，汇率加点 ${r.markup}%，充值手续费 ${r.feeMode === 'rate' ? r.feeValue + '%' : r.feeValue + ' USDT'}`;
+    r.partner = document.getElementById('pie-partner').value;
     r.enabled = toEnabled;
     r.markup = markup.toFixed(2);
     r.feeMode = feeMode;
     r.feeValue = fee.toFixed(2);
-    const after = `${r.enabled ? '启用' : '禁用'}，汇率加点 ${r.markup}%，充值手续费 ${r.feeMode === 'rate' ? r.feeValue + '%' : r.feeValue + ' USDT'}`;
+    const after = `${r.enabled ? '启用' : '禁用'}，收款服务商 ${r.partner}，汇率加点 ${r.markup}%，充值手续费 ${r.feeMode === 'rate' ? r.feeValue + '%' : r.feeValue + ' USDT'}`;
     const m = MERCHANT_ALL[currentMerchantIdx];
-    fpLog('商户管理', '修改', `${m ? m.name : ''} 法币收款配置（${r.crypto}/${r.fiat}）`, `${before} → ${after}`, 'high');
+    fpLog('商户管理', '修改', `${m ? m.name : ''} 法币代收配置（${r.crypto}/${r.fiat}）`, `${before} → ${after}`, 'high');
     closePayinEdit();
     mdRenderPayinTable();
     showToast('已保存，只影响之后的新订单');
@@ -10853,7 +10903,7 @@
   // ── 法币代付配置：按商户配置加点与代付手续费；Rm＝Rc×(1－加点%) 向下取整 4 位；下单锁定，只影响之后的新订单 ──
   const PAYOUT_BY_MERCHANT = {
     '462513816': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.00', feeMode:'rate', feeValue:'0.50', updated:'2026-10-15 15:02:11' }],
-    '291654802': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'0.80', feeMode:'rate', feeValue:'0.50', updated:'2026-10-15 15:10:40' }],
+    '291654802': [{ crypto:'USDT', fiat:'CNY', enabled:true, partner:'rapidsettle', markup:'0.80', feeMode:'rate', feeValue:'0.50', updated:'2026-10-15 15:10:40' }],   // 演示：指定的收款服务商已被运营关闭代付
     '460466234': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.20', feeMode:'rate', feeValue:'0.60', updated:'2026-10-15 15:18:03' }],
     '673738868': [{ crypto:'USDT', fiat:'CNY', enabled:true, markup:'1.00', feeMode:'fixed', feeValue:'5.00', updated:'2026-10-15 15:22:56' }],
   };
@@ -10861,7 +10911,8 @@
     const m = MERCHANT_ALL[currentMerchantIdx];
     const k = m ? m.id : '_';
     // 未配置过：默认禁用，加点、手续费留空；仅启用时必填，禁用时可留空保存
-    if (!PAYOUT_BY_MERCHANT[k]) PAYOUT_BY_MERCHANT[k] = [{ crypto:'USDT', fiat:'CNY', enabled:false, markup:'', feeMode:'rate', feeValue:'', updated:'' }];
+    if (!PAYOUT_BY_MERCHANT[k]) PAYOUT_BY_MERCHANT[k] = [{ crypto:'USDT', fiat:'CNY', enabled:false, partner:'', markup:'', feeMode:'rate', feeValue:'', updated:'' }];
+    PAYOUT_BY_MERCHANT[k].forEach(r => { r._kind = 'out'; });
     return PAYOUT_BY_MERCHANT[k];
   }
   function mdRenderPayoutTable() {
@@ -10870,6 +10921,7 @@
     tbody.innerHTML = payoutPairs().map((r, i) => `<tr>
         <td style="font-family:'Inter',sans-serif;font-weight:500;">${r.crypto}<span style="color:#C0C4CC;margin:0 2px;">/</span>${r.fiat}</td>
         <td>${tBadge(r.enabled ? 'on' : 'off')}</td>
+        <td>${fpPartnerTd(r)}</td>
         <td>${rpMarkupCell(r.markup)}</td>
         <td>${payinFeeCell(r)}</td>
         <td style="font-family:'Inter',sans-serif;">${r.updated || '<span style="color:#C0C4CC;">—</span>'}</td>
@@ -10883,6 +10935,7 @@
     const r = payoutPairs()[i];
     document.getElementById('poe-title').textContent = `法币代付配置（${r.crypto}/${r.fiat}）`;
     document.querySelectorAll('input[name="poe-status"]').forEach(el => { el.checked = el.value === (r.enabled ? 'on' : 'off'); });
+    fpFillPartner(document.getElementById('poe-partner'), 'out', r.partner, 'poe');
     document.getElementById('poe-markup').value = r.markup;
     document.querySelectorAll('input[name="poe-fee-mode"]').forEach(el => { el.checked = el.value === r.feeMode; });
     document.getElementById('poe-fee-value').value = r.feeValue;
@@ -10894,8 +10947,9 @@
   }
   // 参考汇率：取已开通代付的收款商户中第一个的代付汇率 Rc；实际按派单选中通道的 Rc 在下单时锁定
   function poeCurrentRc() {
-    const k = Object.keys(PO_PARTNER).find(n => PO_PARTNER[n].enabled && PO_PARTNER[n].rateEnabled);
-    return k ? { name:k, rc:PO_PARTNER[k].rc } : null;
+    // 跟随所选收款服务商的代付汇率
+    const k = document.getElementById('poe-partner').value;
+    return k && PO_PARTNER[k] && PO_PARTNER[k].rateEnabled ? { name:k, rc:PO_PARTNER[k].rc } : null;
   }
   function poeRenderRatePreview() {
     const ref = poeCurrentRc(), raw = document.getElementById('poe-markup').value.trim();
@@ -10923,6 +10977,7 @@
     const toEnabled = document.querySelector('input[name="poe-status"]:checked').value === 'on';
     // 仅启用时加点、手续费必填；禁用时可留空，填写了仍校验格式
     // 加点 0 ≤ p < 100%；手续费非负，比例不超过 100%；最多 2 位小数
+    if (!document.getElementById('poe-partner').value) { fpPartnerErr('poe', r.partner ? '当前收款服务商已不可用，请重新选择' : '请选择收款服务商'); return; }
     if (!mkRaw && toEnabled) { showToast('请输入汇率加点'); return; }
     if (mkRaw && (!NUM2.test(mkRaw) || parseFloat(mkRaw) >= 100)) { showToast('汇率加点需 ≥ 0 且小于 100，最多 2 位小数'); return; }
     if (!feeRaw && toEnabled) { showToast('请输入代付手续费'); return; }
@@ -10930,7 +10985,8 @@
       showToast(feeModeSel === 'rate' ? '代付手续费需为 0–100 之间的数字，最多 2 位小数' : '代付手续费需为 ≥ 0 的数字，最多 2 位小数'); return;
     }
     const markup = mkRaw ? parseFloat(mkRaw).toFixed(2) : '', fee = feeRaw ? parseFloat(feeRaw).toFixed(2) : '';
-    const same = r.updated !== '' && r.enabled === toEnabled && r.markup === markup && r.feeMode === feeModeSel && r.feeValue === fee;
+    const partnerSel = document.getElementById('poe-partner').value;
+    const same = r.updated !== '' && fpPartnerCell(r) === partnerSel && r.enabled === toEnabled && r.markup === markup && r.feeMode === feeModeSel && r.feeValue === fee;
     if (same) { closePayoutEdit(); showToast('配置无变化'); return; }   // 无变化不写重复日志
     if (r.enabled && !toEnabled) {
       obConfirmBox({ icon:'alert-circle', color:'#F56C6C', title:'禁用法币代付',
@@ -10942,9 +10998,9 @@
     commitPayoutEdit(r, toEnabled, markup, feeModeSel, fee);
   }
   function commitPayoutEdit(r, toEnabled, markup, feeMode, fee) {
-    const txt = x => `${x.enabled ? '启用' : '禁用'}，汇率加点 ${x.markup === '' ? '—' : x.markup + '%'}，代付手续费 ${x.feeValue === '' ? '—' : x.feeMode === 'rate' ? x.feeValue + '%' : x.feeValue + ' USDT'}`;
+    const txt = x => `${x.enabled ? '启用' : '禁用'}，收款服务商 ${fpPartnerCell(x)}，汇率加点 ${x.markup === '' ? '—' : x.markup + '%'}，代付手续费 ${x.feeValue === '' ? '—' : x.feeMode === 'rate' ? x.feeValue + '%' : x.feeValue + ' USDT'}`;
     const before = r.updated === '' ? '未配置' : txt(r);
-    Object.assign(r, { enabled:toEnabled, markup, feeMode, feeValue:fee, updated:fpNow() });
+    Object.assign(r, { enabled:toEnabled, partner:document.getElementById('poe-partner').value, markup, feeMode, feeValue:fee, updated:fpNow() });
     const m = MERCHANT_ALL[currentMerchantIdx];
     fpLog('商户管理', '修改', `${m ? m.name : ''} 法币代付配置（${r.crypto}/${r.fiat}）`, `${before} → ${txt(r)}`, 'high');
     closePayoutEdit();
@@ -11337,7 +11393,7 @@
     { id:'640171234', name:'rapidsettle',     email:'support@rapidsettle.com',  status:'enabled',  created:'2026-07-28 16:40:02', bindGa:false, rateEnabled:false },   // 演示：收款商户在门户禁用了 USDT/CNY，平台不再向其派新订单
     { id:'550160123', name:'trustcard-pay',   email:'admin@trustcard-pay.com',  status:'disabled', created:'2026-06-15 11:22:37', bindGa:true },
     { id:'460159012', name:'novapay-cn',      email:'ops@novapay-cn.com',       status:'inactive', created:'2026-09-20 15:33:09', bindGa:false },
-    { id:'370148901', name:'silverlink-fin',  email:'admin@silverlink-fin.io',  status:'enabled',  created:'2026-05-20 08:55:18', bindGa:true },
+    { id:'370148901', name:'silverlink-fin',  email:'admin@silverlink-fin.io',  status:'enabled',  created:'2026-05-20 08:55:18', bindGa:true, bizOut:false },   // 演示：收款服务商在其后台暂停代付接单（只读），不再接新的代付订单，代收不受影响
   ];
 
   const RM_STATUS = {
@@ -11350,6 +11406,14 @@
 
   const _MAIL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`;
 
+  // 接单状态：收款服务商在其后台分别开关代收、代付接单（只读）；未激活 / 已禁用显示「—」，未开通法币代付的代付列显示「—」
+  function rmBizCell(r, kind) {
+    const empty = '<td><span class="cell-empty">—</span></td>';
+    if (r.status !== 'enabled') return empty;
+    if (kind === 'out' && !poPartner(r.name).enabled) return empty;
+    const on = (kind === 'in' ? r.bizIn : r.bizOut) !== false;
+    return `<td>${on ? '<span class="badge badge-green">接单中</span>' : '<span class="badge badge-gray">暂停接单</span>'}</td>`;
+  }
   function receivingMerchantRender() {
     const tbody = document.getElementById('rm-tbody');
     if (!tbody) return;
@@ -11379,6 +11443,7 @@
         <td style="font-family:Inter,sans-serif;color:#606266">${r.id}</td>
         <td style="font-family:Inter,sans-serif;color:#606266">${r.email || ''}</td>
         <td><span class="${st.cls}">${st.label}</span></td>
+        ${rmBizCell(r, 'in')}${rmBizCell(r, 'out')}
         <td style="font-family:Inter,sans-serif">${r.created}</td>
         <td><div class="action-cell">${actions}</div></td>
       </tr>`;
@@ -11563,6 +11628,8 @@
       note:'用户称已转账，收款商户超过 30 分钟未确认，请平台核实。', files:[['付款截图_0085.png', '1.2 MB']], ruling:{ result:'notarrived', by:'admin', time:'2026-10-05 15:40:22', note:'收款商户提供完整流水，确认未到账', reason:'用户未付款' } },
   };
   FIAT_ORDERS.forEach(o => { if (FIAT_APPEALS[o.id]) o.appeal = FIAT_APPEALS[o.id]; });
+  // 已取消订单：只能由运营在管理系统取消待付款订单（演示数据补取消记录）
+  FIAT_ORDERS.forEach(o => { if (o.status === 'cancelled' && !o.cancel) o.cancel = { by:'admin', time:o.done, reason:'用户确认不再付款' }; });
   // 未申诉订单的用户提交凭证时间（演示：创建后 10 分钟内）；待付款、已取消没有提交凭证
   FIAT_ORDERS.forEach(o => {
     if (o.appeal || o.status === 'pay' || o.status === 'cancelled') return;
@@ -11635,7 +11702,7 @@
   }
   function fpExport(name) {
     // 模块按菜单归属：收款商户资金明细 / 冻结明细在「平台资产」，其余在「法币收款」
-    fpLog(/^收款商户(资金|冻结)明细$/.test(name) ? '平台资产' : '法币收款', '导出', name, '导出' + name + '列表', 'high');
+    fpLog(/^收款商户(资金|冻结)明细$/.test(name) ? '平台资产' : '法币代收', '导出', name, '导出' + name + '列表', 'high');
     showToast('已开始导出' + name);
   }
   // 首页「法币代收/代付」待办：代收申诉待处理 / 退款待确认 / 提现待处理（不含待重试）/ 充币待确认（收款商户待人工审核充币）；代付申诉待处理见 poHomeTodo
@@ -11726,7 +11793,8 @@
     const tbody = document.getElementById('fo-tbody');
     tbody.innerHTML = fpPage('fo', rows).map(o => {
       const st = FO_STATUS[o.status], ok = o.status === 'success';
-      const tag = ok ? '已扣划' : ['pay', 'verify', 'appeal', 'refunding'].includes(o.status) ? '冻结中' : '已释放';
+      // 用户提交付款凭证后才冻结：待付款、已取消（只能从待付款取消）从未冻结
+      const tag = ok ? '已扣划' : ['pay', 'cancelled'].includes(o.status) ? '未冻结' : ['verify', 'appeal', 'refunding'].includes(o.status) ? '冻结中' : '已释放';
       return `<tr>
         <td>${fpMono(o.id)}</td><td>${o.merchant}</td><td>${fpMono(o.uid)}</td><td>${o.rm}</td>
         <td>${fpNum(fpFmt(o.cny), 'CNY')}</td><td>${fpRate(o.rcText)}</td>
@@ -11738,7 +11806,7 @@
         <td>${fpMono(FP_CARDS[o.rm].no)}</td>
         <td><span class="badge ${st.cls}">${st.label}</span>${o.status === 'appeal' && o.appeal && o.appeal.ruling ? `<div style="font-size:11px;color:#909399">${o.refundReject ? '退款被驳回，待收款商户重新回传' : '已裁定，' + FP_RULING[o.appeal.ruling.result].next}</div>` : o.status === 'refunding' ? '<div style="font-size:11px;color:#909399">待 Paypaz 确认</div>' : ''}</td>
         <td>${fpMono(o.created)}</td><td>${o.done ? fpMono(o.done) : fpEmpty}</td>
-        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openFiatOrderDetail('${o.id}')">${_D_EYE_SVG}</span>${fpManualBtn(o)}${o.status === 'refunding' ? `<button class="btn btn-primary btn-sm" onclick="openFpRefundConfirm('${o.id}')">退款确认</button>` : ''}</div></td>
+        <td><div class="action-cell"><span class="action-icon" title="详情" onclick="openFiatOrderDetail('${o.id}')">${_D_EYE_SVG}</span>${o.status === 'pay' ? `<button class="btn btn-default btn-sm" onclick="openFpCancel('${o.id}')">取消订单</button>` : ''}${fpManualBtn(o)}${o.status === 'refunding' ? `<button class="btn btn-primary btn-sm" onclick="openFpRefundConfirm('${o.id}')">退款确认</button>` : ''}</div></td>
       </tr>`;
     }).join('') || fpEmptyRow(16);
     if (window.lucide) lucide.createIcons();
@@ -11746,16 +11814,16 @@
   function openFiatOrderDetail(id) {
     const o = FIAT_ORDERS.find(x => x.id === id), c = FP_CARDS[o.rm], ok = o.status === 'success';
     const st = FO_STATUS[o.status];
-    const tl = [[o.created, '订单创建', `冻结 ${fpFmt(o.y)} USDT（汇率 ${o.rcText}）`]];
+    const tl = [[o.created, '订单创建', `锁定汇率 ${o.rcText}，代币 ${fpFmt(o.y)} USDT（用户提交凭证后冻结）`]];
     const ap = o.appeal;
-    if (o.status !== 'pay' && o.status !== 'cancelled') tl.push([ap ? ap.proofTime : o.proofTime, '用户提交付款凭证', '']);
+    if (o.status !== 'pay' && o.status !== 'cancelled') tl.push([ap ? ap.proofTime : o.proofTime, '用户提交付款凭证', `冻结 ${fpFmt(o.y)} USDT`]);
     if (ap) tl.push([ap.time, ap.by + '发起申诉', o.appealType]);
     if (ap && ap.ruling) tl.push([ap.ruling.time, '平台裁定：' + FP_RULING[ap.ruling.result].label, ap.ruling.note]);
     (o.refundLog || []).forEach(e => tl.push([e[0], `${e[1]}`, e[2]]));
     if (o.manual) tl.push([o.manual.time, '人工标记已退款（' + o.manual.by + '）', o.manual.note]);
     // 裁定无异常 / 资金已到账即生效：系统自动结算，无需收款商户确认收款
     const END = o.manual ? null : { success:[ap && ap.ruling ? '裁定生效，系统自动结算' : '收款商户确认收款', `扣划 ${fpFmt(o.y)} USDT，商户到账 ${ok ? fpFmt(o.x) : ''} USDT`], refunded:['Paypaz 确认退款' + (o.refund && o.refund.confirm ? '（' + o.refund.confirm.by + '）' : ''), '订单已退款，冻结释放'],
-      failed:['平台裁定资金未到账', '订单失败，冻结释放'], cancelled:['用户超时未付款', '订单取消，冻结释放'] }[o.status];
+      failed:['平台裁定资金未到账', '订单失败，冻结释放'], cancelled:['运营取消订单' + (o.cancel ? '（' + o.cancel.by + '）' : ''), o.cancel ? '取消原因：' + o.cancel.reason : '订单已取消'] }[o.status];
     if (END) tl.push([o.done, END[0], END[1]]);
     const html =
       fpSec('订单信息') +
@@ -11782,6 +11850,7 @@
     // 右侧抽屉：顶部订单号与状态，中间可滚动，底部固定操作（需人工处理时显示对应按钮）
     const mk = fpManualKind(o);
     openFpDrawer('订单详情', `${o.id} · ${st.label}`, html,
+      (o.status === 'pay' ? `<button class="btn btn-danger btn-sm" onclick="closeFpDrawer();openFpCancel('${o.id}')">取消订单</button>` : '') +
       (mk ? `<button class="btn btn-primary btn-sm" onclick="closeFpDrawer();openFpManual('${o.id}')">人工标记已退款</button>` : '') +
       (o.status === 'refunding' ? `<button class="btn btn-primary btn-sm" onclick="closeFpDrawer();openFpRefundConfirm('${o.id}')">退款确认</button>` : '') +
       `<button class="btn btn-default btn-sm" onclick="closeFpDrawer()">关闭</button>`);
@@ -11837,10 +11906,40 @@
     if (!note) { showToast('请输入处理说明'); return; }
     Object.assign(o, { status:'refunded', done:now, manual:{ type:'refund', by:OB_USER, time:now, note:`退款 ${fpFmt(amt)} CNY；${note}`, file:fpManualFile },
       refund:{ amt, time:now, by:'运营人工标记', op:OB_USER, file:[fpManualFile, ''], note } });
-    fpLog('法币收款', '状态变更', `订单 ${o.id}`, `人工标记已退款，退款金额 ${fpFmt(amt)} CNY，凭证 ${fpManualFile}；说明：${note}`, 'high');
+    fpLog('法币代收', '状态变更', `订单 ${o.id}`, `人工标记已退款，退款金额 ${fpFmt(amt)} CNY，凭证 ${fpManualFile}；说明：${note}`, 'high');
     closeModal();
     fiatOrdersRender();
     showToast('已人工标记已退款，冻结已释放');
+  }
+
+  // ── 收款订单 · 取消订单：只有运营能取消，且仅限待付款订单；待付款未冻结，取消只释放收款卡时段额度并推送 cancelled Webhook ──
+  function openFpCancel(id) {
+    const o = FIAT_ORDERS.find(x => x.id === id);
+    const html = fpDi('订单号', fpMono(o.id)) + fpDi('下单商户', o.merchant) + fpDi('订单金额', fpNum(fpFmt(o.cny), 'CNY')) + fpDi('收款商户', o.rm) +
+      `<div class="detail-item" style="grid-column:1/-1"><span class="detail-label"><span style="color:#F56C6C">*</span> 取消原因</span>
+         <textarea class="field-input" id="fpc-reason" rows="3" maxlength="200" placeholder="请输入取消原因" style="width:100%;height:auto;padding:6px 10px;resize:vertical;" oninput="fpCancelInput(this)"></textarea>
+         <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:4px;"><span id="fpc-err" style="color:#F56C6C;"></span><span id="fpc-count" style="color:#909399;">0/200</span></div></div>`;
+    fpOpenModal('取消订单', html, '520px');
+    document.querySelector('#detail-modal .modal-footer').innerHTML = `
+      <button class="btn btn-default btn-sm" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary btn-sm" onclick="fpCancelSubmit('${id}')">确认</button>`;
+  }
+  function fpCancelInput(el) {
+    document.getElementById('fpc-count').textContent = el.value.length + '/200';
+    if (el.value.trim()) { document.getElementById('fpc-err').textContent = ''; el.style.borderColor = ''; }
+  }
+  function fpCancelSubmit(id) {
+    const o = FIAT_ORDERS.find(x => x.id === id), el = document.getElementById('fpc-reason');
+    const reason = el.value.trim();
+    if (!reason) { document.getElementById('fpc-err').textContent = '请输入取消原因'; el.style.borderColor = '#F56C6C'; return; }
+    // 提交时以服务端状态为准：用户已提交凭证（不再是待付款）则不能取消
+    if (o.status !== 'pay') { closeModal(); fiatOrdersRender(); showToast('订单状态已变更，请刷新后重试'); return; }
+    const now = fpNow();
+    Object.assign(o, { status:'cancelled', done:now, cancel:{ by:OB_USER, time:now, reason } });
+    fpLog('法币代收', '状态变更', `订单 ${o.id}`, `取消订单（待付款 → 已取消）；原因：${reason}`, 'high');
+    closeModal();
+    fiatOrdersRender();
+    showToast('订单已取消');
   }
 
   // ── 收款订单 · 退款确认：收款商户回传退款凭证后订单为「退款中」，冻结不释放，须 Paypaz 核对凭证后确认 ──
@@ -11882,7 +11981,7 @@
     if (act === 'confirm') {
       o.status = 'refunded'; o.done = now;
       o.refund.confirm = { by:OB_USER, time:now };
-      fpLog('法币收款', '状态变更', `订单 ${o.id}`, `确认退款，退款金额 ${fpFmt(o.refund.amt)} CNY，订单变为已退款，释放冻结 ${fpFmt(o.y)} USDT`, 'high');
+      fpLog('法币代收', '状态变更', `订单 ${o.id}`, `确认退款，退款金额 ${fpFmt(o.refund.amt)} CNY，订单变为已退款，释放冻结 ${fpFmt(o.y)} USDT`, 'high');
       showToast('已确认退款，冻结已释放');
     } else {
       const reason = document.getElementById('fprc-reason').value.trim();
@@ -11890,7 +11989,7 @@
       o.refundReject = { time:now, reason, by:OB_USER };
       o.refundLog.push([now, 'Paypaz 驳回退款（' + OB_USER + '）', reason]);
       o.refund = null;
-      fpLog('法币收款', '状态变更', `订单 ${o.id}`, `驳回退款，订单回到申诉中；驳回原因：${reason}`, 'high');
+      fpLog('法币代收', '状态变更', `订单 ${o.id}`, `驳回退款，订单回到申诉中；驳回原因：${reason}`, 'high');
       showToast('已驳回，已通知收款商户重新回传');
     }
     closeModal();
@@ -11960,7 +12059,7 @@
   function fpRequestEvidence(id) {
     const o = FIAT_ORDERS.find(x => x.id === id);
     o.appeal.evidenceReq = { time:fpNow(), by:OB_USER };
-    fpLog('法币收款', '修改', `订单 ${o.id}（${o.appealType}）`, '要求收款商户 ' + o.rm + ' 补充举证（银行流水）', 'medium');
+    fpLog('法币代收', '修改', `订单 ${o.id}（${o.appealType}）`, '要求收款商户 ' + o.rm + ' 补充举证（银行流水）', 'medium');
     showToast('已通知收款商户补充举证');
     openFiatAppeal(id);
     fiatAppealRender();
@@ -12007,7 +12106,7 @@
       if (result === 'notarrived') { o.status = 'failed'; o.done = t; }
       // 裁定即生效：无异常 / 资金已到账 → 立即扣划冻结代币并按锁定汇率原子结算，订单成功
       if (settle) { fpSettle(o); o.status = 'success'; o.done = t; }
-      fpLog('法币收款', '审批', `订单 ${o.id}（${o.appealType}）`, `申诉裁定：${FP_RULING[result].label}${reason ? '（' + reason + '）' : ''}${needAmt ? '，核实到账金额 ' + fpFmt(o.verifiedAmount) + ' CNY' : ''}；说明：${note}` +
+      fpLog('法币代收', '审批', `订单 ${o.id}（${o.appealType}）`, `申诉裁定：${FP_RULING[result].label}${reason ? '（' + reason + '）' : ''}${needAmt ? '，核实到账金额 ' + fpFmt(o.verifiedAmount) + ' CNY' : ''}；说明：${note}` +
         (settle ? `；已扣划 ${fpFmt(o.y)} USDT 并自动结算，商户到账 ${fpFmt(o.x)} USDT` : ''), 'high');
       closeObConfirm();
       closeFpDrawer();
@@ -12049,7 +12148,7 @@
         <td>${e.rm}</td><td>${fpMono(e.ref)}</td><td>${fpMono(e.time)}</td>
         <td><span class="badge ${t.cls}">${t.label}</span></td>
         <td>${fpNum((e.delta < 0 ? '-' : '+') + fpFmt(Math.abs(e.delta)), 'USDT', color)}</td>
-        <td>${fpNum(fpFmt(e.after), 'USDT')}</td>
+        <td>${fpNum(fpFmt(e.after), 'USDT', isFund && e.after < 0 ? '#F56C6C' : '')}</td>
       </tr>`;
     }).join('') || fpEmptyRow(6);
     if (window.lucide) lucide.createIcons();
@@ -12757,8 +12856,11 @@
      ['2026-10-06 09:35:23', 360000, 'active', null], ['2026-10-06 10:12:20', 216000, 'active', null]].forEach(([t, cny, st, done], i) => {
       const o = { id:'PZPI2026' + t.slice(5, 10).replace('-', '') + '-' + String(100 + i + seed).padStart(5, '0'), cny, rc:rcText };
       const y = Math.ceil(cny / rc * 100) / 100;
-      ev.push([t, () => { T.frozen = rmdR2(T.frozen + y); push(t, 'freeze', o.id, 0, y, o); }]);
-      const end = { success:'deduct', cancelled:'release', failed:'release', refunded:'refund_release' }[st];
+      // 用户提交付款凭证时才冻结（演示：下单后 7 分钟提交）；已取消订单只能是待付款被运营取消，从未冻结，不产生冻结 / 释放流水
+      if (st === 'cancelled') return;
+      const pt = fpFmtTime(new Date(new Date(t.replace(/-/g, '/')).getTime() + 7 * 60000));
+      ev.push([pt, () => { T.frozen = rmdR2(T.frozen + y); push(pt, 'freeze', o.id, 0, y, o); }]);
+      const end = { success:'deduct', failed:'release', refunded:'refund_release' }[st];
       if (end) ev.push([done, () => { T.frozen = rmdR2(T.frozen - y); push(done, end, o.id, end === 'deduct' ? -y : 0, -y, o); }]);
     });
     [['2026-10-03 15:00:16', 30000, 'approved', '2026-10-03 17:10:06', null], ['2026-10-04 11:00:45', 20000, 'rejected', '2026-10-04 15:20:00', '提币地址与报备地址不一致'], ['2026-10-06 11:15:34', 10000, 'pending', null, null]].forEach(([t, amt, st, done, reason], i) => {
@@ -12804,7 +12906,7 @@
         ${obKv('备注', r.remark ? obEsc(r.remark) : '', true)}
       </div>`) +
       obSection('资产', `<div class="rmd-stats">
-        ${stat('总余额', T.balance)}${stat('可提现', avail, '#67C23A')}${stat('收款冻结', T.frozen, '#F56C6C')}${stat('提现冻结', T.wdFrozen, '#E6A23C')}${stat('代付待入账', poPending, '#909399', '不计入总余额', '进行中订单成功后入账的金额；裁定失败或拒单不入账')}
+        ${stat('总余额', T.balance, T.balance < 0 ? '#F56C6C' : '')}${stat('可提现', avail, avail < 0 ? '#F56C6C' : '#67C23A')}${stat('收款冻结', T.frozen, '#F56C6C')}${stat('提现冻结', T.wdFrozen, '#E6A23C')}${stat('代付待入账', poPending, '#909399', '不计入总余额', '进行中订单成功后入账的金额；裁定失败或拒单不入账')}
       </div>`) +
       obSection('钱包地址', rmAddrSectionHtml(r, absIdx), `<button class="btn btn-primary btn-sm" onclick="openRmAddrEdit(${absIdx})">新增</button>`) +
       obSection('代币管理', rmTokenSectionHtml(r, absIdx)) +
@@ -14365,8 +14467,8 @@
       { id:'merchant_active_email', label:'发送激活邮件' },
       { id:'merchant_observer_list', label:'观察者账号列表' },
       { id:'merchant_observer_add', label:'观察者账号添加' },
-      { id:'merchant_payin_view', label:'企业商户法币收款配置查看' },
-      { id:'merchant_payin_edit', label:'企业商户法币收款配置编辑' },
+      { id:'merchant_payin_view', label:'企业商户法币代收配置查看' },
+      { id:'merchant_payin_edit', label:'企业商户法币代收配置编辑' },
       { id:'merchant_payout_view', label:'企业商户法币代付配置查看' },
       { id:'merchant_payout_edit', label:'企业商户法币代付配置编辑' },
       { id:'merchant_whitelist_view', label:'企业商户 Settlement 白名单查看' },
@@ -14384,11 +14486,12 @@
         { id:'receiving_payout_edit', label:'法币代付启用 / 禁用' },
       ] },
     ] },
-    { id:'fiat_payin', label:'法币收款', children:[
-      { id:'fiat_order', label:'收款订单', children:[
+    { id:'fiat_payin', label:'法币代收', children:[
+      { id:'fiat_order', label:'代收订单', children:[
         { id:'fiat_order_view', label:'查看' },
         { id:'fiat_order_export', label:'导出' },
         { id:'fiat_order_refund', label:'人工标记已退款' },
+        { id:'fiat_order_cancel', label:'取消订单' },
       ] },
       { id:'fiat_appeal', label:'申诉处理', children:[
         { id:'fiat_appeal_view', label:'查看' },
@@ -16346,7 +16449,7 @@
   // ══════════════════════════════════════════════════════
   //  系统管理 / 操作日志 data & logic
   // ══════════════════════════════════════════════════════
-  const OPERLOG_MODULES = ['收款商户','法币收款','法币代付','用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
+  const OPERLOG_MODULES = ['收款商户','法币代收','法币代付','用户管理','角色管理','菜单管理','部门管理','岗位管理','参数配置','字典管理','通知公告',
     '客户端管理','对象存储配置','个人信息','登录日志','操作日志','在线用户',
     '商户管理','开户申请','API管理','企业观察账号','提现审核','订单管理','币种/链配置','充值记录','充币审核',
     '企业商户账户明细','企业商户账户调账','平台资产','商户转账'];
@@ -16370,18 +16473,18 @@
     { id:'ol-po-m02', time:'2026-10-16 10:05:33', operator:'admin', module:'收款商户', type:'状态变更', target:'silverlink-fin（370148901）', content:'法币代收 启用，法币代付 禁用 → 法币代收 启用，法币代付 启用', result:'success', ip:'103.45.13.21', level:'high' },
     { id:'ol-po-m01', time:'2026-10-15 15:02:11', operator:'admin', module:'商户管理', type:'修改', target:'shine 法币代付配置（USDT/CNY）', content:'未配置 → 启用，汇率加点 1.00%，代付手续费 0.50%', result:'success', ip:'103.45.13.21', level:'high' },
     // 法币收款相关操作日志（收款商户、商户法币收款配置、申诉、收款商户充提币审核）
-    { id:'ol-fp-m14', time:'2026-10-06 11:30:05', operator:'grace.compliance', module:'法币收款', type:'导出', target:'收款订单', content:'导出收款订单列表（筛选：创建时间 2026-10-01 至 2026-10-06，共 19 条）', result:'success', ip:'61.148.22.44', level:'high' },
-    { id:'ol-fp-m13', time:'2026-10-06 10:20:00', operator:'admin', module:'法币收款', type:'修改', target:'订单 PZPI20261006-00116（商户申诉）', content:'要求收款商户 sunrise-settle 补充举证（银行流水），已通过 WhatsApp 通知', result:'success', ip:'103.45.13.21', level:'medium' },
+    { id:'ol-fp-m14', time:'2026-10-06 11:30:05', operator:'grace.compliance', module:'法币代收', type:'导出', target:'代收订单', content:'导出代收订单列表（筛选：创建时间 2026-10-01 至 2026-10-06，共 19 条）', result:'success', ip:'61.148.22.44', level:'high' },
+    { id:'ol-fp-m13', time:'2026-10-06 10:20:00', operator:'admin', module:'法币代收', type:'修改', target:'订单 PZPI20261006-00116（商户申诉）', content:'要求收款商户 sunrise-settle 补充举证（银行流水），已通过 WhatsApp 通知', result:'success', ip:'103.45.13.21', level:'medium' },
     { id:'ol-fp-m12', time:'2026-10-06 09:12:41', operator:'kelly.bd', module:'收款商户', type:'修改', target:'unioncard-fin（730182345）', content:'重发邀请邮件至 ops@unioncard-fin.io', result:'fail', errorMsg:'邮件发送过于频繁，请稍后再试', ip:'103.45.13.20', level:'medium' },
     { id:'ol-fp-m11', time:'2026-10-06 09:12:05', operator:'kelly.bd', module:'收款商户', type:'修改', target:'unioncard-fin（730182345）', content:'重发邀请邮件至 ops@unioncard-fin.io', result:'success', ip:'103.45.13.20', level:'medium' },
-    { id:'ol-fp-m10', time:'2026-10-05 17:30:00', operator:'admin', module:'法币收款', type:'审批', target:'订单 PZPI20261005-00094（商户申诉）', content:'申诉裁定：资金已到账；说明：核对用户银行回单与收款商户流水，资金已到账；已扣划 33,333.34 USDT 并自动结算，商户到账 33,068.78 USDT', result:'success', ip:'103.45.13.21', level:'high' },
-    { id:'ol-fp-m09', time:'2026-10-05 16:40:00', operator:'admin', module:'法币收款', type:'审批', target:'订单 PZPI20261005-00092（到账异常）', content:'申诉裁定：需退款；说明：金额不一致，需原路退款', result:'success', ip:'103.45.13.21', level:'high' },
-    { id:'ol-fp-m08', time:'2026-10-05 15:40:22', operator:'admin', module:'法币收款', type:'审批', target:'订单 PZPI20261005-00085（商户申诉）', content:'申诉裁定：资金未到账（用户未付款）；说明：收款商户提供完整流水，确认未到账', result:'success', ip:'103.45.13.21', level:'high' },
-    { id:'ol-fp-m07', time:'2026-10-05 15:20:00', operator:'admin', module:'法币收款', type:'审批', target:'订单 PZPI20261005-00091（到账异常）', content:'申诉裁定：需退款；说明：付款人非本人，需原路退款', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-fp-m10', time:'2026-10-05 17:30:00', operator:'admin', module:'法币代收', type:'审批', target:'订单 PZPI20261005-00094（商户申诉）', content:'申诉裁定：资金已到账；说明：核对用户银行回单与收款商户流水，资金已到账；已扣划 33,333.34 USDT 并自动结算，商户到账 33,068.78 USDT', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-fp-m09', time:'2026-10-05 16:40:00', operator:'admin', module:'法币代收', type:'审批', target:'订单 PZPI20261005-00092（到账异常）', content:'申诉裁定：需退款；说明：金额不一致，需原路退款', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-fp-m08', time:'2026-10-05 15:40:22', operator:'admin', module:'法币代收', type:'审批', target:'订单 PZPI20261005-00085（商户申诉）', content:'申诉裁定：资金未到账（用户未付款）；说明：收款商户提供完整流水，确认未到账', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-fp-m07', time:'2026-10-05 15:20:00', operator:'admin', module:'法币代收', type:'审批', target:'订单 PZPI20261005-00091（到账异常）', content:'申诉裁定：需退款；说明：付款人非本人，需原路退款', result:'success', ip:'103.45.13.21', level:'high' },
     { id:'ol-fp-m06', time:'2026-10-05 13:58:40', operator:'grace.compliance', module:'提现审核', type:'审批', target:'goldpay-cn（820193456）· 收款商户 · 30,000.00 USDT', content:'审核拒绝，备注（驳回原因）：提币地址存在风险，请更换地址后重新申请；提现冻结已解冻', result:'success', ip:'61.148.22.44', level:'high' },
     { id:'ol-fp-m15', time:'2026-10-04 16:05:30', operator:'admin', module:'收款商户', type:'修改', target:'rapidsettle（640171234）', content:'重置2FA', result:'success', ip:'103.45.13.21', level:'high' },
     { id:'ol-fp-m05', time:'2026-10-04 17:10:26', operator:'grace.compliance', module:'提现审核', type:'审批', target:'sunrise-settle（910234567）· 收款商户 · 50,000.00 USDT', content:'确认打款，付款地址 THp4cX8nRw2LsY6vB9mKe1QdG5aJ3uFzN7，交易哈希 5c9da3e1f7...，状态变更为已到账', result:'success', ip:'61.148.22.44', level:'high' },
-    { id:'ol-fp-m04', time:'2026-10-03 14:20:36', operator:'admin', module:'商户管理', type:'修改', target:'shine 法币收款配置（USDT/CNY）', content:'启用，汇率加点 0.80%，充值手续费 0.50% → 启用，汇率加点 1.00%，充值手续费 0.50%', result:'success', ip:'103.45.13.21', level:'high' },
+    { id:'ol-fp-m04', time:'2026-10-03 14:20:36', operator:'admin', module:'商户管理', type:'修改', target:'shine 法币代收配置（USDT/CNY）', content:'启用，汇率加点 0.80%，充值手续费 0.50% → 启用，汇率加点 1.00%，充值手续费 0.50%', result:'success', ip:'103.45.13.21', level:'high' },
     { id:'ol-fp-m03', time:'2026-10-02 14:05:10', operator:'grace.compliance', module:'充币审核', type:'审批', target:'goldpay-cn（820193456）· 收款商户 · 哈希 8e1c4f7a2d...', content:'状态由待人工审核变更为已拒绝，驳回原因：链上未查到该哈希对应的转入记录，请核对后重新申报', result:'success', ip:'61.148.22.44', level:'high' },
     { id:'ol-fp-m02', time:'2026-09-30 18:00:12', operator:'admin', module:'收款商户', type:'修改', target:'trustcard-pay（550160123）', content:'名称 trustcard-pay，邮箱 admin@trustcard-pay.com，状态 已启用 → 名称 trustcard-pay，邮箱 admin@trustcard-pay.com，状态 已禁用', result:'success', ip:'103.45.13.21', level:'high' },
     { id:'ol-fp-m01', time:'2026-09-29 16:40:22', operator:'kelly.bd', module:'收款商户', type:'新增', target:'novapay-cn', content:'邀请收款商户，邮箱：ops@novapay-cn.com，邀请邮件发送成功', result:'success', ip:'103.45.13.20', level:'medium' },

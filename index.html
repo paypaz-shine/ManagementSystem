@@ -3430,6 +3430,12 @@
               <div class="p-merch-dropdown" id="ramp-in-merch-dropdown" style="display:none;"></div>
             </div>
             <div class="filter-item">
+              <span class="filter-label-el">邮箱</span>
+              <div class="filter-control">
+                <input class="field-input" type="text" placeholder="请输入邮箱" id="ramp-in-f-email">
+              </div>
+            </div>
+            <div class="filter-item">
               <span class="filter-label-el">Paypaz 订单</span>
               <div class="filter-control">
                 <input class="field-input" type="text" placeholder="请输入" id="ramp-in-f-pid">
@@ -3566,6 +3572,7 @@
                 <tr>
                   <th>商户名称</th>
                   <th>用户 ID</th>
+                  <th>邮箱</th>
                   <th>Paypaz 订单</th>
                   <th>商户订单</th>
                   <th>服务商</th>
@@ -15809,6 +15816,19 @@
     },
   ];
 
+  // 邮箱：用户在 Legend 创建账户时使用的邮箱，按用户 ID 一一对应（同一用户多笔订单邮箱相同）
+  const RAMP_IN_USER_EMAIL = {
+    'USR-78324901':'taro.tanaka@example.com',   'USR-44129807':'emily.chen@example.com',
+    'USR-22038514':'minjun.kim@example.com',    'USR-67290143':'haruka.sato@example.com',
+    'USR-90124836':'david.lee@example.com',     'USR-33817640':'jiwoo.park@example.com',
+    'USR-55671023':'kenji.watanabe@example.com','USR-10938271':'sophia.wong@example.com',
+    'USR-84512096':'yuki.nakamura@example.com', 'USR-19273645':'daniel.ng@example.com',
+    'USR-28451973':'seoyeon.choi@example.com',  'USR-40197582':'ryo.yamamoto@example.com',
+    'USR-51204873':'olivia.tan@example.com',    'USR-52681039':'hyunwoo.jung@example.com',
+    'USR-62047318':'aiko.kobayashi@example.com','USR-70318452':'michael.lim@example.com',
+  };
+  RAMP_IN_ORDERS.forEach(r => { r.email = RAMP_IN_USER_EMAIL[r.userId] || ''; });
+
   // On Ramp 到账后同步生成充币记录：只要代币已上链发出（有 txHash）即视为到账，
   // 不受订单当前状态影响（如 CHARGEBACK_FLAGGED 是到账之后才发生的拒付争议）
   RAMP_IN_ORDERS.filter(r => r.txHash).forEach(r => {
@@ -15911,6 +15931,7 @@
       return `<tr>
         <td>${r.brokerName}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.userId}</td>
+        <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.email || '<span style="color:#C0C4CC;">—</span>'}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.paypazOrderId}</td>
         <td style="font-family:'Inter',sans-serif;font-size:12px;">${r.brokerOrderRef}</td>
         <td>${r.provider}</td>
@@ -15935,7 +15956,7 @@
         <td style="font-family:'Inter',sans-serif;font-size:12px;color:#606266;">${r.completedAt}</td>
         <td><div class="action-cell"><span class="action-icon" onclick="openRampInDetail(${idx})" title="详情">${_GRID_SVG}</span></div></td>
       </tr>`;
-    }).join('') : `<tr><td colspan="24" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无数据</td></tr>`;
+    }).join('') : `<tr><td colspan="26" style="text-align:center;color:#C0C4CC;padding:48px 0;">暂无数据</td></tr>`;
     const total = rampInState.rows.length;
     document.getElementById('ramp-in-page-total').textContent = `共 ${total} 条`;
     const pages = Math.ceil(total / rampInState.size) || 1;
@@ -16047,8 +16068,10 @@
     const dateTo    = document.getElementById('ramp-in-f-date-to').value;
     const compFrom  = document.getElementById('ramp-in-f-completed-from').value;
     const compTo    = document.getElementById('ramp-in-f-completed-to').value;
+    const email     = document.getElementById('ramp-in-f-email').value.trim().toLowerCase();
     rampInState.rows = RAMP_IN_ORDERS.filter(r => {
       if (pid      && !r.paypazOrderId.toLowerCase().includes(pid))                          return false;
+      if (email    && !(r.email && r.email.toLowerCase().includes(email)))                   return false;
       if (cfd      && !r.brokerOrderRef.toLowerCase().includes(cfd))                         return false;
       if (legend   && !r.legendOrderId.toLowerCase().includes(legend))                       return false;
       if (rampInSelectedMerchants.length && !rampInSelectedMerchants.includes(r.brokerId))   return false;
@@ -16071,7 +16094,7 @@
 
   function rampInReset() {
     ['ramp-in-f-pid','ramp-in-f-cfd','ramp-in-f-legend','ramp-in-f-merchant','ramp-in-f-address','ramp-in-f-hash',
-     'ramp-in-f-date-from','ramp-in-f-date-to','ramp-in-f-completed-from','ramp-in-f-completed-to'].forEach(id => {
+     'ramp-in-f-date-from','ramp-in-f-date-to','ramp-in-f-completed-from','ramp-in-f-completed-to','ramp-in-f-email'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = '';
     });
     ['ramp-in-f-fiat','ramp-in-f-token','ramp-in-f-provider','ramp-in-f-network','ramp-in-f-status'].forEach(msLiteReset);
@@ -16092,6 +16115,7 @@
     document.getElementById('modal-body').innerHTML = `
       <div class="detail-item"><span class="detail-label">商户名称</span><span class="detail-value">${r.brokerName}</span></div>
       <div class="detail-item"><span class="detail-label">用户 ID</span><span class="detail-value">${r.userId}</span></div>
+      <div class="detail-item"><span class="detail-label">邮箱</span><span class="detail-value">${r.email || '—'}</span></div>
       <div class="detail-item"><span class="detail-label">Paypaz 订单</span><span class="detail-value">${r.paypazOrderId}</span></div>
       <div class="detail-item"><span class="detail-label">商户订单</span><span class="detail-value">${r.brokerOrderRef}</span></div>
       <div class="detail-item"><span class="detail-label">服务商</span><span class="detail-value">${r.provider}</span></div>
@@ -16256,10 +16280,10 @@
   }
 
   function rampInExport() {
-    const headers = ['商户名称','用户ID','Paypaz订单','商户订单','服务商','服务商订单','支付法币金额','法币币种','入金代币数量','代币币种','实际收到代币',
+    const headers = ['商户名称','用户ID','邮箱','Paypaz订单','商户订单','服务商','服务商订单','支付法币金额','法币币种','入金代币数量','代币币种','实际收到代币',
       '网络费（服务商）','网络费（PayPaz）','手续费（服务商）','手续费（PayPaz）','汇率（服务商）','加点','汇率（PayPaz）','加点费用','净入账','网络','地址','哈希','状态','创建时间','完成时间'];
     csvDownload(headers, rampInState.rows.map(r => [
-      r.brokerName, r.userId, r.paypazOrderId, r.brokerOrderRef, r.provider, r.legendOrderId,
+      r.brokerName, r.userId, r.email || '-', r.paypazOrderId, r.brokerOrderRef, r.provider, r.legendOrderId,
       r.fiatAmount, r.fiatCurrency, r.cryptoAmount, r.cryptoCurrency, r.grossCryptoAmount,
       r.networkFee,
       r.paypazFee ? rampInNetworkFeeInfo(r).amount : '-',
